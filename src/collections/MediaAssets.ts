@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { APIError, type CollectionConfig } from 'payload';
 import { isStaff, staffOnly } from '../access';
+import { resolveMediaDir } from '../lib/media-dir';
 import { ALLOWED_UPLOAD_MIME_TYPES, uploadProblem } from '../lib/upload-policy';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,7 +16,8 @@ export const MediaAssets: CollectionConfig = {
     description: 'Chỉ media có rightsStatus=APPROVED mới hiển thị công khai.',
   },
   upload: {
-    staticDir: path.resolve(dirname, '../../media'),
+    // BMSL_MEDIA_DIR (absolute) moves media to a separate volume; the default is the repository media/ directory.
+    staticDir: resolveMediaDir(process.env, path.resolve(dirname, '../../media')),
     // Explicit raster list: `image/*` would admit image/svg+xml, which is active content served from our origin.
     mimeTypes: ALLOWED_UPLOAD_MIME_TYPES,
   },
