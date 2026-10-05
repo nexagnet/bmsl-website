@@ -23,7 +23,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const { databaseUrl, payloadSecret } = resolvePayloadEnv();
 
 export default buildConfig({
-  admin: { user: Users.slug },
+  // `avatar: 'default'` is Payload's local icon: the admin never looks up a hashed e-mail address at Gravatar, so the
+  // narrow CSP needs no external img-src and no staff address leaves the deployment.
+  admin: { user: Users.slug, avatar: 'default' },
   collections: [
     Users,
     MediaAssets,

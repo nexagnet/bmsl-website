@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { getPayload } from 'payload';
 import config from '../../../src/payload.config';
 import manifest from '../../../src/migration/legacy-manifest.json';
@@ -189,6 +191,79 @@ try {
       unconfirmedPdf: { id: blockedPdf.id, filename: blockedPdf.filename, url: blockedPdf.url },
       projectId: project.id,
     };
+  } else if (cmd === 'analytics-on') {
+    // W5B4 browser UAT: synthetic GA4 id (not a real property) and synthetic Zalo number, published through the CMS.
+    await payload.updateGlobal({
+      slug: 'site-settings',
+      data: {
+        ga4Id: 'G-ABC123DEF4',
+        analyticsEnabled: true,
+        contact: { hotline: '0900 000 000', zalo: '0900000001' },
+        _status: 'published',
+      },
+    });
+    result = { analyticsEnabled: true };
+  } else if (cmd === 'schema-drift') {
+    // Nondestructive dry run of what `payload migrate:create` computes: diff the schema Payload derives from the
+    // current collections/globals against the latest COMMITTED migration snapshot. Nothing is written and the
+    // database is not touched. This runs the same drizzle-kit generator calls as the CLI; it is not the CLI itself.
+    type Kit = {
+      generateDrizzleJson: (schema: unknown) => Promise<{ version: number }>;
+      generateMigration: (before: unknown, after: unknown) => Promise<string[]>;
+      upSnapshot?: (snapshot: { version: number }) => { version: number };
+    };
+    const db = payload.db as unknown as { schema: unknown; migrationDir: string; requireDrizzleKit: () => Kit };
+    const kit = db.requireDrizzleKit();
+    const after = await kit.generateDrizzleJson(db.schema);
+    const latest = fs.readdirSync(db.migrationDir).filter((f) => f.endsWith('.json')).sort().reverse()[0];
+    if (!latest) throw new Error('no committed migration snapshot found');
+    let before = JSON.parse(fs.readFileSync(path.join(db.migrationDir, latest), 'utf8')) as { version: number };
+    if (kit.upSnapshot && before.version < after.version) before = kit.upSnapshot(before);
+    const up = await kit.generateMigration(before, after);
+    const down = await kit.generateMigration(after, before);
+    result = { latestSnapshot: latest, upStatements: up, downStatements: down };
+  } else if (cmd === 'uat-media') {
+    // W5B4 browser UAT: one CONFIRMED, published project per engine, each with its own APPROVED image, so the browser
+    // can load the image, the test can revoke its approval and the browser can prove the bytes are gone afterwards.
+    const slugs = (process.env.SMOKE_FIXTURE_SLUGS ?? '').split(',').filter(Boolean);
+    if (slugs.length === 0 || slugs.some((s) => !/^synthetic-uat-media-[a-z]+$/.test(s))) {
+      throw new Error('SMOKE_FIXTURE_SLUGS must list synthetic-uat-media-<engine> slugs');
+    }
+    const projects: { slug: string; mediaId: number; filename: string; url: string }[] = [];
+    for (const slug of slugs) {
+      const media = await payload.create({
+        collection: 'media-assets',
+        data: { alt: `synthetic ${slug}`, rightsStatus: 'APPROVED', source: MARKERS.mediaSource },
+        file: { data: png, mimetype: 'image/png', name: `${slug}.png`, size: png.length },
+      });
+      await payload.create({
+        collection: 'projects',
+        data: {
+          name: `Synthetic UAT media ${slug}`,
+          slug,
+          summary: MARKERS.publicSummary,
+          sourceStatus: 'CONFIRMED',
+          images: [media.id],
+          _status: 'published',
+        },
+      });
+      projects.push({ slug, mediaId: Number(media.id), filename: String(media.filename), url: String(media.url) });
+    }
+    result = { projects };
+  } else if (cmd === 'uat-document') {
+    // W5B4 browser UAT: its own published document with an APPROVED file. The seeded approved document cannot be the
+    // positive control here: the earlier W5B2 media-revocation block deliberately revokes that file's approval, after
+    // which the public page correctly hides it. Created through the normal CMS path, so every gate still applies.
+    const media = await payload.create({
+      collection: 'media-assets',
+      data: { alt: 'synthetic uat approved document', rightsStatus: 'APPROVED', source: MARKERS.mediaSource },
+      file: { data: pdf, mimetype: 'application/pdf', name: 'synthetic-uat-approved-doc.pdf', size: pdf.length },
+    });
+    const doc = await payload.create({
+      collection: 'documents',
+      data: { title: 'Synthetic UAT Approved Document', file: media.id, _status: 'published' },
+    });
+    result = { documentId: doc.id, mediaId: media.id, filename: media.filename, url: media.url };
   } else if (cmd === 'revoke') {
     const id = Number(process.env.SMOKE_FIXTURE_MEDIA_ID);
     if (!Number.isInteger(id)) throw new Error('SMOKE_FIXTURE_MEDIA_ID is required');

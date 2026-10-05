@@ -14,6 +14,7 @@ import {
 } from './support/db-lifecycle';
 import { assertSafeAdminUrl } from './support/disposable-db';
 import { JOBS } from './support/markers';
+import { registerBrowserBlocks } from './support/browser-blocks';
 import { registerSecurityBlocks } from './support/security-blocks';
 
 // Real HTTP proof (W4/W5A): a production Next build + `next start` against a DISPOSABLE PostgreSQL database that
@@ -125,7 +126,21 @@ beforeAll(async () => {
   // Reproducible type check: regenerate the Payload types first so `next build` type-checks the app and the
   // test fixtures against the strict generated types, exactly as it does after any local Payload start.
   await run(['payload', 'generate:types'], 120_000);
-  await run(['next', 'build'], 480_000);
+  // The ORDINARY application build (`pnpm build`: generates the admin import map, then `next build`), not a
+  // test-only variant, so the production CMS editor is proven through the same path an operator and CI use. The
+  // CSP option is also baked into the build-time headers (next.config.mjs).
+  await runInGroup('pnpm', ['run', 'build'], {
+    cwd: REPO_ROOT,
+    env: {
+      ...process.env,
+      DATABASE_URL: smokeUrl,
+      PAYLOAD_SECRET: SECRET,
+      NEXT_TELEMETRY_DISABLED: '1',
+      NODE_ENV: 'production',
+      CSP_ALLOW_GA4: 'true',
+    },
+    timeoutMs: 600_000,
+  });
 
   const port = await freePort();
   base = `http://127.0.0.1:${port}`;
@@ -141,6 +156,10 @@ beforeAll(async () => {
       SITE_URL: base,
       TRUSTED_ORIGINS: 'https://www.bmsl-trusted.invalid',
       INITIAL_ADMIN_BOOTSTRAP_TOKEN: BOOTSTRAP_TOKEN,
+      // W5B4 browser UAT submits the contact form from three engines at three sizes; the default limiter (30 per
+      // 10 minutes) would answer 429 to a legitimate run. The limiter itself is covered by its unit tests.
+      CONTACT_RATE_LIMIT_MAX: '10000',
+      CSP_ALLOW_GA4: 'true',
     },
   });
   server.child.stdout?.on('data', (d) => (serverLog += d));
@@ -462,5 +481,34 @@ registerSecurityBlocks({
   repoRoot: REPO_ROOT,
   legacySlugs: manifest.projects.map((p) => p.slug),
   get,
+  runFixture,
+});
+
+describe('W5B4 schema drift (nondestructive generator dry run)', () => {
+  it('the schema Payload derives from the code equals the latest committed migration snapshot (no UP and no DOWN statements)', async () => {
+    const result = (await runFixture('schema-drift')) as { latestSnapshot: string; upStatements: string[]; downStatements: string[] };
+    expect(result.latestSnapshot).toMatch(/\.json$/);
+    expect(result.upStatements, `drift against ${result.latestSnapshot}`).toEqual([]);
+    expect(result.downStatements, `drift against ${result.latestSnapshot}`).toEqual([]);
+  });
+});
+
+// W5B4: executed Chromium/Firefox/WebKit UAT, axe and Lighthouse against the same server and database. It must stay
+// registered last: it enables analytics in the published SiteSettings and revokes media of its own. The initial ADMIN
+// is resolved from the database by the suite (the W5B2 bootstrap race decides which candidate wins).
+registerBrowserBlocks({
+  get base() {
+    return base;
+  },
+  smokeUrl,
+  get fixture() {
+    return fixture!;
+  },
+  repoRoot: REPO_ROOT,
+  adminPassword: ADMIN_PASSWORD,
+  editorEmail: 'synthetic-editor@example.invalid',
+  editorPassword: EDITOR_PASSWORD,
+  publishedSlug: PUBLISHED_PROJECT.slug,
+  legacySlugs: manifest.projects.map((p) => p.slug),
   runFixture,
 });
