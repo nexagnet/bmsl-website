@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { assertImportAllowed, parseArgs } from './cli';
-import { parseExternalInput } from './external-input';
+import { ExternalInputError, parseExternalInput } from './external-input';
 import manifest from './legacy-manifest.json';
 
 const repoRoot = path.resolve(__dirname, '../..');
@@ -98,6 +98,43 @@ describe('external article input validation', () => {
     expect(parseExternalInput({ articles: [{ ...base, slug: 'Bad Slug!', approval: approved }] }, manifest).rejected).toHaveLength(1);
     expect(() => parseExternalInput(null, manifest)).toThrow();
     expect(() => parseExternalInput({ articles: 'x' }, manifest)).toThrow();
+  });
+
+  it('rejects malformed or unknown root keys before anything could be written', () => {
+    for (const bad of [{ articles: 'bad' }, { articles: [], extra: 1 }, { articles: [], phone: '0900000000' }, [], 'x', 5, null]) {
+      expect(() => parseExternalInput(bad, manifest)).toThrow(ExternalInputError);
+    }
+    expect(() => parseExternalInput({ articles: [] }, manifest)).not.toThrow();
+  });
+
+  it('accepts exactly the article sources plus the listed candidates #4 and #31, keeping their redirect disposition', () => {
+    const accepted = manifest.entries.filter((e) => {
+      const r = parseExternalInput({ articles: [{ ...base, legacyUrl: e.legacyPath, approval: approved }] }, manifest);
+      return r.articles.length === 1;
+    });
+    const expected = manifest.entries.filter((e) => e.kind === 'article' || e.id === 4 || e.id === 31);
+    expect(accepted.map((e) => e.id).sort((a, b) => a - b)).toEqual(expected.map((e) => e.id).sort((a, b) => a - b));
+    const byId = (id: number) => manifest.entries.find((e) => e.id === id)!;
+    expect([byId(4).kind, byId(31).kind]).toEqual(['service', 'about']);
+    expect([byId(4).disposition, byId(31).disposition]).toEqual(['redirect', 'redirect']);
+    // Other non-article kinds (home, contact, project, category, author) stay rejected.
+    for (const kind of ['home', 'contact', 'project', 'category', 'author']) {
+      const entry = manifest.entries.find((e) => e.kind === kind)!;
+      const r = parseExternalInput({ articles: [{ ...base, legacyUrl: entry.legacyPath, approval: approved }] }, manifest);
+      expect(r.articles).toEqual([]);
+      expect(r.rejected).toHaveLength(1);
+    }
+  });
+
+  it('never echoes raw input values into reasons or reports', () => {
+    const secret = '/private-0987654321-nguyen-van-a';
+    const r = parseExternalInput(
+      { articles: [{ legacyUrl: secret, title: 'x' }, { ...base, secretKey0912345678: 1, approval: approved }, { legacyUrl: 'https://evil.example/x?p=0912345678' }] },
+      manifest,
+    );
+    const text = JSON.stringify(r.rejected);
+    expect(r.rejected).toHaveLength(3);
+    for (const leak of ['0987654321', 'nguyen', '0912345678', 'evil.example']) expect(text).not.toContain(leak);
   });
 
   it('requires a title and plain-text paragraphs only', () => {

@@ -72,6 +72,7 @@ describe('Project BQT feedback gate', () => {
       data: {
         name: 'Synthetic BQT project',
         slug: 'synthetic-bqt',
+        sourceStatus: 'LEGACY-SOURCE',
         bqtFeedback: { text: 'synthetic feedback', approvedBySource: false },
       },
       ...asUser(editor),
@@ -109,7 +110,7 @@ describe('MediaAsset rights gate', () => {
     );
     const media = await payload.create({
       collection: 'media-assets',
-      data: { alt: 'synthetic rights image' },
+      data: { alt: 'synthetic rights image', rightsStatus: 'UNCONFIRMED' },
       file: { data: png, mimetype: 'image/png', name: 'synthetic-rights.png', size: png.length },
       ...asUser(editor),
     });

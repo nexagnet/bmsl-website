@@ -1,3 +1,4 @@
+import candidatesJson from './article-candidates.json';
 import { type LegacyManifest, normalizeSameSitePath } from './legacy.mjs';
 
 // External article input: validated data supplied outside this repository (never raw legacy dumps).
@@ -20,6 +21,14 @@ export type ParsedExternalInput = {
   rejected: { legacyUrl?: string; reason: string }[];
 };
 
+/** Safe to print: never contains input values (they may be private). */
+export class ExternalInputError extends Error {}
+
+// Besides article sources, only manifest ids explicitly listed in article-candidates.json may be imported
+// (blueprint 04: #4 service and #31 About are optional separate articles). Their redirect disposition stays
+// in the manifest and is not changed by importing a draft article.
+const CANDIDATE_IDS = new Set((candidatesJson.candidates as { manifestId: number }[]).map((c) => c.manifestId));
+const ROOT_KEYS = new Set(['articles']);
 const ALLOWED_KEYS = new Set(['legacyUrl', 'title', 'slug', 'excerpt', 'paragraphs', 'publishedAt', 'categorySlug', 'approval']);
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -27,7 +36,11 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
 const nonEmpty = (v: unknown): v is string => typeof v === 'string' && v.trim() !== '';
 
 export function parseExternalInput(raw: unknown, manifest: LegacyManifest): ParsedExternalInput {
-  if (!isRecord(raw) || !Array.isArray(raw.articles)) throw new Error('External input must be an object with an "articles" array');
+  if (!isRecord(raw)) throw new ExternalInputError('External input must be an object with an "articles" array');
+  if (Object.keys(raw).some((k) => !ROOT_KEYS.has(k))) {
+    throw new ExternalInputError('External input has unknown root keys; only "articles" is accepted');
+  }
+  if (!Array.isArray(raw.articles)) throw new ExternalInputError('External input must be an object with an "articles" array');
   const result: ParsedExternalInput = { articles: [], pending: [], rejected: [] };
   const seen = new Set<string>();
 
@@ -37,17 +50,17 @@ export function parseExternalInput(raw: unknown, manifest: LegacyManifest): Pars
       reject('article entry must be an object');
       continue;
     }
-    const rawUrl = typeof item.legacyUrl === 'string' ? item.legacyUrl : undefined;
+    // Raw values are never echoed into reasons or reports: only manifest-validated paths are reported.
     let legacyPath: string;
     try {
-      legacyPath = normalizeSameSitePath(rawUrl ?? '');
-    } catch (error) {
-      reject(`invalid legacyUrl: ${(error as Error).message}`, rawUrl);
+      legacyPath = normalizeSameSitePath(typeof item.legacyUrl === 'string' ? item.legacyUrl : '');
+    } catch {
+      reject('legacyUrl is missing or is not a safe same-site path');
       continue;
     }
     const entry = manifest.entries.find((e) => normalizeSameSitePath(e.legacyPath) === legacyPath);
-    if (!entry || entry.kind !== 'article') {
-      reject('legacyUrl is not an article source in the 47-URL inventory', rawUrl);
+    if (!entry || !(entry.kind === 'article' || CANDIDATE_IDS.has(entry.id))) {
+      reject('legacyUrl is not an article source or listed article candidate in the 47-URL inventory');
       continue;
     }
     const legacyUrl = entry.legacyPath;
@@ -59,7 +72,7 @@ export function parseExternalInput(raw: unknown, manifest: LegacyManifest): Pars
 
     const unknown = Object.keys(item).filter((k) => !ALLOWED_KEYS.has(k));
     if (unknown.length > 0) {
-      reject(`keys not accepted (media, HTML and extra data are never imported): ${unknown.join(', ')}`, legacyUrl);
+      reject(`${unknown.length} key(s) not accepted (media, HTML and extra data are never imported)`, legacyUrl);
       continue;
     }
     if (!nonEmpty(item.title)) {

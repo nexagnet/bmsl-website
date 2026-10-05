@@ -197,3 +197,90 @@ describe('legacy importer: approved external articles', () => {
     expect(report.pendingApprovals.some((p) => p.needs.includes('category'))).toBe(true);
   });
 });
+
+describe('legacy importer: batch validation, slug reservation and optional candidates', () => {
+  const articleSources = manifest.entries.filter((e) => e.kind === 'article');
+  const itemFor = (legacyUrl: string, extra: Record<string, unknown> = {}) => ({
+    legacyUrl,
+    title: `Synthetic ${legacyUrl}`,
+    paragraphs: ['Synthetic paragraph.'],
+    approval: approved,
+    ...extra,
+  });
+  const withoutMode = <T extends { mode: string }>(r: T) => ({ ...r, mode: undefined });
+
+  it('invalid root creates neither projects nor articles, in write mode', async () => {
+    for (const bad of [{ articles: 'bad' }, { articles: [], unexpected: true }, null, []]) {
+      await expect(runLegacyImport(payload, { write: true, externalInput: bad })).rejects.toThrow();
+      expect(await count('projects')).toBe(0);
+      expect(await count('articles')).toBe(0);
+    }
+  });
+
+  it('two sources with the same slug: one created, one reported conflict, dry-run and write agree, no DB error', async () => {
+    const [a, b] = articleSources;
+    const externalInput = { articles: [itemFor(a.legacyPath, { slug: 'synthetic-same-slug' }), itemFor(b.legacyPath, { slug: 'synthetic-same-slug' })] };
+    const dry = await runLegacyImport(payload, { externalInput });
+    expect(await count('articles')).toBe(0);
+    const written = await runLegacyImport(payload, { write: true, externalInput });
+
+    expect(withoutMode(written)).toEqual(withoutMode(dry));
+    expect(written.created.filter((c) => c.collection === 'articles').map((c) => c.legacyUrls)).toEqual([[a.legacyPath]]);
+    expect(written.conflicts.filter((c) => c.collection === 'articles')).toHaveLength(1);
+    expect(written.conflicts.find((c) => c.collection === 'articles')?.slug).toBe('synthetic-same-slug');
+    expect(await count('articles')).toBe(1);
+    const found = await payload.find({ collection: 'articles', draft: true, limit: 5, depth: 0 });
+    expect(found.docs[0].legacyUrl).toBe(a.legacyPath);
+
+    // Rerun: nothing new, first record preserved including a manual edit, conflict still reported.
+    await payload.update({ collection: 'articles', id: found.docs[0].id, data: { title: 'Edited by editor' }, draft: true });
+    const again = await runLegacyImport(payload, { write: true, externalInput });
+    expect(again.created.filter((c) => c.collection === 'articles')).toEqual([]);
+    expect(again.skipped.filter((s) => s.collection === 'articles')).toHaveLength(1);
+    expect(again.conflicts.filter((c) => c.collection === 'articles')).toHaveLength(1);
+    const after = await payload.find({ collection: 'articles', draft: true, limit: 5, depth: 0 });
+    expect(after.totalDocs).toBe(1);
+    expect(after.docs[0].title).toBe('Edited by editor');
+  });
+
+  it('a batch slug that equals an existing manual article is a conflict and the manual record is preserved', async () => {
+    await payload.create({ collection: 'articles', data: { title: 'Manual', slug: 'synthetic-manual' }, draft: true });
+    const [a, b] = articleSources;
+    const externalInput = { articles: [itemFor(a.legacyPath, { slug: 'synthetic-manual' }), itemFor(b.legacyPath)] };
+    const dry = await runLegacyImport(payload, { externalInput });
+    const written = await runLegacyImport(payload, { write: true, externalInput });
+    expect(withoutMode(written)).toEqual(withoutMode(dry));
+    expect(written.conflicts.map((c) => c.slug)).toEqual(['synthetic-manual']);
+    expect(await count('articles')).toBe(2);
+    const manual = await payload.find({ collection: 'articles', where: { slug: { equals: 'synthetic-manual' } }, draft: true, limit: 1 });
+    expect(manual.docs[0].title).toBe('Manual');
+  });
+
+  it('imports the listed candidates #4 (service) and #31 (About) as drafts; the redirect map is not changed', async () => {
+    const byId = (id: number) => manifest.entries.find((e) => e.id === id)!;
+    const externalInput = { articles: [itemFor(byId(4).legacyPath), itemFor(byId(31).legacyPath)] };
+    const report = await runLegacyImport(payload, { write: true, externalInput });
+    expect(report.rejected).toEqual([]);
+    expect(report.created.filter((c) => c.collection === 'articles')).toHaveLength(2);
+    const found = await payload.find({ collection: 'articles', draft: true, limit: 5, depth: 0 });
+    expect(found.docs.map((d) => d._status)).toEqual(['draft', 'draft']);
+    const pub = await payload.find({ collection: 'articles', limit: 5, ...PUBLIC });
+    expect(pub.docs.map(toArticle).filter(Boolean)).toEqual([]);
+    expect(byId(4)).toMatchObject({ disposition: 'redirect', activeTarget: '/dich-vu' });
+    expect(byId(31)).toMatchObject({ disposition: 'redirect', activeTarget: '/gioi-thieu' });
+    // A non-listed kind is still rejected.
+    const rejected = await runLegacyImport(payload, { externalInput: { articles: [itemFor('/chung-cu-ecolife-tay-ho-dang-van-hanh/')] } });
+    expect(rejected.rejected).toHaveLength(1);
+  });
+
+  it('reports the article batch against the <=10 handover acceptance without capping the import', async () => {
+    const items = articleSources.slice(0, 11).map((e) => itemFor(e.legacyPath, { slug: `synthetic-${e.id}` }));
+    expect(items).toHaveLength(11);
+    const report = await runLegacyImport(payload, { write: true, externalInput: { articles: items } });
+    expect(report.created.filter((c) => c.collection === 'articles')).toHaveLength(11);
+    expect(report.articleSelection).toMatchObject({ initialHandoverMax: 10, approvedInBatch: 11, withinInitialHandover: false, selectionApproved: false });
+    expect(await count('articles')).toBe(11);
+    const none = await runLegacyImport(payload, {});
+    expect(none.articleSelection).toMatchObject({ approvedInBatch: 0, withinInitialHandover: true, selectionApproved: false });
+  });
+});
