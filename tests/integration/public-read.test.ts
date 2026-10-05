@@ -51,6 +51,7 @@ describe('public rendering data path', () => {
       data: {
         name: 'Published project',
         slug: 'published-project',
+        sourceStatus: 'LEGACY-SOURCE',
         images: [ok, blocked],
         bqtFeedback: { text: 'unapproved text', approvedBySource: false },
         _status: 'published',

@@ -165,7 +165,7 @@ describe('RBAC (ADMIN / EDITOR / anonymous)', () => {
     );
     const media = await payload.create({
       collection: 'media-assets',
-      data: { alt: 'synthetic image' },
+      data: { alt: 'synthetic image', rightsStatus: 'UNCONFIRMED' },
       file: { data: png, mimetype: 'image/png', name: 'synthetic-rbac.png', size: png.length },
       ...asUser(editor),
     });
@@ -278,7 +278,7 @@ describe('ContactLead durable persistence', () => {
     await denied(
       payload.create({
         collection: 'contact-leads',
-        data: { name: 'x', phone: '1', requestType: 'khac', message: 'm', sourcePage: '/', consent: { given: true, at: new Date().toISOString() } },
+        data: { name: 'x', phone: '1', requestType: 'khac', message: 'm', sourcePage: '/', status: 'new', consent: { given: true, at: new Date().toISOString() } },
         ...anonymous,
       }),
     );
