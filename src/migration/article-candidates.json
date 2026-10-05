@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "source": "docs/blueprint/04-article-inventory.md §2-§3 (slug-based PROPOSAL, full text not read).",
+  "selectionApproved": false,
+  "migratedArticleCount": 0,
+  "notes": [
+    "Candidate/backlog queue only. Nothing here is an approved selection, an approved category or a migrated article.",
+    "proposedCategorySlug is a PROPOSAL from the inventory destination, not an approved category name.",
+    "Every candidate needs content, image-rights and category approval from BMSL before an external article input may be imported (as draft)."
+  ],
+  "candidates": [
+    { "manifestId": 3, "tier": "proposed-first-ten", "proposedCategorySlug": "kien-thuc-nganh", "approvalsRequired": ["selection", "content", "category", "industry-figures-source"] },
+    { "manifestId": 4, "tier": "proposed-first-ten", "proposedCategorySlug": "kien-thuc-nganh", "approvalsRequired": ["selection", "content", "category", "duplicate-check"] },
+    { "manifestId": 25, "tier": "proposed-first-ten", "proposedCategorySlug": "tin-cong-ty", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 35, "tier": "proposed-first-ten", "proposedCategorySlug": "tin-cong-ty", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 2, "tier": "proposed-first-ten", "proposedCategorySlug": "tin-cong-ty", "approvalsRequired": ["selection", "content", "category", "image-rights", "third-party-person-consent"] },
+    { "manifestId": 30, "tier": "proposed-first-ten", "proposedCategorySlug": "tin-cong-ty", "approvalsRequired": ["selection", "content", "category", "project-list-cross-check"] },
+    { "manifestId": 31, "tier": "proposed-first-ten", "proposedCategorySlug": "tin-cong-ty", "approvalsRequired": ["selection", "content", "category", "company-history-confirmation"] },
+    { "manifestId": 23, "tier": "proposed-first-ten", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 34, "tier": "proposed-first-ten", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 24, "tier": "proposed-first-ten", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 26, "tier": "backlog-alternate", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 27, "tier": "backlog-alternate", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 29, "tier": "backlog-alternate", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 32, "tier": "backlog-alternate", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["selection", "content", "category", "image-rights"] },
+    { "manifestId": 33, "tier": "backlog-owner-decision", "proposedCategorySlug": "van-hoa", "approvalsRequired": ["owner-decision-republish", "selection", "content", "category", "personal-data-consent"] }
+  ]
+}
