@@ -324,3 +324,78 @@ describe('HTTP smoke: media rights at original and optimizer URLs (before and af
     expect(html).not.toContain(fixture!.approved.filename);
   });
 });
+
+describe('HTTP smoke: W5B security headers and contact endpoint (real server, disposable PostgreSQL)', () => {
+  const post = (body: BodyInit, headers: Record<string, string> = { 'content-type': 'application/json' }) =>
+    fetch(`${base}/lien-he/gui`, { method: 'POST', headers, body });
+  const synthetic = {
+    name: 'Synthetic W5B Person',
+    phone: '0900000111',
+    requestType: 'bao-gia',
+    message: 'synthetic w5b message',
+    consent: true,
+    sourcePage: '/lien-he',
+  };
+  const leadCount = async (phone: string) => {
+    const client = new pg.Client({ connectionString: smokeUrl });
+    await client.connect();
+    try {
+      return Number((await client.query('select count(*)::int as n from contact_leads where phone = $1', [phone])).rows[0].n);
+    } finally {
+      await client.end();
+    }
+  };
+
+  it.each(['/', '/lien-he', '/admin', '/api/users/me'])('%s carries the baseline security headers and no HSTS', async (route) => {
+    const res = await get(route);
+    expect(res.headers.get('x-content-type-options')).toBe('nosniff');
+    expect(res.headers.get('referrer-policy')).toBe('strict-origin-when-cross-origin');
+    expect(res.headers.get('x-frame-options')).toBe('DENY');
+    expect(res.headers.get('content-security-policy')).toContain("frame-ancestors 'none'");
+    expect(res.headers.get('strict-transport-security')).toBeNull();
+  });
+
+  it('private routes stay noindex', async () => {
+    for (const route of ['/admin', '/api/users/me']) {
+      expect((await get(route)).headers.get('x-robots-tag')).toBe('noindex, nofollow');
+    }
+  });
+
+  it('a valid submission is durably stored in PostgreSQL and acknowledged', async () => {
+    const res = await post(JSON.stringify(synthetic));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true, persisted: true });
+    expect(await leadCount(synthetic.phone)).toBe(1);
+  });
+
+  it('invalid, no-consent, honeypot, malformed, non-JSON, cross-site and oversized requests store nothing', async () => {
+    const phone = '0900000222';
+    const lead = { ...synthetic, phone };
+    expect((await post(JSON.stringify({ ...lead, consent: false }))).status).toBe(400);
+    expect((await post(JSON.stringify({ ...lead, name: '' }))).status).toBe(400);
+    const bot = await post(JSON.stringify({ ...lead, website: 'http://spam.invalid' }));
+    expect(await bot.json()).toEqual({ ok: true });
+    expect((await post('{not json')).status).toBe(400);
+    expect((await post('a=b', { 'content-type': 'text/plain' })).status).toBe(415);
+    expect((await post(JSON.stringify(lead), { 'content-type': 'application/json', origin: 'https://evil.invalid' })).status).toBe(403);
+    expect((await post(JSON.stringify({ ...lead, message: 'x'.repeat(20_000) }))).status).toBe(413);
+    expect(await leadCount(phone)).toBe(0);
+  });
+
+  it('the endpoint is write-only: GET is not served and never lists leads', async () => {
+    const res = await get('/lien-he/gui');
+    expect(res.status).toBeGreaterThanOrEqual(400);
+    expect(await res.text()).not.toContain('Synthetic W5B Person');
+  });
+
+  it('anonymous REST cannot read or create contact leads or list users', async () => {
+    expect([401, 403]).toContain((await get('/api/contact-leads')).status);
+    const create = await fetch(`${base}/api/contact-leads`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ ...synthetic, consent: { given: true, at: new Date().toISOString() } }),
+    });
+    expect([401, 403]).toContain(create.status);
+    expect([401, 403]).toContain((await get('/api/users')).status);
+  });
+});
