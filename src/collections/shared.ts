@@ -1,5 +1,6 @@
 import type { CollectionConfig, Field, GlobalConfig } from 'payload';
 import { adminOnly, publishedOrStaff, staffOnly } from '../access';
+import { isPublicSlug } from '../lib/seo';
 
 // Blueprint `status` (draft|published) is Payload's `_status` via versions.drafts.
 export const drafts = { drafts: true } as const;
@@ -15,7 +16,17 @@ export const seoField: Field = {
   ],
 };
 
-export const slugField: Field = { name: 'slug', type: 'text', required: true, unique: true, index: true };
+// A slug becomes a URL path segment (canonical, sitemap, JSON-LD): only lowercase ASCII words joined by hyphens may
+// be saved, so an unsafe value (path traversal, scheme, whitespace, markup) can never be published.
+export const slugField: Field = {
+  name: 'slug',
+  type: 'text',
+  required: true,
+  unique: true,
+  index: true,
+  validate: (value: unknown) =>
+    isPublicSlug(value) || 'Slug chỉ gồm chữ thường a-z, số và dấu gạch ngang đơn (tối đa 120 ký tự).',
+};
 
 /** EDITOR-managed content: staff write, public reads published only. */
 export const editorContentAccess: CollectionConfig['access'] = {

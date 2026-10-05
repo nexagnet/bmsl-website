@@ -65,6 +65,39 @@ describe('ServiceArea seed', () => {
   });
 });
 
+describe('Project customer-fact publication gate (sourceStatus)', () => {
+  it('keeps a LEGACY-SOURCE project with facts as a draft; publishing needs CONFIRMED', async () => {
+    const project = await payload.create({
+      collection: 'projects',
+      data: { name: 'Synthetic gated project', slug: 'synthetic-gated', sourceStatus: 'LEGACY-SOURCE', address: 'Synthetic address' },
+      draft: true,
+      ...asUser(editor),
+    });
+    await expect(
+      payload.update({ collection: 'projects', id: project.id, data: { _status: 'published' }, ...asUser(editor) }),
+    ).rejects.toThrow();
+    const still = await payload.findByID({ collection: 'projects', id: project.id, draft: true, ...asUser(editor) });
+    expect(still._status).toBe('draft');
+
+    const published = await payload.update({
+      collection: 'projects',
+      id: project.id,
+      data: { sourceStatus: 'CONFIRMED', _status: 'published' },
+      ...asUser(editor),
+    });
+    expect(published._status).toBe('published');
+  });
+
+  it('rejects an unsafe slug on save', async () => {
+    for (const slug of ['../etc/passwd', 'javascript:alert(1)', 'UPPER', 'has space', 'a//b', '<b>x</b>']) {
+      await expect(
+        payload.create({ collection: 'projects', data: { name: 'Synthetic', slug, sourceStatus: 'LEGACY-SOURCE' }, ...asUser(editor) }),
+        slug,
+      ).rejects.toThrow();
+    }
+  });
+});
+
 describe('Project BQT feedback gate', () => {
   it('hides feedback text from the public until approvedBySource=true', async () => {
     const project = await payload.create({
@@ -72,7 +105,8 @@ describe('Project BQT feedback gate', () => {
       data: {
         name: 'Synthetic BQT project',
         slug: 'synthetic-bqt',
-        sourceStatus: 'LEGACY-SOURCE',
+        // CONFIRMED so that this test isolates the approvedBySource gate; the sourceStatus gate has its own test below.
+        sourceStatus: 'CONFIRMED',
         bqtFeedback: { text: 'synthetic feedback', approvedBySource: false },
       },
       ...asUser(editor),

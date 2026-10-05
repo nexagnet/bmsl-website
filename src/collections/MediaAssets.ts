@@ -38,6 +38,8 @@ export const MediaAssets: CollectionConfig = {
     {
       name: 'source',
       type: 'text',
+      // Rights provenance is an internal note; approved media is public, its source/owner note is not.
+      access: { read: ({ req }) => isStaff(req.user) },
       admin: { description: 'Nguồn/chủ sở hữu của tệp, dùng để kiểm tra bản quyền.' },
     },
   ],

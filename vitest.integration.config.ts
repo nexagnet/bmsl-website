@@ -8,6 +8,10 @@ export default defineConfig({
   },
   test: {
     include: ['tests/integration/**/*.test.ts'],
+    // Creates the invocation-owned disposable database before any suite runs and drops it afterwards; the guard
+    // makes every worker refuse to run against anything else.
+    globalSetup: ['tests/integration/global-setup.ts'],
+    setupFiles: ['tests/integration/support/worker-guard.ts'],
     testTimeout: 30000,
     hookTimeout: 120000,
     // Payload tests reset the disposable database schema; never run files concurrently.

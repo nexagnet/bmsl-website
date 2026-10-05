@@ -33,30 +33,42 @@ export async function readBoundedBody(request: Request, maxBytes: number): Promi
 export const isJsonContentType = (request: Request): boolean =>
   /^application\/json\s*(;|$)/i.test(request.headers.get('content-type') ?? '');
 
-const hostOf = (value: string | null | undefined): string | undefined => {
+/** Canonical scheme://host[:port] of an http(s) URL; anything else (opaque "null", other schemes, junk) is undefined. */
+export const originOf = (value: string | null | undefined): string | undefined => {
   if (!value) return undefined;
   try {
-    return new URL(value.includes('://') ? value : `http://${value}`).host.toLowerCase();
+    const url = new URL(value.trim());
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.origin : undefined;
   } catch {
     return undefined;
   }
 };
 
 /**
- * Browser CSRF defence for a cookie-less public endpoint. A request is rejected when the browser says it is
- * cross-site (Sec-Fetch-Site) or when an Origin header names a host that is neither this request's Host nor the
- * configured SITE_URL. Requests with neither header (curl, server-to-server) pass: they carry no ambient browser
- * credentials, and the endpoint is write-only and bounded. Forwarded-host headers are deliberately not trusted.
+ * The only origins accepted as "this site": the origin of SITE_URL (localhost:3000 when unset, like site.ts) plus
+ * the explicit comma-separated TRUSTED_ORIGINS list for approved alternates such as a www host. Each entry is a full
+ * origin (scheme + host + port); unparsable entries are dropped, never repaired.
  */
-export function isSameSiteRequest(request: Request, siteUrl: string | undefined = process.env.SITE_URL): boolean {
+export function trustedOriginsFromEnv(env: Record<string, string | undefined> = process.env): string[] {
+  const configured = [env.SITE_URL?.trim() || 'http://localhost:3000', ...(env.TRUSTED_ORIGINS ?? '').split(',')];
+  return [...new Set(configured.map(originOf).filter((o): o is string => o !== undefined))];
+}
+
+/**
+ * Browser CSRF defence for a cookie-less public endpoint. A request is rejected when the browser says it is
+ * cross-site (Sec-Fetch-Site) or when an Origin header is not exactly one of the trusted origins: scheme, host AND
+ * port must all match, so http vs https or another port of the same host is a different origin. The request's own
+ * Host header and every X-Forwarded-* header are attacker-influenced and are deliberately NOT trusted as origins;
+ * behind a proxy the operator sets SITE_URL / TRUSTED_ORIGINS. Requests with neither Sec-Fetch-Site nor Origin (curl,
+ * server-to-server) pass: they carry no ambient browser credentials, and the endpoint is write-only and bounded.
+ */
+export function isSameSiteRequest(request: Request, trustedOrigins: string[] = trustedOriginsFromEnv()): boolean {
   const fetchSite = request.headers.get('sec-fetch-site');
   if (fetchSite && fetchSite !== 'same-origin' && fetchSite !== 'none') return false;
   const origin = request.headers.get('origin');
   if (origin === null) return true;
-  const originHost = hostOf(origin);
-  if (!originHost) return false;
-  const allowed = [hostOf(request.headers.get('host')), hostOf(siteUrl)].filter(Boolean);
-  return allowed.includes(originHost);
+  const normalized = originOf(origin);
+  return normalized !== undefined && trustedOrigins.includes(normalized);
 }
 
 export type RateLimiterOptions = { max: number; windowMs: number; now?: () => number };

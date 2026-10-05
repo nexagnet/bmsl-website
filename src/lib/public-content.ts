@@ -19,7 +19,25 @@ const slugOf = (v: unknown): string | undefined => {
   return s && isPublicSlug(s) ? s : undefined;
 };
 
-export const isPublished = (doc: unknown): doc is Doc => isDoc(doc) && doc._status === 'published';
+/**
+ * A link target that may be rendered from CMS content: a same-site absolute path, or an http(s)/mailto/tel URL.
+ * Everything else (javascript:, data:, vbscript:, protocol-relative //host, backslash tricks, control characters,
+ * unparsable values) is dropped so that the text is shown without a link.
+ */
+export function safeLinkHref(url: unknown): string | undefined {
+  const value = text(url);
+  // eslint-disable-next-line no-control-regex
+  if (!value || /[\u0000-\u001f\u007f\\]/.test(value)) return undefined;
+  if (value.startsWith('/')) return value.startsWith('//') ? undefined : value;
+  try {
+    const parsed = new URL(value);
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol) ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export const isPublished =(doc: unknown): doc is Doc => isDoc(doc) && doc._status === 'published';
 
 export type PublicImage = { id: string; alt: string; url: string; width?: number; height?: number };
 
@@ -107,11 +125,15 @@ export function toProject(d: unknown): ProjectView | undefined {
   const name = text(d.name);
   const slug = slugOf(d.slug);
   if (!name || !slug) return undefined;
-  const facts = [
-    { label: 'Vị trí', value: text(d.address) },
-    { label: 'Quy mô', value: text(d.scale) },
-    { label: 'Vận hành từ', value: text(d.operatingSince) },
-  ].filter((f): f is { label: string; value: string } => !!f.value);
+  // Customer facts are UNCONFIRMED until the source approved them: only sourceStatus=CONFIRMED may show them.
+  const confirmed = d.sourceStatus === 'CONFIRMED';
+  const facts = confirmed
+    ? [
+        { label: 'Vị trí', value: text(d.address) },
+        { label: 'Quy mô', value: text(d.scale) },
+        { label: 'Vận hành từ', value: text(d.operatingSince) },
+      ].filter((f): f is { label: string; value: string } => !!f.value)
+    : [];
   const services = (Array.isArray(d.services) ? d.services : [])
     .map(toService)
     .filter((s): s is ServiceView => !!s)
@@ -126,8 +148,8 @@ export function toProject(d: unknown): ProjectView | undefined {
     facts,
     services,
     images: toPublicImages(d.images),
-    // BQT feedback is shown only when the source explicitly approved it.
-    bqtFeedback: bqt.approvedBySource === true ? text(bqt.text) : undefined,
+    // BQT feedback is shown only for a CONFIRMED project and when the source explicitly approved it.
+    bqtFeedback: confirmed && bqt.approvedBySource === true ? text(bqt.text) : undefined,
     seo: toSeo(d.seo),
   };
 }

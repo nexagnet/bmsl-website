@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildSitemapEntries,
   hasRichText,
+  safeLinkHref,
   toArticle,
   toDocument,
   toJob,
@@ -62,18 +63,63 @@ describe('media rights gate', () => {
   });
 });
 
+describe('safeLinkHref (rich text links)', () => {
+  it('keeps same-site paths and http(s)/mailto/tel URLs', () => {
+    for (const ok of ['/gioi-thieu', '/du-an/abc?x=1#y', 'https://example.com/a', 'http://example.com', 'mailto:a@example.com', 'tel:+84900000000']) {
+      expect(safeLinkHref(ok), ok).toBe(ok);
+    }
+  });
+
+  it('drops scripts, data URLs, protocol-relative, backslash, control-character and junk targets', () => {
+    for (const bad of [
+      'javascript:alert(1)',
+      ' JavaScript:alert(1)',
+      'java\tscript:alert(1)',
+      'java\nscript:alert(1)',
+      'data:text/html,<script>alert(1)</script>',
+      'vbscript:x',
+      '//evil.example/path',
+      '/\\evil.example',
+      '\\\\evil.example',
+      'ftp://example.com/x',
+      'example.com',
+      '',
+      '   ',
+      null,
+      undefined,
+      42,
+    ]) {
+      expect(safeLinkHref(bad), String(bad)).toBeUndefined();
+    }
+  });
+});
+
 describe('UNCONFIRMED optional data', () => {
   it('hides BQT feedback unless approvedBySource', () => {
-    const doc = { ...pub, id: 1, name: 'P', slug: 'p' };
+    const doc = { ...pub, id: 1, name: 'P', slug: 'p', sourceStatus: 'CONFIRMED' };
     expect(toProject({ ...doc, bqtFeedback: { text: 'ok', approvedBySource: false } })?.bqtFeedback).toBeUndefined();
     expect(toProject({ ...doc, bqtFeedback: { text: 'ok' } })?.bqtFeedback).toBeUndefined();
     expect(toProject({ ...doc, bqtFeedback: { text: 'ok', approvedBySource: true } })?.bqtFeedback).toBe('ok');
   });
 
   it('omits empty project facts instead of inventing values', () => {
-    const p = toProject({ ...pub, id: 1, name: 'P', slug: 'p', address: '  ', scale: null, operatingSince: '2020' });
+    const doc = { ...pub, id: 1, name: 'P', slug: 'p', sourceStatus: 'CONFIRMED' };
+    const p = toProject({ ...doc, address: '  ', scale: null, operatingSince: '2020' });
     expect(p?.facts).toEqual([{ label: 'Vận hành từ', value: '2020' }]);
-    expect(toProject({ ...pub, id: 1, name: 'P', slug: 'p' })?.facts).toEqual([]);
+    expect(toProject({ ...doc })?.facts).toEqual([]);
+  });
+
+  it('shows customer facts and BQT feedback only for sourceStatus CONFIRMED (legacy/unknown sources stay hidden)', () => {
+    const facts = { address: 'Synthetic address', scale: '100', operatingSince: '2020', bqtFeedback: { text: 'ok', approvedBySource: true } };
+    const base = { ...pub, id: 1, name: 'P', slug: 'p', ...facts };
+    for (const sourceStatus of ['LEGACY-SOURCE', undefined, null, 'confirmed', true]) {
+      const p = toProject({ ...base, sourceStatus });
+      expect(p?.facts, String(sourceStatus)).toEqual([]);
+      expect(p?.bqtFeedback, String(sourceStatus)).toBeUndefined();
+    }
+    const confirmed = toProject({ ...base, sourceStatus: 'CONFIRMED' });
+    expect(confirmed?.facts).toHaveLength(3);
+    expect(confirmed?.bqtFeedback).toBe('ok');
   });
 
   it('leaves job salary/benefits/deadline undefined when empty', () => {

@@ -6,7 +6,21 @@ import type pg from 'pg';
 // ends those processes, waits until PostgreSQL itself reports no session left, and only then drops the
 // database, without WITH (FORCE) and without terminating anyone else's sessions.
 
-const DISPOSABLE_NAME = /^bmsl_[a-z_]+_[0-9a-f]{12}$/;
+const DISPOSABLE_NAME = /^bmsl_[a-z_]+_[0-9a-f]{12,16}$/;
+
+// Ownership is not a naming convention: a name that merely looks disposable (right prefix, local host) may belong
+// to someone else's run. Only databases whose CREATE DATABASE this module instance actually executed successfully
+// are recorded here, and only recorded databases can be inspected-for-drop or dropped.
+const owned = new Set<string>();
+
+export const ownsDatabase = (dbName: string): boolean => owned.has(dbName);
+
+/** Creates a database and records ownership only after PostgreSQL confirmed the creation (a failed or "already exists" CREATE is never owned). */
+export async function createOwnedDatabase(admin: pg.Client, dbName: string): Promise<void> {
+  if (!DISPOSABLE_NAME.test(dbName)) throw new Error(`refusing to create non-disposable database ${dbName}`);
+  await admin.query(`create database "${dbName}"`);
+  owned.add(dbName);
+}
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -75,8 +89,10 @@ export async function waitForNoSessions(admin: pg.Client, dbName: string, timeou
 }
 
 /** Drops only a database this test created, and only once nothing is connected to it. */
-export async function dropDisposableDatabase(admin: pg.Client, dbName: string): Promise<void> {
+export async function dropDisposableDatabase(admin: pg.Client, dbName: string, timeoutMs = 30_000): Promise<void> {
   if (!DISPOSABLE_NAME.test(dbName)) throw new Error(`refusing to drop non-disposable database ${dbName}`);
-  await waitForNoSessions(admin, dbName);
+  if (!owned.has(dbName)) throw new Error(`refusing to drop ${dbName}: it was not created by this run`);
+  await waitForNoSessions(admin, dbName, timeoutMs);
   await admin.query(`drop database if exists "${dbName}"`);
+  owned.delete(dbName);
 }

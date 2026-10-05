@@ -1,5 +1,6 @@
-import type { CollectionConfig } from 'payload';
+import { ValidationError, type CollectionConfig } from 'payload';
 import { isStaff } from '../access';
+import { mergeForPublishCheck, publishGateProblem } from '../lib/publish-gate';
 import {
   adminContentAccess,
   drafts,
@@ -60,6 +61,17 @@ export const Projects: CollectionConfig = {
   },
   access: editorContentAccess,
   versions: drafts,
+  hooks: {
+    // Customer facts stay draft until sourceStatus is CONFIRMED (incl. the 17 imported legacy profiles).
+    beforeValidate: [
+      ({ data, originalDoc, operation }) => {
+        if (operation !== 'create' && operation !== 'update') return data;
+        const problem = publishGateProblem(mergeForPublishCheck(originalDoc, data));
+        if (problem) throw new ValidationError({ errors: [{ message: problem, path: 'sourceStatus' }] });
+        return data;
+      },
+    ],
+  },
   fields: [
     { name: 'name', type: 'text', required: true },
     slugField,
@@ -109,7 +121,13 @@ export const Projects: CollectionConfig = {
         },
       ],
     },
-    { name: 'legacyUrls', type: 'array', fields: [{ name: 'url', type: 'text', required: true }] },
+    {
+      name: 'legacyUrls',
+      type: 'array',
+      // Migration provenance is internal: never part of any anonymous REST response.
+      access: { read: ({ req }) => isStaff(req.user) },
+      fields: [{ name: 'url', type: 'text', required: true }],
+    },
     {
       name: 'sourceStatus',
       type: 'select',
@@ -143,7 +161,7 @@ export const Articles: CollectionConfig = {
     { name: 'category', type: 'relationship', relationTo: 'article-categories' },
     { name: 'cover', type: 'relationship', relationTo: 'media-assets' },
     { name: 'publishedAt', type: 'date' },
-    { name: 'legacyUrl', type: 'text' },
+    { name: 'legacyUrl', type: 'text', access: { read: ({ req }) => isStaff(req.user) } },
     seoField,
   ],
 };

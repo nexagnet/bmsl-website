@@ -31,8 +31,8 @@ operator/hosting decision and remains NOT_PROVEN.
 * **Initial ADMIN bootstrap.** Payload's `/api/users/first-register` creates the first user (forced to `ADMIN` by the
   Users hook) with no authentication while the users table is empty. Create the first ADMIN on a private network
   (or before the site is publicly routable) and confirm a user exists before exposing the app. Credentials are
-  chosen by the operator and are never committed. After initialisation Payload refuses `first-register`; this
-  repository does not yet have an automated test for that and it is NOT_PROVEN.
+  chosen by the operator and are never committed. W5B2 closes the public bootstrap: over HTTP it requires
+  `INITIAL_ADMIN_BOOTSTRAP_TOKEN` (see the W5B2 section) and is refused after initialisation.
 * `HSTS_ENABLED=true` only after HTTPS is verified on the production domain.
 * `CSP_ALLOW_GA4=true` only together with an approved GA4 property configured in the CMS.
 * `SITE_URL` should be the public origin so the same-site check accepts the real domain behind a proxy.
@@ -62,11 +62,8 @@ review has NOT been performed.
 * Wiring a browser suite into `pnpm test:integration` needs browser provisioning (`playwright install`) inside the
   existing integration job; this has not been attempted. No `.github` change is needed if it is wired through the
   package script, but the job's 20-minute budget must be measured first.
-* Integration DB-safety hardening of every existing suite (random disposable DB, reject non-disposable targets):
-  only `http-smoke` already follows this pattern; the other suites still reset `DATABASE_URL` after a localhost
-  check. Do not run them against any existing database.
-* Anonymous REST `draft=true` / versions / depth / select probes, GraphQL route and playground availability,
-  upload endpoint SVG/MIME spoofing over HTTP, `first-register` after initialisation: not tested over HTTP.
+* (Superseded by W5B2 below: every integration suite now runs against an invocation-owned database, and the HTTP
+  probes, GraphQL, upload and `first-register` checks exist; they are proven only by the CI run.)
 * Thumbnail/derived-image delivery: image optimisation stays disabled (`images.unoptimized`), so no responsive
   modern-format pipeline was added.
 * JobPosting `datePosted`/location fields and migrations, LocalBusiness: not implemented.
@@ -74,6 +71,42 @@ review has NOT been performed.
 * Real GA4 transport/event-name browser proof and consent grant/withdraw browser flows: not implemented.
 * Integration assertions added to `tests/integration/http-smoke.test.ts` were written without a local PostgreSQL
   and are only proven once CI runs them.
+
+## W5B2 — CMS, disposable database and HTTP security (this change set)
+
+Status: implemented and written without a local PostgreSQL/Docker; the HTTP and database suites are only proven once
+the required CI job runs them. Browser/axe/Lighthouse remain successor contracts (#36/#37).
+
+| Area | Where | Test |
+| --- | --- | --- |
+| `pnpm test:integration` creates one random invocation-owned database (`bmsl_it_<16 hex>`) before any suite; workers refuse any other target; teardown drops only what setup created, after PostgreSQL reports no session, never `WITH (FORCE)` | `vitest.integration.config.ts`, `tests/integration/global-setup.ts`, `support/worker-guard.ts`, `support/disposable-db.ts`, `support/db-lifecycle.ts` | `support/disposable-db.test.ts` (also in `pnpm test`), `db-lifecycle.test.ts` (real PostgreSQL negative ownership) |
+| Ownership is recorded only after a successful `CREATE DATABASE`; a valid-looking name, local host or an already-existing database is never droppable | `createOwnedDatabase` / `dropDisposableDatabase` | same |
+| Initial ADMIN over HTTP needs `INITIAL_ADMIN_BOOTSTRAP_TOKEN` (>= 32 chars, operator generated, no default) sent as `x-bootstrap-token`; a PostgreSQL advisory lock serialises concurrent first accounts; once any user exists an unauthenticated HTTP create is refused; the local API (operator CLI/seed) still bootstraps | `src/lib/bootstrap.ts`, `src/collections/Users.ts` | `bootstrap.test.ts`; HTTP: `support/security-blocks.ts` |
+| Canonical Origin check compares scheme+host+port with `SITE_URL` and the explicit comma-separated `TRUSTED_ORIGINS`; `Host` and `X-Forwarded-*` are never origins | `src/lib/request-guard.ts` | `request-guard.test.ts`; HTTP origin block |
+| GraphQL disabled (`graphQL.disable`); no GraphQL/playground route exists | `src/payload.config.ts` | HTTP: 404 for GET/HEAD/POST/OPTIONS on `/api/graphql*` |
+| Upload size cap 10 MB (HTTP 413) in addition to the explicit MIME list | `src/payload.config.ts` | HTTP upload block (SVG, MIME spoofing, oversize, anonymous, PNG/PDF positive control) |
+| Internal provenance (`media-assets.source`, `projects.legacyUrls`, `articles.legacyUrl`) is staff-read only | collections | HTTP anonymous probes |
+| Customer facts: public rendering and publication require `sourceStatus=CONFIRMED`; legacy profiles (draft) cannot be published with facts | `src/lib/publish-gate.ts`, `public-content.ts` | `publish-gate.test.ts`, `public-content.test.ts`, `cms.test.ts` |
+| Slugs must be lowercase ASCII words with single hyphens on save; rich-text links render only for http(s)/mailto/tel or same-site paths | `shared.ts`, `safeLinkHref` | `public-content.test.ts`, `cms.test.ts` |
+| Rights revocation: warm approved GET, then revoke; GET/HEAD/conditional/range requests return no bytes and no 304; Next optimizer stays disabled | existing W5A media access (preserved) | HTTP rights block |
+
+Operator configuration added: `INITIAL_ADMIN_BOOTSTRAP_TOKEN`, `TRUSTED_ORIGINS` (full origins), `SITE_URL` (canonical
+origin; when unset only `http://localhost:3000` is trusted). Create the first ADMIN with the token on a private
+network or through the local API, then unset the token.
+
+### `pnpm audit --prod` reachability (2026-10-05, 13 findings: 3 high, 6 moderate, 4 low; no critical)
+
+* `undici` 7.29.0 via `payload>undici` (2 high: unrequested WebSocket subprotocol DoS, dropped TLS connect options;
+  plus moderate/low retry/dump/cache interceptor and decompression findings). The site never uses undici's WebSocket,
+  proxy/retry/dump/cache interceptors or custom TLS client options; Payload only uses it for its own outbound fetch
+  (`safeFetch`, for example upload-from-URL, which anonymous users cannot reach). Not reachable from anonymous
+  requests as configured, but NOT proven unreachable. The scoped fix is a `pnpm.overrides` entry `undici: 7.30.0`
+  (compatible patch, 7.29.1+). It was NOT applied: the builder sandbox could neither write `pnpm-lock.yaml` nor the
+  pnpm store, and an override without a regenerated lockfile fails the frozen-lockfile CI install. The coordinator
+  or a networked run must apply it and run `pnpm install` + `pnpm audit --prod`.
+* `braces` <= 3.0.3 (high ReDoS) via `@payloadcms/next>sass>chokidar`: build/dev file watcher only, no request path;
+  no patched release exists. Tracked separately; this is not a zero-vulnerability claim.
+* `esbuild` <= 0.24.2 (moderate, dev server only) via `drizzle-kit`; `dompurify` (low) via the admin Monaco editor.
 
 ## Remaining customer UAT checklist
 Branded Safari/Edge, iOS/Android devices, Windows/macOS, signed BMSL UAT, real GA4 account and Enhanced
