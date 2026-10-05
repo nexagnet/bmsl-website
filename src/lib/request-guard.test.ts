@@ -106,4 +106,11 @@ describe('rate limiter', () => {
       windowMs: 600_000,
     });
   });
+
+  it('caps oversized env values', () => {
+    expect(rateLimitFromEnv({ CONTACT_RATE_LIMIT_MAX: '999999999', CONTACT_RATE_LIMIT_WINDOW_SECONDS: '999999999' })).toEqual({
+      max: 10_000,
+      windowMs: 86_400_000,
+    });
+  });
 });

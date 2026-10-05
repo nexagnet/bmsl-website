@@ -18,6 +18,9 @@ explicitly not yet proven. It does not claim customer sign-off, live abuse prote
 | Uploads: explicit raster + PDF MIME list; `image/*` removed so `image/svg+xml` is rejected by Payload's MIME check | `src/collections/MediaAssets.ts` | `access.test.ts` (config assertion only) |
 
 ### Rate limiting is not production architecture
+Lock-out trade-off: the single global bucket can be exhausted by any client, blocking legitimate leads until the
+window rolls. Env values are capped (max 10000, window 86400 s). Real mitigation belongs at the edge/proxy.
+
 The limiter is one in-memory global bucket per Node process. It bounds abuse of a single instance and nothing
 more. It is not a multi-instance rate limit and is not keyed on client IP, because forwarded-IP headers are
 attacker-controlled unless a trusted proxy is configured. Production abuse protection (edge/WAF/shared store) is an

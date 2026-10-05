@@ -63,6 +63,8 @@ export type RateLimiterOptions = { max: number; windowMs: number; now?: () => nu
  * or production rate-limit architecture (that needs shared state at the edge/proxy and is an operator decision).
  * It is a single global bucket on purpose: client IPs from forwarded headers are attacker-controlled, so nothing
  * here keys on them. Fail-closed: once `max` is reached further requests are refused until the window rolls.
+ * Trade-off: because the bucket is global, a hostile client can exhaust it and lock out legitimate leads until the
+ * window rolls; this is accepted over trusting spoofable IPs, and real mitigation belongs at the edge/proxy.
  * max <= 0 means "refuse everything", never "unlimited".
  */
 export function createRateLimiter({ max, windowMs, now = Date.now }: RateLimiterOptions) {
@@ -88,6 +90,8 @@ export function rateLimitFromEnv(env: Record<string, string | undefined> = proce
     const n = Number(v);
     return v !== undefined && v.trim() !== '' && Number.isInteger(n) && n >= 0 ? n : fallback;
   };
-  const windowSeconds = int(env.CONTACT_RATE_LIMIT_WINDOW_SECONDS, 600);
-  return { max: int(env.CONTACT_RATE_LIMIT_MAX, 30), windowMs: Math.max(1, windowSeconds) * 1000 };
+  // Upper caps keep a typo from silently making the limiter effectively unlimited or never rolling.
+  const windowSeconds = Math.min(86_400, int(env.CONTACT_RATE_LIMIT_WINDOW_SECONDS, 600));
+  const max = Math.min(10_000, int(env.CONTACT_RATE_LIMIT_MAX, 30));
+  return { max, windowMs: Math.max(1, windowSeconds) * 1000 };
 }
