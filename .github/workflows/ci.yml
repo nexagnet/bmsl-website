@@ -1,0 +1,91 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Control-plane contract tests
+        run: node --test tools/autopilot/control-plane.test.mjs
+      - name: Syntax-check autopilot scripts
+        run: |
+          set -euo pipefail
+          for f in tools/autopilot/*.mjs; do node --check "$f"; done
+      - uses: pnpm/action-setup@v4
+        if: ${{ hashFiles('package.json') != '' }}
+        with:
+          version: 10.34.4
+      - name: Install application dependencies
+        if: ${{ hashFiles('package.json') != '' }}
+        run: |
+          test -f pnpm-lock.yaml
+          pnpm install --frozen-lockfile
+      - name: Application verify scripts
+        if: ${{ hashFiles('package.json') != '' }}
+        run: |
+          set -euo pipefail
+          node -e "const p=require('./package.json'); for (const s of ['lint','typecheck','test','build']) { if (!p.scripts?.[s]) process.exit(10) }"
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+
+  integration:
+    name: integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: bmsl
+          POSTGRES_PASSWORD: bmsl_ci
+          POSTGRES_DB: bmsl
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U bmsl"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://bmsl:bmsl_ci@localhost:5432/bmsl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Bootstrap pilot
+        if: ${{ hashFiles('package.json') == '' }}
+        run: echo "No application package yet; control-plane pilot only."
+      - uses: pnpm/action-setup@v4
+        if: ${{ hashFiles('package.json') != '' }}
+        with:
+          version: 10.34.4
+      - name: Install application dependencies
+        if: ${{ hashFiles('package.json') != '' }}
+        run: |
+          test -f pnpm-lock.yaml
+          pnpm install --frozen-lockfile
+      - name: Required application integration suite
+        if: ${{ hashFiles('package.json') != '' }}
+        run: |
+          node -e "const p=require('./package.json'); if (!p.scripts?.['test:integration']) { console.error('Missing required script test:integration'); process.exit(2) }"
+          pnpm test:integration
