@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import nextConfig from '../../next.config.mjs';
 import robots from '../app/robots';
-import sitemap from '../app/sitemap';
+import { buildSitemapEntries } from './public-content';
 import { isPrivatePath } from './seo';
 
 describe('admin exclusion from indexing', () => {
@@ -19,7 +19,9 @@ describe('admin exclusion from indexing', () => {
   });
 
   it('sitemap never lists private paths', () => {
-    for (const entry of sitemap()) {
+    const entries = buildSitemapEntries('https://example.test', ['/', '/admin', '/api/users'], ['/admin/x', '/dich-vu/bao-ve']);
+    expect(entries).toHaveLength(2);
+    for (const entry of entries) {
       expect(isPrivatePath(new URL(entry.url).pathname)).toBe(false);
     }
   });
