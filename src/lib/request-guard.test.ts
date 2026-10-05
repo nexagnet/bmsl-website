@@ -32,6 +32,12 @@ describe('readBoundedBody', () => {
     );
   });
 
+  it('rejects a non-numeric Content-Length', async () => {
+    await expect(readBoundedBody(req({ body: 'x', headers: { 'content-length': 'abc' } }), 100)).rejects.toBeInstanceOf(
+      BodyTooLargeError,
+    );
+  });
+
   it('aborts a chunked stream that crosses the cap even with no Content-Length', async () => {
     let pulled = 0;
     const body = new ReadableStream<Uint8Array>({

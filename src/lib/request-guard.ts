@@ -8,8 +8,11 @@ export class BodyTooLargeError extends Error {}
  * lying Content-Length request can never buffer more than the cap (+ one chunk) in memory.
  */
 export async function readBoundedBody(request: Request, maxBytes: number): Promise<string> {
-  const declared = Number(request.headers.get('content-length') ?? 0);
-  if (Number.isFinite(declared) && declared > maxBytes) throw new BodyTooLargeError();
+  const declaredHeader = request.headers.get('content-length');
+  if (declaredHeader !== null) {
+    // A malformed Content-Length is treated as invalid rather than silently skipping the early reject.
+    if (!/^\d+$/.test(declaredHeader.trim()) || Number(declaredHeader) > maxBytes) throw new BodyTooLargeError();
+  }
   if (!request.body) return '';
   const reader = request.body.getReader();
   const chunks: Uint8Array[] = [];
