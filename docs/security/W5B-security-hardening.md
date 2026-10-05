@@ -39,6 +39,21 @@ contracts (#36/#37).
 | Slugs must be lowercase ASCII words with single hyphens; rich-text links render only for http(s)/mailto/tel or same-site paths | `shared.ts`, `safeLinkHref` | `public-content.test.ts`, `cms.test.ts`, HTTP slug test |
 | Rights revocation: warm approved GET, then revoke; GET/HEAD/conditional/range requests return no bytes and no 304; Next optimizer stays disabled | existing W5A media access (preserved) | HTTP rights block |
 
+### Limits of the upload checks (what they do not prove)
+The upload policy identifies a file by extension, declared MIME type and magic-byte signature; the PDF check only
+confirms a structurally plausible PDF. This is file-type identification, not antivirus/malware scanning and not complete
+PDF validation. An approved PDF can still contain active constructs (for example JavaScript actions, launch or
+embedded-file entries), so this document does not claim stored files have no executable content. Only staff-uploaded,
+rights-APPROVED files are served publicly; malware scanning or PDF sanitising is an operator/hosting decision and
+remains NOT_PROVEN.
+
+### Editing old unconfirmed published records (projects, job postings)
+The publication gates evaluate the stored document overlaid with the incoming change. A project or job that was already
+published while `sourceStatus` is not `CONFIRMED` (data stored before the gate existed) cannot be saved again, even as a
+draft edit, because the stored record is still published. Safe workaround for staff: first set the record to draft
+(unpublish) so it stops being public, make the draft edits, and publish again only after the source has confirmed it and
+`sourceStatus` is `CONFIRMED`. Do not set `CONFIRMED` just to unblock editing.
+
 ### Field-level access and empty-array placeholders
 Where a field is hidden by field access, Payload removes the value. For an array field (`legacyUrls`) the response may
 carry an empty array instead of omitting the key, so the HTTP tests assert that no entries, marker or legacy host
@@ -86,6 +101,10 @@ claim.
   patched release exists. Tracked separately.
 * `esbuild` <= 0.24.2 (moderate, dev server only) via `drizzle-kit`; `dompurify` (low) via the admin Monaco editor.
 
+Status of the `undici` patch: still open, tracked for a later run that is permitted to write the lockfile; blocked here by
+the Action sandbox's lockfile write control, which was not bypassed. Independent review found no reachable high-severity
+preconditions, which is not a proof of unreachability. No zero-vulnerability claim is made.
+
 The independent coordinator security review has not been performed by the builder.
 
 ## NOT_PROVEN / not implemented
@@ -94,9 +113,32 @@ The independent coordinator security review has not been performed by the builde
   and physical devices remain unproven.
 * Thumbnail/derived-image delivery: image optimisation stays disabled (`images.unoptimized`); no rights-aware
   responsive pipeline exists.
-* JobPosting `datePosted`/location fields and LocalBusiness: not implemented (successor).
+* LocalBusiness: stays absent until BMSL explicitly confirms an address.
+* Antivirus/malware scanning and complete PDF validation of uploads: not implemented (see "Limits of the upload checks").
+* The `undici` patch remains open (see audit section).
+* No real recruitment content exists: customer job facts are not provided, so any job stays draft/UNCONFIRMED.
 * Real GA4 transport and consent browser flows: not implemented.
 * Every integration assertion above is proven only once CI runs it against PostgreSQL.
+
+## W5B3 — optional confirmed recruitment facts
+
+`job-postings` gained operator-entered `datePosted`, `jobLocation` (`streetAddress`, `addressLocality`, `addressRegion`,
+`postalCode`, `addressCountry` as ISO 3166-1 alpha-2) and `sourceStatus` (`LEGACY-SOURCE` default, or `CONFIRMED`) via
+migration `20261005_150000_job_confirmed_facts` (with a matching Drizzle snapshot JSON so the next `migrate:create`
+sees no drift).
+
+| Rule | Where |
+| --- | --- |
+| A job can only be published with `sourceStatus=CONFIRMED` | `jobPublishGateProblem`, `JobPostings` `beforeValidate` |
+| Anonymous REST reads need published + CONFIRMED | `JobPostings` `access.read` |
+| `toJob` rejects non-CONFIRMED jobs, including stored published ones; list, detail and sitemap use it | `public-content.ts`, `cms.ts` |
+| `JobPosting` JSON-LD only with title, description, valid `datePosted`, locality and a two-letter uppercase country; never from `createdAt`, no assumed location/country | `confirmedJobPostingLd` |
+| A CONFIRMED job missing date or location stays public without JobPosting markup | same |
+
+Evidence: unit tests (`publish-gate.test.ts`, `public-content.test.ts`, `seo-structured.test.ts`); on PostgreSQL
+`payload.test.ts` (migration up, down then up, gate, anonymous visibility, SQL-downgraded stored row) and HTTP
+`http-smoke.test.ts` / `support/security-blocks.ts` (JobPosting present/absent, drafts 404, stored legacy job hidden at
+REST, list, detail and sitemap). The integration parts are proven only by CI.
 
 ## Remaining customer UAT checklist
 Branded Safari/Edge, iOS/Android devices, Windows/macOS, signed BMSL UAT, real GA4 account and Enhanced Measurement

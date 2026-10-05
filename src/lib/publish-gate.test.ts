@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mergeForPublishCheck, publishGateProblem } from './publish-gate';
+import { jobPublishGateProblem, mergeForPublishCheck, publishGateProblem } from './publish-gate';
 
 describe('project publication gate (sourceStatus)', () => {
   it('refuses publishing ANY project while sourceStatus is not CONFIRMED, whatever fields it fills in', () => {
@@ -30,5 +30,21 @@ describe('project publication gate (sourceStatus)', () => {
     expect(publishGateProblem(mergeForPublishCheck(stored, { _status: 'published', sourceStatus: 'CONFIRMED' }))).toBeUndefined();
     expect(publishGateProblem(mergeForPublishCheck({ _status: 'published', sourceStatus: 'CONFIRMED' }, { sourceStatus: 'LEGACY-SOURCE' }))).toMatch(/CONFIRMED/);
     expect(mergeForPublishCheck(undefined, undefined)).toEqual({ bqtFeedback: {} });
+  });
+});
+
+describe('job publication gate (sourceStatus)', () => {
+  it('refuses publishing a job unless sourceStatus is CONFIRMED, including a stored published legacy job', () => {
+    for (const sourceStatus of ['LEGACY-SOURCE', undefined, null, 'confirmed']) {
+      expect(jobPublishGateProblem({ _status: 'published', sourceStatus }), String(sourceStatus)).toMatch(/CONFIRMED/);
+    }
+    const stored = { _status: 'published', sourceStatus: 'LEGACY-SOURCE' };
+    expect(jobPublishGateProblem(mergeForPublishCheck(stored, { title: 'edit' }))).toMatch(/CONFIRMED/);
+  });
+
+  it('allows drafts and CONFIRMED jobs', () => {
+    expect(jobPublishGateProblem({ _status: 'draft', sourceStatus: 'LEGACY-SOURCE' })).toBeUndefined();
+    expect(jobPublishGateProblem({ _status: 'published', sourceStatus: 'CONFIRMED' })).toBeUndefined();
+    expect(jobPublishGateProblem(mergeForPublishCheck({ _status: 'draft', sourceStatus: 'LEGACY-SOURCE' }, { _status: 'published', sourceStatus: 'CONFIRMED' }))).toBeUndefined();
   });
 });

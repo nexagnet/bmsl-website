@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import pg from 'pg';
 import { describe, expect, it } from 'vitest';
-import { MARKERS, PRIVATE_MARKERS, STORED_LEGACY_SLUG } from './markers';
+import { JOBS, MARKERS, PRIVATE_MARKERS, STORED_LEGACY_SLUG } from './markers';
 
 // W5B2: actual HTTP proof against the real Next server and the disposable database owned by http-smoke.test.ts.
 // Registered from that file so the build, server and fixture are shared (one `next build` within the CI budget).
@@ -166,6 +166,24 @@ export function registerSecurityBlocks(ctx: SecurityContext): void {
       expect((await ctx.get(`/du-an/${STORED_LEGACY_SLUG}`)).status).toBe(404);
       expect(await (await ctx.get('/du-an')).text()).not.toContain('Synthetic Smoke Stored Legacy Project');
       expect(await (await ctx.get('/sitemap.xml')).text()).not.toContain(STORED_LEGACY_SLUG);
+    });
+
+    it('stored unconfirmed (legacy) job rows are hidden at the REST, page, list and sitemap boundary; drafts stay hidden', async () => {
+      // The CMS refuses to publish an unconfirmed job, so simulate a pre-existing stored row with SQL.
+      const updated = await sql<{ id: number }>(`update job_postings set source_status = 'LEGACY-SOURCE' where slug = $1 returning id`, [JOBS.storedLegacy]);
+      expect(updated).toHaveLength(1);
+      const hidden = [JOBS.storedLegacy, JOBS.unconfirmedDraft, JOBS.confirmedDraft];
+      const routes = [`/api/job-postings?where[slug][equals]=${JOBS.storedLegacy}`, `/api/job-postings/${updated[0]!.id}`, '/api/job-postings?limit=100&depth=1', '/tuyen-dung', '/sitemap.xml'];
+      for (const route of routes) {
+        const body = await (await ctx.get(route)).text();
+        for (const slug of hidden) expect(body, `${route} ${slug}`).not.toContain(slug);
+        expect(body, route).not.toContain(MARKERS.storedLegacyJobSalary);
+        expect(body, route).not.toContain(MARKERS.unconfirmedDraftJobSalary);
+      }
+      for (const slug of hidden) expect((await ctx.get(`/tuyen-dung/${slug}`)).status, slug).toBe(404);
+      // Positive control: the CONFIRMED published job is still public over REST.
+      const ok = await (await ctx.get(`/api/job-postings?where[slug][equals]=${JOBS.confirmed}`)).json() as { docs: unknown[] };
+      expect(ok.docs).toHaveLength(1);
     });
 
     it('approved document file is served; the document pointing at an UNCONFIRMED file exposes no file', async () => {
