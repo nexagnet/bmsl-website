@@ -80,6 +80,31 @@ canonical · redirect theo 02. Mục tiêu hiệu năng tham chiếu: LCP < 2,5 
 - Mã GA4 là cấu hình (`SiteSettings`), không hard-code; ID thật do BMSL cấp (chưa có → `UNCONFIRMED`).
 - Cần banner/đồng ý cookie hay không: `OWNER-DECISION` (tư vấn pháp lý của BMSL).
 
+### 7.1 W5A — bằng chứng kỹ thuật và phần còn thiếu
+
+**SEO (đã triển khai, `src/lib/seo.ts`, `src/lib/cms.ts`, `src/app/sitemap.ts`)**
+- Sitemap đọc *mọi* trang của từng collection (200 bản ghi/lần), không giới hạn 500; lỗi DB làm sitemap lỗi (HTTP 500) thay vì trả bản cắt cụt; > 50.000 URL → lỗi rõ ràng (cần tách sitemap index trước khi đạt mức này).
+- Singleton đã *publish* với `seo.noindex` (home/giới thiệu/quy trình/liên hệ) bị loại khỏi sitemap; bản nháp không ảnh hưởng.
+- `SITE_URL` phải là origin `http(s)` (không path/query/fragment/credential); giá trị sai làm build/runtime lỗi, chỉ khi *không đặt* mới dùng `http://localhost:3000`.
+- Slug do CMS nhập phải khớp `^[a-z0-9]+(-[a-z0-9]+)*$` (≤ 120 ký tự); bản ghi có slug khác bị coi là không công khai. Canonical/OG/sitemap/JSON-LD chỉ dùng đường dẫn qua `isPublicContentPath` (từ chối `..`, `%2e`, `?`, `#`, `\`, `/admin`, `/api`). Đường dẫn ảnh được kiểm tra riêng (`isApprovedMediaPath`: chỉ `/api/media-assets/file/<tên tệp>`).
+- JSON-LD được escape (`<`, `>`, `&`, U+2028/9). Phát ra: `Organization` (trang chủ; chỉ tên + URL), `BreadcrumbList` (dịch vụ, dự án, chuyên mục, bài viết, tuyển dụng), `Article` (cần ngày đăng hợp lệ; không bịa tác giả). `JobPosting` có sẵn hàm dựng nhưng **chưa phát ra**: tin tuyển dụng chưa có `datePosted` và địa điểm làm việc. `LocalBusiness` **tắt**: chưa có địa chỉ được xác nhận.
+- Search Console: trường `searchConsoleVerification` (chỉ ký tự `A-Za-z0-9_-`, 20–100) được in thành thẻ meta nếu bản *đã publish* hợp lệ. Việc in thẻ **không chứng minh** quyền sở hữu property.
+
+**Ảnh / media**
+- Chỉ ảnh `APPROVED` có đường dẫn nội bộ hợp lệ mới ra `<img>`, OG, JSON-LD. `<img>` có `decoding="async"`, `loading="lazy"`, width/height khi có đủ cả hai.
+- Bộ tối ưu ảnh của Next (`/_next/image`) **bị tắt** (`images.unoptimized`; endpoint trả 404 trước khi tra cache). Lý do: cache ảnh đã biến đổi sẽ giữ byte sau khi quyền sử dụng bị thu hồi mà không có kiểm tra Payload mới. Test HTTP kiểm tra GET/HEAD của URL optimizer tự dựng (APPROVED, UNCONFIRMED, và sau khi thu hồi) và GET/HEAD của tệp gốc. **Chuyển cho W5B**: pipeline ảnh responsive/định dạng mới *có kiểm tra quyền* (hoặc cache có cơ chế vô hiệu hoá khi thu hồi).
+
+**Analytics (mặc định tắt, `src/lib/analytics.ts`, `src/components/Analytics.tsx`)**
+- Chỉ đọc `SiteSettings` đã publish. Cần đồng thời: `analyticsEnabled = true` (mặc định `false`, migration `20261005_120000_site_settings_analytics`), `ga4Id` dạng `G-XXXXXXXX` hợp lệ, và đồng ý analytics của khách. Thiếu một điều kiện → không render component, không tải script, không gửi sự kiện. Chỉ có ID mà không bật công tắc → vẫn tắt.
+- Tích hợp consent (chính sách cookie là `OWNER-DECISION`, chưa dựng banner): gọi `window.bmslAnalytics.setConsent(true|false)` hoặc phát `window.dispatchEvent(new CustomEvent('bmsl:analytics-consent', { detail: true }))`. Rút consent dừng toàn bộ traffic về sau. Đồng ý trong form liên hệ **không** phải đồng ý analytics.
+- Riêng tư: `send_page_view=false`; mọi sự kiện/`page_view` mang `page_location` = origin + path (không query/UTM/hash) và `page_referrer` = origin của site (không bao giờ gửi referrer thật). Tắt Google signals/quảng cáo cá nhân hoá. **Enhanced Measurement phải tắt trong data stream GA4** (mã không điều khiển được; các sự kiện tự động khác vẫn kế thừa `page_location` đã làm sạch).
+- Sự kiện: đúng 4 tên; tham số allowlist: `link_location`, `request_type` (`khao-sat|bao-gia|khac`), `document_id` (chỉ số). Không gửi tên/SĐT/email/nội dung/URL tuỳ ý.
+- `phone_click`/`zalo_click`: liên kết ở chân trang, chỉ xuất hiện khi `SiteSettings` đã publish có hotline/Zalo hợp lệ (không bịa). `document_download`: liên kết tài liệu ở trang Quy trình & Minh bạch. `form_submit`: chỉ sau khi server trả `{ ok: true, persisted: true }` (sau khi lưu lead vào PostgreSQL); dữ liệu sai, honeypot, lỗi ghi → không sự kiện.
+
+**Cần tài khoản/phê duyệt thật (chưa chứng minh)**
+- ID GA4 thật, tắt Enhanced Measurement, kiểm tra hành vi GA4 thực tế; xác minh Search Console thực tế; banner consent + chính sách cookie (`OWNER-DECISION`); hotline/Zalo/địa chỉ đã xác nhận; `datePosted` + địa điểm cho `JobPosting`.
+- Biến `SITE_URL` đúng domain production.
+
 ## 8. Backup, vận hành, hạ tầng, đường nối AI
 
 - **Hosting:** deploy lên domain/server của khách. Loại máy chủ, quyền truy cập, backup tự động của host: chưa biết → hỏi BMSL (07 §1).

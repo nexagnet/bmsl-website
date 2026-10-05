@@ -1,4 +1,4 @@
-import { isPrivatePath } from './seo';
+import { isApprovedMediaPath, isPrivatePath, isPublicContentPath, isPublicSlug, SITEMAP_MAX_URLS } from './seo';
 import { paths } from './site';
 
 // Pure mappers from CMS documents to public view models. They are defensive on purpose:
@@ -13,6 +13,9 @@ const isDoc = (v: unknown): v is Doc => typeof v === 'object' && v !== null && !
 export const text = (v: unknown): string | undefined =>
   typeof v === 'string' && v.trim() !== '' ? v.trim() : undefined;
 
+/** Slug that is safe to place in a public URL; anything else makes the document non-public. */
+const publicSlug = (v: unknown): string | undefined => (isPublicSlug(v) ? v : undefined);
+
 export const isPublished = (doc: unknown): doc is Doc => isDoc(doc) && doc._status === 'published';
 
 export type PublicImage = { id: string; alt: string; url: string; width?: number; height?: number };
@@ -22,7 +25,8 @@ export function toPublicImage(v: unknown): PublicImage | undefined {
   if (!isDoc(v) || v.rightsStatus !== 'APPROVED') return undefined;
   const url = text(v.url);
   const alt = text(v.alt);
-  if (!url || !alt) return undefined;
+  // Only same-site Payload media paths: no remote hosts, no traversal, no arbitrary files.
+  if (!url || !alt || !isApprovedMediaPath(url)) return undefined;
   return {
     id: String(v.id),
     alt,
@@ -60,7 +64,7 @@ export type ServiceView = {
 export function toService(d: unknown): ServiceView | undefined {
   if (!isPublished(d)) return undefined;
   const name = text(d.name);
-  const slug = text(d.slug);
+  const slug = publicSlug(d.slug);
   if (!name || !slug) return undefined;
   return {
     id: String(d.id),
@@ -78,7 +82,7 @@ export type CategoryView = { id: string; name: string; slug: string; href: strin
 export function toCategory(d: unknown): CategoryView | undefined {
   if (!isPublished(d)) return undefined;
   const name = text(d.name);
-  const slug = text(d.slug);
+  const slug = publicSlug(d.slug);
   return name && slug ? { id: String(d.id), name, slug, href: paths.category(slug) } : undefined;
 }
 
@@ -98,7 +102,7 @@ export type ProjectView = {
 export function toProject(d: unknown): ProjectView | undefined {
   if (!isPublished(d)) return undefined;
   const name = text(d.name);
-  const slug = text(d.slug);
+  const slug = publicSlug(d.slug);
   if (!name || !slug) return undefined;
   const facts = [
     { label: 'Vị trí', value: text(d.address) },
@@ -142,7 +146,7 @@ export type ArticleView = {
 export function toArticle(d: unknown): ArticleView | undefined {
   if (!isPublished(d)) return undefined;
   const title = text(d.title);
-  const slug = text(d.slug);
+  const slug = publicSlug(d.slug);
   const category = toCategory(d.category);
   if (!title || !slug || !category) return undefined;
   return {
@@ -176,7 +180,7 @@ export type JobView = {
 export function toJob(d: unknown): JobView | undefined {
   if (!isPublished(d)) return undefined;
   const title = text(d.title);
-  const slug = text(d.slug);
+  const slug = publicSlug(d.slug);
   if (!title || !slug) return undefined;
   return {
     id: String(d.id),
@@ -232,21 +236,30 @@ export const formatDate = (iso?: string): string | undefined => {
     : new Intl.DateTimeFormat('vi-VN', { dateStyle: 'long', timeZone: 'Asia/Ho_Chi_Minh' }).format(d);
 };
 
-/** Absolute, de-duplicated sitemap entries; private (/admin, /api) paths are never emitted. */
+/**
+ * Absolute, de-duplicated sitemap entries. Only strictly valid public content paths are emitted (private,
+ * traversal, query, fragment and encoded paths are dropped); `excludedPaths` removes noindex singletons.
+ * More than SITEMAP_MAX_URLS entries throws instead of truncating.
+ */
 export function buildSitemapEntries(
   baseUrl: string,
   staticPaths: readonly string[],
   contentPaths: readonly string[],
+  excludedPaths: readonly string[] = [],
 ): { url: string }[] {
   const seen = new Set<string>();
+  const excluded = new Set(excludedPaths);
   const out: { url: string }[] = [];
   for (const p of [...staticPaths, ...contentPaths]) {
-    if (!p.startsWith('/') || isPrivatePath(p)) continue;
+    if (!isPublicContentPath(p) || isPrivatePath(p) || excluded.has(p)) continue;
     const url = p === '/' ? baseUrl : `${baseUrl}${p}`;
     if (!seen.has(url)) {
       seen.add(url);
       out.push({ url });
     }
+  }
+  if (out.length > SITEMAP_MAX_URLS) {
+    throw new Error(`sitemap has ${out.length} URLs, above the ${SITEMAP_MAX_URLS} per-file limit; split it before publishing`);
   }
   return out;
 }

@@ -5,7 +5,9 @@ import { RichText } from '../../../../components/RichText';
 import { getJob } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
 import { formatDate, hasRichText } from '../../../../lib/public-content';
-import { paths } from '../../../../lib/site';
+import { JsonLd } from '../../../../components/JsonLd';
+import { breadcrumbLd } from '../../../../lib/seo';
+import { getSiteUrl, paths } from '../../../../lib/site';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -22,6 +24,13 @@ export default async function JobDetailPage({ params }: Props) {
   const deadline = formatDate(job.deadline);
   return (
     <>
+      <JsonLd
+        data={breadcrumbLd(getSiteUrl(), [
+          { name: 'Tuyển dụng', path: '/tuyen-dung' },
+          { name: job.title, path: job.href },
+        ])}
+      />
+      {/* JobPosting is not emitted: published jobs have no datePosted/jobLocation (jobPostingLd requires them). */}
       <Crumbs items={[{ label: 'Tuyển dụng', href: '/tuyen-dung' }, { label: job.title }]} />
       <article className="container hero">
         <h1>{job.title}</h1>

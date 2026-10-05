@@ -1,6 +1,7 @@
 'use client';
 
 import { type FormEvent, useState } from 'react';
+import { ANALYTICS_BROWSER_EVENT } from '../lib/analytics';
 
 type State = 'idle' | 'sending' | 'sent' | 'invalid' | 'error';
 
@@ -41,9 +42,19 @@ export function ContactForm() {
         }),
       });
       if (response.ok) {
+        const result = (await response.json().catch(() => ({}))) as { persisted?: boolean };
+        const requestType = String(data.get('requestType') ?? '');
         form.reset();
         setInvalid([]);
         setState('sent');
+        // Analytics only after the server confirmed durable persistence. Minimal payload: no name/phone/email/message.
+        if (result.persisted === true) {
+          window.dispatchEvent(
+            new CustomEvent(ANALYTICS_BROWSER_EVENT, {
+              detail: { name: 'form_submit', params: { request_type: requestType, link_location: 'contact_form' } },
+            }),
+          );
+        }
       } else if (response.status === 400) {
         const body = (await response.json()) as { fields?: string[] };
         setInvalid(body.fields ?? []);

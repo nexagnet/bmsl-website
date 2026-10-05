@@ -20,7 +20,16 @@ export function Crumbs({ items }: { items: { label: string; href?: string }[] })
 }
 
 export const Img = ({ image, sizes }: { image: PublicImage; sizes?: string }) => (
-  <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" sizes={sizes} />
+  // Plain <img> of the rights-checked original: Next's optimizer (/_next/image) is disabled (next.config.mjs)
+  // until a rights-aware pipeline exists. Dimensions are set only when both are known (prevents layout shift).
+  <img
+    src={image.url}
+    alt={image.alt}
+    {...(image.width && image.height ? { width: image.width, height: image.height } : {})}
+    loading="lazy"
+    decoding="async"
+    sizes={sizes}
+  />
 );
 
 export function SurveyCta() {

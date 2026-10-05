@@ -13,7 +13,7 @@ import {
 } from './public-content';
 import { NAV_ITEMS, STATIC_PUBLIC_PATHS, SURVEY_CTA } from './site';
 
-const approved = { id: 1, alt: 'Ảnh', url: '/media/a.jpg', rightsStatus: 'APPROVED' };
+const approved = { id: 1, alt: 'Ảnh', url: '/api/media-assets/file/a.jpg', rightsStatus: 'APPROVED' };
 const pub = { _status: 'published' };
 
 describe('site IA', () => {
@@ -38,7 +38,10 @@ describe('published-only mapping', () => {
 
 describe('media rights gate', () => {
   it('accepts only populated APPROVED media', () => {
-    expect(toPublicImage(approved)?.url).toBe('/media/a.jpg');
+    expect(toPublicImage(approved)?.url).toBe('/api/media-assets/file/a.jpg');
+    for (const url of ['https://evil.test/a.jpg', '//evil.test/a.jpg', '/media/a.jpg', '/api/media-assets/file/../../admin']) {
+      expect(toPublicImage({ ...approved, url })).toBeUndefined();
+    }
     expect(toPublicImage({ ...approved, rightsStatus: 'UNCONFIRMED' })).toBeUndefined();
     expect(toPublicImage(7)).toBeUndefined();
     expect(toPublicImage({ ...approved, alt: '' })).toBeUndefined();
@@ -58,7 +61,7 @@ describe('media rights gate', () => {
 
   it('hides documents whose file is not approved', () => {
     expect(toDocument({ ...pub, id: 1, title: 'D', file: { ...approved, rightsStatus: 'UNCONFIRMED' } })).toBeUndefined();
-    expect(toDocument({ ...pub, id: 1, title: 'D', file: approved })?.url).toBe('/media/a.jpg');
+    expect(toDocument({ ...pub, id: 1, title: 'D', file: approved })?.url).toBe('/api/media-assets/file/a.jpg');
   });
 });
 

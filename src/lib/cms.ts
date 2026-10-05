@@ -16,6 +16,7 @@ import {
   toProject,
   toService,
 } from './public-content';
+import { type PublicSiteSettings, toPublicSiteSettings } from './site-settings';
 
 // Public read path. Every query runs with overrideAccess:false and no user, so collection access
 // (published-only content, APPROVED-only media, BQT approval gate) stays authoritative; the mappers
@@ -137,20 +138,61 @@ export const getDocuments = (): Promise<DocumentView[]> =>
     return compact(r.docs.map(toDocument));
   });
 
-/** Public URLs of CMS content that is published and not marked noindex. */
-export async function getContentPaths(): Promise<string[]> {
-  const [services, projects, categories, articles, jobs] = await Promise.all([
-    getServices(),
-    getProjects(500),
-    getCategories(),
-    getArticles({ limit: 500 }),
-    getJobs(),
+/** Published SiteSettings only (drafts never reach the public site); empty when unpublished or unreadable. */
+export const getSiteSettings = (): Promise<PublicSiteSettings> =>
+  safe({}, async () => toPublicSiteSettings(await (await cms()).findGlobal({ slug: 'site-settings', ...PUBLIC })));
+
+export const SITEMAP_PAGE_SIZE = 200;
+
+/** Singleton routes whose SEO.noindex must exclude them from the sitemap. */
+export const SINGLETON_ROUTES: Record<string, PageSlug> = {
+  '/': 'home-page',
+  '/gioi-thieu': 'about-page',
+  '/quy-trinh-minh-bach': 'process-page',
+  '/lien-he': 'contact-page',
+};
+
+/** Reads every page of a collection (no fixed cap). A database failure rejects: a partial sitemap is never served. */
+async function readAll<T>(collection: 'service-areas' | 'projects' | 'article-categories' | 'articles' | 'job-postings', map: (d: unknown) => T | undefined): Promise<T[]> {
+  const payload = await cms();
+  const out: T[] = [];
+  for (let page = 1; ; page++) {
+    const r = await payload.find({ collection, page, limit: SITEMAP_PAGE_SIZE, sort: 'id', ...PUBLIC, depth: 1 });
+    for (const doc of r.docs) {
+      const item = map(doc);
+      if (item !== undefined) out.push(item);
+    }
+    if (!r.hasNextPage) return out;
+  }
+}
+
+/** Singleton routes that are published with noindex (strict read: failures reject instead of failing open). */
+async function noindexSingletonRoutes(): Promise<string[]> {
+  const payload = await cms();
+  const out: string[] = [];
+  for (const [route, slug] of Object.entries(SINGLETON_ROUTES)) {
+    const page = toPage(await payload.findGlobal({ slug, ...PUBLIC }));
+    if (page?.seo.noindex) out.push(route);
+  }
+  return out;
+}
+
+/** Public sitemap data: indexable published content (all pages) plus the singleton routes to exclude. */
+export async function getSitemapData(): Promise<{ contentPaths: string[]; excludedPaths: string[] }> {
+  const [services, projects, categories, articles, jobs, excludedPaths] = await Promise.all([
+    readAll('service-areas', toService),
+    readAll('projects', toProject),
+    readAll('article-categories', toCategory),
+    readAll('articles', toArticle),
+    readAll('job-postings', toJob),
+    noindexSingletonRoutes(),
   ]);
-  return [
+  const contentPaths = [
     ...services.filter((s) => !s.seo.noindex).map((s) => s.href),
     ...projects.filter((p) => !p.seo.noindex).map((p) => p.href),
     ...categories.map((c) => c.href),
-    ...articles.articles.filter((a) => !a.seo.noindex).map((a) => a.href),
+    ...articles.filter((a) => !a.seo.noindex).map((a) => a.href),
     ...jobs.filter((j) => !j.seo.noindex).map((j) => j.href),
   ];
+  return { contentPaths, excludedPaths };
 }

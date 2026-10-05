@@ -5,7 +5,9 @@ import { RichText } from '../../../../../components/RichText';
 import { getArticle } from '../../../../../lib/cms';
 import { buildMetadata } from '../../../../../lib/metadata';
 import { formatDate } from '../../../../../lib/public-content';
-import { paths } from '../../../../../lib/site';
+import { JsonLd } from '../../../../../components/JsonLd';
+import { articleLd, breadcrumbLd } from '../../../../../lib/seo';
+import { getSiteUrl, paths } from '../../../../../lib/site';
 
 type Props = { params: Promise<{ category: string; slug: string }> };
 
@@ -22,6 +24,22 @@ export default async function ArticlePage({ params }: Props) {
   const date = formatDate(article.publishedAt);
   return (
     <>
+      <JsonLd
+        data={breadcrumbLd(getSiteUrl(), [
+          { name: 'Kiến thức', path: '/kien-thuc' },
+          { name: article.category.name, path: article.category.href },
+          { name: article.title, path: article.href },
+        ])}
+      />
+      <JsonLd
+        data={articleLd(getSiteUrl(), {
+          headline: article.title,
+          path: article.href,
+          publishedAt: article.publishedAt,
+          imageUrl: article.cover?.url,
+          description: article.excerpt,
+        })}
+      />
       <Crumbs
         items={[
           { label: 'Kiến thức', href: '/kien-thuc' },

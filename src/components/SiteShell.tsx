@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import type { PublicSiteSettings } from '../lib/site-settings';
 import { NAV_ITEMS, SITE_NAME, SURVEY_CTA } from '../lib/site';
 
 function Nav({ label }: { label: string }) {
@@ -16,7 +17,7 @@ function Nav({ label }: { label: string }) {
   );
 }
 
-export function SiteShell({ children }: { children: ReactNode }) {
+export function SiteShell({ children, settings = {} }: { children: ReactNode; settings?: PublicSiteSettings }) {
   return (
     <>
       <a className="skip-link" href="#main">
@@ -47,6 +48,27 @@ export function SiteShell({ children }: { children: ReactNode }) {
         <div className="container">
           <p className="wordmark">{SITE_NAME}</p>
           <Nav label="Điều hướng chân trang" />
+          {/* Contact links appear only from PUBLISHED, validated settings; nothing is invented. */}
+          {settings.hotline || settings.zalo ? (
+            <p>
+              {settings.hotline ? (
+                <a href={settings.hotline.href} data-analytics-event="phone_click" data-analytics-location="footer">
+                  Hotline: {settings.hotline.display}
+                </a>
+              ) : null}
+              {settings.hotline && settings.zalo ? ' · ' : null}
+              {settings.zalo ? (
+                <a
+                  href={settings.zalo.href}
+                  rel="noopener noreferrer"
+                  data-analytics-event="zalo_click"
+                  data-analytics-location="footer"
+                >
+                  Zalo: {settings.zalo.display}
+                </a>
+              ) : null}
+            </p>
+          ) : null}
           <p className="muted">© {SITE_NAME}</p>
         </div>
       </footer>

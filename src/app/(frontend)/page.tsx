@@ -4,7 +4,9 @@ import { ArticleCards, Empty, ProjectCards, ServiceCards, SurveyCta } from '../.
 import { RichText } from '../../components/RichText';
 import { getArticles, getPage, getProjects, getServices } from '../../lib/cms';
 import { buildMetadata } from '../../lib/metadata';
-import { SITE_NAME, SURVEY_CTA } from '../../lib/site';
+import { JsonLd } from '../../components/JsonLd';
+import { organizationLd } from '../../lib/seo';
+import { getSiteUrl, SITE_NAME, SURVEY_CTA } from '../../lib/site';
 
 export const generateMetadata = async (): Promise<Metadata> =>
   buildMetadata('/', SITE_NAME, (await getPage('home-page'))?.seo);
@@ -18,6 +20,7 @@ export default async function HomePage() {
   ]);
   return (
     <>
+      <JsonLd data={organizationLd(getSiteUrl(), SITE_NAME)} />
       <section className="container hero">
         <h1>{page?.title ?? SITE_NAME}</h1>
         <RichText data={page?.body} />

@@ -26,6 +26,10 @@ describe('admin exclusion from indexing', () => {
     }
   });
 
+  it('disables the Next image optimizer endpoint (no rights-unaware derived-image cache)', () => {
+    expect((nextConfig as { images?: { unoptimized?: boolean } }).images?.unoptimized).toBe(true);
+  });
+
   it('sends X-Robots-Tag noindex for admin and api responses', async () => {
     const headers = await (nextConfig as { headers: () => Promise<{ source: string; headers: { key: string; value: string }[] }[]> }).headers();
     for (const source of ['/admin/:path*', '/api/:path*']) {

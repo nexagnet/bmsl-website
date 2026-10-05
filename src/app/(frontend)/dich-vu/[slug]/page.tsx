@@ -4,7 +4,9 @@ import { Crumbs, SurveyCta } from '../../../../components/blocks';
 import { RichText } from '../../../../components/RichText';
 import { getService } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
-import { paths } from '../../../../lib/site';
+import { JsonLd } from '../../../../components/JsonLd';
+import { breadcrumbLd } from '../../../../lib/seo';
+import { getSiteUrl, paths } from '../../../../lib/site';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -20,6 +22,12 @@ export default async function ServiceDetailPage({ params }: Props) {
   if (!service) notFound();
   return (
     <>
+      <JsonLd
+        data={breadcrumbLd(getSiteUrl(), [
+          { name: 'Dịch vụ', path: '/dich-vu' },
+          { name: service.name, path: service.href },
+        ])}
+      />
       <Crumbs items={[{ label: 'Dịch vụ', href: '/dich-vu' }, { label: service.name }]} />
       <article className="container hero">
         <h1>{service.name}</h1>

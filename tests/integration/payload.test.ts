@@ -304,7 +304,7 @@ describe('ContactLead durable persistence', () => {
     const ok = await submitContact(payload, valid, async () => {
       seenAtNotify.push(await count());
     });
-    expect(ok).toEqual({ status: 200, body: { ok: true } });
+    expect(ok).toEqual({ status: 200, body: { ok: true, persisted: true } });
     expect(seenAtNotify).toEqual([before + 1]);
     expect(await count()).toBe(before + 1);
 

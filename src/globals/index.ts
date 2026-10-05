@@ -44,6 +44,20 @@ export const SiteSettings: GlobalConfig = {
         { name: 'url', type: 'text', required: true },
       ],
     },
-    { name: 'ga4Id', type: 'text' },
+    { name: 'ga4Id', type: 'text', admin: { description: 'Dạng G-XXXXXXXX. Chỉ có tác dụng khi bật "analyticsEnabled".' } },
+    {
+      name: 'analyticsEnabled',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Mặc định tắt. Ngay cả khi bật, GA4 chỉ chạy sau khi khách truy cập đồng ý (chính sách cookie/consent là OWNER-DECISION).',
+      },
+    },
+    {
+      name: 'searchConsoleVerification',
+      type: 'text',
+      admin: { description: 'Giá trị thẻ meta xác minh Google Search Console (chỉ phần content). Chưa chứng minh quyền sở hữu cho tới khi xác minh thực tế.' },
+    },
   ],
 };
