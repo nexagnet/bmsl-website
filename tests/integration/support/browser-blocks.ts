@@ -22,7 +22,7 @@ import {
   summarizeAxe,
 } from './browser-policy';
 import { runInGroup } from './db-lifecycle';
-import { JOBS, PRIVATE_MARKERS } from './markers';
+import { JOBS, MARKERS, PRIVATE_MARKERS } from './markers';
 
 // W5B4: executed browser UAT. Registered from http-smoke.test.ts, so it runs under the existing `pnpm test:integration`
 // CI step against the SAME production build, Next server and invocation-owned disposable PostgreSQL database as the
@@ -54,6 +54,20 @@ const TYPES: Record<Engine, BrowserType> = { chromium, firefox, webkit };
 const MEASUREMENT_ID = 'G-ABC123DEF4'; // synthetic id seeded by the fixture, not a real GA4 property
 const UAT_DOCUMENT_TITLE = 'Synthetic UAT Approved Document'; // created by the `uat-document` fixture, approved and published
 const BROWSER_SUITE_BUDGET_MS = 12 * 60_000; // whole W5B4 browser work inside the 20 min CI job, next to build + HTTP smoke
+// Destination-specific content of each primary-navigation route (from the page sources in src/app/(frontend)): a fixed
+// heading where the route hard-codes it, a fixed in-page landmark where the heading comes from CMS content. /gioi-thieu
+// renders the CMS about-page title as its h1 (the fixture publishes MARKERS.publicAbout); its document title comes from
+// SEO metadata, so only the heading is awaited there.
+const IA_DESTINATIONS: Record<string, { h1?: string; titleHasH1?: boolean; selector?: string }> = {
+  '/': { selector: '#home-services' },
+  '/gioi-thieu': { h1: MARKERS.publicAbout, titleHasH1: false },
+  '/dich-vu': { h1: 'Dịch vụ' },
+  '/du-an': { h1: 'Dự án đang vận hành' },
+  '/quy-trinh-minh-bach': { selector: '#docs-title' },
+  '/kien-thuc': { h1: 'Kiến thức & tin tức' },
+  '/tuyen-dung': { h1: 'Tuyển dụng' },
+  '/lien-he': { selector: 'form.contact-form' },
+};
 const REPORT_DIR = 'test-results/w5b4';
 
 type W = Window & {
@@ -272,25 +286,49 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
             const navName = mobileMenu ? 'Điều hướng chính (di động)' : 'Điều hướng chính';
             const labels: string[] = [];
             for (const item of NAV_ITEMS) {
-              await go(page, `${ctx.base}/`);
-              await hydrated(page, 'header.site-header a.wordmark');
-              if (mobileMenu) await page.locator('details.mobile-menu > summary').click();
-              const nav = page.getByRole('navigation', { name: navName, exact: true });
-              if (labels.length === 0) {
-                const all = await nav.getByRole('link').allInnerTexts();
-                expect(all.map((t) => t.trim())).toEqual(NAV_ITEMS.map((i) => i.label));
+              // One fresh page per real link click, closed in `finally` before the next link: a click starts a client-side
+              // navigation that can still be in flight when the assertions return (the '/' link targets the current URL,
+              // so the home document satisfies generic assertions at once), and the next goto('/') on the same page would
+              // race it (Firefox NS_BINDING_ABORTED, WebKit "'/' interrupted by another '/'"). Nothing is retried or ignored.
+              const visitor = await context.newPage();
+              try {
+                await visitor.addInitScript(recordCspViolations);
+                await go(visitor, `${ctx.base}/`);
+                await hydrated(visitor, 'header.site-header a.wordmark');
+                const homeHeading = await text(visitor.locator('main h1').first());
+                if (mobileMenu) await visitor.locator('details.mobile-menu > summary').click();
+                const nav = visitor.getByRole('navigation', { name: navName, exact: true });
+                if (labels.length === 0) {
+                  const all = await nav.getByRole('link').allInnerTexts();
+                  expect(all.map((t) => t.trim())).toEqual(NAV_ITEMS.map((i) => i.label));
+                }
+                const link = nav.getByRole('link', { name: item.label, exact: true });
+                expect(await link.getAttribute('href'), `${item.label} link target`).toBe(item.href);
+                await link.click();
+                await expect.poll(() => new URL(visitor.url()).pathname, { timeout: 30_000, message: `url after clicking ${item.label}` }).toBe(item.href);
+                // The URL changes first and the document title, rendered content and heading follow when the router commits:
+                // wait for the destination itself, not for any h1 (the still-visible home document has one too).
+                await expect.poll(() => visitor.title(), { timeout: 30_000, message: `title of ${item.href}` }).not.toBe('');
+                await expect.poll(() => visitor.locator('main').count(), { timeout: 30_000, message: `main of ${item.href}` }).toBe(1);
+                await expect.poll(() => visitor.locator('main h1').count(), { timeout: 30_000, message: `heading of ${item.href}` }).toBeGreaterThan(0);
+                const expected = IA_DESTINATIONS[item.href];
+                if (expected?.h1) {
+                  await expect.poll(() => text(visitor.locator('main h1').first()), { timeout: 30_000, message: `h1 of ${item.href}` }).toBe(expected.h1);
+                  if (expected.titleHasH1 !== false) {
+                    await expect.poll(() => visitor.title(), { timeout: 30_000, message: `title of ${item.href}` }).toContain(expected.h1);
+                  }
+                }
+                if (expected?.selector) {
+                  await expect.poll(() => visitor.locator(`main ${expected.selector}`).count(), { timeout: 30_000, message: `${expected.selector} of ${item.href}` }).toBeGreaterThan(0);
+                }
+                if (item.href !== '/') {
+                  expect(await text(visitor.locator('main h1').first()), `${item.href} still shows the home heading`).not.toBe(homeHeading);
+                }
+                expect(await text(visitor.locator('main')), item.href).not.toMatch(/could not be found/i);
+                labels.push(item.label);
+              } finally {
+                await visitor.close();
               }
-              const link = nav.getByRole('link', { name: item.label, exact: true });
-              expect(await link.getAttribute('href'), `${item.label} link target`).toBe(item.href);
-              await link.click();
-              await expect.poll(() => new URL(page.url()).pathname, { timeout: 30_000, message: `url after clicking ${item.label}` }).toBe(item.href);
-              // The URL changes first and the document title, rendered content and heading follow when the router commits:
-              // wait for the destination to settle instead of reading it mid-transition.
-              await expect.poll(() => page.title(), { timeout: 30_000, message: `title of ${item.href}` }).not.toBe('');
-              await expect.poll(() => page.locator('main').count(), { timeout: 30_000, message: `main of ${item.href}` }).toBe(1);
-              await expect.poll(() => page.locator('main h1').count(), { timeout: 30_000, message: `heading of ${item.href}` }).toBeGreaterThan(0);
-              expect(await text(page.locator('main')), item.href).not.toMatch(/could not be found/i);
-              labels.push(item.label);
             }
             expect(labels).toHaveLength(8);
           }, 240_000);

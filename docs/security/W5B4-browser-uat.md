@@ -9,6 +9,25 @@ or hosted customer deployment.
 BASE: `b67bc3b080a5ae09d21c37d19d1b8740dbece033` (main with W5B1/W5B2/W5B3 and the coordinator R3 changes, exact-main CI 37347589737 green).
 HEAD: the head commit of the PR that carries this change (a commit cannot contain its own SHA; the PR records it).
 
+## Repair after PR48 exact-main red (issue #49)
+
+Evidence: PR48 head `7587cd94cbff6737b1b27d9c990f188592116087` was green (CI 37353251510: 272 unit / 349 integration
+passed; trusted Reviewer 37353984012 PASS) and merged as main `95e6e88d82f15260daaa85e002f88a42c0a7363e`. The exact-main
+CI 37354199189 then was red: verify passed 272 unit tests, integration 347 passed / 2 failed of 349 (Firefox desktop
+`NS_BINDING_ABORTED`, WebKit desktop "navigation to '/' interrupted by another '/'"). PR48 head green does not prove main.
+An earlier repair attempt (PR50, head `85845a255c951e82ac1d6d853dcc97143a595d04`) was closed unmerged: its `/gioi-thieu`
+destination had no content wait, so generic assertions could match the stale home document. Its CI run 37355746008 had
+verify PASS and integration pending at close; it is not recorded as a failed run.
+
+| Problem | Cause | Repair |
+| --- | --- | --- |
+| `public IA` test failed on desktop Firefox/WebKit | The test reused ONE page for all 8 links: `goto('/')`, click a nav link, assert. The first nav item is `/`, already the current URL, so the generic URL/title/`main`/`h1` assertions passed on the old home document while a same-URL client navigation was still pending; the next iteration's `goto('/')` then raced it. The `afterEach` `about:blank` only ran after the whole loop | Each link gets a fresh page (`context.newPage()`), closed in `finally` before the next link, so no page navigates while an earlier navigation of it is pending. The real visitor click, exact `href`, 8 areas and 9 engine/size combinations are unchanged. Every destination now waits for its own content before the final assertions: a fixed heading and matching title where the route hard-codes one, a fixed landmark for other routes, and for the CMS-driven `/gioi-thieu` the published about-page title (`MARKERS.publicAbout`, synthetic fixture) as `h1`; the heading must also differ from the home one. No sleep, retry, ignored abort or weaker timeout. The race was detected from source; it was not reproduced locally |
+| `pnpm build` used a POSIX `NEXT_PHASE=... ` prefix that fails under the Windows default `cmd` script shell | Shell-specific syntax in `package.json` | `build` is `node scripts/build.mjs`: it runs `payload generate:importmap` (with `NEXT_PHASE=phase-production-build` set for that child only, no database needed), aborts if it fails, then `next build` with the caller environment unchanged (runtime env stays fail-fast). Unit-tested in `tests/integration/support/build-launcher.test.ts` (sequencing, abort on failure, env scoping) |
+
+The repaired head and its CI are NOT recorded here: a commit cannot contain its own SHA and no run of it exists yet. A full
+Windows production build was not run; the launcher is proven by unit tests and by the required CI. W5C #24 stays
+waiting for this repair merged and exact-main CI green.
+
 ## Repair after CI 37350286860 (second head `2887d4b`: integration 343 passed / 6 failed, 390.49 s)
 
 Partial real evidence of that run (old failed head, passed sub-checks only; NOT proof for the new head): Chromium 153.0.8010.12,
