@@ -44,6 +44,11 @@ and no draft content leaks:
 to `proposedTarget`, and add `publishedEvidence` (the issue/PR proving publication and approval). Run
 `pnpm test`. Do not change a target to a detail page that is still draft: manifest tests fail it as a dead-end.
 
+`publishedEvidence` is only a text note. Setting it does **not** prove the target exists and the manifest tests do not
+check it. Before switching from the fallback, verify against the real CMS that the target is published and answers
+HTTP 200 on the public site (for example `curl -I https://<site>/du-an/<slug>`), and attach that result to the evidence.
+The HTTP smoke test (section 7) only covers the fallback/static targets; it must be extended for each published detail.
+
 ## 4. Importer
 
 ```
@@ -60,9 +65,19 @@ pnpm migrate:legacy --write [--input ...]            # explicit write, draft onl
   an `approval` object `{contentApproved: true, approvedBy, approvedAt}`; optional `slug`, `excerpt`, `paragraphs`
   (plain text), `publishedAt`, `categorySlug`. `categorySlug` is linked only if that category already exists in the CMS;
   no category is ever created or forced. Media, HTML and unknown keys are rejected; no media is downloaded or uploaded.
+- Accepted sources: the inventory article sources plus the explicitly known optional candidates #4 (service post) and
+  #31 (About post) from `article-candidates.json`. Any other source kind is rejected. #4 and #31 keep their
+  service/About redirect; importing them as a draft article does not approve the selection.
+- The input root may only contain `articles` (an array). Anything else (malformed or extra root keys, bad JSON) aborts
+  the run before Payload or the database is touched, so no project or article is written. Error messages and rejected
+  entries never echo raw input values.
+- The whole batch is planned before the first write (slugs are reserved across the batch, input order wins). Two
+  sources claiming the same slug give one created record and one reported **conflict**; dry-run and write reports agree.
 - Idempotent by legacy source URL or canonical slug. Existing records are never modified, so manual edits,
   publication and approval state survive reruns. A slug held by an unrelated record is a **conflict** and untouched.
-- Report: created / skipped / conflicts / pending approvals / rejected input.
+- Report: created / skipped / conflicts / pending approvals / rejected input, plus (when input is supplied) an
+  `articleSelection` block comparing the batch with the initial handover acceptance of **<= 10 articles**. This is
+  informational only: the CMS has no ceiling, the selection stays UNCONFIRMED and no article is claimed as migrated.
 
 ## 5. Approval queue (owner actions)
 
@@ -75,11 +90,31 @@ pnpm migrate:legacy --write [--input ...]            # explicit write, draft onl
 
 ## 6. PROVEN / NOT_PROVEN
 
-PROVEN (by tests in this PR): 47/47 inventory coverage against `01-url-inventory.md`; 18 project sources → 17 profiles;
-root identity; 46 deterministic 301 rules without loops/chains/duplicates; unsafe-target rejection; Next config shape;
-CLI/input guards. Also observed on a built `next start` without a database: all 92 legacy slash/no-slash requests
-returned a direct 301 to the manifest `activeTarget`.
+PROVEN by unit tests (`pnpm test`): 47/47 inventory coverage against `01-url-inventory.md`; 18 project sources → 17
+profiles; root identity; 46 deterministic 301 rules without loops/chains/duplicates; unsafe-target rejection; Next
+config shape; CLI/input guards; root-key and candidate (#4/#31) input validation.
 
-NOT_PROVEN: HTTP 200 of the redirect targets and draft non-leak against a live database in this environment;
-importer behaviour on real WordPress data; content accuracy; image rights; article/category selection;
-outside-sitemap URLs; production cutover.
+An earlier, one-off probe on a built `next start` **without a database** saw all 92 legacy slash/no-slash requests
+return a direct 301. That is redirect evidence only: redirects are served before any page renders, and pages that
+need the database answered 500 in that probe. It is not evidence that the targets return 200.
+
+The measured HTTP evidence is the CI `integration` job result of `tests/integration/http-smoke.test.ts` (section 7),
+plus the PostgreSQL importer tests in `tests/integration/migration.test.ts`. Record the exact job run and counts in the PR.
+
+NOT_PROVEN: importer behaviour on real WordPress data; content accuracy; image rights; article/category selection
+(all UNCONFIRMED); that any article is migrated; browser/axe checks (W5B); outside-sitemap URLs; production cutover.
+Write-mode import must not be run by an operator until the CI evidence above is green on the exact HEAD.
+
+## 7. HTTP smoke proof (runs in CI)
+
+`pnpm test:integration` (the existing CI `integration` job) includes `tests/integration/http-smoke.test.ts`. It:
+
+1. creates its own uniquely named database (`bmsl_http_smoke_<random>`) on the local CI PostgreSQL server and drops
+   only that database afterwards; the shared database is never reset;
+2. runs the committed migrations, `next build` into a private dist directory (`NEXT_DIST_DIR`), and the importer CLI in
+   write mode with synthetic input kept in a temp directory outside the repository;
+3. starts `next start` on a free port and checks: all 46 legacy sources, slash and no-slash (92 requests), give exactly
+   one 301 to `activeTarget`; every active target and `/` returns 200 with no `Location`; the eight public IA routes
+   return 200; the proposed (unpublished) detail targets return 404 and listings do not contain imported drafts.
+
+Run locally against a disposable local database only: `DATABASE_URL=postgresql://... pnpm test:integration`.

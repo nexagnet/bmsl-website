@@ -77,6 +77,41 @@ describe('external article input validation', () => {
     expect(project.rejected).toHaveLength(1);
   });
 
+  it('accepts only the explicitly known service/About candidates (#4, #31) besides article sources', () => {
+    const accepted: number[] = [];
+    for (const entry of manifest.entries) {
+      const r = parseExternalInput({ articles: [{ legacyUrl: entry.legacyPath, title: 'Synthetic title', approval: approved }] }, manifest);
+      if (r.articles.length === 1) accepted.push(entry.id);
+      else expect(r.rejected, `#${entry.id}`).toHaveLength(1);
+    }
+    const articleIds = manifest.entries.filter((e) => e.kind === 'article').map((e) => e.id);
+    expect(accepted.sort((a, b) => a - b)).toEqual([...articleIds, 4, 31].sort((a, b) => a - b));
+  });
+
+  it('keeps the service/About redirect disposition of #4 and #31 untouched', () => {
+    for (const id of [4, 31]) {
+      const e = manifest.entries.find((x) => x.id === id);
+      expect(e?.disposition).toBe('redirect');
+      expect(['service', 'about']).toContain(e?.kind);
+    }
+  });
+
+  it('rejects unknown root keys and non-array articles without echoing raw values', () => {
+    expect(() => parseExternalInput({ articles: [], extra: 'secret-value-123' }, manifest)).toThrow(/root key/);
+    try {
+      parseExternalInput({ articles: [], 'private@example.test': 1 }, manifest);
+    } catch (error) {
+      expect((error as Error).message).not.toContain('private@example.test');
+    }
+    expect(() => parseExternalInput({ articles: 'bad' }, manifest)).toThrow();
+  });
+
+  it('does not echo an unsafe legacyUrl value in the rejection', () => {
+    const r = parseExternalInput({ articles: [{ ...base, legacyUrl: 'https://private.example.test/x?token=abc', approval: approved }] }, manifest);
+    expect(r.rejected).toHaveLength(1);
+    expect(JSON.stringify(r.rejected)).not.toContain('private.example.test');
+  });
+
   it('accepts a legacy URL without the trailing slash', () => {
     const r = parseExternalInput({ articles: [{ ...base, legacyUrl: base.legacyUrl.replace(/\/$/, ''), approval: approved }] }, manifest);
     expect(r.articles).toHaveLength(1);

@@ -185,6 +185,69 @@ describe('legacy importer: approved external articles', () => {
     expect(found.docs[0].title).toBe('Mine');
   });
 
+  it('invalid root writes nothing: no projects and no articles are created', async () => {
+    for (const bad of [{ articles: 'bad' }, { articles: [], unexpected: true }, null, []]) {
+      await expect(runLegacyImport(payload, { write: true, externalInput: bad })).rejects.toThrow();
+      expect(await count('projects')).toBe(0);
+      expect(await count('articles')).toBe(0);
+    }
+  });
+
+  it('reserves slugs across the batch: the duplicate is a reported conflict, not a partial DB failure', async () => {
+    const other = '/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien/';
+    const dupInput = {
+      articles: [
+        { legacyUrl: articleUrl, slug: 'shared-slug', title: 'First', approval: approved },
+        { legacyUrl: other, slug: 'shared-slug', title: 'Second', approval: approved },
+      ],
+    };
+    const dry = await runLegacyImport(payload, { externalInput: dupInput });
+    expect(await count('projects')).toBe(0);
+    const written = await runLegacyImport(payload, { write: true, externalInput: dupInput });
+    expect({ ...written, mode: 'dry-run' }).toEqual(dry);
+    expect(written.conflicts.filter((c) => c.collection === 'articles')).toHaveLength(1);
+    expect(written.created.filter((c) => c.collection === 'articles').map((c) => c.legacyUrls)).toEqual([[articleUrl]]);
+    expect(await count('projects')).toBe(17);
+    const found = await payload.find({ collection: 'articles', draft: true, limit: 5, depth: 0 });
+    expect(found.totalDocs).toBe(1);
+    expect(found.docs[0].title).toBe('First');
+    // Rerun: the first source is preserved, the second is still a conflict, nothing new is created.
+    const again = await runLegacyImport(payload, { write: true, externalInput: dupInput });
+    expect(again.created).toEqual([]);
+    expect(again.conflicts).toHaveLength(1);
+    expect(await count('articles')).toBe(1);
+  });
+
+  it('imports approved optional candidates #4 (service) and #31 (About) as draft articles', async () => {
+    const service = '/dich-vu-quan-ly-van-hanh-toa-nha-doi-hoi-nhan-su-gioi-chuyen-nghiep-va-uy-tin-2/';
+    const about = '/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien/';
+    const report = await runLegacyImport(payload, {
+      write: true,
+      externalInput: {
+        articles: [
+          { legacyUrl: service, title: 'Synthetic service article', approval: approved },
+          { legacyUrl: about, title: 'Synthetic about article', approval: approved },
+        ],
+      },
+    });
+    expect(report.rejected).toEqual([]);
+    expect(report.created.filter((c) => c.collection === 'articles')).toHaveLength(2);
+    const found = await payload.find({ collection: 'articles', draft: true, limit: 5, depth: 0 });
+    expect(found.docs.every((d) => d._status === 'draft')).toBe(true);
+    expect(report.articleSelection).toMatchObject({ importableInBatch: 2, withinInitialHandover: true, selectionApproved: false });
+  });
+
+  it('reports a batch above the initial handover acceptance without enforcing a CMS ceiling', async () => {
+    const urls = manifest.entries.filter((e) => e.kind === 'article').slice(0, 11).map((e) => e.legacyPath);
+    expect(urls).toHaveLength(11);
+    const report = await runLegacyImport(payload, {
+      write: true,
+      externalInput: { articles: urls.map((legacyUrl, i) => ({ legacyUrl, title: `Synthetic ${i}`, approval: approved })) },
+    });
+    expect(report.articleSelection).toMatchObject({ importableInBatch: 11, initialHandoverMax: 10, withinInitialHandover: false, selectionApproved: false });
+    expect(await count('articles')).toBe(11);
+  });
+
   it('never invents a category: an unknown categorySlug is reported, not created or forced', async () => {
     const report = await runLegacyImport(payload, {
       write: true,

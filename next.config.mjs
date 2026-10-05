@@ -15,6 +15,8 @@ if (problems.length > 0) throw new Error(`Invalid legacy redirect rules:\n${prob
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Lets the HTTP smoke test (tests/integration/http-smoke.test.ts) build into a private directory.
+  distDir: globalThis.process?.env?.NEXT_DIST_DIR || '.next',
   // Without this Next answers /legacy-slug/ with its own 308 to /legacy-slug and only then applies our 301
   // (a chain). Rule sources are slash-less and Next matches both /x and /x/ directly.
   skipTrailingSlashRedirect: true,
