@@ -37,6 +37,11 @@ export default buildConfig({
     ContactLeads,
   ],
   globals: [HomePage, AboutPage, ProcessPage, ContactPage, SiteSettings],
+  // No GraphQL API or playground: the public site reads through the local API and there is no approved GraphQL
+  // consumer, so the endpoint stays absent (no src/app/(payload)/api/graphql route) and generation is disabled.
+  graphQL: { disable: true },
+  // Hard request-level cap on uploaded files (HTTP 413 beyond it), enforced while the body streams in.
+  upload: { abortOnLimit: true, limits: { fileSize: 10_000_000 } },
   editor: lexicalEditor(),
   secret: payloadSecret,
   db: postgresAdapter({

@@ -1,5 +1,6 @@
-import type { CollectionConfig } from 'payload';
+import { ValidationError, type CollectionConfig } from 'payload';
 import { isStaff } from '../access';
+import { mergeForPublishCheck, publishGateProblem } from '../lib/publish-gate';
 import {
   adminContentAccess,
   drafts,
@@ -58,8 +59,24 @@ export const Projects: CollectionConfig = {
     description:
       'Hồ sơ dự án. Thông tin lấy từ nguồn cũ là UNCONFIRMED cho tới khi BMSL/chủ đầu tư xác nhận; giữ ở trạng thái nháp.',
   },
-  access: editorContentAccess,
+  access: {
+    ...editorContentAccess,
+    // The public REST boundary also requires CONFIRMED, so stored unconfirmed (for example legacy) data stays hidden.
+    read: ({ req }) =>
+      isStaff(req.user) ? true : { _status: { equals: 'published' }, sourceStatus: { equals: 'CONFIRMED' } },
+  },
   versions: drafts,
+  hooks: {
+    // A project can only be published with sourceStatus CONFIRMED (incl. the 17 imported legacy profiles).
+    beforeValidate: [
+      ({ data, originalDoc, operation }) => {
+        if (operation !== 'create' && operation !== 'update') return data;
+        const problem = publishGateProblem(mergeForPublishCheck(originalDoc, data));
+        if (problem) throw new ValidationError({ errors: [{ message: problem, path: 'sourceStatus' }] });
+        return data;
+      },
+    ],
+  },
   fields: [
     { name: 'name', type: 'text', required: true },
     slugField,
@@ -109,7 +126,13 @@ export const Projects: CollectionConfig = {
         },
       ],
     },
-    { name: 'legacyUrls', type: 'array', fields: [{ name: 'url', type: 'text', required: true }] },
+    {
+      name: 'legacyUrls',
+      type: 'array',
+      // Migration provenance is internal: anonymous responses carry no values (the framework may return an empty array).
+      access: { read: ({ req }) => isStaff(req.user) },
+      fields: [{ name: 'url', type: 'text', required: true }],
+    },
     {
       name: 'sourceStatus',
       type: 'select',
@@ -143,7 +166,7 @@ export const Articles: CollectionConfig = {
     { name: 'category', type: 'relationship', relationTo: 'article-categories' },
     { name: 'cover', type: 'relationship', relationTo: 'media-assets' },
     { name: 'publishedAt', type: 'date' },
-    { name: 'legacyUrl', type: 'text' },
+    { name: 'legacyUrl', type: 'text', access: { read: ({ req }) => isStaff(req.user) } },
     seoField,
   ],
 };

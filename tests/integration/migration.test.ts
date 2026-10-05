@@ -106,7 +106,8 @@ describe('legacy importer: projects', () => {
     await payload.update({
       collection: 'projects',
       id: found.docs[0].id,
-      data: { name: 'Edited by editor', summary: 'Edited summary', _status: 'published' },
+      // Publishing needs sourceStatus CONFIRMED (a legacy profile cannot be published as it is: see cms.test.ts).
+      data: { name: 'Edited by editor', summary: 'Edited summary', sourceStatus: 'CONFIRMED', _status: 'published' },
     });
 
     const again = await runLegacyImport(payload, { write: true });

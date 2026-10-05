@@ -6,7 +6,21 @@ import type pg from 'pg';
 // ends those processes, waits until PostgreSQL itself reports no session left, and only then drops the
 // database, without WITH (FORCE) and without terminating anyone else's sessions.
 
-const DISPOSABLE_NAME = /^bmsl_[a-z_]+_[0-9a-f]{12}$/;
+const DISPOSABLE_NAME = /^bmsl_[a-z_]+_[0-9a-f]{12,16}$/;
+
+// Ownership is not a naming convention: a name that merely looks disposable (right prefix, local host) may belong
+// to someone else's run. Only databases whose CREATE DATABASE this module instance actually executed successfully
+// are recorded here, and only recorded databases can be inspected-for-drop or dropped.
+const owned = new Set<string>();
+
+export const ownsDatabase = (dbName: string): boolean => owned.has(dbName);
+
+/** Creates a database and records ownership only after PostgreSQL confirmed the creation (a failed or "already exists" CREATE is never owned). */
+export async function createOwnedDatabase(admin: pg.Client, dbName: string): Promise<void> {
+  if (!DISPOSABLE_NAME.test(dbName)) throw new Error(`refusing to create non-disposable database ${dbName}`);
+  await admin.query(`create database "${dbName}"`);
+  owned.add(dbName);
+}
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -31,7 +45,7 @@ const within = (p: Promise<void>, ms: number): Promise<boolean> =>
 /**
  * Stops a group started by spawnGroup together with every descendant (`pnpm exec next start` -> node):
  * SIGTERM first, SIGKILL for the same group if it does not close in time. Resolves only after the group's stdio
- * has closed, i.e. after every process in it has released its pipes.
+ * has closed, i.e. after every process in it has released its pipes. Safe to call more than once.
  */
 export async function stopProcessGroup({ child, closed }: Group, graceMs = 10_000): Promise<void> {
   const pid = child.pid;
@@ -50,6 +64,48 @@ export async function stopProcessGroup({ child, closed }: Group, graceMs = 10_00
   }
   signalGroup('SIGKILL');
   if (!(await within(closed, 10_000))) throw new Error(`process group ${pid} did not close after SIGKILL`);
+}
+
+export type RunOptions = { cwd: string; env: NodeJS.ProcessEnv; timeoutMs: number; graceMs?: number };
+
+/**
+ * Runs a command as an invocation-owned process group and resolves with its combined output. On timeout, failure or
+ * success the WHOLE group (for example `pnpm exec payload run` -> node, which hold the PostgreSQL sessions) is
+ * stopped and its pipes are awaited before this returns, so a caller can safely DROP the database afterwards.
+ */
+export async function runInGroup(command: string, args: string[], { cwd, env, timeoutMs, graceMs }: RunOptions): Promise<string> {
+  const group = spawnGroup(command, args, { cwd, env });
+  let out = '';
+  group.child.stdout?.on('data', (d) => (out += d));
+  group.child.stderr?.on('data', (d) => (out += d));
+  let timedOut = false;
+  const timer = setTimeout(() => {
+    timedOut = true;
+    void stopProcessGroup(group, graceMs).catch(() => undefined);
+  }, timeoutMs);
+  let spawnError: Error | undefined;
+  group.child.once('error', (error) => {
+    spawnError = error;
+  });
+  const result = await new Promise<{ code: number | null; signal: NodeJS.Signals | null }>((resolve) => {
+    group.child.once('exit', (code, signal) => resolve({ code, signal }));
+    group.child.once('error', () => resolve({ code: null, signal: null }));
+  });
+  clearTimeout(timer);
+  let stopError: unknown;
+  try {
+    await stopProcessGroup(group, graceMs); // descendants of a finished leader must not outlive the run
+  } catch (error) {
+    stopError = error;
+  }
+  const tail = out.slice(-4000);
+  if (spawnError) throw spawnError;
+  if (timedOut) throw new Error(`${command} ${args.join(' ')} timed out after ${timeoutMs} ms\n${tail}`);
+  if (result.code !== 0) {
+    throw new Error(`${command} ${args.join(' ')} failed (code ${result.code}, signal ${result.signal})\n${tail}`);
+  }
+  if (stopError) throw stopError;
+  return out;
 }
 
 const sessionsOf = async (admin: pg.Client, dbName: string) =>
@@ -75,8 +131,10 @@ export async function waitForNoSessions(admin: pg.Client, dbName: string, timeou
 }
 
 /** Drops only a database this test created, and only once nothing is connected to it. */
-export async function dropDisposableDatabase(admin: pg.Client, dbName: string): Promise<void> {
+export async function dropDisposableDatabase(admin: pg.Client, dbName: string, timeoutMs = 30_000): Promise<void> {
   if (!DISPOSABLE_NAME.test(dbName)) throw new Error(`refusing to drop non-disposable database ${dbName}`);
-  await waitForNoSessions(admin, dbName);
+  if (!owned.has(dbName)) throw new Error(`refusing to drop ${dbName}: it was not created by this run`);
+  await waitForNoSessions(admin, dbName, timeoutMs);
   await admin.query(`drop database if exists "${dbName}"`);
+  owned.delete(dbName);
 }

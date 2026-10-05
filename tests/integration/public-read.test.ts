@@ -51,7 +51,7 @@ describe('public rendering data path', () => {
       data: {
         name: 'Published project',
         slug: 'published-project',
-        sourceStatus: 'LEGACY-SOURCE',
+        sourceStatus: 'CONFIRMED', // only CONFIRMED projects can be published; this isolates the approvedBySource gate
         images: [ok, blocked],
         bqtFeedback: { text: 'unapproved text', approvedBySource: false },
         _status: 'published',
