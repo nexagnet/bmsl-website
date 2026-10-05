@@ -102,14 +102,15 @@ export async function submitContact(
   try {
     lead = await createContactLead(payload, parsed.lead);
   } catch (error) {
-    console.error('contact lead persistence failed', error instanceof Error ? error.message : 'unknown');
+    // Never log error.message: database errors can embed the submitted values (PII).
+    console.error('contact lead persistence failed', error instanceof Error ? error.name : 'unknown');
     return { status: 500, body: { ok: false, error: 'persist_failed' } };
   }
 
   try {
     await notify(lead);
   } catch (error) {
-    console.error('contact lead notification failed', error instanceof Error ? error.message : 'unknown');
+    console.error('contact lead notification failed', error instanceof Error ? error.name : 'unknown');
   }
   // `persisted` is the only signal the browser may use for the form_submit analytics event: it exists solely
   // after the durable write above succeeded. The bot response deliberately lacks it.

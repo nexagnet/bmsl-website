@@ -15,7 +15,8 @@ export const MediaAssets: CollectionConfig = {
   },
   upload: {
     staticDir: path.resolve(dirname, '../../media'),
-    mimeTypes: ['image/*', 'application/pdf'],
+    // Explicit raster list: `image/*` would admit image/svg+xml, which is active content served from our origin.
+    mimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif', 'application/pdf'],
   },
   access: {
     // Only media whose rights are APPROVED is publicly readable (blueprint 06 §9.5).

@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { withPayload } from '@payloadcms/next/withPayload';
 import {
   buildRedirectRules,
@@ -5,6 +6,7 @@ import {
   toNextRedirects,
   validateRedirectRules,
 } from './src/migration/legacy.mjs';
+import { buildSecurityHeaders } from './src/lib/security-headers.mjs';
 
 const noindex = [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }];
 
@@ -26,6 +28,7 @@ const nextConfig = {
   },
   async headers() {
     return [
+      { source: '/:path*', headers: buildSecurityHeaders(process.env) },
       { source: '/admin/:path*', headers: noindex },
       { source: '/api/:path*', headers: noindex },
     ];

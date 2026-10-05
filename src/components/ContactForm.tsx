@@ -1,7 +1,8 @@
 'use client';
 
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { emitAnalyticsEvent, formSubmitParams } from '../lib/analytics';
+import { DEFAULT_REQUEST_TYPE, requestTypeFromSearch } from '../lib/request-type';
 
 type State = 'idle' | 'sending' | 'sent' | 'invalid' | 'error';
 
@@ -17,6 +18,12 @@ const FIELD_LABELS: Record<string, string> = {
 export function ContactForm() {
   const [state, setState] = useState<State>('idle');
   const [invalid, setInvalid] = useState<string[]>([]);
+  const [requestType, setRequestType] = useState<string>(DEFAULT_REQUEST_TYPE);
+
+  // Read after hydration so the page stays statically rendered; unknown values keep the safe default.
+  useEffect(() => {
+    setRequestType(requestTypeFromSearch(window.location.search));
+  }, []);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,6 +54,7 @@ export function ContactForm() {
         const submitParams = formSubmitParams(response.status, body, data.get('requestType'));
         if (submitParams) emitAnalyticsEvent('form_submit', submitParams);
         form.reset();
+        setRequestType(DEFAULT_REQUEST_TYPE);
         setInvalid([]);
         setState('sent');
       } else if (response.status === 400) {
@@ -79,7 +87,7 @@ export function ContactForm() {
       </label>
       <label>
         Loại yêu cầu
-        <select name="requestType" required defaultValue="khao-sat" aria-invalid={bad('requestType')}>
+        <select name="requestType" required value={requestType} onChange={(e) => setRequestType(e.target.value)} aria-invalid={bad('requestType')}>
           <option value="khao-sat">Khảo sát</option>
           <option value="bao-gia">Báo giá</option>
           <option value="khac">Khác</option>

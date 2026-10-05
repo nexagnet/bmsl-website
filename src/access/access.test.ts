@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { MediaAssets } from '../collections/MediaAssets';
 import type { PayloadRequest } from 'payload';
 import { adminOnly, adminOrSelf, isAdmin, isStaff, nobody, publishedOrStaff, staffOnly } from './index';
 
@@ -43,5 +44,13 @@ describe('access functions', () => {
 
   it('nobody denies everyone', () => {
     expect(nobody(req(admin))).toBe(false);
+  });
+
+  it('media uploads never allow active SVG or wildcard image types', () => {
+    const upload = MediaAssets.upload as { mimeTypes?: string[] };
+    expect(upload.mimeTypes).toBeDefined();
+    expect(upload.mimeTypes).not.toContain('image/*');
+    expect(upload.mimeTypes?.some((t) => t.includes('svg'))).toBe(false);
+    expect(upload.mimeTypes).toContain('image/png');
   });
 });
