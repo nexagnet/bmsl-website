@@ -16,7 +16,14 @@ function Nav({ label }: { label: string }) {
   );
 }
 
-export function SiteShell({ children }: { children: ReactNode }) {
+type Props = {
+  children: ReactNode;
+  /** Published, validated SiteSettings values only; absent means the link is not shown (never invented). */
+  hotline?: { label: string; href: string };
+  zalo?: { href: string };
+};
+
+export function SiteShell({ children, hotline, zalo }: Props) {
   return (
     <>
       <a className="skip-link" href="#main">
@@ -47,6 +54,22 @@ export function SiteShell({ children }: { children: ReactNode }) {
         <div className="container">
           <p className="wordmark">{SITE_NAME}</p>
           <Nav label="Điều hướng chân trang" />
+          {hotline || zalo ? (
+            <p>
+              {/* data-analytics-* hooks are inert unless the opt-in analytics provider is mounted and consented. */}
+              {hotline ? (
+                <a href={hotline.href} data-analytics-event="phone_click" data-link-location="footer">
+                  Hotline: {hotline.label}
+                </a>
+              ) : null}
+              {hotline && zalo ? ' · ' : null}
+              {zalo ? (
+                <a href={zalo.href} rel="noopener" data-analytics-event="zalo_click" data-link-location="footer">
+                  Zalo
+                </a>
+              ) : null}
+            </p>
+          ) : null}
           <p className="muted">© {SITE_NAME}</p>
         </div>
       </footer>

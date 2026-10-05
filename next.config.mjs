@@ -18,6 +18,9 @@ const nextConfig = {
   // Without this Next answers /legacy-slug/ with its own 308 to /legacy-slug and only then applies our 301
   // (a chain). Rule sources are slash-less and Next matches both /x and /x/ directly.
   skipTrailingSlashRedirect: true,
+  // /_next/image would cache transformed bytes of MediaAsset files without a new rights check, so APPROVED media
+  // revoked later would still be served. Disabled (404) until a rights-aware pipeline exists (W5B).
+  images: { unoptimized: true },
   async redirects() {
     return toNextRedirects(legacyRules);
   },

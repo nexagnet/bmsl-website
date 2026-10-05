@@ -1,6 +1,7 @@
 'use client';
 
 import { type FormEvent, useState } from 'react';
+import { emitAnalyticsEvent, formSubmitParams } from '../lib/analytics';
 
 type State = 'idle' | 'sending' | 'sent' | 'invalid' | 'error';
 
@@ -41,6 +42,10 @@ export function ContactForm() {
         }),
       });
       if (response.ok) {
+        // form_submit only after the server confirms a durable write; honeypot responses lack `persisted`.
+        const body: unknown = await response.json().catch(() => null);
+        const submitParams = formSubmitParams(response.status, body, data.get('requestType'));
+        if (submitParams) emitAnalyticsEvent('form_submit', submitParams);
         form.reset();
         setInvalid([]);
         setState('sent');
