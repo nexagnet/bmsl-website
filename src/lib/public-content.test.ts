@@ -101,10 +101,31 @@ describe('UNCONFIRMED optional data', () => {
   });
 
   it('leaves job salary/benefits/deadline undefined when empty', () => {
-    const j = toJob({ ...pub, id: 1, title: 'J', slug: 'j', salary: '', deadline: null });
+    const j = toJob({ ...pub, id: 1, title: 'J', slug: 'j', salary: '', deadline: null, sourceStatus: 'CONFIRMED' });
     expect(j?.salary).toBeUndefined();
     expect(j?.deadline).toBeUndefined();
     expect(hasRichText(j?.benefits)).toBe(false);
+  });
+
+  it('a job is public only for sourceStatus CONFIRMED (stored legacy jobs stay hidden); missing date/location stay public', () => {
+    const doc = { ...pub, id: 1, title: 'J', slug: 'j', salary: 'S', benefits: 'B', deadline: '2026-05-06T00:00:00.000Z' };
+    for (const sourceStatus of ['LEGACY-SOURCE', undefined, null, 'confirmed', true]) {
+      expect(toJob({ ...doc, sourceStatus }), String(sourceStatus)).toBeUndefined();
+    }
+    const confirmed = toJob({ ...doc, sourceStatus: 'CONFIRMED' });
+    expect(confirmed?.salary).toBe('S');
+    expect(confirmed?.datePosted).toBeUndefined();
+    expect(confirmed?.location).toBeUndefined();
+  });
+
+  it('keeps a job location only with a locality and an uppercase two-letter country', () => {
+    const job = (jobLocation: unknown) => toJob({ ...pub, id: 1, title: 'J', slug: 'j', sourceStatus: 'CONFIRMED', jobLocation })?.location;
+    expect(job({ addressLocality: 'L', addressCountry: 'ZZ', postalCode: ' ' })).toEqual({ addressLocality: 'L', addressCountry: 'ZZ' });
+    expect(job({ addressLocality: 'L' })).toBeUndefined();
+    expect(job({ addressCountry: 'ZZ' })).toBeUndefined();
+    expect(job({ addressLocality: 'L', addressCountry: 'zz' })).toBeUndefined();
+    expect(job({ addressLocality: 'L', addressCountry: 'ZZZ' })).toBeUndefined();
+    expect(job(null)).toBeUndefined();
   });
 
   it('detects empty vs non-empty rich text', () => {
@@ -119,7 +140,7 @@ describe('route mapping', () => {
   it('builds canonical hrefs', () => {
     expect(toService({ ...pub, id: 1, name: 'Bảo vệ', slug: 'bao-ve' })?.href).toBe('/dich-vu/bao-ve');
     expect(toProject({ ...pub, id: 1, name: 'P', slug: 'p', sourceStatus: 'CONFIRMED' })?.href).toBe('/du-an/p');
-    expect(toJob({ ...pub, id: 1, title: 'J', slug: 'j' })?.href).toBe('/tuyen-dung/j');
+    expect(toJob({ ...pub, id: 1, title: 'J', slug: 'j', sourceStatus: 'CONFIRMED' })?.href).toBe('/tuyen-dung/j');
     const article = toArticle({
       ...pub,
       id: 1,

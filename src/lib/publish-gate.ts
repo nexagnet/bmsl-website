@@ -20,3 +20,12 @@ export function publishGateProblem(doc: Doc): string | undefined {
   if (doc._status !== 'published' || doc.sourceStatus === 'CONFIRMED') return undefined;
   return 'Không thể xuất bản dự án khi sourceStatus chưa là CONFIRMED: giữ ở trạng thái nháp cho tới khi nguồn xác nhận.';
 }
+
+/**
+ * Job postings follow the same rule (W5B3): salary, benefits, deadline, date and location are customer facts, so a job
+ * may only be PUBLISHED with sourceStatus=CONFIRMED. The public mapper and REST read access apply it to stored data too.
+ */
+export function jobPublishGateProblem(doc: Doc): string | undefined {
+  if (doc._status !== 'published' || doc.sourceStatus === 'CONFIRMED') return undefined;
+  return 'Không thể xuất bản tin tuyển dụng khi sourceStatus chưa là CONFIRMED: giữ ở trạng thái nháp cho tới khi BMSL xác nhận.';
+}

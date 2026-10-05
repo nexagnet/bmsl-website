@@ -5,6 +5,7 @@ import {
   fetchAllPages,
   SITEMAP_MAX_URLS,
   toArticle,
+  toJob,
   toProject,
   toPublicImage,
 } from './public-content';
@@ -16,7 +17,7 @@ import {
   normalizeSiteUrl,
 } from './seo';
 import { getSiteUrl, STATIC_PUBLIC_PATHS } from './site';
-import { articleLd, breadcrumbLd, isoDate, jobPostingLd, organizationLd, serializeJsonLd } from './structured-data';
+import { articleLd, breadcrumbLd, confirmedJobPostingLd, isoDate, jobPostingLd, organizationLd, serializeJsonLd } from './structured-data';
 
 const SITE = 'https://example.test';
 const pub = { _status: 'published' };
@@ -234,6 +235,49 @@ describe('JSON-LD', () => {
     expect(jobPostingLd(SITE, { ...full, datePosted: undefined })).toBeUndefined();
     expect(jobPostingLd(SITE, { ...full, location: undefined })).toBeUndefined();
     expect(jobPostingLd(SITE, { ...full, description: ' ' })).toBeUndefined();
+  });
+
+  describe('confirmed recruitment facts', () => {
+    const body = (t: string) => ({ root: { children: [{ type: 'paragraph', children: [{ type: 'text', text: t }] }] } });
+    const base = {
+      ...pub,
+      id: 1,
+      title: 'Synthetic job',
+      slug: 'synthetic-job',
+      description: body('Synthetic description'),
+      sourceStatus: 'CONFIRMED',
+      datePosted: '2026-03-04T00:00:00.000Z',
+      jobLocation: { addressLocality: 'Synthetic City', addressCountry: 'ZZ' },
+      createdAt: '2020-01-01T00:00:00.000Z',
+    };
+    const ld = (over: Record<string, unknown>) => {
+      const job = toJob({ ...base, ...over });
+      return job ? confirmedJobPostingLd(SITE, job) : undefined;
+    };
+
+    it('emits JobPosting from operator-entered fields only', () => {
+      expect(ld({})).toMatchObject({
+        '@type': 'JobPosting',
+        title: 'Synthetic job',
+        description: 'Synthetic description',
+        datePosted: '2026-03-04T00:00:00.000Z',
+        jobLocation: { address: { addressLocality: 'Synthetic City', addressCountry: 'ZZ' } },
+      });
+      expect(JSON.stringify(ld({}))).not.toContain('2020-01-01');
+    });
+
+    it('emits nothing when unconfirmed, unpublished or missing a fact', () => {
+      expect(ld({ sourceStatus: 'LEGACY-SOURCE' })).toBeUndefined();
+      expect(ld({ sourceStatus: undefined })).toBeUndefined();
+      expect(ld({ _status: 'draft' })).toBeUndefined();
+      expect(ld({ datePosted: undefined })).toBeUndefined(); // createdAt is never a fallback
+      expect(ld({ datePosted: 'yesterday' })).toBeUndefined();
+      expect(ld({ jobLocation: undefined })).toBeUndefined();
+      expect(ld({ jobLocation: { addressLocality: 'Synthetic City' } })).toBeUndefined(); // no assumed country
+      expect(ld({ jobLocation: { addressCountry: 'ZZ' } })).toBeUndefined();
+      expect(ld({ jobLocation: { addressLocality: 'Synthetic City', addressCountry: 'Zzz' } })).toBeUndefined();
+      expect(ld({ description: body(' ') })).toBeUndefined();
+    });
   });
 
   it('accepts only ISO dates', () => {

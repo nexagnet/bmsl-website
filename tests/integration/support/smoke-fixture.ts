@@ -2,7 +2,7 @@ import { getPayload } from 'payload';
 import config from '../../../src/payload.config';
 import manifest from '../../../src/migration/legacy-manifest.json';
 import { runLegacyImport } from '../../../src/migration/importer';
-import { MARKERS, STORED_LEGACY_SLUG } from './markers';
+import { JOBS, MARKERS, STORED_LEGACY_SLUG } from './markers';
 
 // Fixture runtime for tests/integration/http-smoke.test.ts, executed as a short-lived subprocess:
 //   pnpm exec payload run tests/integration/support/smoke-fixture.ts   (SMOKE_FIXTURE_CMD=seed|revoke)
@@ -112,6 +112,47 @@ try {
         _status: 'published',
       },
     });
+    // Recruitment (W5B3). Only CONFIRMED jobs can be published. A fresh LEGACY-SOURCE job is never published here: the
+    // legacy negative is a CONFIRMED job that the test downgrades with SQL (a legacy-preexisting stored row).
+    const body = (t: string) => ({
+      root: {
+        type: 'root',
+        format: '',
+        indent: 0,
+        version: 1,
+        direction: 'ltr' as const,
+        children: [
+          {
+            type: 'paragraph',
+            format: '',
+            indent: 0,
+            version: 1,
+            direction: 'ltr' as const,
+            children: [{ type: 'text', text: t, version: 1, detail: 0, format: 0, mode: 'normal', style: '' }],
+          },
+        ],
+      },
+    });
+    const location = { addressLocality: JOBS.locality, addressCountry: JOBS.country };
+    const job = (slug: string, extra: Record<string, unknown>) =>
+      payload.create({
+        collection: 'job-postings',
+        data: {
+          title: `Synthetic ${slug}`,
+          slug,
+          description: body(`Synthetic description ${slug}`),
+          applyInstruction: 'Synthetic apply instruction',
+          sourceStatus: 'CONFIRMED',
+          _status: 'published',
+          ...extra,
+        } as never,
+      });
+    await job(JOBS.confirmed, { datePosted: JOBS.datePosted, jobLocation: location });
+    await job(JOBS.noLocation, { datePosted: JOBS.datePosted });
+    await job(JOBS.noDate, { jobLocation: location });
+    await job(JOBS.unconfirmedDraft, { sourceStatus: 'LEGACY-SOURCE', salary: MARKERS.unconfirmedDraftJobSalary, _status: 'draft' });
+    await job(JOBS.confirmedDraft, { datePosted: JOBS.datePosted, jobLocation: location, _status: 'draft' });
+    await job(JOBS.storedLegacy, { salary: MARKERS.storedLegacyJobSalary, datePosted: JOBS.datePosted, jobLocation: location });
     // Documents: approved file is the positive control, UNCONFIRMED file must stay hidden.
     await payload.create({
       collection: 'documents',

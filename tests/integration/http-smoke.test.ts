@@ -13,6 +13,7 @@ import {
   stopProcessGroup,
 } from './support/db-lifecycle';
 import { assertSafeAdminUrl } from './support/disposable-db';
+import { JOBS } from './support/markers';
 import { registerSecurityBlocks } from './support/security-blocks';
 
 // Real HTTP proof (W4/W5A): a production Next build + `next start` against a DISPOSABLE PostgreSQL database that
@@ -243,6 +244,40 @@ describe('HTTP smoke: W5A SEO and analytics output', () => {
     expect(html).toContain('"@type":"BreadcrumbList"');
     expect(html).toContain(fixture!.approved.url);
     expect(html).not.toContain(fixture!.unconfirmed.filename);
+  });
+
+  it('JobPosting JSON-LD is emitted only for the CONFIRMED job with operator-entered date and location', async () => {
+    const page = async (slug: string) => {
+      const res = await get(`/tuyen-dung/${slug}`);
+      return { status: res.status, html: await res.text() };
+    };
+    const ok = await page(JOBS.confirmed);
+    expect(ok.status).toBe(200);
+    expect(ok.html).toContain('"@type":"JobPosting"');
+    expect(ok.html).toContain(`"datePosted":"${JOBS.datePosted}"`);
+    expect(ok.html).toContain(`"addressLocality":"${JOBS.locality}"`);
+    expect(ok.html).toContain(`"addressCountry":"${JOBS.country}"`);
+    expect(ok.html).toContain('"@type":"BreadcrumbList"');
+    expect(ok.html).not.toMatch(/LocalBusiness/);
+    // Confirmed but missing an optional fact: still public, but no JobPosting markup and nothing invented.
+    for (const slug of [JOBS.noLocation, JOBS.noDate]) {
+      const p = await page(slug);
+      expect(p.status, slug).toBe(200);
+      expect(p.html, slug).not.toContain('JobPosting');
+      expect(p.html, slug).not.toContain('"datePosted"');
+    }
+    expect(await (await get('/sitemap.xml')).text()).toContain(`/tuyen-dung/${JOBS.noDate}`);
+  });
+
+  it('draft jobs (unconfirmed or confirmed) are not public and never emit JobPosting', async () => {
+    const list = await (await get('/tuyen-dung')).text();
+    const sitemap = await (await get('/sitemap.xml')).text();
+    for (const slug of [JOBS.unconfirmedDraft, JOBS.confirmedDraft]) {
+      expect((await get(`/tuyen-dung/${slug}`)).status, slug).toBe(404);
+      expect(list).not.toContain(slug);
+      expect(sitemap).not.toContain(slug);
+    }
+    expect(list).toContain(JOBS.confirmed);
   });
 
   it('the published hotline is rendered with its analytics hook; no Zalo is invented', async () => {
