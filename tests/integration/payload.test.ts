@@ -46,6 +46,85 @@ afterAll(async () => {
   await pool.end();
 });
 
+describe('W5B3 job posting confirmed facts (migration 20261005_150000_job_confirmed_facts)', () => {
+  it('migration up added the optional columns to the live and version tables and is recorded', async () => {
+    const mig = await pool.query("select 1 from payload_migrations where name = '20261005_150000_job_confirmed_facts'");
+    expect(mig.rowCount).toBe(1);
+    const cols = async (table: string) =>
+      (await pool.query('select column_name from information_schema.columns where table_name = $1', [table])).rows.map(
+        (r: { column_name: string }) => r.column_name,
+      );
+    const live = await cols('job_postings');
+    for (const c of ['date_posted', 'job_location_street_address', 'job_location_address_locality', 'job_location_address_region', 'job_location_postal_code', 'job_location_address_country', 'source_status']) {
+      expect(live, c).toContain(c);
+    }
+    const versions = await cols('_job_postings_v');
+    for (const c of ['version_date_posted', 'version_job_location_address_locality', 'version_job_location_address_country', 'version_source_status']) {
+      expect(versions, c).toContain(c);
+    }
+  });
+
+  it('facts are optional, default to unconfirmed and are never derived from createdAt', async () => {
+    const created = await payload.create({
+      collection: 'job-postings',
+      data: { title: 'Synthetic job facts', slug: 'synthetic-job-facts-default', applyInstruction: 'synthetic' },
+    });
+    expect(created.sourceStatus).toBe('LEGACY-SOURCE');
+    expect(created.datePosted ?? null).toBeNull();
+    expect(created.jobLocation?.addressCountry ?? null).toBeNull();
+    expect(created.createdAt).toBeTruthy();
+  });
+
+  it('stores operator-entered facts and rejects a malformed country code', async () => {
+    const created = await payload.create({
+      collection: 'job-postings',
+      data: {
+        title: 'Synthetic job facts stored',
+        slug: 'synthetic-job-facts-stored',
+        applyInstruction: 'synthetic',
+        sourceStatus: 'CONFIRMED',
+        datePosted: '2026-03-04T00:00:00.000Z',
+        jobLocation: { addressLocality: 'Synthetic City', addressCountry: 'ZZ' },
+      },
+    });
+    expect(created.sourceStatus).toBe('CONFIRMED');
+    expect(created.datePosted).toBe('2026-03-04T00:00:00.000Z');
+    expect(created.jobLocation?.addressLocality).toBe('Synthetic City');
+    await denied(
+      payload.create({
+        collection: 'job-postings',
+        data: {
+          title: 'Synthetic job bad country',
+          slug: 'synthetic-job-facts-bad-country',
+          applyInstruction: 'synthetic',
+          jobLocation: { addressLocality: 'Synthetic City', addressCountry: 'Zzz' },
+        },
+      }),
+    );
+  });
+
+  it('a draft job is invisible to the anonymous reader even when CONFIRMED with facts', async () => {
+    await payload.create({
+      collection: 'job-postings',
+      data: {
+        title: 'Synthetic job draft hidden',
+        slug: 'synthetic-job-facts-draft',
+        applyInstruction: 'synthetic',
+        sourceStatus: 'CONFIRMED',
+        datePosted: '2026-03-04T00:00:00.000Z',
+        jobLocation: { addressLocality: 'Synthetic City', addressCountry: 'ZZ' },
+        _status: 'draft',
+      },
+    });
+    const r = await payload.find({
+      collection: 'job-postings',
+      where: { slug: { equals: 'synthetic-job-facts-draft' } },
+      ...anonymous,
+    });
+    expect(r.totalDocs).toBe(0);
+  });
+});
+
 describe('Payload configuration + Postgres adapter', () => {
   it('has applied migrations and exposes all W0 entities', async () => {
     const { rows } = await pool.query('select count(*)::int as n from payload_migrations');

@@ -175,9 +175,9 @@ export const JobPostings: CollectionConfig = {
   slug: 'job-postings',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'deadline', '_status', 'updatedAt'],
+    defaultColumns: ['title', 'sourceStatus', 'deadline', '_status', 'updatedAt'],
     description:
-      'Tin tuyển dụng. Lương, quyền lợi và hạn nộp là UNCONFIRMED cho tới khi BMSL xác nhận.',
+      'Tin tuyển dụng. Lương, quyền lợi, hạn nộp, ngày đăng và địa điểm làm việc là UNCONFIRMED cho tới khi BMSL xác nhận. Dữ liệu có cấu trúc JobPosting chỉ được phát ra khi sourceStatus=CONFIRMED và đủ ngày đăng + địa điểm.',
   },
   access: editorContentAccess,
   versions: drafts,
@@ -193,6 +193,49 @@ export const JobPostings: CollectionConfig = {
       admin: { description: 'UNCONFIRMED: không nhập mức lương khi chưa có xác nhận của BMSL.' },
     },
     { name: 'deadline', type: 'date' },
+    {
+      name: 'datePosted',
+      type: 'date',
+      admin: {
+        date: { pickerAppearance: 'dayOnly' },
+        description:
+          'Ngày đăng thực tế do BMSL cung cấp. Không suy ra từ ngày tạo bản ghi; để trống nếu chưa có xác nhận.',
+      },
+    },
+    {
+      name: 'jobLocation',
+      type: 'group',
+      admin: {
+        description:
+          'Địa điểm làm việc do BMSL xác nhận. Không tự suy ra địa chỉ hay quốc gia; để trống nếu chưa có xác nhận.',
+      },
+      fields: [
+        { name: 'streetAddress', type: 'text' },
+        { name: 'addressLocality', type: 'text', admin: { description: 'Quận/huyện hoặc thành phố làm việc.' } },
+        { name: 'addressRegion', type: 'text', admin: { description: 'Tỉnh/thành phố.' } },
+        { name: 'postalCode', type: 'text' },
+        {
+          name: 'addressCountry',
+          type: 'text',
+          admin: { description: 'Mã quốc gia ISO 3166-1 alpha-2 (hai chữ cái in hoa) do BMSL xác nhận; không mặc định.' },
+          validate: (value: unknown) =>
+            value === undefined || value === null || value === '' || (typeof value === 'string' && /^[A-Z]{2}$/.test(value))
+              ? true
+              : 'Mã quốc gia phải gồm đúng hai chữ cái in hoa (ISO 3166-1 alpha-2).',
+        },
+      ],
+    },
+    {
+      name: 'sourceStatus',
+      type: 'select',
+      required: true,
+      defaultValue: 'LEGACY-SOURCE',
+      options: ['LEGACY-SOURCE', 'CONFIRMED'],
+      admin: {
+        description:
+          'Chỉ chọn CONFIRMED khi BMSL đã xác nhận tin tuyển dụng này (gồm ngày đăng và địa điểm). Mặc định: chưa xác nhận.',
+      },
+    },
     { name: 'applyInstruction', type: 'textarea', required: true },
     seoField,
   ],

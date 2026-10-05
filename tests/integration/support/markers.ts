@@ -22,5 +22,17 @@ export const PRIVATE_MARKERS = [
   MARKERS.mediaSource,
 ];
 
+/** Synthetic job postings (W5B3): slugs and the factual values the fixture enters. */
+export const JOBS = {
+  confirmed: 'synthetic-smoke-job-confirmed',
+  unconfirmed: 'synthetic-smoke-job-unconfirmed',
+  noLocation: 'synthetic-smoke-job-no-location',
+  noDate: 'synthetic-smoke-job-no-date',
+  draft: 'synthetic-smoke-job-draft',
+  datePosted: '2026-03-04T00:00:00.000Z',
+  locality: 'SYNTHETIC-LOCALITY-MARKER',
+  country: 'ZZ',
+} as const;
+
 /** Slug of the project that is CONFIRMED + published at seed time and downgraded to LEGACY-SOURCE by SQL in the test. */
 export const STORED_LEGACY_SLUG = 'synthetic-smoke-stored-legacy';

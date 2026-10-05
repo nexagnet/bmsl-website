@@ -1,3 +1,4 @@
+import { richTextToPlain, type JobView } from './public-content';
 import { absoluteContentUrl, isApprovedMediaPath } from './seo';
 import { SITE_NAME } from './site';
 
@@ -76,8 +77,14 @@ export type JobPostingInput = {
   description?: string;
   datePosted?: string;
   validThrough?: string;
-  /** Published job location; BMSL has not provided one yet, so pages do not emit JobPosting today. */
-  location?: { addressLocality: string; addressCountry: string };
+  /** Operator-entered job location; never inferred. */
+  location?: {
+    streetAddress?: string;
+    addressLocality: string;
+    addressRegion?: string;
+    postalCode?: string;
+    addressCountry: string;
+  };
 };
 
 /** Google requires title, description, datePosted, hiringOrganization and jobLocation: all or nothing. */
@@ -96,4 +103,19 @@ export function jobPostingLd(siteUrl: string, j: JobPostingInput): Json | undefi
     hiringOrganization: { '@type': 'Organization', name: SITE_NAME, sameAs: siteUrl },
     jobLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', ...j.location } },
   };
+}
+
+/**
+ * JobPosting for a published job page. Emitted only for a CONFIRMED job whose datePosted and location were entered by
+ * staff: createdAt is never used for the date, no location or country is assumed, and anything missing emits none.
+ */
+export function confirmedJobPostingLd(siteUrl: string, job: JobView): Json | undefined {
+  if (job.sourceStatus !== 'CONFIRMED') return undefined;
+  return jobPostingLd(siteUrl, {
+    title: job.title,
+    description: richTextToPlain(job.description),
+    datePosted: job.datePosted,
+    validThrough: job.deadline,
+    location: job.location,
+  });
 }

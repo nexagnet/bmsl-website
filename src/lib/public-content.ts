@@ -198,8 +198,52 @@ export type JobView = {
   salary?: string;
   deadline?: string;
   applyInstruction?: string;
+  /** Operator-entered facts for JobPosting JSON-LD; present only when well-formed, never derived. */
+  sourceStatus?: string;
+  datePosted?: string;
+  location?: JobLocationView;
   seo: PublicSeo;
 };
+
+export type JobLocationView = {
+  streetAddress?: string;
+  addressLocality: string;
+  addressRegion?: string;
+  postalCode?: string;
+  addressCountry: string;
+};
+
+/** A location needs a locality and an ISO 3166-1 alpha-2 country, both entered by staff; nothing is defaulted. */
+function toJobLocation(v: unknown): JobLocationView | undefined {
+  if (!isDoc(v)) return undefined;
+  const addressLocality = text(v.addressLocality);
+  const addressCountry = text(v.addressCountry);
+  if (!addressLocality || !addressCountry || !/^[A-Z]{2}$/.test(addressCountry)) return undefined;
+  const streetAddress = text(v.streetAddress);
+  const addressRegion = text(v.addressRegion);
+  const postalCode = text(v.postalCode);
+  return {
+    ...(streetAddress ? { streetAddress } : {}),
+    addressLocality,
+    ...(addressRegion ? { addressRegion } : {}),
+    ...(postalCode ? { postalCode } : {}),
+    addressCountry,
+  };
+}
+
+/** Plain text of a Lexical value: one line per top-level block. */
+export function richTextToPlain(v: unknown): string {
+  if (!isDoc(v) || !isDoc(v.root) || !Array.isArray(v.root.children)) return '';
+  const flat = (n: unknown): string => {
+    if (!isDoc(n)) return '';
+    if (typeof n.text === 'string') return n.text;
+    return Array.isArray(n.children) ? n.children.map(flat).join('') : '';
+  };
+  return v.root.children
+    .map((block) => flat(block).trim())
+    .filter(Boolean)
+    .join('\n');
+}
 
 export function toJob(d: unknown): JobView | undefined {
   if (!isPublished(d)) return undefined;
@@ -217,6 +261,9 @@ export function toJob(d: unknown): JobView | undefined {
     salary: text(d.salary),
     deadline: text(d.deadline),
     applyInstruction: text(d.applyInstruction),
+    sourceStatus: text(d.sourceStatus),
+    datePosted: text(d.datePosted),
+    location: toJobLocation(d.jobLocation),
     seo: toSeo(d.seo),
   };
 }

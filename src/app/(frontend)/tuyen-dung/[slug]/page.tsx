@@ -7,7 +7,7 @@ import { getJob } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
 import { formatDate, hasRichText } from '../../../../lib/public-content';
 import { getSiteUrl } from '../../../../lib/site';
-import { breadcrumbLd } from '../../../../lib/structured-data';
+import { breadcrumbLd, confirmedJobPostingLd } from '../../../../lib/structured-data';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,7 +31,8 @@ export default async function JobDetailPage({ params }: Props) {
           { name: job.title, path: job.href },
         ])}
       />
-      {/* JobPosting is not emitted: published jobs have no datePosted or job location, and none is invented. */}
+      {/* JobPosting only for CONFIRMED jobs with operator-entered datePosted and location; otherwise none. */}
+      <JsonLd data={confirmedJobPostingLd(getSiteUrl(), job)} />
       <article className="container hero">
         <h1>{job.title}</h1>
         {/* Salary, benefits and deadline are UNCONFIRMED optional fields: rendered only when present. */}

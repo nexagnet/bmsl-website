@@ -13,6 +13,7 @@ import {
   stopProcessGroup,
 } from './support/db-lifecycle';
 import { assertSafeAdminUrl } from './support/disposable-db';
+import { JOBS } from './support/markers';
 import { registerSecurityBlocks } from './support/security-blocks';
 
 // Real HTTP proof (W4/W5A): a production Next build + `next start` against a DISPOSABLE PostgreSQL database that
@@ -243,6 +244,33 @@ describe('HTTP smoke: W5A SEO and analytics output', () => {
     expect(html).toContain('"@type":"BreadcrumbList"');
     expect(html).toContain(fixture!.approved.url);
     expect(html).not.toContain(fixture!.unconfirmed.filename);
+  });
+
+  it('JobPosting JSON-LD is emitted only for the CONFIRMED job with operator-entered date and location', async () => {
+    const jsonLd = async (slug: string) => {
+      const res = await get(`/tuyen-dung/${slug}`);
+      return { status: res.status, html: await res.text() };
+    };
+    const ok = await jsonLd(JOBS.confirmed);
+    expect(ok.status).toBe(200);
+    expect(ok.html).toContain('"@type":"JobPosting"');
+    expect(ok.html).toContain(`"datePosted":"${JOBS.datePosted}"`);
+    expect(ok.html).toContain(`"addressLocality":"${JOBS.locality}"`);
+    expect(ok.html).toContain(`"addressCountry":"${JOBS.country}"`);
+    expect(ok.html).toContain('"@type":"BreadcrumbList"');
+    expect(ok.html).not.toMatch(/LocalBusiness/);
+    for (const slug of [JOBS.unconfirmed, JOBS.noLocation, JOBS.noDate]) {
+      const page = await jsonLd(slug);
+      expect(page.status, slug).toBe(200);
+      expect(page.html, slug).not.toContain('JobPosting');
+      expect(page.html, slug).not.toContain('datePosted');
+    }
+  });
+
+  it('a draft job is not public and never emits JobPosting', async () => {
+    expect((await get(`/tuyen-dung/${JOBS.draft}`)).status).toBe(404);
+    expect(await (await get('/tuyen-dung')).text()).not.toContain(JOBS.draft);
+    expect(await (await get('/sitemap.xml')).text()).not.toContain(JOBS.draft);
   });
 
   it('the published hotline is rendered with its analytics hook; no Zalo is invented', async () => {
