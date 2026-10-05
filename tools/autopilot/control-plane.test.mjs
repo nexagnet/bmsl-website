@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -86,4 +86,15 @@ test('scratch pnpm lockfile can only be staged as pnpm-lock.yaml', () => {
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test('builder keeps a finite max-turns cap with headroom over the W3A run (63 turns)', () => {
+  const workflow = readFileSync(
+    new URL('../../.github/workflows/autopilot-builder.yml', import.meta.url),
+    'utf8',
+  );
+  const caps = [...workflow.matchAll(/--max-turns\s+(\d+)/g)].map((m) => Number(m[1]));
+  assert.equal(caps.length, 1, 'builder must declare exactly one --max-turns');
+  assert.ok(caps[0] >= 80, `cap ${caps[0]} would fail a 63-turn successful session`);
+  assert.ok(caps[0] <= 100, `cap ${caps[0]} is no longer a tight loop bound`);
 });
