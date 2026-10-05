@@ -8,7 +8,11 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 // width/height/mimeType/filename are populated by Payload's upload handling.
 export const MediaAssets: CollectionConfig = {
   slug: 'media-assets',
-  admin: { useAsTitle: 'alt' },
+  admin: {
+    useAsTitle: 'alt',
+    defaultColumns: ['filename', 'alt', 'rightsStatus', 'updatedAt'],
+    description: 'Chỉ media có rightsStatus=APPROVED mới hiển thị công khai.',
+  },
   upload: {
     staticDir: path.resolve(dirname, '../../media'),
     mimeTypes: ['image/*', 'application/pdf'],
@@ -28,7 +32,12 @@ export const MediaAssets: CollectionConfig = {
       required: true,
       defaultValue: 'UNCONFIRMED',
       options: ['UNCONFIRMED', 'APPROVED'],
+      admin: { description: 'Chỉ đặt APPROVED khi BMSL xác nhận có quyền sử dụng tệp này.' },
     },
-    { name: 'source', type: 'text' },
+    {
+      name: 'source',
+      type: 'text',
+      admin: { description: 'Nguồn/chủ sở hữu của tệp, dùng để kiểm tra bản quyền.' },
+    },
   ],
 };

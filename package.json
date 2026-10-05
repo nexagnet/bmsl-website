@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config vitest.config.ts",
-    "test:integration": "vitest run --config vitest.integration.config.ts"
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "seed:service-areas": "payload run src/seed/run-service-areas.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",

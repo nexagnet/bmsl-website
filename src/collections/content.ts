@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { isStaff } from '../access';
 import {
   adminContentAccess,
   drafts,
@@ -12,7 +13,13 @@ import {
 
 export const ServiceAreas: CollectionConfig = {
   slug: 'service-areas',
-  admin: { useAsTitle: 'name' },
+  admin: {
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'slug', 'order', '_status', 'updatedAt'],
+    description:
+      'Đúng 4 lĩnh vực dịch vụ đã xác nhận. Không thêm giấy phép/cam kết/số liệu khi BMSL chưa duyệt.',
+  },
+  defaultSort: 'order',
   access: adminContentAccess,
   versions: drafts,
   fields: [
@@ -27,7 +34,13 @@ export const ServiceAreas: CollectionConfig = {
 
 export const ArticleCategories: CollectionConfig = {
   slug: 'article-categories',
-  admin: { useAsTitle: 'name' },
+  admin: {
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'slug', 'order', '_status', 'updatedAt'],
+    description:
+      'Đúng 5 chuyên mục bài viết. Tên chuyên mục CHƯA được xác nhận: chỉ nhập khi BMSL cung cấp.',
+  },
+  defaultSort: 'order',
   access: adminContentAccess,
   versions: drafts,
   fields: [
@@ -39,24 +52,61 @@ export const ArticleCategories: CollectionConfig = {
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
-  admin: { useAsTitle: 'name' },
+  admin: {
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'slug', 'sourceStatus', '_status', 'updatedAt'],
+    description:
+      'Hồ sơ dự án. Thông tin lấy từ nguồn cũ là UNCONFIRMED cho tới khi BMSL/chủ đầu tư xác nhận; giữ ở trạng thái nháp.',
+  },
   access: editorContentAccess,
   versions: drafts,
   fields: [
     { name: 'name', type: 'text', required: true },
     slugField,
     { name: 'summary', type: 'textarea' },
-    { name: 'address', type: 'text' },
-    { name: 'scale', type: 'text' },
-    { name: 'operatingSince', type: 'text' },
+    {
+      name: 'address',
+      type: 'text',
+      admin: { description: 'UNCONFIRMED cho tới khi nguồn xác nhận.' },
+    },
+    {
+      name: 'scale',
+      type: 'text',
+      admin: { description: 'UNCONFIRMED: số toà/căn chỉ nhập khi có nguồn.' },
+    },
+    {
+      name: 'operatingSince',
+      type: 'text',
+      admin: { description: 'UNCONFIRMED cho tới khi nguồn xác nhận.' },
+    },
     { name: 'services', type: 'relationship', relationTo: 'service-areas', hasMany: true },
     { name: 'images', type: 'relationship', relationTo: 'media-assets', hasMany: true },
     {
       name: 'bqtFeedback',
       type: 'group',
       fields: [
-        { name: 'text', type: 'textarea' },
-        { name: 'approvedBySource', type: 'checkbox', defaultValue: false },
+        {
+          name: 'text',
+          type: 'textarea',
+          admin: {
+            description:
+              'Phản hồi của BQT (UNCONFIRMED). Chỉ hiển thị công khai khi tích "Đã được nguồn duyệt" bên dưới.',
+          },
+          access: {
+            // The public sees the feedback text only once the source approved it.
+            read: ({ req, siblingData }) =>
+              isStaff(req.user) || siblingData?.approvedBySource === true,
+          },
+        },
+        {
+          name: 'approvedBySource',
+          type: 'checkbox',
+          defaultValue: false,
+          label: 'Đã được nguồn duyệt',
+          admin: {
+            description: 'Chỉ tích khi BQT/chủ đầu tư đã xác nhận cho phép công bố phản hồi này.',
+          },
+        },
       ],
     },
     { name: 'legacyUrls', type: 'array', fields: [{ name: 'url', type: 'text', required: true }] },
@@ -66,6 +116,10 @@ export const Projects: CollectionConfig = {
       required: true,
       defaultValue: 'LEGACY-SOURCE',
       options: ['LEGACY-SOURCE', 'CONFIRMED'],
+      admin: {
+        description:
+          'LEGACY-SOURCE = lấy từ website cũ, chưa xác nhận. Chỉ chọn CONFIRMED khi BMSL đã duyệt.',
+      },
     },
     seoField,
   ],
@@ -73,7 +127,12 @@ export const Projects: CollectionConfig = {
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
-  admin: { useAsTitle: 'title' },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'category', 'publishedAt', '_status', 'updatedAt'],
+    description: 'Bài viết. Số liệu, tên riêng và cam kết cần nguồn được duyệt trước khi xuất bản.',
+  },
+  defaultSort: '-publishedAt',
   access: editorContentAccess,
   versions: drafts,
   fields: [
@@ -91,7 +150,12 @@ export const Articles: CollectionConfig = {
 
 export const JobPostings: CollectionConfig = {
   slug: 'job-postings',
-  admin: { useAsTitle: 'title' },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'deadline', '_status', 'updatedAt'],
+    description:
+      'Tin tuyển dụng. Lương, quyền lợi và hạn nộp là UNCONFIRMED cho tới khi BMSL xác nhận.',
+  },
   access: editorContentAccess,
   versions: drafts,
   fields: [
@@ -100,7 +164,11 @@ export const JobPostings: CollectionConfig = {
     { name: 'description', type: 'richText' },
     { name: 'requirements', type: 'richText' },
     { name: 'benefits', type: 'richText' },
-    { name: 'salary', type: 'text' },
+    {
+      name: 'salary',
+      type: 'text',
+      admin: { description: 'UNCONFIRMED: không nhập mức lương khi chưa có xác nhận của BMSL.' },
+    },
     { name: 'deadline', type: 'date' },
     { name: 'applyInstruction', type: 'textarea', required: true },
     seoField,
@@ -109,7 +177,11 @@ export const JobPostings: CollectionConfig = {
 
 export const Documents: CollectionConfig = {
   slug: 'documents',
-  admin: { useAsTitle: 'title' },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'category', '_status', 'updatedAt'],
+    description: 'Tài liệu tải về. Tệp là media: chỉ hiển thị công khai khi rightsStatus=APPROVED.',
+  },
   access: editorContentAccess,
   versions: drafts,
   fields: [

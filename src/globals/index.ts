@@ -21,10 +21,14 @@ export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   access: adminSingletonAccess,
   versions: drafts,
+  admin: {
+    description: 'Thông tin liên hệ chính thức là UNCONFIRMED: để trống cho tới khi BMSL xác nhận.',
+  },
   fields: [
     {
       name: 'contact',
       type: 'group',
+      admin: { description: 'UNCONFIRMED: không điền giá trị suy đoán; chỉ nhập khi BMSL xác nhận.' },
       fields: [
         { name: 'address', type: 'text' },
         { name: 'email', type: 'email' },
