@@ -4,5 +4,8 @@ export default defineConfig({
   test: {
     include: ['tests/integration/**/*.test.ts'],
     testTimeout: 30000,
+    hookTimeout: 120000,
+    // Payload tests reset the disposable database schema; never run files concurrently.
+    fileParallelism: false,
   },
 });

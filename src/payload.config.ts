@@ -3,17 +3,48 @@ import { fileURLToPath } from 'node:url';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { buildConfig } from 'payload';
+import {
+  ArticleCategories,
+  Articles,
+  Documents,
+  JobPostings,
+  Projects,
+  ServiceAreas,
+} from './collections/content';
+import { ContactLeads } from './collections/ContactLeads';
+import { MediaAssets } from './collections/MediaAssets';
+import { Redirects } from './collections/Redirects';
 import { Users } from './collections/Users';
+import { AboutPage, ContactPage, HomePage, ProcessPage, SiteSettings } from './globals';
+import { resolvePayloadEnv } from './lib/env';
+import { migrations } from './migrations';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const { databaseUrl, payloadSecret } = resolvePayloadEnv();
 
 export default buildConfig({
   admin: { user: Users.slug },
-  collections: [Users],
+  collections: [
+    Users,
+    MediaAssets,
+    ServiceAreas,
+    ArticleCategories,
+    Projects,
+    Articles,
+    JobPostings,
+    Documents,
+    Redirects,
+    ContactLeads,
+  ],
+  globals: [HomePage, AboutPage, ProcessPage, ContactPage, SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET ?? '',
+  secret: payloadSecret,
   db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URL ?? '' },
+    pool: { connectionString: databaseUrl },
+    // Schema changes ship as committed migrations (src/migrations); never auto-push.
+    push: false,
+    migrationDir: path.resolve(dirname, 'migrations'),
+    prodMigrations: migrations,
   }),
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
 });
