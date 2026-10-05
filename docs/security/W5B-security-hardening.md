@@ -22,8 +22,8 @@ multi-instance or per-IP limit (forwarded-IP headers are attacker-controlled). P
 ## W5B2 — CMS, disposable database and HTTP security
 
 Status: implemented. No PostgreSQL/Docker exists in the builder sandbox, so every integration suite is proven only by
-the required CI job (`pnpm test:integration` against the CI PostgreSQL service). Browser/axe/Lighthouse remain successor
-contracts (#36/#37).
+the required CI job (`pnpm test:integration` against the CI PostgreSQL service). Browser/axe/Lighthouse are the W5B4
+contract (#37): see `W5B4-browser-uat.md`.
 
 | Area | Where | Test |
 | --- | --- | --- |
