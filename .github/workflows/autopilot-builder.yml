@@ -201,7 +201,7 @@ jobs:
               }
             }
           claude_args: >-
-            --max-turns 60
+            --max-turns 80
             --allowedTools "Edit,Write,Bash(pnpm:*),Bash(node:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*)"
             --append-system-prompt "You are the BMSL Website Autopilot builder.
             Read the GitHub issue of this run and do exactly what it asks, nothing outside that scope.
