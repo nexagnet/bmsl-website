@@ -121,7 +121,6 @@ jobs:
         with:
           node-version: 22
       - uses: pnpm/action-setup@v4
-        if: ${{ hashFiles('package.json') != '' }}
         with:
           version: 10.34.4
       - name: Cai dependency BMSL neu app da duoc bootstrap
