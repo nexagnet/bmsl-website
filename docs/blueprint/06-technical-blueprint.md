@@ -80,6 +80,51 @@ canonical · redirect theo 02. Mục tiêu hiệu năng tham chiếu: LCP < 2,5 
 - Mã GA4 là cấu hình (`SiteSettings`), không hard-code; ID thật do BMSL cấp (chưa có → `UNCONFIRMED`).
 - Cần banner/đồng ý cookie hay không: `OWNER-DECISION` (tư vấn pháp lý của BMSL).
 
+### 6.1 Triển khai W5A (SEO + analytics opt-in) và bằng chứng kỹ thuật
+
+**SEO (đã triển khai)**
+- `sitemap.xml` đọc **mọi trang** của từng collection (phân trang 200/lần, không còn giới hạn 500 âm thầm); lỗi đọc DB làm sitemap lỗi
+  rõ ràng thay vì cắt bớt; vượt 50.000 URL/tệp thì báo lỗi (cần sitemap index — chưa cần với quy mô hiện tại).
+  Singleton (`/`, `/gioi-thieu`, `/quy-trinh-minh-bach`, `/lien-he`) có `seo.noindex` bị loại khỏi sitemap.
+- `SITE_URL` được kiểm tra (chỉ origin http/https, không user:pass/path/query/hash; sai → lỗi khi khởi động/build). Canonical/OG dùng `metadataBase`.
+- JSON-LD (thoát `<`, `>`, `&`, U+2028/9): `Organization` (chỉ tên, URL, mạng xã hội https hợp lệ), `BreadcrumbList` (dịch vụ, dự án,
+  chuyên mục, bài, tuyển dụng), `Article` (cần `publishedAt` hợp lệ; không bịa tác giả). `JobPosting` có hàm dựng nhưng **chưa phát ra**:
+  trường đã xuất bản chưa có `datePosted` và địa điểm làm việc (schema.org yêu cầu) → cần bổ sung trường + BMSL cung cấp dữ liệu.
+  `LocalBusiness` **tắt**: chưa có cờ "địa chỉ đã xác nhận" trong schema; không suy ra từ `contact.address` (UNCONFIRMED).
+- Search Console: `SiteSettings.searchConsoleVerification` (chỉ ký tự `[A-Za-z0-9_-]{20,100}`) → thẻ `google-site-verification`.
+  Có thẻ **không** chứng minh quyền sở hữu property: cần tài khoản thật.
+- Ảnh: chỉ media `APPROVED` có URL cùng site (không host ngoài); `<img>` có `alt`, `width/height` thật từ tệp, `loading=lazy`, `decoding=async`.
+  **Chưa bật pipeline ảnh responsive/định dạng mới** (không có `sharp`/cache): cache dẫn xuất chưa thể bảo đảm ranh giới quyền
+  `MediaAsset` (tệp gốc có kiểm thử HTTP trong `http-smoke.test.ts`: UNCONFIRMED và sau khi thu hồi duyệt không được trả 200; chạy ở CI). Chuyển cho W5B: cần pipeline
+  kiểm tra quyền trên từng URL dẫn xuất trước khi bật.
+
+**Analytics (mặc định TẮT)**
+- Chỉ đọc `SiteSettings` **đã xuất bản**. Cần cả `analyticsEnabled=true` (mặc định false) **và** `ga4Id` hợp lệ (`G-[A-Z0-9]{6,12}`);
+  nếu không, component analytics không được render: không script, không listener, không sự kiện.
+- Ngay cả khi bật, **không gửi gì trước khi có đồng ý phân tích**. Điểm tích hợp (không giả định chính sách): cơ chế consent do BMSL chọn gọi
+  `window.bmslAnalytics.setConsent(true|false)` hoặc `window.dispatchEvent(new CustomEvent('bmsl:analytics-consent', { detail: { granted } }))`.
+  Rút đồng ý dừng mọi lệnh sau đó (`consent update denied` + `ga-disable-<ID>`). Đồng ý trong form liên hệ **không** phải đồng ý analytics.
+  Mã không lưu cookie/localStorage nào; việc lưu trạng thái đồng ý là trách nhiệm của cơ chế consent (OWNER-DECISION).
+- Riêng tư: `send_page_view=false`; `page_location` = origin + path (không query/UTM/hash), `page_referrer` = origin của site (không bao giờ
+  chuyển referrer thật); mỗi sự kiện kèm hai giá trị đã làm sạch này; tắt Google signals/quảng cáo cá nhân hoá; consent mặc định `denied`.
+- Sự kiện (tên cố định) và tham số allowlist: `phone_click`/`zalo_click` (`link_location`), `form_submit` (`request_type`),
+  `document_download` (`document_id`). Không bao giờ gửi tên/SĐT/email/nội dung/URL tuỳ ý. `phone_click`/`zalo_click` chỉ có khi
+  `SiteSettings` đã xuất bản hotline/Zalo hợp lệ (chân trang); `document_download` ở trang Quy trình & Minh bạch.
+- `form_submit` chỉ bắn khi server trả `200 {ok:true, persisted:true}` (sau khi `ContactLead` lưu vào PostgreSQL); lỗi hợp lệ, honeypot
+  (`200 {ok:true}` không có `persisted`), lỗi 500, lỗi mạng đều không bắn.
+
+**Bằng chứng**: `src/lib/analytics.test.ts` (transport mock, ví dụ query/referrer nhạy cảm, đồng ý/rút đồng ý, thứ tự `form_submit`),
+`src/lib/seo-structured.test.ts` (SITE_URL, >1.000 mục sitemap, JSON-LD thoát/URL/ID không an toàn), `src/lib/site-settings.test.ts`;
+tích hợp: `tests/integration/seo-content.test.ts` (505 dự án, noindex, settings đã xuất bản, quyền media) và phần W5A trong `http-smoke.test.ts`
+(HTML thật, sitemap, tệp media theo quyền).
+
+**Còn cần tài khoản thật / BMSL duyệt (chưa chứng minh được trong repo)**
+- Mã GA4 thật và tài khoản GA4; **tắt Enhanced Measurement** (site search, form interactions, file downloads, outbound clicks) trong data stream
+  GA4 — phía mã không thể tắt các tính năng cấu hình trên máy chủ GA; thiết lập cuối cùng cần kiểm tra bằng DebugView.
+- Xác minh Search Console thật; chính sách cookie/đồng ý và giao diện consent (OWNER-DECISION).
+- Hotline/Zalo/địa chỉ đã xác nhận để hiển thị link + `LocalBusiness`; `datePosted`/địa điểm cho `JobPosting`.
+- Hành vi `page_referrer` cố định trên GA4 thật chưa được kiểm chứng trực tiếp.
+
 ## 8. Backup, vận hành, hạ tầng, đường nối AI
 
 - **Hosting:** deploy lên domain/server của khách. Loại máy chủ, quyền truy cập, backup tự động của host: chưa biết → hỏi BMSL (07 §1).

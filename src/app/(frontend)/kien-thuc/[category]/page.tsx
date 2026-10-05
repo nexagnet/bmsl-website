@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation';
 import { ArticleCards, Crumbs, Empty, Pager, SurveyCta } from '../../../../components/blocks';
 import { getArticles, getCategories, getCategory } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
-import { paths } from '../../../../lib/site';
+import { breadcrumbJsonLd } from '../../../../lib/seo';
+import { getSiteUrl, paths } from '../../../../lib/site';
+import { JsonLd } from '../../../../components/JsonLd';
 
 type Props = { params: Promise<{ category: string }>; searchParams: Promise<{ page?: string }> };
 
@@ -24,6 +26,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   ]);
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd(getSiteUrl(), [
+          { name: 'Kiến thức', path: '/kien-thuc' },
+          { name: category.name, path: category.href },
+        ])}
+      />
       <Crumbs items={[{ label: 'Kiến thức', href: '/kien-thuc' }, { label: category.name }]} />
       <section className="container hero">
         <h1>{category.name}</h1>

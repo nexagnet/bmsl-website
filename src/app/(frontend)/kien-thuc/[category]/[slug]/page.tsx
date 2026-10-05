@@ -5,7 +5,9 @@ import { RichText } from '../../../../../components/RichText';
 import { getArticle } from '../../../../../lib/cms';
 import { buildMetadata } from '../../../../../lib/metadata';
 import { formatDate } from '../../../../../lib/public-content';
-import { paths } from '../../../../../lib/site';
+import { articleJsonLd, breadcrumbJsonLd } from '../../../../../lib/seo';
+import { getSiteUrl, paths, SITE_NAME } from '../../../../../lib/site';
+import { JsonLd } from '../../../../../components/JsonLd';
 
 type Props = { params: Promise<{ category: string; slug: string }> };
 
@@ -22,6 +24,23 @@ export default async function ArticlePage({ params }: Props) {
   const date = formatDate(article.publishedAt);
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd(getSiteUrl(), [
+          { name: 'Kiến thức', path: '/kien-thuc' },
+          { name: article.category.name, path: article.category.href },
+          { name: article.title, path: article.href },
+        ])}
+      />
+      {/* Article: no author is invented; image only when the cover is APPROVED media. */}
+      <JsonLd
+        data={articleJsonLd(getSiteUrl(), SITE_NAME, {
+          title: article.title,
+          path: article.href,
+          publishedAt: article.publishedAt,
+          imageUrl: article.cover?.url,
+          description: article.excerpt,
+        })}
+      />
       <Crumbs
         items={[
           { label: 'Kiến thức', href: '/kien-thuc' },

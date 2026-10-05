@@ -1,4 +1,4 @@
-import { isPrivatePath } from './seo';
+import { isPrivatePath, isSitePath } from './seo';
 import { paths } from './site';
 
 // Pure mappers from CMS documents to public view models. They are defensive on purpose:
@@ -22,7 +22,8 @@ export function toPublicImage(v: unknown): PublicImage | undefined {
   if (!isDoc(v) || v.rightsStatus !== 'APPROVED') return undefined;
   const url = text(v.url);
   const alt = text(v.alt);
-  if (!url || !alt) return undefined;
+  // Same-site paths only: no arbitrary remote image hosts can ever reach <img>, OG or JSON-LD.
+  if (!url || !alt || !isSitePath(url)) return undefined;
   return {
     id: String(v.id),
     alt,

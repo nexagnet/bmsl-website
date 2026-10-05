@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseContactSubmission } from './contact-submission';
+import { parseContactSubmission, submitContact } from './contact-submission';
 
 // Synthetic data only.
 const valid = {
@@ -44,6 +44,17 @@ describe('parseContactSubmission', () => {
 
   it('flags a filled honeypot as bot, even when the rest is valid', () => {
     expect(parseContactSubmission({ ...valid, website: 'http://spam.example' }).kind).toBe('bot');
+  });
+
+  it('only a stored lead reports persisted; bots get a plain ok (so form_submit analytics cannot fire for them)', async () => {
+    const created: unknown[] = [];
+    const payload = { create: async (args: unknown) => (created.push(args), { id: 1 }) } as never;
+    expect(await submitContact(payload, { ...valid, website: 'x' })).toEqual({ status: 200, body: { ok: true } });
+    expect(created).toHaveLength(0);
+    expect(await submitContact(payload, valid)).toEqual({ status: 200, body: { ok: true, persisted: true } });
+    expect(created).toHaveLength(1);
+    const failing = { create: async () => Promise.reject(new Error('db')) } as never;
+    expect((await submitContact(failing, valid)).status).toBe(500);
   });
 
   it('forces sourcePage to a same-site path', () => {

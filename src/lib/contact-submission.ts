@@ -80,7 +80,7 @@ export type LeadNotifier = (lead: { id: number | string }) => Promise<void>;
 export const noopNotifier: LeadNotifier = async () => {};
 
 export type SubmitResult =
-  | { status: 200; body: { ok: true } }
+  | { status: 200; body: { ok: true; persisted?: true } }
   | { status: 400; body: { ok: false; fields: ContactField[] } }
   | { status: 500; body: { ok: false; error: 'persist_failed' } };
 
@@ -111,5 +111,6 @@ export async function submitContact(
   } catch (error) {
     console.error('contact lead notification failed', error instanceof Error ? error.message : 'unknown');
   }
-  return { status: 200, body: { ok: true } };
+  // `persisted` is the only signal the client may use to emit the form_submit analytics event.
+  return { status: 200, body: { ok: true, persisted: true } };
 }

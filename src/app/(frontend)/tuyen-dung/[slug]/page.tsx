@@ -5,7 +5,9 @@ import { RichText } from '../../../../components/RichText';
 import { getJob } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
 import { formatDate, hasRichText } from '../../../../lib/public-content';
-import { paths } from '../../../../lib/site';
+import { breadcrumbJsonLd } from '../../../../lib/seo';
+import { getSiteUrl, paths } from '../../../../lib/site';
+import { JsonLd } from '../../../../components/JsonLd';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -22,6 +24,14 @@ export default async function JobDetailPage({ params }: Props) {
   const deadline = formatDate(job.deadline);
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd(getSiteUrl(), [
+          { name: 'Tuyển dụng', path: '/tuyen-dung' },
+          { name: job.title, path: job.href },
+        ])}
+      />
+      {/* JobPosting is intentionally not emitted: published job fields have no datePosted or job location, which
+          schema.org/Google require. It will be added once those fields exist; nothing is fabricated meanwhile. */}
       <Crumbs items={[{ label: 'Tuyển dụng', href: '/tuyen-dung' }, { label: job.title }]} />
       <article className="container hero">
         <h1>{job.title}</h1>

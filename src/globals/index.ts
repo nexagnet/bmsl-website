@@ -44,6 +44,24 @@ export const SiteSettings: GlobalConfig = {
         { name: 'url', type: 'text', required: true },
       ],
     },
-    { name: 'ga4Id', type: 'text' },
+    {
+      name: 'ga4Id',
+      type: 'text',
+      admin: { description: 'UNCONFIRMED: chỉ nhập ID GA4 thật (G-XXXXXXXXXX) do BMSL cấp. Giá trị sai định dạng bị bỏ qua.' },
+    },
+    {
+      name: 'analyticsEnabled',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Mặc định tắt. Chỉ bật sau khi BMSL quyết định chính sách cookie/đồng ý (OWNER-DECISION). Ngay cả khi bật, không có lưu lượng nào được gửi trước khi người dùng đồng ý phân tích.',
+      },
+    },
+    {
+      name: 'searchConsoleVerification',
+      type: 'text',
+      admin: { description: 'Chỉ giá trị content của thẻ meta google-site-verification do Search Console cấp. Không điền suy đoán.' },
+    },
   ],
 };

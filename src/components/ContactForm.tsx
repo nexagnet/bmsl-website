@@ -1,6 +1,8 @@
 'use client';
 
 import { type FormEvent, useState } from 'react';
+import { trackEvent } from '../lib/analytics-client';
+import { postContact } from '../lib/contact-client';
 
 type State = 'idle' | 'sending' | 'sent' | 'invalid' | 'error';
 
@@ -24,36 +26,26 @@ export function ContactForm() {
     const params = new URLSearchParams(window.location.search);
     const utm = Object.fromEntries([...params].filter(([key]) => key.startsWith('utm_')));
     setState('sending');
-    try {
-      const response = await fetch('/lien-he/gui', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          name: data.get('name'),
-          phone: data.get('phone'),
-          email: data.get('email'),
-          requestType: data.get('requestType'),
-          message: data.get('message'),
-          consent: data.get('consent') === 'on',
-          website: data.get('website'),
-          sourcePage: window.location.pathname,
-          utm,
-        }),
-      });
-      if (response.ok) {
-        form.reset();
-        setInvalid([]);
-        setState('sent');
-      } else if (response.status === 400) {
-        const body = (await response.json()) as { fields?: string[] };
-        setInvalid(body.fields ?? []);
-        setState('invalid');
-      } else {
-        setState('error');
-      }
-    } catch {
-      setState('error');
-    }
+    const requestType = data.get('requestType');
+    const outcome = await postContact(
+      fetch,
+      {
+        name: data.get('name'),
+        phone: data.get('phone'),
+        email: data.get('email'),
+        requestType,
+        message: data.get('message'),
+        consent: data.get('consent') === 'on',
+        website: data.get('website'),
+        sourcePage: window.location.pathname,
+        utm,
+      },
+      // Analytics only after the server confirmed durable persistence; the payload is the request type alone.
+      () => trackEvent('form_submit', { request_type: requestType }),
+    );
+    if (outcome.state === 'sent') form.reset();
+    setInvalid(outcome.fields);
+    setState(outcome.state);
   }
 
   const bad = (field: string) => (invalid.includes(field) ? true : undefined);

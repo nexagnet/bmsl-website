@@ -16,7 +16,18 @@ function Nav({ label }: { label: string }) {
   );
 }
 
-export function SiteShell({ children }: { children: ReactNode }) {
+type ContactLink = { label: string; href: string };
+
+export function SiteShell({
+  children,
+  hotline,
+  zalo,
+}: {
+  children: ReactNode;
+  /** Published, validated SiteSettings values only; absent means nothing is rendered (no invented numbers). */
+  hotline?: ContactLink;
+  zalo?: ContactLink;
+}) {
   return (
     <>
       <a className="skip-link" href="#main">
@@ -47,6 +58,27 @@ export function SiteShell({ children }: { children: ReactNode }) {
         <div className="container">
           <p className="wordmark">{SITE_NAME}</p>
           <Nav label="Điều hướng chân trang" />
+          {hotline || zalo ? (
+            <p>
+              {hotline ? (
+                <a href={hotline.href} data-analytics-event="phone_click" data-analytics-location="footer">
+                  Hotline: {hotline.label}
+                </a>
+              ) : null}
+              {hotline && zalo ? ' · ' : null}
+              {zalo ? (
+                <a
+                  href={zalo.href}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  data-analytics-event="zalo_click"
+                  data-analytics-location="footer"
+                >
+                  Zalo: {zalo.label}
+                </a>
+              ) : null}
+            </p>
+          ) : null}
           <p className="muted">© {SITE_NAME}</p>
         </div>
       </footer>

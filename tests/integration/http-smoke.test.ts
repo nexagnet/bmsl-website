@@ -222,3 +222,75 @@ describe('HTTP smoke: public IA routes and draft non-leak', () => {
     }
   });
 });
+
+describe('HTTP smoke: W5A SEO, analytics default and media boundary', () => {
+  const png = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+    'base64',
+  );
+  const upload = async (name: string, rightsStatus: 'APPROVED' | 'UNCONFIRMED') => {
+    const m = await payload!.create({
+      collection: 'media-assets',
+      data: { alt: `synthetic ${name}`, rightsStatus },
+      file: { data: png, mimetype: 'image/png', name: `${name}.png`, size: png.length },
+    });
+    return m as unknown as { id: number; filename: string };
+  };
+
+  it('home page ships Organization JSON-LD and no analytics script by default', async () => {
+    const html = await (await get('/')).text();
+    expect(html).toContain('"@type":"Organization"');
+    expect(html).not.toContain('googletagmanager.com');
+    expect(html).not.toContain('google-site-verification');
+  });
+
+  it('enabled analytics still ships no external script from the server (consent is required client-side)', async () => {
+    await payload!.updateGlobal({
+      slug: 'site-settings',
+      data: {
+        ga4Id: 'G-ABCDEF1234',
+        analyticsEnabled: true,
+        searchConsoleVerification: 'abcDEF123_-abcDEF123_-xyz',
+        _status: 'published',
+      },
+    });
+    const html = await (await get('/')).text();
+    expect(html).not.toContain('googletagmanager.com');
+    expect(html).toContain('google-site-verification');
+  });
+
+  it('a draft SiteSettings changes nothing publicly', async () => {
+    await payload!.updateGlobal({
+      slug: 'site-settings',
+      data: { searchConsoleVerification: 'zzzDEF123_-abcDEF123_-xyz', _status: 'draft' },
+      draft: true,
+    });
+    const html = await (await get('/')).text();
+    expect(html).not.toContain('zzzDEF123_-abcDEF123_-xyz');
+  });
+
+  it('a singleton marked noindex leaves the sitemap; admin and api never appear', async () => {
+    expect(await (await get('/sitemap.xml')).text()).toContain('/gioi-thieu');
+    await payload!.updateGlobal({
+      slug: 'about-page',
+      data: { title: 'Synthetic about', seo: { noindex: true }, _status: 'published' },
+    });
+    const sitemap = await (await get('/sitemap.xml')).text();
+    expect(sitemap).not.toContain('/gioi-thieu');
+    expect(sitemap).toContain('/lien-he');
+    expect(sitemap).not.toMatch(/\/(admin|api)(\/|<)/);
+    expect(await (await get('/robots.txt')).text()).toContain('Disallow: /admin');
+  });
+
+  it('media bytes follow the rights status at the real file URL (UNCONFIRMED, APPROVED, then revoked)', async () => {
+    const ok = await upload('w5a-ok', 'APPROVED');
+    const blocked = await upload('w5a-blocked', 'UNCONFIRMED');
+    const status = async (m: { filename: string }) => (await get(`/api/media-assets/file/${m.filename}`)).status;
+
+    expect(await status(blocked)).not.toBe(200);
+    expect(await status(ok)).toBe(200);
+
+    await payload!.update({ collection: 'media-assets', id: ok.id, data: { rightsStatus: 'UNCONFIRMED' } });
+    expect(await status(ok)).not.toBe(200);
+  });
+});

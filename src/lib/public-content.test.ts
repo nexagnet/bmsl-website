@@ -44,6 +44,13 @@ describe('media rights gate', () => {
     expect(toPublicImage({ ...approved, alt: '' })).toBeUndefined();
   });
 
+  it('never exposes remote or protocol-relative image hosts, even for APPROVED media', () => {
+    for (const url of ['https://evil.test/a.jpg', '//evil.test/a.jpg', 'javascript:alert(1)', '/a\\b.jpg']) {
+      expect(toPublicImage({ ...approved, url })).toBeUndefined();
+    }
+    expect(toPublicImage({ ...approved, url: '/api/media-assets/file/a.jpg' })?.url).toBe('/api/media-assets/file/a.jpg');
+  });
+
   it('filters unapproved project images and SEO og image', () => {
     const p = toProject({
       ...pub,

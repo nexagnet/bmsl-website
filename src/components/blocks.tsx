@@ -19,9 +19,15 @@ export function Crumbs({ items }: { items: { label: string; href?: string }[] })
   );
 }
 
-export const Img = ({ image, sizes }: { image: PublicImage; sizes?: string }) => (
-  <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" sizes={sizes} />
-);
+/**
+ * Approved media only (see toPublicImage). Explicit width/height are emitted only together, from the stored file,
+ * to avoid layout shift; they are never invented. No responsive srcset/format cache is used: an optimizer cache
+ * cannot yet guarantee the MediaAsset rights boundary for derived bytes (docs/blueprint/06-technical-blueprint.md §6.1).
+ */
+export const Img = ({ image, sizes }: { image: PublicImage; sizes?: string }) => {
+  const dims = image.width && image.height ? { width: image.width, height: image.height } : {};
+  return <img src={image.url} alt={image.alt} {...dims} loading="lazy" decoding="async" sizes={sizes} />;
+};
 
 export function SurveyCta() {
   return (

@@ -16,6 +16,8 @@ import {
   toProject,
   toService,
 } from './public-content';
+import { collectAllPages } from './seo';
+import { EMPTY_SITE_SETTINGS, type SiteSettingsView, toSiteSettings } from './site-settings';
 
 // Public read path. Every query runs with overrideAccess:false and no user, so collection access
 // (published-only content, APPROVED-only media, BQT approval gate) stays authoritative; the mappers
@@ -137,20 +139,55 @@ export const getDocuments = (): Promise<DocumentView[]> =>
     return compact(r.docs.map(toDocument));
   });
 
-/** Public URLs of CMS content that is published and not marked noindex. */
+/** Published SiteSettings only (draft/absent => analytics off, no contact links). Failures degrade to empty settings. */
+export const getSiteSettings = (): Promise<SiteSettingsView> =>
+  safe(EMPTY_SITE_SETTINGS, async () => toSiteSettings(await (await cms()).findGlobal({ slug: 'site-settings', ...PUBLIC })));
+
+/** Every published item of a collection, page by page: the sitemap never silently stops at a fixed limit. */
+const getAll = <T>(collection: 'service-areas' | 'projects' | 'article-categories' | 'articles' | 'job-postings', map: (d: unknown) => T | undefined): Promise<T[]> =>
+  collectAllPages(async (page) => {
+    const r = await (await cms()).find({ collection, sort: 'createdAt', page, limit: SITEMAP_PAGE_SIZE, ...PUBLIC });
+    return { docs: compact(r.docs.map(map)), totalPages: r.totalPages };
+  });
+
+const SITEMAP_PAGE_SIZE = 200;
+
+/** Singleton routes whose page document can be marked noindex in the CMS. */
+const SINGLETON_ROUTES: Record<string, PageSlug> = {
+  '/': 'home-page',
+  '/gioi-thieu': 'about-page',
+  '/quy-trinh-minh-bach': 'process-page',
+  '/lien-he': 'contact-page',
+};
+
+/** Fixed IA paths minus singleton pages an editor marked noindex. */
+export async function getIndexableStaticPaths(staticPaths: readonly string[]): Promise<string[]> {
+  const flags = await Promise.all(
+    staticPaths.map(async (path) => {
+      const slug = SINGLETON_ROUTES[path];
+      return slug ? (await getPage(slug))?.seo.noindex === true : false;
+    }),
+  );
+  return staticPaths.filter((_, i) => !flags[i]);
+}
+
+/**
+ * Public URLs of CMS content that is published and not marked noindex. Unlike the listing helpers this reads
+ * every page; a read failure throws (the sitemap must not be silently truncated), so it is not wrapped in safe().
+ */
 export async function getContentPaths(): Promise<string[]> {
   const [services, projects, categories, articles, jobs] = await Promise.all([
-    getServices(),
-    getProjects(500),
-    getCategories(),
-    getArticles({ limit: 500 }),
-    getJobs(),
+    getAll('service-areas', toService),
+    getAll('projects', toProject),
+    getAll('article-categories', toCategory),
+    getAll('articles', toArticle),
+    getAll('job-postings', toJob),
   ]);
   return [
     ...services.filter((s) => !s.seo.noindex).map((s) => s.href),
     ...projects.filter((p) => !p.seo.noindex).map((p) => p.href),
     ...categories.map((c) => c.href),
-    ...articles.articles.filter((a) => !a.seo.noindex).map((a) => a.href),
+    ...articles.filter((a) => !a.seo.noindex).map((a) => a.href),
     ...jobs.filter((j) => !j.seo.noindex).map((j) => j.href),
   ];
 }
