@@ -1,11 +1,19 @@
-import { spawn } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import net from 'node:net';
 import path from 'node:path';
 import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import manifest from '../../src/migration/legacy-manifest.json';
-import { dropDisposableDatabase, type Group, spawnGroup, stopProcessGroup } from './support/db-lifecycle';
+import {
+  createOwnedDatabase,
+  dropDisposableDatabase,
+  type Group,
+  runInGroup,
+  spawnGroup,
+  stopProcessGroup,
+} from './support/db-lifecycle';
+import { assertSafeAdminUrl } from './support/disposable-db';
+import { registerSecurityBlocks } from './support/security-blocks';
 
 // Real HTTP proof (W4/W5A): a production Next build + `next start` against a DISPOSABLE PostgreSQL database that
 // this file creates and drops itself (never the shared database, never any other database). Synthetic data only.
@@ -17,17 +25,16 @@ import { dropDisposableDatabase, type Group, spawnGroup, stopProcessGroup } from
 // server's process group. Teardown stops that group, waits until pg_stat_activity shows no session, then drops the
 // database (no WITH FORCE). A leftover session fails the run loudly. No Payload instance lives in this process.
 
-const ADMIN_URL = process.env.DATABASE_URL;
-if (!ADMIN_URL) throw new Error('DATABASE_URL is required');
-const adminHost = new URL(ADMIN_URL).hostname;
-if (!['localhost', '127.0.0.1', '::1', '[::1]'].includes(adminHost)) {
-  throw new Error(`Refusing to provision a database on a non-local host (${adminHost})`);
-}
+// Administrative connection provided by the integration entrypoint (global-setup.ts), validated again here.
+const ADMIN_URL = assertSafeAdminUrl(process.env.BMSL_IT_ADMIN_DATABASE_URL).toString();
 
 const REPO_ROOT = path.resolve(import.meta.dirname, '../..');
 const DB_NAME = `bmsl_http_smoke_${randomBytes(6).toString('hex')}`;
 if (!/^bmsl_http_smoke_[0-9a-f]{12}$/.test(DB_NAME)) throw new Error('unexpected disposable database name');
 const SECRET = `synthetic-smoke-${randomBytes(8).toString('hex')}`;
+const BOOTSTRAP_TOKEN = `synthetic-bootstrap-${randomBytes(16).toString('hex')}`;
+const ADMIN_PASSWORD = `Pw-${randomBytes(12).toString('hex')}`;
+const EDITOR_PASSWORD = `Pw-${randomBytes(12).toString('hex')}`;
 const smokeUrl = (() => {
   const u = new URL(ADMIN_URL);
   u.pathname = `/${DB_NAME}`;
@@ -44,30 +51,23 @@ type Media = { id: number; filename: string; url: string };
 
 let admin: pg.Client;
 let server: Group | undefined;
-let fixture: { approved: Media; unconfirmed: Media } | undefined;
+let fixture: { approved: Media; unconfirmed: Media; approvedPdf: Media; unconfirmedPdf: Media; projectId: number } | undefined;
 let base = '';
 let serverLog = '';
 let createdDatabase = false;
 
 const tail = (text: string) => text.slice(-4000);
 
-/** Runs `pnpm exec <args>` against the disposable database and resolves with its output. */
+/**
+ * Runs `pnpm exec <args>` against the disposable database as an invocation-owned process group (pnpm -> payload/next
+ * -> node). On timeout or failure the whole group is killed and its pipes awaited, so no descendant keeps a
+ * PostgreSQL session or pipe open when afterAll drops the database.
+ */
 function run(args: string[], timeoutMs: number, env: Record<string, string> = { NODE_ENV: 'production' }): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const child = spawn('pnpm', ['exec', ...args], {
-      cwd: REPO_ROOT,
-      env: { ...process.env, DATABASE_URL: smokeUrl, PAYLOAD_SECRET: SECRET, NEXT_TELEMETRY_DISABLED: '1', ...env },
-    });
-    let out = '';
-    child.stdout.on('data', (d) => (out += d));
-    child.stderr.on('data', (d) => (out += d));
-    const timer = setTimeout(() => child.kill('SIGKILL'), timeoutMs);
-    child.on('error', reject);
-    child.on('close', (code, signal) => {
-      clearTimeout(timer);
-      if (code === 0) resolve(out);
-      else reject(new Error(`pnpm exec ${args.join(' ')} failed (code ${code}, signal ${signal})\n${tail(out)}`));
-    });
+  return runInGroup('pnpm', ['exec', ...args], {
+    cwd: REPO_ROOT,
+    env: { ...process.env, DATABASE_URL: smokeUrl, PAYLOAD_SECRET: SECRET, NEXT_TELEMETRY_DISABLED: '1', ...env },
+    timeoutMs,
   });
 }
 
@@ -112,14 +112,14 @@ async function waitUntilServing() {
 beforeAll(async () => {
   admin = new pg.Client({ connectionString: ADMIN_URL });
   await admin.connect();
-  await admin.query(`create database "${DB_NAME}"`);
+  await createOwnedDatabase(admin, DB_NAME);
   createdDatabase = true;
 
   // Schema (committed migrations), 17 imported project drafts + approved draft articles (incl. candidate #4), a
   // published project with one APPROVED and one UNCONFIRMED media file as positive control, published ID-only
   // SiteSettings (analytics off) and a published noindex singleton: all through the real CMS, in a fixture subprocess.
   const seeded = await runFixture('seed');
-  fixture = seeded as unknown as { approved: Media; unconfirmed: Media };
+  fixture = seeded as unknown as NonNullable<typeof fixture>;
 
   // Reproducible type check: regenerate the Payload types first so `next build` type-checks the app and the
   // test fixtures against the strict generated types, exactly as it does after any local Payload start.
@@ -130,7 +130,17 @@ beforeAll(async () => {
   base = `http://127.0.0.1:${port}`;
   server = spawnGroup('pnpm', ['exec', 'next', 'start', '-p', String(port), '-H', '127.0.0.1'], {
     cwd: REPO_ROOT,
-    env: { ...process.env, DATABASE_URL: smokeUrl, PAYLOAD_SECRET: SECRET, NODE_ENV: 'production', NEXT_TELEMETRY_DISABLED: '1' },
+    env: {
+      ...process.env,
+      DATABASE_URL: smokeUrl,
+      PAYLOAD_SECRET: SECRET,
+      NODE_ENV: 'production',
+      NEXT_TELEMETRY_DISABLED: '1',
+      // Explicit operator configuration under test: the trusted canonical origin and the bootstrap secret.
+      SITE_URL: base,
+      TRUSTED_ORIGINS: 'https://www.bmsl-trusted.invalid',
+      INITIAL_ADMIN_BOOTSTRAP_TOKEN: BOOTSTRAP_TOKEN,
+    },
   });
   server.child.stdout?.on('data', (d) => (serverLog += d));
   server.child.stderr?.on('data', (d) => (serverLog += d));
@@ -398,4 +408,24 @@ describe('HTTP smoke: W5B security headers and contact endpoint (real server, di
     expect([401, 403]).toContain(create.status);
     expect([401, 403]).toContain((await get('/api/users')).status);
   });
+});
+
+// W5B2 HTTP proof (REST probes, GraphQL, bootstrap/roles, uploads, rights revocation, origin validation) shares this
+// file's build, server and disposable database; see support/security-blocks.ts.
+registerSecurityBlocks({
+  get base() {
+    return base;
+  },
+  smokeUrl,
+  get fixture() {
+    return fixture!;
+  },
+  bootstrapToken: BOOTSTRAP_TOKEN,
+  adminPassword: ADMIN_PASSWORD,
+  editorPassword: EDITOR_PASSWORD,
+  publishedSlug: PUBLISHED_PROJECT.slug,
+  repoRoot: REPO_ROOT,
+  legacySlugs: manifest.projects.map((p) => p.slug),
+  get,
+  runFixture,
 });

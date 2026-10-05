@@ -96,7 +96,7 @@ describe('sitemap over real content', () => {
     for (let i = 0; i < PROJECTS; i += 1) {
       await payload.create({
         collection: 'projects',
-        data: { name: `Synthetic ${i}`, slug: `synthetic-sitemap-${i}`, sourceStatus: 'LEGACY-SOURCE', _status: 'published' },
+        data: { name: `Synthetic ${i}`, slug: `synthetic-sitemap-${i}`, sourceStatus: 'CONFIRMED', _status: 'published' },
       });
     }
     await payload.create({
@@ -109,7 +109,7 @@ describe('sitemap over real content', () => {
       data: {
         name: 'Synthetic noindex',
         slug: 'synthetic-sitemap-noindex',
-        sourceStatus: 'LEGACY-SOURCE',
+        sourceStatus: 'CONFIRMED',
         seo: { noindex: true },
         _status: 'published',
       },

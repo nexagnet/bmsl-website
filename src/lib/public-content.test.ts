@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildSitemapEntries,
   hasRichText,
+  safeLinkHref,
   toArticle,
   toDocument,
   toJob,
@@ -47,6 +48,7 @@ describe('media rights gate', () => {
   it('filters unapproved project images and SEO og image', () => {
     const p = toProject({
       ...pub,
+      sourceStatus: 'CONFIRMED',
       id: 1,
       name: 'P',
       slug: 'p',
@@ -64,16 +66,38 @@ describe('media rights gate', () => {
 
 describe('UNCONFIRMED optional data', () => {
   it('hides BQT feedback unless approvedBySource', () => {
-    const doc = { ...pub, id: 1, name: 'P', slug: 'p' };
+    const doc = { ...pub, id: 1, name: 'P', slug: 'p', sourceStatus: 'CONFIRMED' };
     expect(toProject({ ...doc, bqtFeedback: { text: 'ok', approvedBySource: false } })?.bqtFeedback).toBeUndefined();
     expect(toProject({ ...doc, bqtFeedback: { text: 'ok' } })?.bqtFeedback).toBeUndefined();
     expect(toProject({ ...doc, bqtFeedback: { text: 'ok', approvedBySource: true } })?.bqtFeedback).toBe('ok');
   });
 
   it('omits empty project facts instead of inventing values', () => {
-    const p = toProject({ ...pub, id: 1, name: 'P', slug: 'p', address: '  ', scale: null, operatingSince: '2020' });
+    const doc = { ...pub, id: 1, name: 'P', slug: 'p', sourceStatus: 'CONFIRMED' };
+    const p = toProject({ ...doc, address: '  ', scale: null, operatingSince: '2020' });
     expect(p?.facts).toEqual([{ label: 'Vận hành từ', value: '2020' }]);
-    expect(toProject({ ...pub, id: 1, name: 'P', slug: 'p' })?.facts).toEqual([]);
+    expect(toProject({ ...doc })?.facts).toEqual([]);
+  });
+
+  it('a project is public only for sourceStatus CONFIRMED, even with only a summary, services or a name (stored legacy data stays hidden)', () => {
+    const claims = [{ summary: 'S' }, { services: [{ ...pub, id: 1, name: 'Dv', slug: 'dv' }] }, {}, { address: 'A', bqtFeedback: { text: 'ok', approvedBySource: true } }];
+    for (const sourceStatus of ['LEGACY-SOURCE', undefined, null, 'confirmed', true]) {
+      for (const claim of claims) {
+        expect(toProject({ ...pub, id: 1, name: 'P', slug: 'p', ...claim, sourceStatus }), `${String(sourceStatus)} ${JSON.stringify(claim)}`).toBeUndefined();
+      }
+    }
+    const confirmed = toProject({ ...pub, id: 1, name: 'P', slug: 'p', address: 'A', bqtFeedback: { text: 'ok', approvedBySource: true }, sourceStatus: 'CONFIRMED' });
+    expect(confirmed?.facts).toHaveLength(1);
+    expect(confirmed?.bqtFeedback).toBe('ok');
+  });
+
+  it('keeps only safe rich-text link targets', () => {
+    for (const ok of ['/gioi-thieu', '/du-an/abc?x=1#y', 'https://example.com/a', 'http://example.com', 'mailto:a@example.com', 'tel:+84900000000']) {
+      expect(safeLinkHref(ok), ok).toBe(ok);
+    }
+    for (const bad of ['javascript:alert(1)', ' JavaScript:alert(1)', 'java\tscript:alert(1)', 'data:text/html,<script>alert(1)</script>', 'vbscript:x', '//evil.example/path', '/\\evil.example', 'ftp://example.com/x', 'example.com', '', '   ', null, undefined, 42]) {
+      expect(safeLinkHref(bad), String(bad)).toBeUndefined();
+    }
   });
 
   it('leaves job salary/benefits/deadline undefined when empty', () => {
@@ -94,7 +118,7 @@ describe('UNCONFIRMED optional data', () => {
 describe('route mapping', () => {
   it('builds canonical hrefs', () => {
     expect(toService({ ...pub, id: 1, name: 'Bảo vệ', slug: 'bao-ve' })?.href).toBe('/dich-vu/bao-ve');
-    expect(toProject({ ...pub, id: 1, name: 'P', slug: 'p' })?.href).toBe('/du-an/p');
+    expect(toProject({ ...pub, id: 1, name: 'P', slug: 'p', sourceStatus: 'CONFIRMED' })?.href).toBe('/du-an/p');
     expect(toJob({ ...pub, id: 1, title: 'J', slug: 'j' })?.href).toBe('/tuyen-dung/j');
     const article = toArticle({
       ...pub,

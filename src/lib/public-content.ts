@@ -19,6 +19,24 @@ const slugOf = (v: unknown): string | undefined => {
   return s && isPublicSlug(s) ? s : undefined;
 };
 
+/**
+ * A link target that may be rendered from CMS content: a same-site absolute path, or an http(s)/mailto/tel URL.
+ * Everything else (javascript:, data:, vbscript:, protocol-relative //host, backslash tricks, control characters,
+ * unparsable values) is dropped so that the text is shown without a link.
+ */
+export function safeLinkHref(url: unknown): string | undefined {
+  const value = text(url);
+  // eslint-disable-next-line no-control-regex
+  if (!value || /[\u0000-\u001f\u007f\\]/.test(value)) return undefined;
+  if (value.startsWith('/')) return value.startsWith('//') ? undefined : value;
+  try {
+    const parsed = new URL(value);
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol) ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export const isPublished = (doc: unknown): doc is Doc => isDoc(doc) && doc._status === 'published';
 
 export type PublicImage = { id: string; alt: string; url: string; width?: number; height?: number };
@@ -107,6 +125,9 @@ export function toProject(d: unknown): ProjectView | undefined {
   const name = text(d.name);
   const slug = slugOf(d.slug);
   if (!name || !slug) return undefined;
+  // Every project claim (name, summary, services, facts, images) is UNCONFIRMED until the owner approved the source:
+  // a project is public only with sourceStatus=CONFIRMED, including stored data that predates the publication gate.
+  if (d.sourceStatus !== 'CONFIRMED') return undefined;
   const facts = [
     { label: 'Vị trí', value: text(d.address) },
     { label: 'Quy mô', value: text(d.scale) },

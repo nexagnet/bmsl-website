@@ -1,7 +1,8 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { CollectionConfig } from 'payload';
+import { APIError, type CollectionConfig } from 'payload';
 import { isStaff, staffOnly } from '../access';
+import { ALLOWED_UPLOAD_MIME_TYPES, uploadProblem } from '../lib/upload-policy';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,7 +17,20 @@ export const MediaAssets: CollectionConfig = {
   upload: {
     staticDir: path.resolve(dirname, '../../media'),
     // Explicit raster list: `image/*` would admit image/svg+xml, which is active content served from our origin.
-    mimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif', 'application/pdf'],
+    mimeTypes: ALLOWED_UPLOAD_MIME_TYPES,
+  },
+  hooks: {
+    // Name, declared type and bytes must agree on an approved kind (src/lib/upload-policy.ts); Payload alone would
+    // accept real PNG bytes labelled .html and trusts the declared type when it cannot sniff the bytes.
+    beforeOperation: [
+      ({ args, operation, req }) => {
+        if ((operation === 'create' || operation === 'update') && req.file) {
+          const problem = uploadProblem(req.file.name, req.file.mimetype, req.file.data);
+          if (problem) throw new APIError(problem, 400, undefined, true);
+        }
+        return args;
+      },
+    ],
   },
   access: {
     // Only media whose rights are APPROVED is publicly readable (blueprint 06 §9.5).
@@ -38,6 +52,8 @@ export const MediaAssets: CollectionConfig = {
     {
       name: 'source',
       type: 'text',
+      // Rights provenance is an internal note; approved media is public, its source/owner note is not.
+      access: { read: ({ req }) => isStaff(req.user) },
       admin: { description: 'Nguồn/chủ sở hữu của tệp, dùng để kiểm tra bản quyền.' },
     },
   ],
