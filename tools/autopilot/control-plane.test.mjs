@@ -98,3 +98,13 @@ test('builder keeps a finite max-turns cap with headroom over the W3A run (63 tu
   assert.ok(caps[0] >= 80, `cap ${caps[0]} would fail a 63-turn successful session`);
   assert.ok(caps[0] <= 500, `cap ${caps[0]} is no longer a tight loop bound`);
 });
+
+
+test('builder allows read-only git fetch but not git push', () => {
+  const workflow = readFileSync(
+    new URL('../../.github/workflows/autopilot-builder.yml', import.meta.url),
+    'utf8',
+  );
+  assert.match(workflow, /Bash\(git fetch:\*\)/, 'builder must allow read-only git fetch for same-repo repair source');
+  assert.doesNotMatch(workflow, /Bash\(git push:/, 'builder must not expose git push to Claude');
+});
