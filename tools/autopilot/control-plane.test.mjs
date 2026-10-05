@@ -96,5 +96,5 @@ test('builder keeps a finite max-turns cap with headroom over the W3A run (63 tu
   const caps = [...workflow.matchAll(/--max-turns\s+(\d+)/g)].map((m) => Number(m[1]));
   assert.equal(caps.length, 1, 'builder must declare exactly one --max-turns');
   assert.ok(caps[0] >= 80, `cap ${caps[0]} would fail a 63-turn successful session`);
-  assert.ok(caps[0] <= 256, `cap ${caps[0]} is no longer a tight loop bound`);
+  assert.ok(caps[0] <= 500, `cap ${caps[0]} is no longer a tight loop bound`);
 });

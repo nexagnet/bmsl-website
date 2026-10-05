@@ -60,7 +60,7 @@ jobs:
     needs: preflight
     if: needs.preflight.outputs.decision == 'RUN'
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 180
     # Mot Issue = mot lan agent chay tai mot thoi diem. Khong huy lan dang chay: agent co the dang push.
     concurrency:
       group: autopilot-builder-issue-${{ github.event.issue.number }}
@@ -201,7 +201,7 @@ jobs:
               }
             }
           claude_args: >-
-            --max-turns 256
+            --max-turns 500
             --allowedTools "Edit,Write,Bash(pnpm:*),Bash(node:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*)"
             --append-system-prompt "You are the BMSL Website Autopilot builder.
             Read the GitHub issue of this run and do exactly what it asks, nothing outside that scope.
