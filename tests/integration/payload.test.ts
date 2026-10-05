@@ -286,6 +286,81 @@ describe('ContactLead durable persistence', () => {
     await denied(payload.delete({ collection: 'contact-leads', id: lead.id, ...asUser(admin) }));
   });
 
+  it('submitContact: persists first, rejects invalid, discards honeypot, notifies only after persistence', async () => {
+    const { submitContact } = await import('../../src/lib/contact-submission');
+    const count = async () =>
+      Number((await pool.query('select count(*)::int as n from contact_leads')).rows[0].n);
+    const before = await count();
+    const valid = {
+      name: 'Synthetic Submit',
+      phone: '0900000001',
+      requestType: 'khac',
+      message: 'synthetic submit message',
+      consent: true,
+      sourcePage: '/lien-he',
+    };
+
+    const seenAtNotify: number[] = [];
+    const ok = await submitContact(payload, valid, async () => {
+      seenAtNotify.push(await count());
+    });
+    expect(ok).toEqual({ status: 200, body: { ok: true } });
+    expect(seenAtNotify).toEqual([before + 1]);
+    expect(await count()).toBe(before + 1);
+
+    const failingNotifier = await submitContact(payload, { ...valid, name: 'Synthetic Notify Fail' }, async () => {
+      throw new Error('notifier down');
+    });
+    expect(failingNotifier.status).toBe(200);
+    expect(await count()).toBe(before + 2);
+
+    const cases = [
+      { ...valid, name: '' },
+      { ...valid, phone: 'abc' },
+      { ...valid, requestType: 'other' },
+      { ...valid, consent: false },
+    ];
+    for (const bad of cases) {
+      let notified = false;
+      const res = await submitContact(payload, bad, async () => {
+        notified = true;
+      });
+      expect(res.status).toBe(400);
+      expect(notified).toBe(false);
+    }
+    expect(await count()).toBe(before + 2);
+
+    let botNotified = false;
+    const bot = await submitContact(payload, { ...valid, website: 'http://spam.example' }, async () => {
+      botNotified = true;
+    });
+    expect(bot).toEqual({ status: 200, body: { ok: true } });
+    expect(botNotified).toBe(false);
+    expect(await count()).toBe(before + 2);
+
+    const stored = await pool.query(
+      'select consent_given, consent_at, status, source_page from contact_leads where name = $1',
+      ['Synthetic Submit'],
+    );
+    expect(stored.rows[0]).toMatchObject({ consent_given: true, status: 'new', source_page: '/lien-he' });
+    expect(stored.rows[0].consent_at).toBeInstanceOf(Date);
+  });
+
+  it('submitContact: returns failure, not success, when persistence fails', async () => {
+    const { submitContact } = await import('../../src/lib/contact-submission');
+    const broken = { create: async () => { throw new Error('db down'); } } as unknown as Payload;
+    let notified = false;
+    const res = await submitContact(
+      broken,
+      { name: 'a', phone: '0900000002', requestType: 'khac', message: 'm', consent: true, sourcePage: '/lien-he' },
+      async () => {
+        notified = true;
+      },
+    );
+    expect(res).toEqual({ status: 500, body: { ok: false, error: 'persist_failed' } });
+    expect(notified).toBe(false);
+  });
+
   it('rejects leads without consent', async () => {
     const { createContactLead } = await import('../../src/lib/contact-lead');
     await expect(

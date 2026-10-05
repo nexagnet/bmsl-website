@@ -253,6 +253,25 @@ h2 {
   overflow-x: auto;
 }
 
+.contact-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 36rem;
+  position: relative;
+}
+.contact-form label {
+  display: grid;
+  gap: 0.25rem;
+}
+.contact-form label.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.contact-form [aria-invalid='true'] {
+  border-color: #b00020;
+}
+
 .site-footer {
   border-top: 1px solid var(--color-border);
   background: var(--color-surface);
