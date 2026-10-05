@@ -2,16 +2,18 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArticleCards, Crumbs, Empty, Pager, SurveyCta } from '../../../../components/blocks';
+import { JsonLd } from '../../../../components/JsonLd';
 import { getArticles, getCategories, getCategory } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
-import { paths } from '../../../../lib/site';
+import { getSiteUrl } from '../../../../lib/site';
+import { breadcrumbLd } from '../../../../lib/structured-data';
 
 type Props = { params: Promise<{ category: string }>; searchParams: Promise<{ page?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category: slug } = await params;
   const category = await getCategory(slug);
-  return category ? buildMetadata(paths.category(slug), category.name) : {};
+  return category ? buildMetadata(category.href, category.name) : {};
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
@@ -25,6 +27,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   return (
     <>
       <Crumbs items={[{ label: 'Kiến thức', href: '/kien-thuc' }, { label: category.name }]} />
+      <JsonLd
+        data={breadcrumbLd(getSiteUrl(), [
+          { name: 'Kiến thức', path: '/kien-thuc' },
+          { name: category.name, path: category.href },
+        ])}
+      />
       <section className="container hero">
         <h1>{category.name}</h1>
         <ul className="chips">

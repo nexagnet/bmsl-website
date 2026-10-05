@@ -18,7 +18,7 @@ export default async function ProcessPage() {
             {documents.map((d) => (
               <li key={d.id} className="card">
                 <h3>
-                  <a href={d.url}>{d.title}</a>
+                  <a href={d.url} data-analytics-event="document_download" data-document-id={d.id}>{d.title}</a>
                 </h3>
                 {d.description ? <p>{d.description}</p> : null}
               </li>

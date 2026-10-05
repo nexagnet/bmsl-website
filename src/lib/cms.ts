@@ -15,7 +15,9 @@ import {
   toPage,
   toProject,
   toService,
+  fetchAllPages,
 } from './public-content';
+import { type SiteSettingsView, toSiteSettings } from './site-settings';
 
 // Public read path. Every query runs with overrideAccess:false and no user, so collection access
 // (published-only content, APPROVED-only media, BQT approval gate) stays authoritative; the mappers
@@ -137,20 +139,56 @@ export const getDocuments = (): Promise<DocumentView[]> =>
     return compact(r.docs.map(toDocument));
   });
 
-/** Public URLs of CMS content that is published and not marked noindex. */
+/** Published SiteSettings only (draft:false, no user). Anything unpublished or invalid yields an empty view. */
+export const getSiteSettings = (): Promise<SiteSettingsView> =>
+  safe({}, async () => toSiteSettings(await (await cms()).findGlobal({ slug: 'site-settings', ...PUBLIC })));
+
+export const SITEMAP_PAGE_SIZE = 200;
+
+type ReadAllCollection = 'service-areas' | 'projects' | 'article-categories' | 'articles' | 'job-postings';
+
+/** Every published document of a collection, page by page. Unlike the page reads, a DB failure throws. */
+const readAll = async <T>(collection: ReadAllCollection, map: (d: unknown) => T | undefined): Promise<T[]> => {
+  const payload = await cms();
+  const docs = await fetchAllPages(async (page) => {
+    const r = await payload.find({ collection, sort: 'id', page, limit: SITEMAP_PAGE_SIZE, ...PUBLIC });
+    return { docs: r.docs as unknown[], hasNextPage: r.hasNextPage };
+  });
+  return compact(docs.map(map));
+};
+
+const SINGLETON_PATHS: [PageSlug, string][] = [
+  ['home-page', '/'],
+  ['about-page', '/gioi-thieu'],
+  ['process-page', '/quy-trinh-minh-bach'],
+  ['contact-page', '/lien-he'],
+];
+
+/** Paths of published singleton pages whose SEO group sets noindex: excluded from the sitemap. Throws on DB failure. */
+export async function getNoindexStaticPaths(): Promise<string[]> {
+  const payload = await cms();
+  const out: string[] = [];
+  for (const [slug, path] of SINGLETON_PATHS) {
+    const page = toPage(await payload.findGlobal({ slug, ...PUBLIC }));
+    if (page?.seo.noindex) out.push(path);
+  }
+  return out;
+}
+
+/** Public URLs of published, indexable CMS content: every page of every collection, no silent cap. */
 export async function getContentPaths(): Promise<string[]> {
   const [services, projects, categories, articles, jobs] = await Promise.all([
-    getServices(),
-    getProjects(500),
-    getCategories(),
-    getArticles({ limit: 500 }),
-    getJobs(),
+    readAll('service-areas', toService),
+    readAll('projects', toProject),
+    readAll('article-categories', toCategory),
+    readAll('articles', toArticle),
+    readAll('job-postings', toJob),
   ]);
   return [
     ...services.filter((s) => !s.seo.noindex).map((s) => s.href),
     ...projects.filter((p) => !p.seo.noindex).map((p) => p.href),
     ...categories.map((c) => c.href),
-    ...articles.articles.filter((a) => !a.seo.noindex).map((a) => a.href),
+    ...articles.filter((a) => !a.seo.noindex).map((a) => a.href),
     ...jobs.filter((j) => !j.seo.noindex).map((j) => j.href),
   ];
 }

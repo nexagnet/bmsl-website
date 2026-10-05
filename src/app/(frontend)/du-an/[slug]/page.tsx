@@ -2,16 +2,18 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Crumbs, Img, SurveyCta } from '../../../../components/blocks';
+import { JsonLd } from '../../../../components/JsonLd';
 import { getProject } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
-import { paths } from '../../../../lib/site';
+import { getSiteUrl } from '../../../../lib/site';
+import { breadcrumbLd } from '../../../../lib/structured-data';
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
-  return project ? buildMetadata(paths.project(slug), project.name, project.seo, project.summary) : {};
+  return project ? buildMetadata(project.href, project.name, project.seo, project.summary) : {};
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
@@ -21,6 +23,12 @@ export default async function ProjectDetailPage({ params }: Props) {
   return (
     <>
       <Crumbs items={[{ label: 'Dự án', href: '/du-an' }, { label: project.name }]} />
+      <JsonLd
+        data={breadcrumbLd(getSiteUrl(), [
+          { name: 'Dự án', path: '/du-an' },
+          { name: project.name, path: project.href },
+        ])}
+      />
       <article className="container hero">
         <h1>{project.name}</h1>
         {project.summary ? <p>{project.summary}</p> : null}

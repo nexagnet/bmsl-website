@@ -80,6 +80,27 @@ canonical · redirect theo 02. Mục tiêu hiệu năng tham chiếu: LCP < 2,5 
 - Mã GA4 là cấu hình (`SiteSettings`), không hard-code; ID thật do BMSL cấp (chưa có → `UNCONFIRMED`).
 - Cần banner/đồng ý cookie hay không: `OWNER-DECISION` (tư vấn pháp lý của BMSL).
 
+### 7.1 W5A — bằng chứng kỹ thuật và phần còn chờ
+
+**Đã triển khai (mã + test):**
+- Sitemap đọc hết mọi trang của từng collection (200 bản ghi/trang), không còn giới hạn 500 âm thầm; lỗi DB làm hỏng request thay vì trả sitemap thiếu; vượt 50.000 URL thì báo lỗi. Singleton đã xuất bản có `seo.noindex` bị loại khỏi sitemap.
+- `SITE_URL` phải là origin http(s) thuần (không path/query/hash/credential), sai thì lỗi. Slug CMS phải là `a-z0-9` nối bằng `-`; đường dẫn canonical/OG/sitemap/JSON-LD chỉ nhận đường dẫn nội dung công khai đã kiểm tra (không `..`, `%`, `?`, `#`, `\`, `/admin`, `/api`). Đường dẫn ảnh duyệt (`/api/media-assets/file/<tên>`) kiểm tra riêng, không phải route nội dung.
+- JSON-LD: `Organization` (mọi trang), `BreadcrumbList` (dịch vụ, dự án, chuyên mục, bài viết, tuyển dụng), `Article` (chỉ khi có ngày đăng hợp lệ; không tự thêm tác giả). Chuỗi JSON-LD được escape `<`, `>`, `&`, U+2028/9. `JobPosting` có hàm dựng nhưng **chưa phát ra** vì tin tuyển dụng đã xuất bản chưa có `datePosted` và địa điểm. `LocalBusiness` **tắt** (chưa có địa chỉ xác nhận).
+- Analytics đọc `SiteSettings` đã xuất bản. Mặc định tắt (`analyticsEnabled=false`); chỉ khi bật + `ga4Id` dạng `G-XXXXXXXXXX` thì component mới được render, và vẫn **không tải script/gửi sự kiện** cho tới khi có đồng ý qua `window.bmslAnalytics.setConsent(true)` hoặc sự kiện `bmsl:analytics-consent` (detail `true/false`). Rút đồng ý dừng mọi truyền tin sau đó. Đồng ý trong form liên hệ **không** phải đồng ý analytics.
+- Riêng tư với GA4: `send_page_view=false`; `page_location` chỉ gồm origin + path (không query/UTM/hash); `page_referrer` luôn là origin của site; tắt Google Signals/quảng cáo cá nhân hoá. Sự kiện chỉ gồm `phone_click`, `zalo_click`, `form_submit`, `document_download` với tham số allowlist `link_location`, `request_type`, `document_id` (không tên/SĐT/email/nội dung/URL).
+- `form_submit` chỉ phát khi server trả `200` + `persisted:true` (sau khi ghi `ContactLead` vào PostgreSQL); dữ liệu sai, honeypot, lỗi ghi, lỗi mạng không phát. Hotline/Zalo ở chân trang chỉ hiện khi `SiteSettings` đã xuất bản có số hợp lệ; không bịa số.
+- Ảnh: `<img>` có `decoding="async"`, kích thước chỉ khi có đủ rộng và cao; chỉ nhận đường dẫn media duyệt cùng site, không host ngoài.
+- **Tối ưu ảnh của Next bị tắt** (`images.unoptimized`): `/_next/image` trả 404, vì bộ nhớ đệm biến thể không kiểm tra lại quyền `MediaAsset` sau khi thu hồi duyệt. Giới hạn chính xác cho W5B: cần pipeline ảnh phản hồi (srcset/định dạng hiện đại) tự kiểm quyền mỗi lần phục vụ hoặc xoá cache khi thu hồi. Hiện không có `imageSizes`/thumbnail nào được cấu hình.
+- Migration `20261005_120000_site_settings_analytics` thêm `analyticsEnabled`, `searchConsoleVerification`.
+
+**Cần tài khoản thật / BMSL duyệt (không chứng minh được bằng mã):**
+- ID GA4 thật và bật `analyticsEnabled`; **tắt Enhanced Measurement trong data stream GA4** (mã không điều khiển được; chỉ khi tắt thì các sự kiện tự động như outbound click/file download/scroll mới không đi theo cấu hình riêng của GA).
+- Chính sách cookie/đồng ý và giao diện đồng ý: `OWNER-DECISION`; mã chỉ cung cấp điểm gắn (hook). Chưa bật thu thập mặc định.
+- Giá trị xác minh Search Console: trường `searchConsoleVerification` chỉ render thẻ meta; **không** chứng minh đã sở hữu property.
+- Địa chỉ xác nhận (để bật `LocalBusiness`), `datePosted` và địa điểm làm việc (để phát `JobPosting`), số hotline/Zalo chính thức.
+
+**Kiểm chứng:** unit (`src/lib/analytics.test.ts`, `seo-structured.test.ts`, `site-settings.test.ts`), PostgreSQL (`tests/integration/seo-content.test.ts`: 505 dự án, cách ly bản nháp/đã xuất bản của SiteSettings, noindex), HTTP thật (`tests/integration/http-smoke.test.ts`: file gốc và URL optimizer GET/HEAD trước/sau thu hồi), vòng đời teardown (`tests/integration/db-lifecycle.test.ts`).
+
 ## 8. Backup, vận hành, hạ tầng, đường nối AI
 
 - **Hosting:** deploy lên domain/server của khách. Loại máy chủ, quyền truy cập, backup tự động của host: chưa biết → hỏi BMSL (07 §1).
