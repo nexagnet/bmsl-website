@@ -1,18 +1,20 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Crumbs } from '../../../../components/blocks';
+import { JsonLd } from '../../../../components/JsonLd';
 import { RichText } from '../../../../components/RichText';
 import { getJob } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
 import { formatDate, hasRichText } from '../../../../lib/public-content';
-import { paths } from '../../../../lib/site';
+import { getSiteUrl } from '../../../../lib/site';
+import { breadcrumbLd } from '../../../../lib/structured-data';
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const job = await getJob(slug);
-  return job ? buildMetadata(paths.job(slug), job.title, job.seo) : {};
+  return job ? buildMetadata(job.href, job.title, job.seo) : {};
 }
 
 export default async function JobDetailPage({ params }: Props) {
@@ -23,6 +25,13 @@ export default async function JobDetailPage({ params }: Props) {
   return (
     <>
       <Crumbs items={[{ label: 'Tuyển dụng', href: '/tuyen-dung' }, { label: job.title }]} />
+      <JsonLd
+        data={breadcrumbLd(getSiteUrl(), [
+          { name: 'Tuyển dụng', path: '/tuyen-dung' },
+          { name: job.title, path: job.href },
+        ])}
+      />
+      {/* JobPosting is not emitted: published jobs have no datePosted or job location, and none is invented. */}
       <article className="container hero">
         <h1>{job.title}</h1>
         {/* Salary, benefits and deadline are UNCONFIRMED optional fields: rendered only when present. */}

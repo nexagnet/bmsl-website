@@ -3,3 +3,62 @@ export const PRIVATE_PATH_PREFIXES = ['/admin', '/api'] as const;
 
 export const isPrivatePath = (path: string): boolean =>
   PRIVATE_PATH_PREFIXES.some((p) => path === p || path.startsWith(`${p}/`));
+
+/** Top-level sections that carry indexable public content (docs/blueprint/05 §1). */
+const PUBLIC_SECTIONS = [
+  'gioi-thieu',
+  'dich-vu',
+  'du-an',
+  'quy-trinh-minh-bach',
+  'kien-thuc',
+  'tuyen-dung',
+  'lien-he',
+] as const;
+
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const MAX_SLUG = 120;
+const MAX_PATH = 400;
+
+/** A CMS slug that is safe as a URL path segment: lowercase ASCII words joined by single hyphens. */
+export const isPublicSlug = (slug: unknown): slug is string =>
+  typeof slug === 'string' && slug.length <= MAX_SLUG && SLUG.test(slug);
+
+/**
+ * An indexable public content path: "/" or "/<section>/<slug>[/<slug>]". Rejects query, fragment, backslash,
+ * percent-encoding (so encoded traversal never normalizes into something else), dot segments, empty segments,
+ * unknown sections and private routes. This is NOT the media-path check (see isApprovedMediaPath).
+ */
+export function isPublicContentPath(path: unknown): path is string {
+  if (typeof path !== 'string' || path.length === 0 || path.length > MAX_PATH) return false;
+  if (path === '/') return true;
+  if (!path.startsWith('/') || isPrivatePath(path)) return false;
+  const segments = path.slice(1).split('/');
+  if (!(PUBLIC_SECTIONS as readonly string[]).includes(segments[0] as string)) return false;
+  return segments.every(isPublicSlug);
+}
+
+const MEDIA_FILE = /^\/api\/media-assets\/file\/[A-Za-z0-9][A-Za-z0-9._-]{0,200}$/;
+
+/** Same-site path of an uploaded media file. Only this exact shape may reach <img>, OG or JSON-LD images. */
+export const isApprovedMediaPath = (path: unknown): path is string =>
+  typeof path === 'string' && MEDIA_FILE.test(path) && !path.includes('..');
+
+/** SITE_URL must be a bare http(s) origin; anything else is a configuration error, never silently repaired. */
+export function normalizeSiteUrl(raw: string): string {
+  let url: URL;
+  try {
+    url = new URL(raw.trim());
+  } catch {
+    throw new Error('SITE_URL must be an absolute http(s) URL');
+  }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') throw new Error('SITE_URL must use http or https');
+  if (url.username || url.password) throw new Error('SITE_URL must not contain credentials');
+  if (url.search || url.hash || url.pathname !== '/') {
+    throw new Error('SITE_URL must be an origin only (no path, query or fragment)');
+  }
+  return url.origin;
+}
+
+/** Absolute URL for a validated public content path; undefined when the path is not safe to publish. */
+export const absoluteContentUrl = (siteUrl: string, path: string): string | undefined =>
+  isPublicContentPath(path) ? (path === '/' ? siteUrl : `${siteUrl}${path}`) : undefined;

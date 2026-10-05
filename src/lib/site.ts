@@ -1,3 +1,5 @@
+import { normalizeSiteUrl } from './seo';
+
 /** Locked public IA (docs/blueprint/05 §1). Canonical paths carry no trailing slash, matching what Next serves. */
 export const SITE_NAME = 'BMSL';
 
@@ -25,5 +27,6 @@ export const paths = {
   job: (slug: string) => `/tuyen-dung/${slug}`,
 };
 
+/** Validated origin; localhost only when SITE_URL is unset. An invalid value throws instead of being repaired. */
 export const getSiteUrl = (env: Record<string, string | undefined> = process.env): string =>
-  (env.SITE_URL?.trim() || 'http://localhost:3000').replace(/\/+$/, '');
+  normalizeSiteUrl(env.SITE_URL?.trim() || 'http://localhost:3000');
