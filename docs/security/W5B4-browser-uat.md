@@ -1,13 +1,15 @@
 # W5B4 — executed browser, accessibility, analytics and performance UAT
 
-Status: IMPLEMENTED, REPAIRED AFTER TWO RED CI RUNS, CI EVIDENCE OF THE REPAIRED HEAD PENDING. The suites below are
-committed and wired into the existing required CI step (`pnpm test:integration`, job `integration`, real PostgreSQL
-service). A committed-but-unexecuted suite does not pass: the numbers in "CI evidence" are filled in only from the CI run
-of the PR head. This document does not claim customer sign-off, branded Edge/Safari, physical devices, a real GA4 property
-or hosted customer deployment.
+Status: PROVEN on the exact CI of the merged source heads listed in "CI evidence" (PR48 head, PR51 head and exact-main CI
+`37357834196`, all verify + integration PASS). The suites are wired into the existing required CI step (`pnpm test:integration`,
+job `integration`, real PostgreSQL service). This document does not claim customer sign-off, branded Edge/Safari, physical
+devices, a real GA4 property, live customer accounts or hosted customer deployment: that evidence is absent and stays
+`NOT_PROVEN` (see the end of this document).
 
-BASE: `b67bc3b080a5ae09d21c37d19d1b8740dbece033` (main with W5B1/W5B2/W5B3 and the coordinator R3 changes, exact-main CI 37347589737 green).
-HEAD: the head commit of the PR that carries this change (a commit cannot contain its own SHA; the PR records it).
+BASE of the original W5B4 PR: `b67bc3b080a5ae09d21c37d19d1b8740dbece033` (main with W5B1/W5B2/W5B3 and the coordinator R3 changes, exact-main CI 37347589737 green).
+Final source of this evidence (refreshed by W5C, #24): main `f363129eeb8b28cdcded76f8f81c9c6be9f94b13` (merge of PR #51), exact-main CI `37357834196`.
+HEAD of each original PR is recorded in the PR (a commit cannot contain its own SHA). The earlier sections below are kept in
+chronological order as history; the "CI evidence" section is the current proof.
 
 ## Repair after PR48 exact-main red (issue #49)
 
@@ -17,16 +19,20 @@ CI 37354199189 then was red: verify passed 272 unit tests, integration 347 passe
 `NS_BINDING_ABORTED`, WebKit desktop "navigation to '/' interrupted by another '/'"). PR48 head green does not prove main.
 An earlier repair attempt (PR50, head `85845a255c951e82ac1d6d853dcc97143a595d04`) was closed unmerged: its `/gioi-thieu`
 destination had no content wait, so generic assertions could match the stale home document. Its CI run 37355746008 had
-verify PASS and integration pending at close; it is not recorded as a failed run.
+verify PASS and integration still running at the time it was closed and eventually passed; it is not a failed head, and is
+not recorded as a failed run.
 
 | Problem | Cause | Repair |
 | --- | --- | --- |
 | `public IA` test failed on desktop Firefox/WebKit | The test reused ONE page for all 8 links: `goto('/')`, click a nav link, assert. The first nav item is `/`, already the current URL, so the generic URL/title/`main`/`h1` assertions passed on the old home document while a same-URL client navigation was still pending; the next iteration's `goto('/')` then raced it. The `afterEach` `about:blank` only ran after the whole loop | Each link gets a fresh page (`context.newPage()`), closed in `finally` before the next link, so no page navigates while an earlier navigation of it is pending. The real visitor click, exact `href`, 8 areas and 9 engine/size combinations are unchanged. Every destination now waits for its own content before the final assertions: a fixed heading and matching title where the route hard-codes one, a fixed landmark for other routes, and for the CMS-driven `/gioi-thieu` the published about-page title (`MARKERS.publicAbout`, synthetic fixture) as `h1`; the heading must also differ from the home one. No sleep, retry, ignored abort or weaker timeout. The race was detected from source; it was not reproduced locally |
 | `pnpm build` used a POSIX `NEXT_PHASE=... ` prefix that fails under the Windows default `cmd` script shell | Shell-specific syntax in `package.json` | `build` is `node scripts/build.mjs`: it runs `payload generate:importmap` (with `NEXT_PHASE=phase-production-build` set for that child only, no database needed), aborts if it fails, then `next build` with the caller environment unchanged (runtime env stays fail-fast). Unit-tested in `tests/integration/support/build-launcher.test.ts` (sequencing, abort on failure, env scoping) |
 
-The repaired head and its CI are NOT recorded here: a commit cannot contain its own SHA and no run of it exists yet. A full
-Windows production build was not run; the launcher is proven by unit tests and by the required CI. W5C #24 stays
-waiting for this repair merged and exact-main CI green.
+Outcome (recorded after the fact; the PR could not contain its own SHA): PR51 (head `4530bbea80a494dd9214f0f9dadbc9384908e0b2`)
+passed CI `37356370868` (278 unit / 355 integration tests, 12 files) and the trusted Reviewer `37357329591` (attempt 2), and merged
+as main `f363129eeb8b28cdcded76f8f81c9c6be9f94b13`; the exact-main CI `37357834196` then passed verify and integration. The portable
+Node build launcher and the fresh-page About heading poll are therefore on main. PR50 was closed unmerged (CI `37355746008`
+eventually passed), so it is not a failed head; the source-readiness issue it exposed prompted PR51 proactively. A full
+Windows production build was not run; the launcher is proven by its unit tests (6 checks) and by the required Linux CI.
 
 ## Repair after CI 37350286860 (second head `2887d4b`: integration 343 passed / 6 failed, 390.49 s)
 
@@ -179,42 +185,73 @@ Environment note: the builder shell mounts `pnpm-lock.yaml` read-only for pnpm (
 restored from the previously generated and reviewed head `2887d4b` with the editor tools (diff against that commit is
 empty). No control was bypassed.
 
-Independent exact-lock registry audit (coordinator): 0 critical, 1 high, 3 moderate, 1 low; `undici` 7.29.1 is patched.
-Production-only `pnpm audit`: 3 entries, 0 critical, 1 high, 1 moderate, 1 low. No zero-vulnerability claim is made.
+Independent exact-lock registry audit (coordinator), corrected by W5C: full lockfile 0 critical, 1 high, 3 moderate, 1 low;
+`undici` 7.29.1 is patched. **Production-only** `pnpm audit`: 3 entries, 0 critical, 1 high, 1 moderate, 1 low. No
+zero-vulnerability claim is made, and package presence is distinguished from exploitability below.
 
-| Package | Severity | Path | Reachability (honest) |
+| Package | Severity | Installed through | Reachability (honest) |
 | --- | --- | --- | --- |
-| `braces` <= 3.0.3 | high | `vitest > vite > sass > chokidar` | the remaining high is a dev-time glob precondition, not public runtime code; never in the production bundle |
-| `esbuild` <= 0.24.2 | moderate | `@payloadcms/db-postgres > drizzle-kit > @esbuild-kit/*` | migration CLI tooling; the vulnerable dev-server mode is not run |
-| `vitest`, `@vitest/mocker` < 4.1.11 | moderate | `vitest` | test runner only; the fix is a major vitest upgrade, not applied in this slice |
-| `dompurify` 3.4.13-3.4.15 | low | `@payloadcms/ui > @monaco-editor/react > monaco-editor` | bundled in the staff-only admin; exploitation needs the `IN_PLACE` option with a node-removing hook: NOT_PROVEN unreachable; fix needs a Payload bump |
+| `braces` 3.0.3 | high | `@payloadcms/next > sass > chokidar > braces` (a production dependency path), and also the Vitest/dev tree | The vulnerable precondition is a deeply nested glob input. No publicly reachable path that feeds such input was demonstrated. That is **not** proof it is absent from the production bundle: no bundle or call-site analysis was done, so "never in the production bundle" is NOT claimed |
+| `esbuild` 0.18.20 | moderate (production path) | `@payloadcms/db-postgres > drizzle-kit > @esbuild-kit/esm-loader > @esbuild-kit/core-utils > esbuild` | Migration/CLI tooling; the vulnerable dev-server mode is not run by this repo. Package present on the production path |
+| `dompurify` 3.4.15 | low | `@payloadcms/next > @payloadcms/ui > @monaco-editor/react > monaco-editor > dompurify` | Staff-only admin editor. Exploitation needs the `IN_PLACE` option with a node-removing hook: reachability **NOT_PROVEN** either way; the fix needs a Payload bump |
+| `vitest`, `@vitest/mocker` < 4.1.11 | moderate (full lock only) | `vitest` (dev dependency) | Test runner only; the fix is a major vitest upgrade, deliberately not applied in this handover slice |
 
-An independent security review of this change is required and has not been done by the author.
+No unsolicited major dependency upgrade was made. An independent security review of this change is required and has not been done by the author.
 
 ## CI budget
 
 The `integration` job keeps `timeout-minutes: 20`. The browser work has its own assertion (<= 12 minutes from the start of
-provisioning to the last Lighthouse run) in addition to the existing build and HTTP smoke. CI 37350286860 measured the
-browser suite at 270938 ms (provisioning 50852 ms) and the whole integration run at 390.49 s on the old head. Actual
-timings of the repaired head go in the evidence table below.
+provisioning to the last Lighthouse run) in addition to the existing build and HTTP smoke. Measured timings are in the
+evidence tables below.
 
-## CI evidence (to be filled from the CI run of the PR head; empty values are not claimed)
+## CI evidence (chronological; each row cites the exact run it comes from)
 
-Previous heads: `632880f` (CI 37334173552: 316 passed / 33 failed) and `2887d4b` (CI 37350286860: verify 272 unit tests
-passed; integration 343 passed / 6 failed, 11 files, 390.49 s; all 6 failures CMS flows; public matrix, analytics, media,
-schema drift, axe, Lighthouse and coverage checks passed). The repaired head has not run yet:
+History of earlier, superseded heads (not proof for the current main): `632880f` (CI 37334173552: 316 passed / 33 failed),
+`2887d4b` (CI 37350286860: integration 343 passed / 6 failed, 11 files, 390.49 s; all 6 failures CMS flows; the public matrix,
+analytics, media, schema drift, axe, Lighthouse and coverage checks passed).
 
-| Item | Value |
+### PR48 head `7587cd94cbff6737b1b27d9c990f188592116087` — CI `37353251510` PASS, trusted Reviewer `37353984012` PASS
+
+This head was green and merged as main `95e6e88d82f15260daaa85e002f88a42c0a7363e`, whose exact-main CI `37354199189` was RED
+(2 of 349 integration tests, Firefox and WebKit desktop navigation lifecycle race; see "Repair after PR48 exact-main red").
+A green PR head does not prove main; this row is the proof of that head only.
+
+| Item | Value (`W5B4_REPORT`) |
 | --- | --- |
-| Repaired head SHA / CI run | PENDING |
-| `pnpm test` / `pnpm test:integration` test counts | PENDING |
-| Provisioning / browser suite / total job time | PENDING |
-| Engines and versions (from `W5B4_REPORT`) | PENDING |
-| axe violations by impact per combination | PENDING |
-| Lighthouse scores per run | PENDING |
-| Changed-area coverage per file | PENDING |
-| Schema drift result | PENDING |
-| ADMIN / EDITOR admin flows incl. Lexical editor (3 engines) on the ordinary build | PENDING |
+| Tests | verify 272 unit; integration 349 of 349 passed across 11 files |
+| Engines | Chromium 153.0.8010.12, Firefox 155.0, WebKit 26.6; 9 engine x size combinations |
+| axe | 0 violations at every impact level, all 9 combinations |
+| Lighthouse (perf/a11y/best/SEO, LCP) | mobile home 100/100/100/91, LCP 1662.744 ms; mobile contact 100/100/100/66, LCP 1659.897 ms; mobile project 78/100/100/91, LCP 1657.2003 ms, TBT 1029.39985 ms; desktop home 100/100/100/91, LCP 431.3212 ms |
+| CLS / transfer | 0 everywhere; 163844-196118 bytes. Budgets unchanged: pass |
+| Timing | browser suite 225733 ms (provisioning 61243 ms); whole integration 310.75 s |
+| Coverage | 7 changed-area modules each >= 80 % |
+| Schema drift | UP and DOWN statement lists empty |
+| Admin flows | ADMIN and EDITOR through the real UI on all 3 engines: actual Lexical editor, role assertions, no Gravatar request: PASS |
+
+### PR51 head `4530bbea80a494dd9214f0f9dadbc9384908e0b2` — CI `37356370868` PASS, trusted Reviewer `37357329591` (attempt 2) PASS
+
+Merged as main `f363129eeb8b28cdcded76f8f81c9c6be9f94b13`. This is the latest repair proof: the engines are unchanged and the
+whole matrix passed with the new portable launcher and fresh-page IA checks.
+
+| Item | Value (`W5B4_REPORT`) |
+| --- | --- |
+| Tests | verify 278 unit; integration 355 passed across 12 files (includes the 6 new launcher unit checks) |
+| Engines / matrix | unchanged (Chromium 153.0.8010.12, Firefox 155.0, WebKit 26.6); 9 combinations, axe 0 at every impact |
+| Lighthouse (perf/a11y/best/SEO, LCP) | mobile home 98/100/100/100, LCP 2304.4545 ms; mobile contact 99/100/100/66, LCP 1660.0246 ms; mobile project 100/100/100/91, LCP 1662.7395 ms; desktop home 100/100/100/91, LCP 447.4607 ms |
+| CLS / transfer | 0 everywhere; 163600-194541 bytes |
+| Timing | browser suite 292531 ms (provisioning 52430 ms); whole integration 411.68 s |
+| Checks | All CMS/admin/editor, analytics, media and IA matrix checks PASS |
+
+### Exact main `f363129eeb8b28cdcded76f8f81c9c6be9f94b13` — CI `37357834196`
+
+verify and integration PASS (recorded in the W5C task contract on 2026-10-05 UTC; the W5C builder could not fetch the run logs, so
+the per-run `W5B4_REPORT` numbers of this run itself are not copied here: the figures above are those of the PR51 head run
+`37356370868`, and main differs from that head only by the merge). Retrieve the main run's `W5B4_REPORT` from its log when a
+final handover pack is assembled.
+
+PR50 (closed unmerged, CI `37355746008` eventually PASS) is not a failed head: it is retained as history only.
+
+Not claimed anywhere above: customer, live-account or physical-device evidence, and any full Windows production build.
 
 ## Input-dependent items that remain NOT_PROVEN
 
@@ -222,7 +259,10 @@ schema drift, axe, Lighthouse and coverage checks passed). The repaired head has
 * Real GA4 property delivery and Enhanced Measurement; Search Console; the cookie/consent policy and UI (owner decisions).
 * Customer-confirmed contact, legal, media, project and job facts (everything stays UNCONFIRMED/draft; existing
   jobs migrated to `LEGACY-SOURCE` stay hidden until an operator reviews and confirms them, never auto-approved).
-* Production hosting, DNS, HTTPS, WAF, backups, highest-ADMIN transfer and delivered training (W5C #24).
+* Production hosting, DNS, HTTPS, WAF, off-site backup scheduling, highest-ADMIN transfer and delivered training: see the
+  W5C handover matrix `docs/handover/uat-handover-matrix.md` (each item `NOT_PROVEN`).
 * Raw upload signature checks are file-type identification, not PDF/malware scanning.
-* That `payload generate:importmap` runs under the `NEXT_PHASE` build switch without a database in every environment:
-  proven only by the CI run of this head.
+* A full Windows production build, and a production build on the real host. `payload generate:importmap` under the
+  `NEXT_PHASE` build switch without a database is proven on the Linux CI runs cited above only.
+* Reachability of the audited dependency findings (braces, DOMPurify): package presence is not exploitability, and no
+  bundle/call-site analysis was done.
