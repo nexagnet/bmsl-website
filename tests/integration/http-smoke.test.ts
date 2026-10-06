@@ -25,7 +25,8 @@ import { registerSecurityBlocks } from './support/security-blocks';
 // Lifecycle: every connection to the disposable database belongs to a process this file spawned: short-lived
 // `payload run` fixture subprocesses (support/smoke-fixture.ts, which exit and so close their own pool) and the Next
 // server's process group. Teardown stops that group, waits until pg_stat_activity shows no session, then drops the
-// database (no WITH FORCE). A leftover session fails the run loudly. No Payload instance lives in this process.
+// database (no WITH FORCE). The deliberately absent database of the missing-database test is never created or dropped
+// here; that test only asserts zero sessions on it and that it stays absent. A leftover session fails the run loudly. No Payload instance lives in this process.
 
 // Administrative connection provided by the integration entrypoint (global-setup.ts), validated again here.
 const ADMIN_URL = assertSafeAdminUrl(process.env.BMSL_IT_ADMIN_DATABASE_URL).toString();
@@ -634,9 +635,13 @@ describe('HTTP smoke: /healthz readiness (real server, disposable PostgreSQL)', 
       expect(text).not.toContain(absentName);
     } finally {
       await stopProcessGroup(down);
+      // The target is never created by this fixture, so it is never dropped here: no session may remain on it, and an
+      // unexpected creation fails visibly and is preserved for diagnosis.
+      const sessions = await admin.query('select count(*)::int as n from pg_stat_activity where datname = $1', [
+        absentName,
+      ]);
+      expect(sessions.rows[0].n, 'no session may remain on the absent database after the child stopped').toBe(0);
       existsAfter = await exists();
-      // Only if the app wrongly created it: remove the database this invocation named (never any other).
-      if (existsAfter) await admin.query(`drop database if exists "${absentName}" with (force)`);
     }
     expect(existsAfter, 'the application must not create a missing database (disableCreateDatabase: true)').toBe(false);
   }, 150_000);
