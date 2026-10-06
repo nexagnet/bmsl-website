@@ -10,7 +10,11 @@ export default async function ServicesPage() {
   return (
     <>
       <section className="container hero">
-        <h1>Dịch vụ</h1>
+        <div className="hero-card">
+          <h1>Dịch vụ</h1>
+        </div>
+      </section>
+      <section className="container section">
         {services.length ? <ServiceCards items={services} /> : <Empty>Nội dung đang được cập nhật.</Empty>}
       </section>
       <SurveyCta />

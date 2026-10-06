@@ -19,30 +19,42 @@ export default async function HomePage() {
   return (
     <>
       <section className="container hero">
-        <h1>{page?.title ?? SITE_NAME}</h1>
-        <RichText data={page?.body} />
-        <p>
-          <Link className="button" href={SURVEY_CTA.href}>
-            {SURVEY_CTA.label}
-          </Link>
-        </p>
+        <div className="hero-card">
+          <h1>{page?.title ?? SITE_NAME}</h1>
+          <div className="prose">
+            <RichText data={page?.body} />
+          </div>
+          <p style={{ marginTop: '1.75rem', marginBottom: 0 }}>
+            <Link className="button" href={SURVEY_CTA.href}>
+              {SURVEY_CTA.label}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
+          </p>
+        </div>
       </section>
       <section className="container section" aria-labelledby="home-services">
         <h2 id="home-services">Dịch vụ</h2>
         {services.length ? <ServiceCards items={services} /> : <Empty>Nội dung đang được cập nhật.</Empty>}
       </section>
       {projects.length ? (
-        <section className="container section" aria-labelledby="home-projects">
+        <section className="container section alt" aria-labelledby="home-projects">
           <h2 id="home-projects">Dự án</h2>
           <ProjectCards items={projects} />
         </section>
       ) : null}
       <section className="container section" aria-labelledby="home-process">
         <h2 id="home-process">Quy trình & Minh bạch</h2>
-        <Link href="/quy-trinh-minh-bach">Xem quy trình & minh bạch</Link>
+        <p>
+          <Link className="button secondary" href="/quy-trinh-minh-bach">
+            Xem quy trình & minh bạch
+          </Link>
+        </p>
       </section>
       {latest.articles.length ? (
-        <section className="container section" aria-labelledby="home-articles">
+        <section className="container section alt" aria-labelledby="home-articles">
           <h2 id="home-articles">Kiến thức</h2>
           <ArticleCards items={latest.articles} />
         </section>

@@ -10,7 +10,11 @@ export default async function JobsPage() {
   return (
     <>
       <section className="container hero">
-        <h1>Tuyển dụng</h1>
+        <div className="hero-card">
+          <h1>Tuyển dụng</h1>
+        </div>
+      </section>
+      <section className="container section">
         {jobs.length ? <JobCards items={jobs} /> : <Empty>Hiện chưa có vị trí tuyển dụng được công bố.</Empty>}
       </section>
       <SurveyCta />

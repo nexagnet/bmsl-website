@@ -30,16 +30,20 @@ export default async function ProjectDetailPage({ params }: Props) {
         ])}
       />
       <article className="container hero">
-        <h1>{project.name}</h1>
-        {project.summary ? <p>{project.summary}</p> : null}
+        <div className="hero-card">
+          <h1>{project.name}</h1>
+          {project.summary ? <p className="lead" style={{ marginBottom: 0 }}>{project.summary}</p> : null}
+        </div>
         {project.images.length ? (
-          <ul className="grid">
-            {project.images.map((image) => (
-              <li key={image.id}>
-                <Img image={image} sizes="(min-width: 64rem) 25vw, 100vw" />
-              </li>
-            ))}
-          </ul>
+          <div style={{ marginTop: '2rem' }}>
+            <ul className="grid">
+              {project.images.map((image) => (
+                <li key={image.id} className="card" style={{ padding: '0.5rem' }}>
+                  <Img image={image} sizes="(min-width: 64rem) 25vw, 100vw" />
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : null}
         {project.facts.length ? (
           <dl className="facts">
@@ -52,7 +56,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           </dl>
         ) : null}
         {project.services.length ? (
-          <p>
+          <p style={{ marginTop: '1.5rem', fontWeight: 500 }}>
             Dịch vụ:{' '}
             {project.services.map((s, i) => (
               <span key={s.href}>
@@ -63,7 +67,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           </p>
         ) : null}
         {project.bqtFeedback ? (
-          <section aria-labelledby="bqt-title">
+          <section aria-labelledby="bqt-title" className="prose" style={{ marginTop: '2rem' }}>
             <h2 id="bqt-title">Phản hồi của Ban quản trị</h2>
             <blockquote>{project.bqtFeedback}</blockquote>
           </section>

@@ -10,7 +10,11 @@ export default async function ProjectsPage() {
   return (
     <>
       <section className="container hero">
-        <h1>Dự án đang vận hành</h1>
+        <div className="hero-card">
+          <h1>Dự án đang vận hành</h1>
+        </div>
+      </section>
+      <section className="container section">
         {projects.length ? <ProjectCards items={projects} /> : <Empty>Chưa có dự án được công bố.</Empty>}
       </section>
       <SurveyCta />

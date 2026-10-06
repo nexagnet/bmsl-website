@@ -23,12 +23,16 @@ export async function SingletonPage({
   return (
     <>
       <section className="container hero">
-        <h1>{page?.title ?? fallbackTitle}</h1>
-        {page && hasRichText(page.body) ? (
-          <RichText data={page.body} />
-        ) : (
-          <Empty>Nội dung đang được cập nhật.</Empty>
-        )}
+        <div className="hero-card">
+          <h1>{page?.title ?? fallbackTitle}</h1>
+          {page && hasRichText(page.body) ? (
+            <div className="prose">
+              <RichText data={page.body} />
+            </div>
+          ) : (
+            <Empty>Nội dung đang được cập nhật.</Empty>
+          )}
+        </div>
       </section>
       {children}
       <SurveyCta />
