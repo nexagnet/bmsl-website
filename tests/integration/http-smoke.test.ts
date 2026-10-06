@@ -484,6 +484,105 @@ registerSecurityBlocks({
   runFixture,
 });
 
+// CD1: the production readiness probe, over real HTTP, against the real initialized and migrated PostgreSQL runtime.
+describe('HTTP smoke: /healthz readiness (real server, disposable PostgreSQL)', () => {
+  const FIXED = { status: 'unavailable' };
+  const expectNoLeak = (text: string) => {
+    for (const secret of [smokeUrl, DB_NAME, SECRET, BOOTSTRAP_TOKEN, 'postgres', 'ECONNREFUSED', 'payload_migrations', 'stack']) {
+      expect(text).not.toContain(secret);
+    }
+  };
+
+  it('answers 200 with a minimal no-store body when the migrated database is initialized', async () => {
+    const res = await get('/healthz');
+    const text = await res.text();
+    expect(res.status).toBe(200);
+    expect(res.headers.get('cache-control')).toBe('no-store');
+    expect(res.headers.get('content-type')).toContain('application/json');
+    expect(JSON.parse(text)).toEqual({ status: 'ok' });
+    expect(res.headers.get('x-content-type-options')).toBe('nosniff'); // existing security headers still apply
+    expectNoLeak(text);
+  });
+
+  it('is read-only: non-GET methods are not served as readiness', async () => {
+    for (const method of ['POST', 'PUT', 'DELETE']) {
+      const res = await get('/healthz', { method });
+      expect(res.status).toBe(405);
+    }
+  });
+
+  it('answers 503 with a fixed safe body while a committed migration is not recorded, then recovers', async () => {
+    const db = new pg.Client({ connectionString: smokeUrl });
+    await db.connect();
+    let removed: { name: string; batch: number; updated_at: Date; created_at: Date } | undefined;
+    try {
+      const del = await db.query('delete from payload_migrations where id = (select max(id) from payload_migrations) returning name, batch, updated_at, created_at');
+      removed = del.rows[0];
+      expect(removed, 'expected at least one recorded migration').toBeDefined();
+      const res = await get('/healthz');
+      const text = await res.text();
+      expect(res.status).toBe(503);
+      expect(res.headers.get('cache-control')).toBe('no-store');
+      expect(JSON.parse(text)).toEqual(FIXED);
+      expectNoLeak(text);
+      expect(text).not.toContain(removed!.name);
+    } finally {
+      if (removed) {
+        await db.query('insert into payload_migrations (name, batch, updated_at, created_at) values ($1, $2, $3, $4)', [
+          removed.name,
+          removed.batch,
+          removed.updated_at,
+          removed.created_at,
+        ]);
+      }
+      await db.end();
+    }
+    expect((await get('/healthz')).status).toBe(200);
+  });
+
+  it('answers 503 with a fixed safe body when the database is unavailable (separate server, nonexistent database)', async () => {
+    const port = await freePort();
+    const unavailableUrl = new URL(smokeUrl);
+    unavailableUrl.pathname = `/${DB_NAME}_absent`;
+    const down = spawnGroup('pnpm', ['exec', 'next', 'start', '-p', String(port), '-H', '127.0.0.1'], {
+      cwd: REPO_ROOT,
+      env: {
+        ...process.env,
+        DATABASE_URL: unavailableUrl.toString(),
+        PAYLOAD_SECRET: SECRET,
+        NODE_ENV: 'production',
+        NEXT_TELEMETRY_DISABLED: '1',
+        SITE_URL: `http://127.0.0.1:${port}`,
+      },
+    });
+    let log = '';
+    down.child.stdout?.on('data', (d) => (log += d));
+    down.child.stderr?.on('data', (d) => (log += d));
+    try {
+      let res: Response | undefined;
+      const deadline = Date.now() + 90_000;
+      while (Date.now() < deadline) {
+        if (down.child.exitCode !== null) throw new Error(`unavailable-db server exited early\n${tail(log)}`);
+        try {
+          res = await fetch(`http://127.0.0.1:${port}/healthz`, { redirect: 'manual' });
+          break;
+        } catch {
+          await new Promise((r) => setTimeout(r, 1000));
+        }
+      }
+      expect(res, 'server never answered').toBeDefined();
+      const text = await res!.text();
+      expect(res!.status).toBe(503);
+      expect(res!.headers.get('cache-control')).toBe('no-store');
+      expect(JSON.parse(text)).toEqual(FIXED);
+      expectNoLeak(text);
+      expect(text).not.toContain(`${DB_NAME}_absent`);
+    } finally {
+      await stopProcessGroup(down);
+    }
+  }, 150_000);
+});
+
 describe('W5B4 schema drift (nondestructive generator dry run)', () => {
   it('the schema Payload derives from the code equals the latest committed migration snapshot (no UP and no DOWN statements)', async () => {
     const result = (await runFixture('schema-drift')) as { latestSnapshot: string; upStatements: string[]; downStatements: string[] };
