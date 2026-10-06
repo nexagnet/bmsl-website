@@ -4,7 +4,7 @@ Gói này là **vật liệu đã chuẩn bị để xem xét**. Nó không ph�
 
 | Tài liệu | Nội dung |
 | --- | --- |
-| [`huong-dan-cms.md`](huong-dan-cms.md) | Hướng dẫn CMS tiếng Việt cho ADMIN/EDITOR, chương trình đào tạo ≤ 2 giờ và danh sách kiểm tra |
+| [`huong-dan-cms.md`](huong-dan-cms.md) | Hướng dẫn CMS tiếng Việt cho ADMIN/EDITOR, chương trình đào tạo ≤ 2 giờ, danh sách kiểm tra và [§12 thực hành với bộ dữ liệu mẫu [MẪU]](huong-dan-cms.md#12-thực-hành-với-bộ-dữ-liệu-mẫu-mẫu) (bản nháp, không xuất bản) |
 | [`../runbooks/van-hanh.md`](../runbooks/van-hanh.md) | Cấu hình môi trường, tách CSDL/media, migration, khởi động, ADMIN đầu tiên, log không PII, xoay bí mật, sự cố/lead, quyết định còn mở |
 | [`../runbooks/backup-restore.md`](../runbooks/backup-restore.md) | Công cụ sao lưu/khôi phục thử (`scripts/backup/`), quy tắc an toàn, bằng chứng tổng hợp, giới hạn |
 | [`uat-handover-matrix.md`](uat-handover-matrix.md) | Ma trận UAT ↔ bằng chứng (SHA/CI), danh sách xác nhận khách hàng, danh sách sẵn sàng phát hành, điều kiện cutover |
