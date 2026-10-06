@@ -220,6 +220,28 @@ describe('HTTP smoke: public IA routes and draft non-leak', () => {
     expect(res.headers.get('content-type')).toContain('text/html');
   });
 
+  it('header and footer render the local BMSL logo (no WordPress hotlink) and the logo and favicons are served as JPEG', async () => {
+    const html = await (await get('/')).text();
+    const logoSrcs = [...html.matchAll(/<img[^>]+src="([^"]*bmsl-logo[^"]*)"/g)].map((m) => m[1]);
+    // One header + one footer image (+ the preload hint is a <link>, not an <img>); alt identifies BMSL.
+    expect(logoSrcs).toHaveLength(2);
+    expect(html).toContain('alt="BMSL — Bình Minh Sông Lô"');
+    expect(html).not.toContain('binhminhsonglo.vn');
+    expect(html).not.toContain('wordmark');
+    // Next fingerprints file-convention icons (e.g. /icon-4usi79.jpg), so the URLs are read from the rendered <link> tags.
+    const iconHref = html.match(/<link[^>]+rel="icon"[^>]+href="([^"]+)"/)?.[1];
+    const appleHref = html.match(/<link[^>]+rel="apple-touch-icon"[^>]+href="([^"]+)"/)?.[1];
+    expect(iconHref).toMatch(/^\/icon-[\w-]+\.jpg/);
+    expect(appleHref).toMatch(/^\/apple-icon-[\w-]+\.jpg/);
+    for (const route of [...new Set(logoSrcs), iconHref!, appleHref!]) {
+      const res = await get(route.replace(/^https?:\/\/[^/]+/, ''));
+      expect(res.status, route).toBe(200);
+      expect(res.headers.get('content-type'), route).toBe('image/jpeg');
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      expect(Array.from(bytes.slice(0, 3)), route).toEqual([0xff, 0xd8, 0xff]);
+    }
+  });
+
   it('public pages really read the database: the published control project is listed and served', async () => {
     const list = await (await get('/du-an')).text();
     expect(list).toContain(PUBLISHED_PROJECT.name);

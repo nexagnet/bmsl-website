@@ -294,7 +294,7 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
               try {
                 await visitor.addInitScript(recordCspViolations);
                 await go(visitor, `${ctx.base}/`);
-                await hydrated(visitor, 'header.site-header a.wordmark');
+                await hydrated(visitor, 'header.site-header a.brand-logo');
                 const homeHeading = await text(visitor.locator('main h1').first());
                 if (mobileMenu) await visitor.locator('details.mobile-menu > summary').click();
                 const nav = visitor.getByRole('navigation', { name: navName, exact: true });
