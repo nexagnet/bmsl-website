@@ -24,7 +24,17 @@ Tài liệu này bổ sung cho `huong-dan-cms.md`, trong đó một số tên m�
 | Contact Page | Trang liên hệ |
 | Site Settings | Cài đặt website |
 
-Các nút và thông báo hệ thống (lưu nháp, xuất bản, huỷ, phiên bản, báo lỗi…) do bản dịch `vi` chính thức của Payload cung cấp; cách diễn đạt có thể khác chút so với tên tiếng Anh trong `huong-dan-cms.md` (Save Draft ≈ lưu bản nháp, Publish ≈ xuất bản).
+Các nút và thông báo hệ thống (lưu nháp, xuất bản, huỷ, phiên bản, báo lỗi…) do bản dịch `vi` chính thức của Payload cung cấp, cộng một số ghi đè có chọn lọc trong `src/i18n/vi-admin-overrides.ts`. `huong-dan-cms.md` dùng đúng các nhãn này (bảng thuật ngữ ở §12.6).
+
+| Nhãn trên màn hình | Tiếng Anh | Khóa Payload 3.90.2 |
+| --- | --- | --- |
+| Trở lại | Go back | `general:goBack` |
+| Xuất bản các thay đổi | Publish changes | `version:publishChanges` (trước: "Xuất bản tài liệu") |
+| Gỡ xuất bản | Unpublish | `version:unpublish` (trước: "Ẩn tài liệu") |
+| Lịch sử phiên bản | Versions | `version:versions` (trước: "Danh sách phiên bản") |
+| Lưu bản nháp / Xuất bản | Save Draft / Publish | `version:saveDraft` / `version:publish` (giữ bản dịch chính thức) |
+
+Trong Payload, "document" là bản ghi nội dung bất kỳ, không phải mục **Tài liệu** (tệp tải về).
 
 ## Nhãn lựa chọn và giá trị máy
 
@@ -53,4 +63,6 @@ Các quy tắc cũ vẫn áp dụng: chỉ chọn **Đã xác nhận** khi BMSL 
 
 * Chuỗi nào bản dịch `vi` chính thức chưa có sẽ hiện theo bản dịch này hoặc tiếng Anh nội bộ của Payload; không dùng hack giao diện.
 * Tên nhóm thanh bên mặc định "Collections"/"Globals" do Payload quyết định (bản dịch chính thức), chưa đổi thành "Danh mục quản lý"/"Trang và cấu hình".
+* Chuỗi "Mặt sau" mà chủ sở hữu thấy trên giao diện **không** có trong catalog `vi` của `@payloadcms/translations` 3.90.2 (nút quay lại là `general:goBack` = "Quay lại", nay "Trở lại"); chưa xác định được khóa nguồn nên chưa chứng minh đã sửa đúng chuỗi đó.
+* Một số chuỗi chính thức khác còn dùng "tài liệu" theo nghĩa bản ghi (ví dụ tài liệu bị khóa/đã sửa đổi); chưa sửa.
 * Ảnh chụp trước/sau và kiểm thử trên trình duyệt (desktop 1440, mobile 390) chưa thực hiện: cần UAT của con người trên môi trường cô lập.

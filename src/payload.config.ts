@@ -18,6 +18,7 @@ import { Redirects } from './collections/Redirects';
 import { Users } from './collections/Users';
 import { AboutPage, ContactPage, HomePage, ProcessPage, SiteSettings } from './globals';
 import { resolvePayloadEnv } from './lib/env';
+import { viAdminTranslations } from './i18n/vi-admin-overrides';
 import { migrations } from './migrations';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -28,7 +29,12 @@ export default buildConfig({
   // narrow CSP needs no external img-src and no staff address leaves the deployment.
   admin: { user: Users.slug, avatar: 'default' },
   // Admin UI language only (not data localization): Vietnamese for every account, whatever the browser prefers.
-  i18n: { supportedLanguages: { vi }, fallbackLanguage: 'vi' },
+  i18n: {
+    supportedLanguages: { vi },
+    fallbackLanguage: 'vi',
+    // Selective overrides on top of the official catalog (src/i18n/vi-admin-overrides.ts).
+    translations: { vi: viAdminTranslations },
+  },
   collections: [
     Users,
     MediaAssets,
