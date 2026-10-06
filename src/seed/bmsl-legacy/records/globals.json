@@ -1,0 +1,1489 @@
+{
+  "records": [
+    {
+      "key": "globals/about-page",
+      "slug": "about-page",
+      "title": "Giới thiệu tổng quan",
+      "body": {
+        "root": {
+          "type": "root",
+          "format": "",
+          "indent": 0,
+          "version": 1,
+          "direction": "ltr",
+          "children": [
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Quý Đối tác / Khách hàng thân mến!",
+                  "format": 3,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "CÔNG TY CỔ PHẦN QUẢN LÝ DỊCH VỤ BẤT ĐỘNG SẢN BÌNH MINH SÔNG LÔ là doanh nghiệp hoạt động chính trong các lĩnh vực:",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Quản lý bất động sản: Quản lý vận hành nhà chung cư, trung tâm thương mại, tòa nhà văn phòng, khu đô thị;",
+                      "format": 1,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Đầu tư kinh doanh bất động sản: Thuê và cho thuê các mặt sàn chung cư, TTTM, tòa nhà, khai thác hầm xe …;",
+                      "format": 1,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": ">> Đơn vị đủ điều kiện:",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Đơn vị đủ điều kiện quản lý, vận hành nhà chung cư , được đăng tải trên trang web Bộ Xây dựng – Cục quản lý nhà và thị trường bất động sản theo thông tư 28/2016/TT-BXD (STT 37).",
+                      "format": 3,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Đơn vị đủ điều kiện kinh doanh dịch vụ phòng cháy và chữa cháy theo Giấy xác nhận số 101/GXN-PCCC của Phòng Cảnh sát Phòng cháy, chữa cháy và Cứu nạn cứu hộ – Công an Thành phố Hà Nội ngày 04/05/2021.",
+                      "format": 3,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Với nền tảng phát triển bền vững và những sáng tạo trong kinh doanh cùng đội ngũ nhân lực dồi dào có trình độ cao, nhiều năm kinh nghiệm, được đào tạo chuẩn hóa hệ thống quản lý kỹ thuật, Công ty đã từng bước khẳng định vị trí và tạo dựng được thương hiệu uy tín của mình trên thị trường.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Rất mong sự quan tâm và hợp tác cùng Quý Đối tác / Khách hàng.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Xin trân trọng cảm ơn!",
+                  "format": 2,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "tag": "h2",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "TRỤ SỞ VĂN PHÒNG CÔNG TY BÌNH MINH SÔNG LÔ",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "VP Công ty Bình Minh Sông Lô đặt trụ sở tại tầng 1 – Trung tâm thương mại – Tháp Tây, chung cư Học viện Quốc phòng với diện tích gần 200m2, chia ra các khu vực chức năng: Phòng Ban Giám đốc, phòng Hành chính nhân sự, phòng Kế toán và khu vực phòng họp với đầy đủ máy móc trang thiết bị Văn phòng hiện đại và đầy đủ, phục vụ cho công việc của các phòng ban trong Công ty",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                },
+                {
+                  "type": "text",
+                  "text": ".",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "upload",
+              "version": 3,
+              "format": "",
+              "id": "02cdc58a54322721dcf3ac73",
+              "relationTo": "media-assets",
+              "value": {
+                "$mediaKey": "sha256:21e51e4f8c90ea57982fc7367c82b54f98bf2508a1fd4bf0c5dc011a8444196f"
+              },
+              "fields": null
+            },
+            {
+              "type": "heading",
+              "tag": "h2",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Tổng Quan Cơ Cấu Tổ Chức Và Các Phòng Ban Chuyên Môn Tại Bình Minh Sông Lô",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "TỔNG QUAN CƠ CẤU TỔ CHỨC VÀ CÁC PHÒNG BAN CHUYÊN MÔN TẠI BAN QUẢN LÝ BÌNH MINH SÔNG LÔ",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Trong lĩnh vực quản lý và vận hành bất động sản, cơ cấu tổ chức vững chắc cùng sự phối hợp nhịp nhàng giữa các phòng ban là yếu tố then chốt giúp tối ưu hóa chi phí, đảm bảo an ninh và nâng cao chất lượng dịch vụ cho cư dân, khách hàng. Bài viết này sẽ mang đến góc nhìn toàn cảnh về bộ máy quản trị, điều hành cũng như nhiệm vụ trọng tâm của các phòng ban chuyên môn tại ",
+                  "format": 2,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                },
+                {
+                  "type": "text",
+                  "text": "Công ty Cổ phần Quản lý Dịch vụ Bất động sản Bình Minh Sông Lô.",
+                  "format": 3,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "1. Ban Điều Hành & Quản Lý Tòa Nhà",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Ban Điều hành đóng vai trò là hạt nhân chỉ đạo, định hướng chiến lược và chịu trách nhiệm toàn bộ về hiệu quả hoạt động dịch vụ tại dự án.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Vai trò & Mục tiêu:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                },
+                {
+                  "type": "text",
+                  "text": " Giám đốc Ban quản lý tòa nhà là chức danh tổng điều hành, xây dựng mục tiêu và chỉ tiêu cho từng bộ phận để hoàn thành mục tiêu chung của công ty.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Nhiệm vụ trọng tâm:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Lập kế hoạch & Giám sát: Lập kế hoạch hoạt động, giám sát thực hiện kế hoạch chung nhằm đảm bảo các tiêu chí về doanh số, lợi nhuận, chất lượng dịch vụ và phát triển thương hiệu.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Chuyên nghiệp hóa dịch vụ: Tổ chức vận hành tòa nhà theo tiêu chuẩn chuyên nghiệp, lập kế hoạch chăm sóc cư dân và thiết kế hệ thống quy định nghiệp vụ dịch vụ.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 3,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Đào tạo & Tối ưu nhân sự: Bố trí nhân sự đúng người đúng việc, đề xuất chính sách, điều chuyển, khen thưởng và phát triển đội ngũ kế cận.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 4,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Đánh giá & Cải tiến: Định kỳ báo cáo, đánh giá tuân thủ quy trình và liên tục cải tiến nghiệp vụ quản lý tòa nhà",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "2. Phòng Vận Hành",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Phòng Vận hành giữ vai trò then chốt trong việc duy trì bộ máy tổ chức, quản trị nguồn nhân lực và xây dựng văn hóa doanh nghiệp.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Trưởng Phòng Vận Hành có vai trò thiết kế cấu trúc doanh nghiệp, thiết lập chính sách, văn hóa, tầm nhìn và quản lý hiệu quả làm việc của các đội nhóm thực thi. ",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                },
+                {
+                  "type": "text",
+                  "text": "Các nhiệm vụ chính của Trưởng phòng Vận hành bao gồm:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Tiếp nhận chỉ đạo từ Ban Giám đốc và triển khai kế hoạch, chiến lược đến các phòng ban.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Hoạch định chiến lược nhân sự, định biên nhân sự, xây dựng bảng mô tả công việc và hệ thống đánh giá KPI.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 3,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Xây dựng quy chế lương thưởng, phúc lợi, lộ trình thăng tiến và quản lý ngân sách nhân sự.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 4,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Xây dựng nội quy lao động, quy trình hành chính và phát triển văn hóa doanh nghiệp.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Nhân sự phòng vận hành có vai trò đảm bảo toàn bộ công tác chính sách, chế độ đãi ngộ cho Cán bộ nhân viên.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                },
+                {
+                  "type": "text",
+                  "text": " Nhân sự phòng Vận hành có các nhiệm vụ chính sau:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Quản lý, theo dõi và giải quyết chế độ BHXH, BHYT, công đoàn, báo tăng/giảm nhân sự",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Chấm công, tính lương, quyết toán thuế TNCN và thực hiện chính sách thưởng.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Thực hiện hồ sơ quan hệ lao động (hợp đồng thử việc, hợp đồng lao động, quyết định điều chuyển, bổ nhiệm…) và lưu trữ dữ liệu nhân sự.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "3. Khối Kỹ Thuật & Kỹ Sư Trưởng",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Khối Kỹ thuật chịu trách nhiệm đảm bảo toàn bộ hệ thống cơ điện, hạ tầng tòa nhà vận hành an toàn và liên tục 24/7.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Vai trò & Mục tiêu:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                },
+                {
+                  "type": "text",
+                  "text": " Thiết lập quy trình vận hành, xử lý sự cố kỹ thuật và xây dựng kế hoạch tiết kiệm năng lượng cho tòa nhà.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Nhiệm vụ trọng tâm:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Kiểm soát hệ thống kỹ thuật: Giám sát vận hành 24/7 các hệ thống điện, nước, điều hòa không khí, PCCC, thang máy, camera…",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Bảo trì & Sửa chữa: Lập kế hoạch bảo trì định kỳ, đàm phán hợp đồng nhà cung cấp, kiểm soát nhà thầu sửa chữa và theo dõi chỉ số điện nước hàng tháng, tiếp nhận và khắc phục các sự cố kỹ thuật tại căn hộ/tòa nhà kịp thời.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 3,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Quản lý dữ liệu cư dân: Hướng dẫn cư dân làm thủ tục đăng ký, cấp thẻ và cập nhật dữ liệu nhân khẩu chính xác.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "4. Bộ Phận Bảo Vệ & An Ninh",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Bộ phận Bảo vệ là lá chắn an ninh, trực tiếp bảo vệ tài sản và tính mạng của cư dân, khách hàng tại dự án",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Nhiệm vụ trọng tâm:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Kiểm soát an ninh: Thường xuyên tuần tra, kiên quyết ngăn chặn, bắt giữ và lập biên bản các hành vi vi phạm pháp luật (trộm cắp, gây rối, phá hoại).",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Tác phong & Giao tiếp: Tiếp xúc chừng mực, lịch sự, hỗ trợ trả lời thắc mắc của khách hàng, cư dân và nhà thầu trong phạm vi cho phép.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 3,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Tinh thần trách nhiệm: Luôn nêu cao tinh thần cảnh giác trong ca trực, chủ động, tận tâm và lấy tinh thần phục vụ khách hàng làm nền tảng.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "5. Bộ Phận Vệ Sinh & Môi Trường",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Bộ phận Vệ sinh giữ vai trò duy trì không gian sống sạch đẹp, văn minh và đảm bảo mỹ quan chung cho toàn bộ dự án.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Nhiệm vụ trọng tâm:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Tuân thủ quy trình chuẩn: Tổ trưởng và nhân viên phải nắm vững, thực hiện nghiêm ngặt các quy trình duy trì vệ sinh ngoại cảnh (sảnh, bậc tam cấp, khuôn viên) và khu vực công cộng/nhà vệ sinh.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Nghiệm thu & Báo cáo: Thực hiện đầy đủ các biên bản kiểm tra nghiệm thu, ghi chép sổ sách và báo cáo đánh giá chất lượng định kỳ theo quy định.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "6. Bộ Phận Lễ Tân & Dịch Vụ Khách Hàng",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Bộ phận Lễ tân là “giao diện” đại diện cho hình ảnh thương hiệu của doanh nghiệp, đóng vai trò là cầu nối trực tiếp giữa Ban Quản lý / Chủ đầu tư với cư dân và khách hàng.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Nhiệm vụ chính:",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "listType": "bullet",
+              "start": 1,
+              "tag": "ul",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "children": [
+                {
+                  "type": "listitem",
+                  "value": 1,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Đón tiếp & Kiểm soát sảnh: Chào đón khách hàng, hỗ trợ hướng dẫn/quẹt thẻ thang máy, nhận và giao thư từ/bưu phẩm.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 2,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Chăm sóc cư dân & Xử lý thông tin: Tiếp nhận phản ánh, yêu cầu sửa chữa qua Hotline/trực tiếp, cập nhật tiến độ xử lý và phản hồi sự hài lòng cho cư dân.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 3,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Hỗ trợ thủ tục & Hành chính: Hướng dẫn cư dân làm thủ tục đăng ký thi công, hoàn thiện nội thất, làm thẻ xe, thu phí dịch vụ/điện nước qua phần mềm chuyên dụng.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "listitem",
+                  "value": 4,
+                  "format": "",
+                  "indent": 0,
+                  "version": 1,
+                  "direction": "ltr",
+                  "children": [
+                    {
+                      "type": "text",
+                      "text": "Phát thông báo: Gửi các thư mời, phiếu khảo sát ý kiến và thông báo phí định kỳ đến cư dân.",
+                      "format": 0,
+                      "detail": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "version": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Sự kết hợp chặt chẽ giữa Ban Điều hành, Phòng Vận hành, Khối Kỹ thuật, Bộ phận Bảo vệ, Bộ phận Lễ tân và Bộ phận Vệ sinh giúp Công ty Cổ phần Quản lý Dịch vụ Bất động sản Bình Minh Sông Lô xây dựng nên một quy trình quản lý tòa nhà chuyên nghiệp, an toàn và tối ưu. Đây chính là nền tảng vững chắc nâng cao giá trị bất động sản và mang lại trải nghiệm sống đẳng cấp cho mọi cư dân.",
+                  "format": 0,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Bình Minh Sông Lô – Giải pháp quản lý vận hành tòa nhà uy tín, chất lượng hàng đầu",
+                  "format": 3,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Hotline: [số điện thoại — chờ BMSL xác nhận] (Mr. Minh)",
+                  "format": 2,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "globals/contact-page",
+      "slug": "contact-page",
+      "title": "Liên hệ",
+      "body": {
+        "root": {
+          "type": "root",
+          "format": "",
+          "indent": 0,
+          "version": 1,
+          "direction": "ltr",
+          "children": [
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "CÔNG TY CP QUẢN LÝ DỊCH VỤ BẤT ĐỘNG SẢN BÌNH MINH SÔNG LÔ | CÔNG TY CP DỊCH VỤ BẢO VỆ BÌNH MINH – SÔNG LÔ",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "A: A16-NV6 ô số 9, khu đô thị mới hai bên đường Lê Trọng Tấn, phường Tây Mỗ, TP. Hà Nội, Việt Nam",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "W: binhminhsonglo.vn",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "E: [email — chờ BMSL xác nhận]",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "F: https://www.facebook.com/share/19onTsQNLx/?mibextid=LQQJ4d",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "format": "",
+              "indent": 0,
+              "version": 1,
+              "direction": "ltr",
+              "textFormat": 0,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "M: [số điện thoại — chờ BMSL xác nhận] | [số điện thoại — chờ BMSL xác nhận] | [số điện thoại — chờ BMSL xác nhận]",
+                  "format": 1,
+                  "detail": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "version": 1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

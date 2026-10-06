@@ -16,7 +16,9 @@
     "test": "vitest run --config vitest.config.ts",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "seed:service-areas": "payload run src/seed/run-service-areas.ts",
-    "migrate:legacy": "payload run src/migration/run-import.ts --"
+    "migrate:legacy": "payload run src/migration/run-import.ts --",
+    "seed:bmsl-legacy": "payload run src/seed/bmsl-legacy/run.ts --",
+    "seed:bmsl-legacy:generate": "payload run src/seed/bmsl-legacy/generate-cli.ts --"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",
