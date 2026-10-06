@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { vi } from '@payloadcms/translations/languages/vi';
 import { buildConfig } from 'payload';
 import {
   ArticleCategories,
@@ -26,6 +27,8 @@ export default buildConfig({
   // `avatar: 'default'` is Payload's local icon: the admin never looks up a hashed e-mail address at Gravatar, so the
   // narrow CSP needs no external img-src and no staff address leaves the deployment.
   admin: { user: Users.slug, avatar: 'default' },
+  // Admin UI language only (not data localization): Vietnamese for every account, whatever the browser prefers.
+  i18n: { supportedLanguages: { vi }, fallbackLanguage: 'vi' },
   collections: [
     Users,
     MediaAssets,

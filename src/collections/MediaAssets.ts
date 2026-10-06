@@ -10,6 +10,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 // width/height/mimeType/filename are populated by Payload's upload handling.
 export const MediaAssets: CollectionConfig = {
   slug: 'media-assets',
+  labels: { singular: 'Ảnh hoặc tệp', plural: 'Thư viện ảnh và tệp' },
   admin: {
     useAsTitle: 'alt',
     defaultColumns: ['filename', 'alt', 'rightsStatus', 'updatedAt'],
@@ -42,18 +43,29 @@ export const MediaAssets: CollectionConfig = {
     delete: staffOnly,
   },
   fields: [
-    { name: 'alt', type: 'text', required: true },
+    {
+      name: 'alt',
+      type: 'text',
+      required: true,
+      label: 'Mô tả ảnh (alt)',
+      admin: { description: 'Mô tả ngắn nội dung tệp, dùng cho người dùng đọc màn hình và tìm kiếm.' },
+    },
     {
       name: 'rightsStatus',
       type: 'select',
       required: true,
       defaultValue: 'UNCONFIRMED',
-      options: ['UNCONFIRMED', 'APPROVED'],
-      admin: { description: 'Chỉ đặt APPROVED khi BMSL xác nhận có quyền sử dụng tệp này.' },
+      label: 'Quyền sử dụng tệp',
+      options: [
+        { label: 'Chưa xác nhận quyền sử dụng', value: 'UNCONFIRMED' },
+        { label: 'Đã duyệt quyền sử dụng', value: 'APPROVED' },
+      ],
+      admin: { description: 'Chỉ chọn "Đã duyệt" (APPROVED) khi BMSL xác nhận có quyền sử dụng tệp này.' },
     },
     {
       name: 'source',
       type: 'text',
+      label: 'Nguồn tệp',
       // Rights provenance is an internal note; approved media is public, its source/owner note is not.
       access: { read: ({ req }) => isStaff(req.user) },
       admin: { description: 'Nguồn/chủ sở hữu của tệp, dùng để kiểm tra bản quyền.' },

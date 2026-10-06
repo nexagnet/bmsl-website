@@ -14,6 +14,7 @@ type TransactionSessions = Record<string, { db: { execute: (query: unknown) => P
 // An EDITOR can sign in to the admin panel and read only their own record.
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: { singular: 'Tài khoản', plural: 'Tài khoản' },
   admin: { useAsTitle: 'email' },
   auth: { maxLoginAttempts: 5, lockTime: 10 * 60 * 1000, tokenExpiration: 7200 },
   access: {
@@ -54,7 +55,9 @@ export const Users: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'EDITOR',
-      options: ROLES.map((r) => ({ label: r, value: r })),
+      label: 'Vai trò',
+      options: ROLES.map((r) => ({ label: r === 'ADMIN' ? 'Quản trị viên (ADMIN)' : 'Biên tập viên (EDITOR)', value: r })),
+      admin: { description: 'Chỉ quản trị viên được đổi vai trò. Biên tập viên chỉ xem được tài khoản của chính mình.' },
       access: { create: adminOnlyField, update: adminOnlyField },
     },
   ],

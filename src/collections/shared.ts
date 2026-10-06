@@ -8,11 +8,18 @@ export const drafts = { drafts: true } as const;
 export const seoField: Field = {
   name: 'seo',
   type: 'group',
+  label: 'SEO',
   fields: [
-    { name: 'title', type: 'text' },
-    { name: 'metaDescription', type: 'textarea' },
-    { name: 'ogImage', type: 'relationship', relationTo: 'media-assets' },
-    { name: 'noindex', type: 'checkbox', defaultValue: false },
+    { name: 'title', type: 'text', label: 'Tiêu đề SEO' },
+    { name: 'metaDescription', type: 'textarea', label: 'Mô tả SEO' },
+    { name: 'ogImage', type: 'relationship', relationTo: 'media-assets', label: 'Ảnh chia sẻ' },
+    {
+      name: 'noindex',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Không lập chỉ mục',
+      admin: { description: 'Tích để yêu cầu công cụ tìm kiếm không lập chỉ mục trang này.' },
+    },
   ],
 };
 
@@ -24,6 +31,7 @@ export const slugField: Field = {
   required: true,
   unique: true,
   index: true,
+  label: 'Đường dẫn (slug)',
   validate: (value: unknown) =>
     isPublicSlug(value) || 'Slug chỉ gồm chữ thường a-z, số và dấu gạch ngang đơn (tối đa 120 ký tự).',
 };
