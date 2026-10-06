@@ -81,8 +81,8 @@ Cutover cần **uỷ quyền riêng, phạm vi rõ** của chủ và đầu vào
 
 | Điều kiện | Trạng thái | Bằng chứng cần có |
 | --- | --- | --- |
-| Hosting và quyền truy cập đã duyệt | `NOT_PROVEN` | Quyết định hạ tầng + truy cập được cấp |
-| HTTPS và domain; `SITE_URL`, `TRUSTED_ORIGINS`; HSTS chỉ sau khi HTTPS đã xác nhận | `NOT_PROVEN` | Kiểm tra trên domain thật |
+| Hosting và quyền truy cập đã duyệt | Môi trường Northflank đã dựng (điều phối viên báo cáo 2026-10-06, `van-hanh.md` §10.0). Phê duyệt hosting và quyền truy cập chính thức của BMSL: `NOT_PROVEN` | Quyết định hạ tầng + truy cập được cấp |
+| HTTPS và domain; `SITE_URL`, `TRUSTED_ORIGINS`; HSTS chỉ sau khi HTTPS đã xác nhận | HTTPS trên domain do Northflank cấp đã được quan sát (HSTS/CSP có mặt). Domain tuỳ chỉnh/DNS: `NOT_PROVEN` | Kiểm tra trên domain thật |
 | Lịch sao lưu **off-site** tại host | `NOT_PROVEN` | Cấu hình lịch + một lần khôi phục thử từ bản off-site |
 | Sở hữu Search Console; cấu hình GA4 và đồng ý cookie | `NOT_PROVEN` | Xác minh quyền sở hữu; property GA4 thật; chính sách do BMSL quyết |
 | Chuyển giao an toàn tài khoản ADMIN cao nhất | `NOT_PROVEN` | Biên bản chuyển giao (không ghi mật khẩu) |
