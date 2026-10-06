@@ -25,14 +25,14 @@
     "serviceAreas": 4,
     "globals": 2,
     "imageUrlsFound": 235,
-    "imagesCommitted": 57,
-    "imageUrlsCommitted": 63,
+    "imagesCommitted": 56,
+    "imageUrlsCommitted": 62,
     "imagesPendingTotal": 172,
     "imagesPendingPerson": 164,
     "imagesPendingThirdParty": 7,
     "imagesPendingDocument": 1,
     "imagesPendingUnreviewed": 0,
-    "committedBytes": 18554487
+    "committedBytes": 18451067
   },
   "inventory": [
     {
@@ -1978,21 +1978,6 @@
       "usedBy": [
         "articles/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10"
       ]
-    },
-    {
-      "key": "sha256:4dc3ca526bfc7876fe1cb470ed2352c73030ebe538fccf80e312ac51b117bbce",
-      "file": "assets/4dc3ca526bfc-logo-bmsl.jpg",
-      "sourceUrls": [
-        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/logo-bmsl.jpg"
-      ],
-      "mime": "image/jpeg",
-      "bytes": 103420,
-      "width": 1080,
-      "height": 1080,
-      "alt": "Logo BMSL — Bình Minh Sông Lô",
-      "altSource": "derived",
-      "class": "BRAND",
-      "usedBy": []
     },
     {
       "key": "sha256:4e03913a2fcf368083e287cf063f87d2861d057bb8a9f7a8cef41b40f9260d75",
@@ -5401,6 +5386,12 @@
           "blockIndex": null
         }
       ]
+    }
+  ],
+  "unused": [
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/logo-bmsl.jpg",
+      "reason": "approved image that no seeded record references (featured image of a page without a cover field)"
     }
   ]
 }

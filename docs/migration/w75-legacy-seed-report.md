@@ -8,7 +8,7 @@ Nguồn: https://binhminhsonglo.vn (WordPress 6.7.1), quan sát 2026-10-06.
 
 * Dòng kiểm kê: **51** = 47 URL của bộ 47 (giữ nguyên) + 4 mục mới trên site cũ chưa có trong bộ 47.
 * Bản ghi seed: 17 dự án (từ 18 nguồn), 15 bài viết nháp, 4 lĩnh vực dịch vụ, 2 trang (about-page, contact-page).
-* Ảnh: 235 URL ảnh trong thân bài/ảnh bìa → **57 tệp duy nhất được commit** (63 URL, 18.6 MB); **172 URL chờ duyệt**: 164 có người nhận diện được, 7 bên thứ ba, 1 tài liệu có chữ ký, 0 chưa duyệt.
+* Ảnh: 235 URL ảnh trong thân bài/ảnh bìa → **56 tệp duy nhất được commit** (62 URL, 18.5 MB); **172 URL chờ duyệt**: 164 có người nhận diện được, 7 bên thứ ba, 1 tài liệu có chữ ký, 0 chưa duyệt.
 * Sitemap: 51 URL; URL không có trong kiểm kê: không có.
 
 ## Từng URL → đích CMS

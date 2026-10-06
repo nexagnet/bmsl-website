@@ -111,6 +111,12 @@ describe('committed seed pack: rights, privacy and size', () => {
     const committedUrls = new Set(pack.manifest.media.flatMap((m) => m.sourceUrls.map(normalizeImageUrl)));
     for (const p of pack.manifest.pendingMedia) expect(committedUrls.has(normalizeImageUrl(p.sourceUrl)), p.sourceUrl).toBe(false);
 
+    // No dead weight: every committed file is referenced by at least one seeded record.
+    const records = JSON.stringify([pack.serviceAreas, pack.projects, pack.articles, pack.globals]);
+    for (const m of pack.manifest.media) {
+      expect(m.usedBy.length, m.file).toBeGreaterThan(0);
+      expect(records.includes(m.key), m.file).toBe(true);
+    }
     const onDisk = files('assets').map((f) => `assets/${f}`).sort();
     expect(onDisk).toEqual(pack.manifest.media.map((m) => m.file).sort());
     const hashesOnDisk = new Set(onDisk.map((f) => createHash('sha256').update(readFileSync(path.join(PACK_DIR, f))).digest('hex')));

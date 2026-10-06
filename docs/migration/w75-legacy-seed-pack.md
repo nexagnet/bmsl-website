@@ -13,7 +13,7 @@ Báo cáo từng URL (do generator sinh, không sửa tay): [`w75-legacy-seed-re
 src/seed/bmsl-legacy/
   manifest.json            kiểm kê 47 URL chuẩn + mục mới, nguồn gốc ảnh (URL, SHA-256, kích thước), ảnh chờ duyệt, ghi chú chuyển đổi
   records/                 giá trị nội dung ĐÃ CHUẨN HOÁ: service-areas, projects, articles, globals (about/contact) ở dạng Lexical
-  assets/                  57 tệp ảnh được phép commit (JPEG/PNG gốc, đặt tên <sha12>-<tên>.jpg|png)
+  assets/                  56 tệp ảnh được phép commit (JPEG/PNG gốc, đặt tên <sha12>-<tên>.jpg|png)
   review/image-review.json quyết định quyền cho từng URL ảnh (COMMIT/PENDING + lý do); ảnh chưa có trong tệp này mặc định PENDING
   review/content-review.json  bài mà VĂN BẢN không được commit (lý do kèm theo)
   generate-cli.ts, generator.ts, html.ts, lexical.ts, image-meta.ts   bộ sinh pack (CÓ dùng mạng, chỉ chạy khi được yêu cầu)
@@ -72,8 +72,8 @@ Duyệt quyền sau này = sửa `review/image-review.json` hoặc `review/conte
   8 chuyên mục + tác giả không seed (`TAXONOMY_NOT_SEEDED`).
 * **Độ khớp văn bản**: 13 `EXACT`, 6 `EXACT_EXCEPT_REDACTIONS`, 0 `DIFFERS` (so văn bản nguồn với văn bản trong Lexical, sau khi
   chuẩn hoá khoảng trắng). Dự án: các trường được tách từ dòng "Địa điểm / Quy mô / Chủ đầu tư / Năm thực hiện / Dịch vụ".
-* **Ảnh**: 235 URL ảnh dùng trong thân bài/ảnh bìa → **57 tệp duy nhất được commit** (63 URL, 18,6 MB): 9 đồ hoạ, 31 cảnh/vật thể
-  không có người, 16 ảnh toà nhà dự án, 1 logo. **172 URL chờ duyệt**: 164 ảnh có người nhận diện được (nhân viên, cư dân, trẻ
+* **Ảnh**: 235 URL ảnh dùng trong thân bài/ảnh bìa → **56 tệp duy nhất được commit** (62 URL, 18,5 MB): 9 đồ hoạ, 31 cảnh/vật thể
+  không có người, 16 ảnh toà nhà dự án. Ảnh đại diện của bài #1 (logo) không bản ghi nào dùng nên không commit (liệt kê ở `manifest.unused`). **172 URL chờ duyệt**: 164 ảnh có người nhận diện được (nhân viên, cư dân, trẻ
   em), 6 ảnh nằm trên website của bên thứ ba (không tải về), 1 ảnh có watermark báo, 1 thư cảm ơn có chữ ký và con dấu.
   Vị trí của từng ảnh chờ duyệt trong bài được ghi trong `manifest.json` (`pendingMedia[].usedBy.blockIndex`); ảnh được commit
   nằm đúng vị trí gốc dưới dạng node `upload` trong nội dung Lexical.
@@ -105,7 +105,7 @@ nào hiện công khai cho tới khi BMSL duyệt từng tệp trong `/admin` (v
 
 ## 7. Chưa chứng minh (`NOT_PROVEN`)
 
-* Quyền sử dụng ảnh/văn bản của 57 ảnh và các bài đã commit: chỉ là quyết định của owner dùng lại tài liệu website cũ của BMSL;
+* Quyền sử dụng ảnh/văn bản của 56 ảnh và các bài đã commit: chỉ là quyết định của owner dùng lại tài liệu website cũ của BMSL;
   nguồn gốc ảnh dự án (ảnh gửi qua Zalo, có phối cảnh của chủ đầu tư) và quyền nhân thân chưa được xác minh độc lập.
 * Mọi dữ kiện lịch sử (quy mô, địa chỉ, trạng thái vận hành, giấy phép/xác nhận pháp lý trong bài Giới thiệu, mốc lịch sử): chưa xác nhận.
 * Chưa chạy trên DB/volume staging thật của BMSL và chưa có ảnh chụp so sánh nguồn–CMS trên staging: chỉ có bằng chứng trên

@@ -675,6 +675,15 @@ export async function buildPack(input: BuildInput): Promise<BuildResult> {
   });
 
   // ---- finalize media (alt text, usage) and the pending list --------------------------------------------------------------
+  // An approved image that no record references (for example the featured image of a page that has no cover field)
+  // is not committed: it would only be dead weight in the repository. It is listed in the manifest instead.
+  const unused: { sourceUrl: string; reason: string }[] = [];
+  for (const m of [...mediaByKey.values()]) {
+    if (usage.get(m.key)?.records.size) continue;
+    for (const sourceUrl of m.sourceUrls) unused.push({ sourceUrl, reason: 'approved image that no seeded record references (featured image of a page without a cover field)' });
+    mediaByKey.delete(m.key);
+    assets.delete(m.file);
+  }
   const media: MediaEntry[] = [...mediaByKey.values()].sort((a, b) => a.key.localeCompare(b.key));
   for (const m of media) {
     const u = usage.get(m.key);
@@ -738,6 +747,7 @@ export async function buildPack(input: BuildInput): Promise<BuildResult> {
     inventory,
     media,
     pendingMedia,
+    unused: unused.sort((a, b) => a.sourceUrl.localeCompare(b.sourceUrl)),
   };
   const pack: Pack = { manifest, serviceAreas, projects, articles, globals };
   return { pack, assets, report: renderReport(pack) };

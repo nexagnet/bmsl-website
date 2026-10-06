@@ -230,6 +230,21 @@ describe('buildPack (synthetic WordPress)', () => {
     expect(graphic.alt).toMatch(/^Bảng số \d+$/);
   });
 
+  it('does not commit an approved image that no seeded record references (it is listed as unused instead)', async () => {
+    const w = world(({ snapshot, files, review }) => {
+      // The featured image of the About page: the about-page global has no cover field, so nothing would use it.
+      files.set(normalizeImageUrl(`${UP}/featured.png`), png(555));
+      review.images.push({ url: `${UP}/featured.png`, decision: 'COMMIT', class: 'GRAPHIC', reason: 'x' });
+      snapshot.media.push({ id: 5, source_url: `${UP}/featured.png`, alt_text: '' });
+      snapshot.posts.find((p) => p.slug === slugOf(legacyManifest.entries.find((e) => e.id === 1)!.legacyPath))!.featured_media = 5;
+    });
+    const { pack, assets } = await build(w);
+    expect(pack.manifest.media.some((m) => m.sourceUrls.some((u) => u.endsWith('/featured.png')))).toBe(false);
+    expect([...assets.keys()].some((f) => f.includes('featured'))).toBe(false);
+    expect(pack.manifest.unused?.map((u) => u.sourceUrl)).toEqual([`${UP}/featured.png`]);
+    expect(pack.manifest.media.every((m) => m.usedBy.length > 0)).toBe(true);
+  });
+
   it('renders a per-URL report that contains every canonical entry', async () => {
     const { report } = await build(world());
     for (const e of legacyManifest.entries) expect(report).toContain(`\`${e.legacyPath}\``);

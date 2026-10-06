@@ -87,6 +87,8 @@ export type Manifest = {
   inventory: InventoryRow[];
   media: MediaEntry[];
   pendingMedia: PendingMediaEntry[];
+  /** Reviewed-as-COMMIT images that no seeded record references: not committed. */
+  unused?: { sourceUrl: string; reason: string }[];
 };
 
 export type ServiceAreaRecord = {
