@@ -1,6 +1,16 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import logo from '../assets/brand/bmsl-logo.jpg';
 import { NAV_ITEMS, SITE_NAME, SURVEY_CTA } from '../lib/site';
+
+/** Accessible name of the logo; the wording is the text printed in the original BMSL logo (docs/brand/logo.md). */
+const LOGO_ALT = `${SITE_NAME} — Bình Minh Sông Lô`;
+
+function BrandLogo({ priority = false }: { priority?: boolean }) {
+  // Local static import (no WordPress hotlink). Width/height come from the file so the aspect ratio never distorts.
+  return <Image className="brand-logo-img" src={logo} alt={LOGO_ALT} priority={priority} />;
+}
 
 function Nav({ label }: { label: string }) {
   return (
@@ -31,13 +41,8 @@ export function SiteShell({ children, hotline, zalo }: Props) {
       </a>
       <header className="site-header">
         <div className="container header-row">
-          <Link className="wordmark" href="/" aria-label={`${SITE_NAME} — Trang chủ`}>
-            <span className="wordmark-badge" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14" />
-              </svg>
-            </span>
-            <span>{SITE_NAME}</span>
+          <Link className="brand-logo" href="/" aria-label={`${LOGO_ALT} — Trang chủ`}>
+            <BrandLogo priority />
           </Link>
           {/* Mobile menu is a native disclosure: keyboard- and screen-reader-operable without JavaScript. */}
           <details className="mobile-menu">
@@ -59,14 +64,9 @@ export function SiteShell({ children, hotline, zalo }: Props) {
         <div className="container">
           <div className="footer-top">
             <div className="footer-brand">
-              <p className="wordmark">
-                <span className="wordmark-badge" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14" />
-                  </svg>
-                </span>
-                <span>{SITE_NAME}</span>
-              </p>
+              <div className="footer-logo">
+                <BrandLogo />
+              </div>
               {hotline || zalo ? (
                 <div className="footer-contacts">
                   {/* data-analytics-* hooks are inert unless the opt-in analytics provider is mounted and consented. */}
