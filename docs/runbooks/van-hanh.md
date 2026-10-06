@@ -56,6 +56,7 @@ Local API của máy chủ (không có đường HTTP) — việc này cần quy
 
 * `pnpm seed:service-areas`: bốn lĩnh vực dịch vụ; bị từ chối ở production trừ khi `BMSL_ALLOW_SEED=true` (chỉ sau khi chủ đồng ý).
 * `pnpm migrate:legacy`: mặc định dry-run; ghi dữ liệu bản nháp chỉ ở local/staging. Chi tiết: `docs/migration/w4-legacy-migration.md`. Toàn bộ nội dung legacy giữ `UNCONFIRMED`/nháp cho tới khi BMSL duyệt.
+* `pnpm seed:bmsl-legacy [--write]`: bộ seed ban đầu lưu trong Git (nội dung + ảnh được phép của website cũ), nạp offline, mặc định dry-run, không bao giờ chạy tự động và bị từ chối ở production. Chi tiết và danh sách BMSL cần duyệt: `docs/migration/w75-legacy-seed-pack.md`.
 
 ## 6. Log không chứa PII
 

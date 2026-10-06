@@ -252,6 +252,13 @@ describe('source parsing helpers', () => {
     });
   });
 
+  it('joins a value that wraps onto the next paragraph after a trailing comma (and only then)', () => {
+    const facts = parseProjectFacts('<p>Địa điểm : KĐT X, phường Y, Quận Z,</p><p>Hà Nội</p><p>Số căn hộ : 84 căn hộ</p><p>Dòng lạ</p>');
+    expect(facts.address).toBe('KĐT X, phường Y, Quận Z, Hà Nội');
+    expect(facts.scale).toBe('84 căn hộ');
+    expect(facts.unparsed).toEqual(['Dòng lạ']);
+  });
+
   it('extracts visible text with block boundaries and without scripts, styles or iframes', () => {
     expect(plainTextOfHtml('<p>A</p><script>x()</script><p>B<br>C</p><iframe src="u"></iframe>').replace(/\s+/g, ' ').trim()).toBe('A B C');
   });

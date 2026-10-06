@@ -186,15 +186,21 @@ export type ProjectFacts = {
 export function parseProjectFacts(html: string): ProjectFacts {
   const facts: ProjectFacts = { services: [], unparsed: [] };
   const paragraphs = parseHtml(html).flatMap((n) => (isElement(n) && n.tag !== 'img' ? [squash(textOf(n))] : []));
+  // A value that ends with a comma continues in the next unlabelled paragraph ("..., Quận Cầu Giấy," / "Hà Nội").
+  let open: 'address' | 'scale' | 'investor' | 'since' | undefined;
   for (const line of paragraphs) {
     if (!line) continue;
     const m = /^([^:]{3,25}?)\s*:\s*(.+)$/.exec(line);
     const kind = m ? FACT_LABELS[m[1]!.toLowerCase()] : undefined;
     if (!m || !kind) {
-      facts.unparsed.push(line);
+      if (open && !m) {
+        facts[open] = `${facts[open]} ${line}`.replace(/\.$/, '');
+        if (!facts[open]!.endsWith(',')) open = undefined;
+      } else facts.unparsed.push(line);
       continue;
     }
     const value = m[2]!.replace(/\.$/, '').trim();
+    open = kind !== 'services' && value.endsWith(',') ? kind : undefined;
     if (kind === 'services') {
       const lower = value.toLowerCase();
       if (/bảo vệ/.test(lower)) facts.services.push('bao-ve');

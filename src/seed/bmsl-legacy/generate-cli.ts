@@ -33,8 +33,20 @@ async function get(url: string, kind: 'json-or-xml' | 'image') {
       ? u.pathname.startsWith('/wp-content/uploads/')
       : u.pathname.startsWith('/wp-json/wp/v2/') || /^\/wp-sitemap[\w-]*\.xml$/.test(u.pathname) || u.pathname === '/';
   if (u.origin !== SITE || !allowedPath || u.pathname.includes('..') || u.username || u.password) throw new Error(`Refusing to fetch ${u.origin}${u.pathname}`);
-  // redirect: 'error' so a redirect can never lead to another host.
-  return fetch(u, { headers: HEADERS, redirect: 'error', signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+  // redirect: 'error' so a redirect can never lead to another host. The legacy server is slow and throttles bursts:
+  // a network error or a 429/5xx is retried with backoff; any other answer (including 404) is returned as it is.
+  let last: unknown;
+  for (let attempt = 1; attempt <= 4; attempt += 1) {
+    try {
+      const res = await fetch(u, { headers: HEADERS, redirect: 'error', signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+      if (res.status !== 429 && res.status < 500) return res;
+      last = new Error(`HTTP ${res.status}`);
+    } catch (error) {
+      last = error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
+  }
+  throw last instanceof Error ? last : new Error('fetch failed');
 }
 
 async function pagedJson<T>(endpoint: string, params: string, optional = false): Promise<T[]> {
@@ -147,6 +159,7 @@ try {
   console.log(`Report: ${path.relative(REPO_ROOT, REPORT)}`);
   process.exit(0);
 } catch (error) {
-  console.error(`Generate aborted: ${(error as Error).message}`);
+  const cause = (error as { cause?: { code?: string; message?: string } }).cause;
+  console.error(`Generate aborted: ${(error as Error).message}${cause ? ` (${cause.code ?? cause.message})` : ''}`);
   process.exit(1);
 }

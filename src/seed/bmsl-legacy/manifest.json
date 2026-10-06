@@ -576,12 +576,7 @@
         "image-rights",
         "publication-approval"
       ],
-      "notes": [
-        {
-          "kind": "unparsed-lines",
-          "count": 1
-        }
-      ],
+      "notes": [],
       "textFidelity": "NOT_APPLICABLE",
       "bodyChars": 207
     },

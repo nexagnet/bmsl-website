@@ -81,6 +81,10 @@ pnpm migrate:legacy --write [--input ...]            # explicit write, draft onl
   and no article is counted as migrated: the article selection stays UNCONFIRMED until BMSL approves it.
 - The CLI aborts with exit code 1 on invalid input and always destroys Payload in a `finally`.
 
+> **Seed pack (Issue #75):** the importer above stays as it is (approved-input articles, no media). Legacy text and
+> authorized images now also exist as a version-controlled, offline seed pack with its own loader and rights review:
+> see `docs/migration/w75-legacy-seed-pack.md`. It does not change the 47-entry manifest or any redirect rule.
+
 ## 5. Approval queue (owner actions)
 
 1. Confirm project list and per-project facts (status, scale, address, operating date); B10, B3, B5, Himlam statuses.

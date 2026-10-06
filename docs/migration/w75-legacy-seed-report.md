@@ -72,7 +72,6 @@ Nguồn: https://binhminhsonglo.vn (WordPress 6.7.1), quan sát 2026-10-06.
 * legacy:2: text-not-committed×1 (Bài báo đăng lại, cuối bài ghi nguồn doisongphapluat.com.vn: bản quyền văn bản thuộc toà soạn; có tên cá nhân thứ ba.)
 * legacy:3: text-not-committed×1 (Bài báo đăng lại ("Theo báo" nguoiduatin.vn, tác giả t/h): bản quyền văn bản thuộc toà soạn.)
 * legacy:4: text-not-committed×1 (Bài phỏng vấn của phóng viên Đời sống & Pháp luật (ĐS&PL) đăng lại, ảnh lưu trên doisongphapluat.com.vn: bản quyền thuộc toà soạn. Nghi trùng bài (hậu tố -2).)
-* legacy:17: unparsed-lines×1
 * legacy:31: iframe-dropped×1 (www.youtube.com)
 * legacy:33: text-not-committed×1 (Blueprint 01/04: OWNER-DECISION có đăng lại thông tin cá nhân của người lãnh đạo hay không.)
 * legacy:36: redacted-phone×1
