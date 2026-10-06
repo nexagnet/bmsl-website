@@ -31,7 +31,6 @@ export default async function ProjectDetailPage({ params }: Props) {
       />
       <article className="container hero">
         <div className="hero-card">
-          <div className="kicker">HỒ SƠ DỰ ÁN</div>
           <h1>{project.name}</h1>
           {project.summary ? <p className="lead" style={{ marginBottom: 0 }}>{project.summary}</p> : null}
         </div>

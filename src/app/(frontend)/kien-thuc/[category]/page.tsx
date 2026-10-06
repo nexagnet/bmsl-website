@@ -35,11 +35,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       />
       <section className="container hero">
         <div className="hero-card">
-          <div className="kicker">CHUYÊN MỤC KIẾN THỨC</div>
           <h1>{category.name}</h1>
         </div>
       </section>
-      <section className="container section" style={{ paddingTop: '0.5rem' }}>
+      <section className="container section">
         <ul className="chips">
           {categories.map((c) => (
             <li key={c.id}>

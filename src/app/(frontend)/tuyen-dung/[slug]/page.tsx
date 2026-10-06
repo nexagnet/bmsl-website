@@ -35,7 +35,6 @@ export default async function JobDetailPage({ params }: Props) {
       <JsonLd data={confirmedJobPostingLd(getSiteUrl(), job)} />
       <article className="container hero">
         <div className="hero-card" style={{ maxWidth: '52rem' }}>
-          <div className="kicker">VỊ TRÍ TUYỂN DỤNG</div>
           <h1>{job.title}</h1>
           {/* Salary, benefits and deadline are UNCONFIRMED optional fields: rendered only when present. */}
           {job.salary ? <p className="muted" style={{ fontWeight: 600, margin: '0.25rem 0' }}>Mức lương: {job.salary}</p> : null}

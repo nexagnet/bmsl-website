@@ -31,7 +31,6 @@ export default async function ServiceDetailPage({ params }: Props) {
       />
       <article className="container hero">
         <div className="hero-card">
-          <div className="kicker">DỊCH VỤ CHUYÊN SÂU</div>
           <h1>{service.name}</h1>
           {service.summary ? <p className="lead">{service.summary}</p> : null}
           <div className="prose">

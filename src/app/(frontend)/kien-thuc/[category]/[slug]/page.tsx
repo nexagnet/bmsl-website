@@ -50,7 +50,6 @@ export default async function ArticlePage({ params }: Props) {
       />
       <article className="container hero">
         <div className="hero-card" style={{ maxWidth: '54rem' }}>
-          <div className="kicker">{article.category.name}</div>
           <h1>{article.title}</h1>
           {date ? (
             <p className="muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

@@ -67,7 +67,6 @@ export function SiteShell({ children, hotline, zalo }: Props) {
                 </span>
                 <span>{SITE_NAME}</span>
               </p>
-              <p>Dịch vụ quản lý và vận hành bất động sản chuyên nghiệp, tiêu chuẩn cao cấp.</p>
               {hotline || zalo ? (
                 <div className="footer-contacts">
                   {/* data-analytics-* hooks are inert unless the opt-in analytics provider is mounted and consented. */}
@@ -95,7 +94,7 @@ export function SiteShell({ children, hotline, zalo }: Props) {
             </div>
           </div>
           <div className="footer-bottom">
-            <p className="muted">© {SITE_NAME}. Bản quyền được bảo lưu.</p>
+            <p className="muted">© {SITE_NAME}</p>
           </div>
         </div>
       </footer>

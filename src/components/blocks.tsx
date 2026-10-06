@@ -72,11 +72,7 @@ export function SurveyCta() {
     <section className="survey-cta-section" aria-labelledby="cta-title">
       <div className="container">
         <div className="survey-cta-card">
-          <div className="kicker" style={{ color: '#93c5fd' }}>HỢP TÁC & VẬN HÀNH</div>
           <h2 id="cta-title">Liên hệ khảo sát</h2>
-          <p>
-            Đội ngũ chuyên gia của BMSL sẵn sàng đồng hành, khảo sát thực trạng công trình và tư vấn phương án vận hành tối ưu chi phí, đảm bảo an toàn tuyệt đối.
-          </p>
           <Link className="button" href={SURVEY_CTA.href}>
             {SURVEY_CTA.label}
             <svg
@@ -214,20 +210,6 @@ export const JobCards = ({ items }: { items: JobView[] }) => (
   <ul className="grid">
     {items.map((j) => (
       <li key={j.id} className="card">
-        <div style={{ display: 'inline-block', marginBottom: '0.5rem' }}>
-          <span
-            style={{
-              background: 'var(--color-surface-subtle)',
-              color: 'var(--color-brand-secondary)',
-              padding: '0.2rem 0.6rem',
-              borderRadius: 'var(--radius-sm)',
-              fontWeight: 600,
-              fontSize: '0.8rem',
-            }}
-          >
-            Tuyển dụng
-          </span>
-        </div>
         <h3>
           <Link href={j.href}>{j.title}</Link>
         </h3>

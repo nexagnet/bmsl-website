@@ -8,11 +8,8 @@ export const generateMetadata = () => singletonMetadata('contact-page', '/lien-h
 export default function ContactPage() {
   return (
     <SingletonPage slug="contact-page" fallbackTitle="Liên hệ">
-      <section className="container section" aria-labelledby="contact-form-title" style={{ paddingTop: '1rem' }}>
-        <div className="section-header">
-          <div className="kicker">TIẾP NHẬN THÔNG TIN</div>
-          <h2 id="contact-form-title">Gửi yêu cầu</h2>
-        </div>
+      <section className="container section" aria-labelledby="contact-form-title">
+        <h2 id="contact-form-title">Gửi yêu cầu</h2>
         <ContactForm />
       </section>
     </SingletonPage>

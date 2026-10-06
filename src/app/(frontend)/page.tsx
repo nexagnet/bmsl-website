@@ -20,7 +20,6 @@ export default async function HomePage() {
     <>
       <section className="container hero">
         <div className="hero-card">
-          <div className="kicker">TIÊU CHUẨN VẬN HÀNH BẤT ĐỘNG SẢN</div>
           <h1>{page?.title ?? SITE_NAME}</h1>
           <div className="prose">
             <RichText data={page?.body} />
@@ -37,41 +36,26 @@ export default async function HomePage() {
         </div>
       </section>
       <section className="container section" aria-labelledby="home-services">
-        <div className="section-header">
-          <div className="kicker">LĨNH VỰC HOẠT ĐỘNG</div>
-          <h2 id="home-services">Dịch vụ</h2>
-        </div>
+        <h2 id="home-services">Dịch vụ</h2>
         {services.length ? <ServiceCards items={services} /> : <Empty>Nội dung đang được cập nhật.</Empty>}
       </section>
       {projects.length ? (
         <section className="container section alt" aria-labelledby="home-projects">
-          <div className="section-header">
-            <div className="kicker">HỒ SƠ NĂNG LỰC</div>
-            <h2 id="home-projects">Dự án</h2>
-          </div>
+          <h2 id="home-projects">Dự án</h2>
           <ProjectCards items={projects} />
         </section>
       ) : null}
       <section className="container section" aria-labelledby="home-process">
-        <div className="section-header">
-          <div className="kicker">CAM KẾT CHẤT LƯỢNG</div>
-          <h2 id="home-process">Quy trình & Minh bạch</h2>
-        </div>
-        <p style={{ maxWidth: '42rem', marginBottom: '1.5rem', color: 'var(--color-text-secondary)' }}>
-          Hệ thống tiêu chuẩn quản lý đồng bộ, công khai và minh bạch trong mọi hoạt động vận hành kỹ thuật, an ninh và vệ sinh.
-        </p>
+        <h2 id="home-process">Quy trình & Minh bạch</h2>
         <p>
           <Link className="button secondary" href="/quy-trinh-minh-bach">
-            Xem quy trình & minh bạch →
+            Xem quy trình & minh bạch
           </Link>
         </p>
       </section>
       {latest.articles.length ? (
         <section className="container section alt" aria-labelledby="home-articles">
-          <div className="section-header">
-            <div className="kicker">THÔNG TIN CHUYÊN NGÀNH</div>
-            <h2 id="home-articles">Kiến thức</h2>
-          </div>
+          <h2 id="home-articles">Kiến thức</h2>
           <ArticleCards items={latest.articles} />
         </section>
       ) : null}

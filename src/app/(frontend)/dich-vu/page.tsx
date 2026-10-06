@@ -11,14 +11,10 @@ export default async function ServicesPage() {
     <>
       <section className="container hero">
         <div className="hero-card">
-          <div className="kicker">GIẢI PHÁP VẬN HÀNH</div>
           <h1>Dịch vụ</h1>
-          <p className="lead" style={{ marginBottom: 0 }}>
-            Hệ thống giải pháp quản lý vận hành tòa nhà, bảo vệ an ninh, vệ sinh công nghiệp và an toàn PCCC theo chuẩn mực chuyên nghiệp.
-          </p>
         </div>
       </section>
-      <section className="container section" style={{ paddingTop: '1rem' }}>
+      <section className="container section">
         {services.length ? <ServiceCards items={services} /> : <Empty>Nội dung đang được cập nhật.</Empty>}
       </section>
       <SurveyCta />
