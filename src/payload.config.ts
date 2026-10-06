@@ -47,7 +47,12 @@ export default buildConfig({
   editor: lexicalEditor(),
   secret: payloadSecret,
   db: postgresAdapter({
-    pool: { connectionString: databaseUrl },
+    // connectionTimeoutMillis bounds waiting for a pooled connection (pg default: wait forever), so a saturated pool
+    // fails a request instead of queuing it indefinitely (also bounds the /healthz probe's acquisition).
+    pool: { connectionString: databaseUrl, connectionTimeoutMillis: 5000 },
+    // The dedicated BMSL database is pre-provisioned by the operator. Payload's default (false) would issue
+    // CREATE DATABASE through the maintenance database when the target is missing; fail closed instead.
+    disableCreateDatabase: true,
     // Schema changes ship as committed migrations (src/migrations); never auto-push.
     push: false,
     migrationDir: path.resolve(dirname, 'migrations'),

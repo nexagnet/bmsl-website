@@ -25,7 +25,8 @@ import { registerSecurityBlocks } from './support/security-blocks';
 // Lifecycle: every connection to the disposable database belongs to a process this file spawned: short-lived
 // `payload run` fixture subprocesses (support/smoke-fixture.ts, which exit and so close their own pool) and the Next
 // server's process group. Teardown stops that group, waits until pg_stat_activity shows no session, then drops the
-// database (no WITH FORCE). A leftover session fails the run loudly. No Payload instance lives in this process.
+// database (no WITH FORCE). The deliberately absent database of the missing-database test is never created or dropped
+// here; that test only asserts zero sessions on it and that it stays absent. A leftover session fails the run loudly. No Payload instance lives in this process.
 
 // Administrative connection provided by the integration entrypoint (global-setup.ts), validated again here.
 const ADMIN_URL = assertSafeAdminUrl(process.env.BMSL_IT_ADMIN_DATABASE_URL).toString();
@@ -482,6 +483,168 @@ registerSecurityBlocks({
   legacySlugs: manifest.projects.map((p) => p.slug),
   get,
   runFixture,
+});
+
+// CD1: the production readiness probe, over real HTTP, against the real initialized and migrated PostgreSQL runtime.
+describe('HTTP smoke: /healthz readiness (real server, disposable PostgreSQL)', () => {
+  const FIXED = { status: 'unavailable' };
+  const expectNoLeak = (text: string) => {
+    for (const secret of [smokeUrl, DB_NAME, SECRET, BOOTSTRAP_TOKEN, 'postgres', 'ECONNREFUSED', 'payload_migrations', 'stack']) {
+      expect(text).not.toContain(secret);
+    }
+  };
+
+  it('answers 200 with a minimal no-store body when the migrated database is initialized', async () => {
+    const res = await get('/healthz');
+    const text = await res.text();
+    expect(res.status).toBe(200);
+    expect(res.headers.get('cache-control')).toBe('no-store');
+    expect(res.headers.get('content-type')).toContain('application/json');
+    expect(JSON.parse(text)).toEqual({ status: 'ok' });
+    expect(res.headers.get('x-content-type-options')).toBe('nosniff'); // existing security headers still apply
+    expectNoLeak(text);
+  });
+
+  it('is read-only: non-GET methods are not served as readiness', async () => {
+    for (const method of ['POST', 'PUT', 'DELETE']) {
+      const res = await get('/healthz', { method });
+      expect(res.status).toBe(405);
+    }
+  });
+
+  it('answers 503 with a fixed safe body while a committed migration is not recorded, then recovers', async () => {
+    const db = new pg.Client({ connectionString: smokeUrl });
+    await db.connect();
+    let removed: { name: string; batch: number; updated_at: Date; created_at: Date } | undefined;
+    try {
+      const del = await db.query('delete from payload_migrations where id = (select max(id) from payload_migrations) returning name, batch, updated_at, created_at');
+      removed = del.rows[0];
+      expect(removed, 'expected at least one recorded migration').toBeDefined();
+      const res = await get('/healthz');
+      const text = await res.text();
+      expect(res.status).toBe(503);
+      expect(res.headers.get('cache-control')).toBe('no-store');
+      expect(JSON.parse(text)).toEqual(FIXED);
+      expectNoLeak(text);
+      expect(text).not.toContain(removed!.name);
+    } finally {
+      if (removed) {
+        await db.query('insert into payload_migrations (name, batch, updated_at, created_at) values ($1, $2, $3, $4)', [
+          removed.name,
+          removed.batch,
+          removed.updated_at,
+          removed.created_at,
+        ]);
+      }
+      await db.end();
+    }
+    expect((await get('/healthz')).status).toBe(200);
+  });
+
+  it('stays bounded while payload_migrations is locked: concurrent probes get a safe 503, one query at most, then 200 after release', async () => {
+    const locker = new pg.Client({ connectionString: smokeUrl });
+    await locker.connect();
+    const probesWaiting = async () =>
+      Number(
+        (
+          await locker.query(
+            `select count(*)::int as n from pg_stat_activity
+             where datname = current_database() and pid <> pg_backend_pid() and state <> 'idle'
+               and query ilike '%select name from payload_migrations%'`,
+          )
+        ).rows[0].n,
+      );
+    try {
+      await locker.query('begin');
+      await locker.query('lock table payload_migrations in access exclusive mode');
+      const started = Date.now();
+      const burst = await Promise.all(Array.from({ length: 12 }, () => get('/healthz')));
+      const elapsed = Date.now() - started;
+      for (const res of burst) {
+        const text = await res.text();
+        expect(res.status).toBe(503);
+        expect(JSON.parse(text)).toEqual(FIXED);
+        expectNoLeak(text);
+      }
+      expect(elapsed, 'probes must give up within the readiness bound').toBeLessThan(8000);
+      // Singleflight: twelve concurrent probes never leave more than one query working on the database.
+      expect(await probesWaiting()).toBeLessThanOrEqual(1);
+      // The server-side lock/statement timeout ends the stuck query by itself even though the lock is still held.
+      const deadline = Date.now() + 10_000;
+      while ((await probesWaiting()) > 0 && Date.now() < deadline) await new Promise((r) => setTimeout(r, 250));
+      expect(await probesWaiting(), 'a blocked probe query was left running on the server').toBe(0);
+    } finally {
+      await locker.query('rollback').catch(() => undefined);
+      await locker.end();
+    }
+    // Resources were released: the next probe is served from a free pooled connection and is ready again.
+    const deadline = Date.now() + 10_000;
+    let status = 0;
+    while (Date.now() < deadline) {
+      status = (await get('/healthz')).status;
+      if (status === 200) break;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    expect(status).toBe(200);
+  }, 60_000);
+
+  it('answers 503 with a fixed safe body and does NOT create the database when it does not exist (disableCreateDatabase)', async () => {
+    // Unique, invocation-owned name derived from this run's random DB_NAME; it is never provisioned by the fixture.
+    const absentName = `${DB_NAME}_absent`;
+    if (!/^bmsl_http_smoke_[0-9a-f]{12}_absent$/.test(absentName)) throw new Error('unexpected absent database name');
+    const exists = async () =>
+      (await admin.query('select 1 from pg_database where datname = $1', [absentName])).rowCount === 1;
+    expect(await exists(), 'the target database must be absent BEFORE the request').toBe(false);
+
+    const port = await freePort();
+    const unavailableUrl = new URL(smokeUrl);
+    unavailableUrl.pathname = `/${absentName}`;
+    const down = spawnGroup('pnpm', ['exec', 'next', 'start', '-p', String(port), '-H', '127.0.0.1'], {
+      cwd: REPO_ROOT,
+      env: {
+        ...process.env,
+        DATABASE_URL: unavailableUrl.toString(),
+        PAYLOAD_SECRET: SECRET,
+        NODE_ENV: 'production',
+        NEXT_TELEMETRY_DISABLED: '1',
+        SITE_URL: `http://127.0.0.1:${port}`,
+      },
+    });
+    let log = '';
+    down.child.stdout?.on('data', (d) => (log += d));
+    down.child.stderr?.on('data', (d) => (log += d));
+    let existsAfter = true;
+    try {
+      let res: Response | undefined;
+      const deadline = Date.now() + 90_000;
+      while (Date.now() < deadline) {
+        if (down.child.exitCode !== null) throw new Error(`unavailable-db server exited early\n${tail(log)}`);
+        try {
+          res = await fetch(`http://127.0.0.1:${port}/healthz`, { redirect: 'manual' });
+          break;
+        } catch {
+          await new Promise((r) => setTimeout(r, 1000));
+        }
+      }
+      expect(res, 'server never answered').toBeDefined();
+      const text = await res!.text();
+      expect(res!.status).toBe(503);
+      expect(res!.headers.get('cache-control')).toBe('no-store');
+      expect(JSON.parse(text)).toEqual(FIXED);
+      expectNoLeak(text);
+      expect(text).not.toContain(absentName);
+    } finally {
+      await stopProcessGroup(down);
+      // The target is never created by this fixture, so it is never dropped here: no session may remain on it, and an
+      // unexpected creation fails visibly and is preserved for diagnosis.
+      const sessions = await admin.query('select count(*)::int as n from pg_stat_activity where datname = $1', [
+        absentName,
+      ]);
+      expect(sessions.rows[0].n, 'no session may remain on the absent database after the child stopped').toBe(0);
+      existsAfter = await exists();
+    }
+    expect(existsAfter, 'the application must not create a missing database (disableCreateDatabase: true)').toBe(false);
+  }, 150_000);
 });
 
 describe('W5B4 schema drift (nondestructive generator dry run)', () => {
