@@ -12,7 +12,15 @@ export default async function KnowledgePage({ searchParams }: { searchParams: Pr
   return (
     <>
       <section className="container hero">
-        <h1>Kiến thức & tin tức</h1>
+        <div className="hero-card">
+          <div className="kicker">TIN TỨC & CHUYÊN NGÀNH</div>
+          <h1>Kiến thức & tin tức</h1>
+          <p className="lead" style={{ marginBottom: 0 }}>
+            Chia sẻ các thông tin chuyên sâu, quy định pháp luật và kiến thức thực tiễn trong công tác quản lý vận hành bất động sản.
+          </p>
+        </div>
+      </section>
+      <section className="container section" style={{ paddingTop: '0.5rem' }}>
         {categories.length ? (
           <ul className="chips">
             {categories.map((c) => (

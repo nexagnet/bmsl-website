@@ -10,7 +10,15 @@ export default async function JobsPage() {
   return (
     <>
       <section className="container hero">
-        <h1>Tuyển dụng</h1>
+        <div className="hero-card">
+          <div className="kicker">CƠ HỘI NGHỀ NGHIỆP</div>
+          <h1>Tuyển dụng</h1>
+          <p className="lead" style={{ marginBottom: 0 }}>
+            Gia nhập đội ngũ BMSL để phát triển sự nghiệp trong môi trường quản lý vận hành bất động sản chuyên nghiệp và chuẩn mực.
+          </p>
+        </div>
+      </section>
+      <section className="container section" style={{ paddingTop: '1rem' }}>
         {jobs.length ? <JobCards items={jobs} /> : <Empty>Hiện chưa có vị trí tuyển dụng được công bố.</Empty>}
       </section>
       <SurveyCta />
