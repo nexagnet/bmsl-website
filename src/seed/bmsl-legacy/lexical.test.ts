@@ -171,6 +171,8 @@ describe('htmlToLexical', () => {
     expect(isFilenameLikeAlt('Z6128654384679 07dff50005ef35b3aef4226b52bcf854')).toBe(true);
     expect(isFilenameLikeAlt('IMG_7549')).toBe(true);
     expect(isFilenameLikeAlt('photo.jpg')).toBe(true);
+    for (const junk of ['Qnt03494', '0', '3', '20.10']) expect(isFilenameLikeAlt(junk), junk).toBe(true);
+    expect(isFilenameLikeAlt('Bảng Tiêu Chuẩn Vận Hành Tòa Nhà')).toBe(false);
     expect(isFilenameLikeAlt('')).toBe(true);
     expect(isFilenameLikeAlt('Toà nhà B-IA20 Ciputra Hà Nội')).toBe(false);
   });

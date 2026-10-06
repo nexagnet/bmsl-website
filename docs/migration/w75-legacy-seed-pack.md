@@ -58,7 +58,8 @@ pnpm seed:bmsl-legacy:generate --observed-at 2026-10-06
 Chỉ truy cập `https://binhminhsonglo.vn` (WordPress REST công khai, sitemap, ảnh trong `/wp-content/uploads/`; không theo
 redirect sang host khác, ≤ 10 MB mỗi tệp, chỉ JPEG/PNG xác nhận theo byte). Kết quả xác định (cùng đầu vào → cùng byte).
 Duyệt quyền sau này = sửa `review/image-review.json` hoặc `review/content-review.json`, chạy lại generator, xem diff, commit.
-Ảnh/bài chưa được duyệt luôn nằm ngoài repository.
+Ảnh/bài chưa được duyệt luôn nằm ngoài repository. Lần chạy đầy đủ mất vài phút (site cũ chậm); đặt
+`BMSL_SEED_IMAGE_CACHE=<thư mục tuyệt đối ngoài repo>` để tái dùng ảnh đã tải (vẫn kiểm tra loại tệp/kích thước và tính hash như thường).
 
 ## 4. Kết quả kiểm kê (từ `manifest.json`)
 
@@ -77,6 +78,8 @@ Duyệt quyền sau này = sửa `review/image-review.json` hoặc `review/conte
   em), 6 ảnh nằm trên website của bên thứ ba (không tải về), 1 ảnh có watermark báo, 1 thư cảm ơn có chữ ký và con dấu.
   Vị trí của từng ảnh chờ duyệt trong bài được ghi trong `manifest.json` (`pendingMedia[].usedBy.blockIndex`); ảnh được commit
   nằm đúng vị trí gốc dưới dạng node `upload` trong nội dung Lexical.
+* **Alt text**: 6 ảnh dùng alt do người viết trên site cũ; 50 ảnh dùng alt *suy ra* từ tiêu đề bài/tên dự án (đánh dấu
+  `altSource: derived` trong manifest) vì alt gốc là tên tệp hoặc số vô nghĩa ("Qnt03494", "0"). BMSL nên rà lại khi duyệt ảnh.
 * **Văn bản không được commit** (dòng kiểm kê vẫn có, kèm lý do): #2, #3, #4 là **bài báo đăng lại** (có dẫn nguồn
   doisongphapluat.com.vn, nguoiduatin.vn; bản quyền thuộc toà soạn) và #33 (OWNER-DECISION của blueprint: thông tin cá nhân
   của lãnh đạo). Hệ quả: cả 4 `service-areas` ở dạng placeholder UNCONFIRMED giống `seed:service-areas`.
@@ -102,6 +105,17 @@ nào hiện công khai cho tới khi BMSL duyệt từng tệp trong `/admin` (v
 | Unit | `generator.test.ts` | dữ liệu WordPress tổng hợp: đủ 47 URL, xác định (2 lần chạy trùng byte), fail-closed với ảnh chưa duyệt, không bao giờ tải host khác, đường dẫn ngoài `/wp-content/uploads`, SVG/ảnh hỏng, chặn bài, bài ngoài bộ 47 |
 | Unit | `pack.test.ts` | pack thật: 47 URL giữ nguyên, 17 dự án, SHA-256/kích thước/loại tệp, không ảnh chờ duyệt nào nằm trong repo, không SĐT/email/hotlink, ≤ 10 MB mỗi tệp, không trường phê duyệt; validator từ chối tệp bị sửa, SVG, path traversal, lớp ảnh bị cấm, host lạ, trường `_status`/`rightsStatus`, upload/liên kết/nội dung chủ động không an toàn |
 | Tích hợp (PostgreSQL thật) | `tests/integration/legacy-seed.test.ts` | DB trống: dry-run ghi 0 dòng 0 tệp; `--write` tạo bản nháp + tệp ảnh; lần 2 tạo 0; xung đột slug và bản ghi đã xuất bản không bị đụng; chỉnh sửa của staff được giữ; người ẩn danh không đọc được bản ghi/global/media; ảnh APPROVED hiện đúng vị trí và biến mất khi thu hồi; chốt chặn production/staging |
+
+**Bằng chứng runtime** (môi trường cô lập, ghi trong PR): checkout mới của đúng commit → PostgreSQL trống + volume media trống →
+migrate → `--dry-run` (0 dòng, 0 tệp) → `--write` (38 bản ghi + 56 tệp ảnh) → lần 2 (0 mới) → chạy website thật: người ẩn danh thấy 0
+nội dung seed, tệp ảnh chưa duyệt trả 403, 56 tệp trên đĩa khớp SHA-256 với pack và còn nguyên sau khi khởi động lại tiến trình.
+Phần seed chạy trên mạng Docker `internal` (không có đường ra internet) nên không thể liên hệ WordPress.
+
+Ảnh chụp trình soạn thảo CMS (`/admin`, tài khoản test cục bộ) nằm ở `docs/migration/screenshots/w75/`: `cms-about-page-*`,
+`cms-project-ecolife-*` (1440 và 390 px), `cms-article-infographics-1440`, `cms-media-list-1440` (mọi ảnh `Chưa xác nhận quyền sử dụng`),
+`cms-articles-list-1440`, `public-du-an-anonymous-1440` (website công khai không hiện bản nháp nào). Ảnh chụp trang nguồn
+không được commit: chúng có số điện thoại nổi và nội dung bên thứ ba. Dấu tiếng Việt trong ảnh chụp có thể lệch do font dự phòng của
+Chromium trên máy chụp; dữ liệu đã ở dạng Unicode NFC.
 
 ## 7. Chưa chứng minh (`NOT_PROVEN`)
 

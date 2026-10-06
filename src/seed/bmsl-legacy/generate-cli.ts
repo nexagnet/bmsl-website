@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildPack, type ContentReviewFile, type ImageFetcher, type ReviewFile, type WpMedia, type WpPost, type WpSnapshot, type WpTerm } from './generator';
 import { MAX_ASSET_BYTES, PACK_FILES, packProblems } from './pack';
@@ -100,12 +100,30 @@ async function fetchImageOnce(url: string): Promise<Buffer> {
   return Buffer.concat(chunks);
 }
 
+/**
+ * Optional operator-side cache (BMSL_SEED_IMAGE_CACHE=<absolute dir>, outside the repository): a file already downloaded
+ * from the same URL path is reused instead of fetched again. The bytes still go through the same type/size checks and
+ * are hashed as usual; the cache only saves time on repeated runs.
+ */
+const cacheFile = (url: string): string | undefined => {
+  const dir = process.env.BMSL_SEED_IMAGE_CACHE;
+  if (!dir || !path.isAbsolute(dir)) return undefined;
+  return path.join(dir, new URL(url).pathname.replace('/wp-content/uploads/', '').replace(/\//g, '__'));
+};
+
 /** Up to 4 attempts with backoff; a final failure is recorded and printed, never silently ignored. */
 const fetchImage: ImageFetcher = async (url) => {
+  const cached = cacheFile(url);
+  if (cached && existsSync(cached)) return readFileSync(cached);
   let reason = 'unknown';
   for (let attempt = 1; attempt <= 4; attempt += 1) {
     try {
-      return await fetchImageOnce(url);
+      const bytes = await fetchImageOnce(url);
+      if (cached) {
+        mkdirSync(path.dirname(cached), { recursive: true });
+        writeFileSync(cached, bytes);
+      }
+      return bytes;
     } catch (error) {
       reason = (error as Error).message;
       if (/10 MB|content-type|HTTP 404/.test(reason)) break;

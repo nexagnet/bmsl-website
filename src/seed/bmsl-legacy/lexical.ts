@@ -87,6 +87,9 @@ export function isFilenameLikeAlt(alt: string): boolean {
   const a = alt.trim();
   return (
     a === '' ||
+    // Only digits and punctuation ("0", "3", "20.10") or camera-style names ("Qnt03494") describe nothing.
+    /^[\d\s.,\-_/]+$/.test(a) ||
+    /^[A-Za-z]{1,6}\d{3,}$/.test(a) ||
     /^[A-Za-z]?\d{6,}[\s_-]/.test(a) ||
     /^(img|image|dsc|screenshot)[\s_-]?\d*$/i.test(a) ||
     /\.(jpe?g|png|gif|webp)$/i.test(a) ||
