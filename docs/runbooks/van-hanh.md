@@ -86,7 +86,30 @@ Local API của máy chủ (không có đường HTTP) — việc này cần quy
 * Khi nghi ngờ lạm dụng: giảm `CONTACT_RATE_LIMIT_MAX`, chặn ở edge/WAF (bảo vệ chống lạm dụng ở production là quyết định hạ tầng, `NOT_PROVEN`). Khi nghi lộ dữ liệu: xoay `PAYLOAD_SECRET`, mật khẩu CSDL, đổi mật khẩu ADMIN, đánh giá phạm vi, báo cáo BMSL.
 * Khi lệch/hỏng dữ liệu: dừng ghi, khôi phục bản sao lưu gần nhất vào CSDL mới, so sánh, quyết định cùng BMSL.
 
-## 10. Quyết định chính sách còn mở (cần BMSL/nhà cung cấp)
+## 10. Triển khai container trên Northflank (đã chuẩn bị, chưa thực hiện)
+
+Repo có `Dockerfile` + `.dockerignore` ở thư mục gốc. Builder chỉ chuẩn bị mã; **việc tạo tài nguyên, build image, deploy và cấu hình CD trên Northflank do điều phối viên thực hiện và chưa được chứng minh** (`NOT_PROVEN`). Image **không** chứa `.env`, media, bản sao lưu hay bí mật.
+
+**Tài nguyên (tách riêng, một instance ban đầu):**
+* Một PostgreSQL **riêng cho BMSL**. **Không bao giờ** dùng lại CSDL của ứng dụng Nexagnet.
+* Một **volume bền vững** riêng gắn vào dịch vụ BMSL, ví dụ mount `/data/media`; đặt `BMSL_MEDIA_DIR=/data/media`. Không dùng lưu trữ tạm của container cho upload. Tiến trình chạy bằng user `node` (uid 1000): volume phải ghi được bởi user này, nếu không container tự dừng với lỗi cố định (`BMSL_MEDIA_DIR is not writable`).
+* Chỉ chạy **1 instance** (giới hạn form liên hệ là bộ nhớ theo tiến trình; media nằm trên một volume).
+
+**Biến môi trường (chỉ runtime, đặt dưới dạng secret của Northflank, không đặt ở build-arg):** `DATABASE_URL` (CSDL riêng, `?sslmode=require` nếu nhà cung cấp hỗ trợ), `PAYLOAD_SECRET`, `BMSL_MEDIA_DIR`, `SITE_URL` = **URL HTTPS thực tế** do Northflank cấp (cập nhật khi đổi domain; kiểm tra Origin dựa vào giá trị này). `PORT` do nền tảng cấp (mặc định 3000); ứng dụng lắng nghe `0.0.0.0`. Thiếu `DATABASE_URL`/`PAYLOAD_SECRET`/`BMSL_MEDIA_DIR` thì container thoát ngay (fail-closed). Không bật analytics (`CSP_ALLOW_GA4`, mã GA4 trong CMS) cho tới khi BMSL xác nhận; `HSTS_ENABLED=true` chỉ sau khi HTTPS đã kiểm chứng.
+
+**Migration:** không áp dụng khi build image. Khi khởi động, Payload áp dụng các migration đã commit (`prodMigrations`, có khoá advisory) rồi mới sẵn sàng; không có reset/seed/xoá dữ liệu tự động. Giữ 1 instance để khởi động không tranh chấp.
+
+**Health check:** `GET /healthz` (chỉ đọc, `Cache-Control: no-store`). `200 {"status":"ok"}` chỉ khi kết nối PostgreSQL của runtime trả lời và **mọi** migration đã commit đã được ghi nhận; ngược lại `503 {"status":"unavailable"}`, không lộ chi tiết CSDL/bí mật. Dùng cho readiness (và liveness với ngưỡng lỗi rộng rãi, ví dụ khởi động có thể chậm do migration).
+
+**Build / deploy:** build đúng commit `main` SHA đã được CI xác minh (`verify` + `integration`) và đối chiếu SHA đó với image đang chạy. Ghi lại SHA/ tag image mỗi lần deploy.
+
+**ADMIN đầu tiên:** theo §4, qua kênh riêng đã được duyệt (đặt `INITIAL_ADMIN_BOOTSTRAP_TOKEN` tạm thời, ưu tiên mạng riêng/chưa mở công khai, gỡ ngay sau khi dùng). Không đặt mật khẩu mặc định, không ghi vào repo/log.
+
+**Rollback:** triển khai lại **image trước đó đã xác minh**; giữ nguyên CSDL và volume media. Không chạy migration `down` hay ghi đè CSDL khi rollback ứng dụng; nếu migration mới không tương thích, dùng quy trình khôi phục vào CSDL mới (§8, `backup-restore.md`).
+
+**Còn thiếu bằng chứng (`NOT_PROVEN`):** build image thật và chạy trên Northflank (Builder không có Docker/PG ở đây); quyền ghi của volume cho uid 1000; `/healthz` 200/503 trên môi trường thật; cấu hình CD gốc của Northflank; HTTPS/domain thật; lịch sao lưu CSDL + media; ADMIN đầu tiên và bàn giao thật; xác nhận của BMSL về analytics, liên hệ và các dữ kiện khách hàng (vẫn `UNCONFIRMED`).
+
+## 11. Quyết định chính sách còn mở (cần BMSL/nhà cung cấp)
 
 Hạ tầng, domain, host, quyền truy cập, backup của host · nơi lưu và mã hoá bản sao lưu off-site, chu kỳ lưu giữ · ai được xem lead, EDITOR có xem lead không · thời hạn lưu/xoá lead · 2FA · kênh thông báo lead · WAF/chống lạm dụng ·
 chính sách cookie/đồng ý và mã GA4, quyền Search Console · bật HSTS. Xem thêm `docs/blueprint/07-open-questions.md`.
