@@ -2,6 +2,7 @@ export type GateTransport = (request: {
   url: string;
   headers: Record<string, string>;
   signal: AbortSignal;
+  timeoutMs?: number;
 }) => Promise<{ status: number; headers: { get(name: string): string | null | undefined }; text: string }>;
 
 export type GateOutcome = {

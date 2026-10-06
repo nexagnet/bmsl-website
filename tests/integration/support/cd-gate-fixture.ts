@@ -75,10 +75,10 @@ export function makeTransport(world: World): { transport: GateTransport; calls: 
     calls.push(p);
     const forced = world.override?.(u.pathname, calls.length);
     if (forced) {
-      return { status: forced.status, headers: { get: (n) => forced.headers?.[n.toLowerCase()] }, text: forced.text ?? '{}' };
+      return { status: forced.status, headers: new Headers(forced.headers), text: forced.text ?? '{}' };
     }
-    const ok = (body: unknown) => ({ status: 200, headers: { get: () => undefined }, text: JSON.stringify(body) });
-    const notFound = { status: 404, headers: { get: () => undefined }, text: '{}' };
+    const ok = (body: unknown) => ({ status: 200, headers: new Headers(), text: JSON.stringify(body) });
+    const notFound = { status: 404, headers: new Headers(), text: '{}' };
     const pageSize = world.pageSize ?? 100;
     const page = Number(u.searchParams.get('page') ?? '1');
     const paged = (key: string, all: Json[]) => ok({ total_count: all.length, [key]: all.slice((page - 1) * pageSize, page * pageSize) });

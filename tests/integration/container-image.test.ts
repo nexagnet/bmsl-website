@@ -8,6 +8,7 @@ import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createOwnedDatabase, dropDisposableDatabase, waitForNoSessions } from './support/db-lifecycle';
 import { assertSafeAdminUrl } from './support/disposable-db';
+import { observeNeverReady } from './support/never-ready';
 
 // Packaged production runtime proof (CD2): builds the EXACT checked-out Dockerfile (frozen lockfile) and runs the
 // resulting NON-ROOT image on the Linux Docker host network against a NEW invocation-owned PostgreSQL database and a
@@ -107,12 +108,30 @@ async function start(name: string, file: string, extra: string[] = []): Promise<
   containers.add(name);
   await must(['run', '-d', '--name', name, '--network', 'host', '--env-file', file, ...extra, IMAGE], 120_000, `start ${name}`);
 }
+/** True only when Docker positively reports the object does not exist (a daemon failure is NOT absence). */
+const isAbsent = async (kind: 'container' | 'volume' | 'image', ref: string): Promise<boolean> => {
+  const r = await docker([kind, 'inspect', ref], 30_000);
+  return r.code !== 0 && /no such/i.test(r.stderr);
+};
+/** Stops and removes an owned container; ownership is kept until its absence is confirmed, otherwise this throws. */
 async function removeContainer(name: string): Promise<void> {
   if (!containers.has(name)) return;
   await docker(['stop', '-t', '15', name], 60_000);
   await docker(['rm', '-f', name], 60_000);
+  if (!(await isAbsent('container', name))) throw new Error(`owned container ${name} could not be confirmed removed`);
   containers.delete(name);
 }
+/** Foreground `docker run --rm`: named and tracked, so a client timeout cannot leave an untracked survivor. */
+async function runOnce(name: string, args: string[], timeoutMs: number): Promise<Result> {
+  containers.add(name);
+  try {
+    return await docker(['run', '--rm', '--name', name, ...args], timeoutMs);
+  } finally {
+    await removeContainer(name);
+  }
+}
+let oneShot = 0;
+const oneShotName = (label: string) => `bmsl-it-${label}-${ID}-${++oneShot}`;
 async function healthz(): Promise<number | undefined> {
   try {
     return (await fetch(`${base}/healthz`, { signal: AbortSignal.timeout(5000), redirect: 'manual' })).status;
@@ -150,25 +169,40 @@ beforeAll(async () => {
 }, 720_000);
 
 afterAll(async () => {
-  try {
-    for (const name of [...containers]) await removeContainer(name);
-    if (volumeCreated) await docker(['volume', 'rm', VOLUME], 60_000);
-    if (imageBuilt) await docker(['image', 'rm', IMAGE], 60_000);
-  } finally {
-    rmSync(tmp, { recursive: true, force: true });
+  // Every owned cleanup is attempted; any failure is aggregated and fails the suite (required CI never passes silently).
+  const failures: string[] = [];
+  const attempt = async (what: string, fn: () => Promise<unknown>) => {
     try {
-      if (createdDatabase) await dropDisposableDatabase(admin, DB_NAME, 60_000);
-    } finally {
-      await admin?.end();
+      await fn();
+    } catch (error) {
+      failures.push(`${what}: ${scrub(error instanceof Error ? error.message : String(error))}`);
     }
+  };
+  for (const name of [...containers]) await attempt(`container ${name}`, () => removeContainer(name));
+  if (volumeCreated) {
+    await attempt('volume', async () => {
+      await docker(['volume', 'rm', VOLUME], 60_000);
+      if (!(await isAbsent('volume', VOLUME))) throw new Error(`owned volume ${VOLUME} could not be confirmed removed`);
+    });
   }
-}, 240_000);
+  if (imageBuilt) {
+    await attempt('image', async () => {
+      await docker(['image', 'rm', IMAGE], 60_000);
+      if (!(await isAbsent('image', IMAGE))) throw new Error(`owned image ${IMAGE} could not be confirmed removed`);
+    });
+  }
+  await attempt('private env files', async () => rmSync(tmp, { recursive: true, force: true }));
+  if (createdDatabase) await attempt('database', () => dropDisposableDatabase(admin, DB_NAME, 60_000));
+  await attempt('admin connection', async () => admin?.end());
+  if (failures.length > 0) throw new Error(`cleanup failed:\n${failures.join('\n')}`);
+}, 360_000);
 
 describe('container image: identity and fail-closed configuration', () => {
   it('runs as non-root user:group node:node and keeps application files read-only', async () => {
     expect(await must(['image', 'inspect', '-f', '{{.Config.User}}', IMAGE], 30_000, 'inspect')).toBe('node:node');
-    const r = await docker(
-      ['run', '--rm', '--network', 'none', '--entrypoint', 'sh', IMAGE, '-c', 'echo "$(id -u):$(id -g)"; test ! -w /app/package.json && test ! -w /app/src && echo ro; test -w /data/media && echo media-w'],
+    const r = await runOnce(
+      oneShotName('id'),
+      ['--network', 'none', '--entrypoint', 'sh', IMAGE, '-c', 'echo "$(id -u):$(id -g)"; test ! -w /app/package.json && test ! -w /app/src && echo ro; test -w /data/media && echo media-w'],
       60_000,
     );
     expect(r.code).toBe(0);
@@ -177,11 +211,11 @@ describe('container image: identity and fail-closed configuration', () => {
 
   it('exits non-zero with a fixed message and no value when runtime configuration is missing', async () => {
     const noSecret = writeEnvFile('partial.env', { DATABASE_URL: urlFor(DB_NAME), BMSL_MEDIA_DIR: MEDIA_DIR });
-    const r = await docker(['run', '--rm', '--network', 'none', '--env-file', noSecret, IMAGE], 60_000);
+    const r = await runOnce(oneShotName('nosecret'), ['--network', 'none', '--env-file', noSecret, IMAGE], 60_000);
     expect(r.code).toBe(1);
     expect(r.stderr).toContain('PAYLOAD_SECRET is required');
     expect(r.stderr).not.toContain(SECRET);
-    const none = await docker(['run', '--rm', '--network', 'none', IMAGE], 60_000);
+    const none = await runOnce(oneShotName('noenv'), ['--network', 'none', IMAGE], 60_000);
     expect(none.code).toBe(1);
     expect(none.stderr).toContain('DATABASE_URL is required');
   });
@@ -192,21 +226,13 @@ describe('container image: identity and fail-closed configuration', () => {
     const file = writeEnvFile('missing-db.env', appEnv(MISSING_DB_NAME, missingPort));
     // Private tmpfs for media: this container must not touch the proof volume.
     await start(name, file, ['--mount', 'type=tmpfs,destination=/data/media,tmpfs-mode=1777']);
-    const deadline = Date.now() + 90_000;
-    let verdict = '';
-    while (Date.now() < deadline && !verdict) {
-      if (!(await running(name))) verdict = 'exited';
-      else {
-        try {
-          const status = (await fetch(`http://127.0.0.1:${missingPort}/healthz`, { signal: AbortSignal.timeout(5000) })).status;
-          expect(status).not.toBe(200);
-          if (status === 503) verdict = 'unavailable';
-        } catch {
-          // not listening yet
-        }
-      }
-      if (!verdict) await sleep(1500);
-    }
+    // Only connection failures are tolerated; any observed 200 fails at once (see support/never-ready.test.ts).
+    const verdict = await observeNeverReady({
+      isRunning: () => running(name),
+      probe: async () => (await fetch(`http://127.0.0.1:${missingPort}/healthz`, { signal: AbortSignal.timeout(5000) })).status,
+      sleep: async (ms) => void (await sleep(ms)),
+      timeoutMs: 90_000,
+    });
     expect(['exited', 'unavailable']).toContain(verdict);
     await removeContainer(name);
     const exists = await admin.query('select 1 from pg_database where datname = $1', [MISSING_DB_NAME]);
@@ -306,7 +332,7 @@ describe('container image: fresh database, migrations, media volume, rights', ()
 
 describe('container image: CD gate CLI is included and runnable without application secrets', () => {
   const run = (envVars: string[], extra: string[] = [], cmd: string[] = ['node', 'scripts/cd/gate-main-ci.mjs']) =>
-    docker(['run', '--rm', '--network', 'none', ...envVars.flatMap((e) => ['-e', e]), ...extra, IMAGE, ...cmd], 120_000);
+    runOnce(oneShotName('gate'), ['--network', 'none', ...envVars.flatMap((e) => ['-e', e]), ...extra, IMAGE, ...cmd], 120_000);
 
   it('an invalid SHA exits 2 without any DATABASE_URL, PAYLOAD_SECRET or media volume', async () => {
     const r = await run(['BMSL_TARGET_SHA=not-a-sha']);

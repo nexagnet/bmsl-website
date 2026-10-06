@@ -324,6 +324,71 @@ describe('CD gate: API errors, rate limits, timeouts', () => {
     expect(sleeps[0]).toBe(6000);
   });
 
+  it('a real Headers object without Retry-After (null) does not mask x-ratelimit-reset', async () => {
+    const sleeps: number[] = [];
+    const t0 = 1_700_000_000_000;
+    const { outcome } = await gate(
+      (w) => void (w.override = (_p, call) => (call === 1 ? body(403, '{}', { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': String(t0 / 1000 + 5) }) : undefined)),
+      { BMSL_GATE_TIMEOUT_SECONDS: '60' },
+      { now: () => t0, sleep: async (ms) => void sleeps.push(ms) },
+    );
+    expect(new Headers().get('retry-after')).toBeNull();
+    expect(outcome.exitCode).toBe(EXIT.PASS);
+    expect(sleeps).toEqual([6000]);
+  });
+
+  it('a 403 with neither Retry-After nor an exhausted quota is not treated as a rate limit', async () => {
+    const sleeps: number[] = [];
+    const { outcome } = await gate((w) => void (w.override = () => body(403, '{}', { 'x-ratelimit-remaining': '12' })), {}, { sleep: async (ms) => void sleeps.push(ms) });
+    expect(outcome.exitCode).toBe(EXIT.API);
+    expect(outcome.reason).toBe('github api status 403');
+    expect(sleeps).toEqual([]);
+  });
+
+  it('an empty or non-numeric Retry-After is ignored in favour of the reset header', async () => {
+    const sleeps: number[] = [];
+    const t0 = 1_700_000_000_000;
+    const { outcome } = await gate(
+      (w) => void (w.override = (_p, call) => (call === 1 ? body(429, '{}', { 'retry-after': '', 'x-ratelimit-reset': String(t0 / 1000 + 2) }) : undefined)),
+      { BMSL_GATE_TIMEOUT_SECONDS: '60' },
+      { now: () => t0, sleep: async (ms) => void sleeps.push(ms) },
+    );
+    expect(outcome.exitCode).toBe(EXIT.PASS);
+    expect(sleeps).toEqual([3000]);
+  });
+
+  it('a 200 that arrives after the overall deadline never passes', async () => {
+    let t = 1_700_000_000_000;
+    const inner = makeTransport(goodWorld()).transport;
+    const outcome = await runGate({
+      env: { ...env, BMSL_GATE_TIMEOUT_SECONDS: '10' },
+      transport: async (req) => {
+        const res = await inner(req);
+        t += 11_000; // the response is only received after the deadline
+        return res;
+      },
+      now: () => t,
+      sleep: noSleep,
+    });
+    expect(outcome.exitCode).toBe(EXIT.TIMEOUT);
+  });
+
+  it('a hanging transport that ignores its signal is cut at the overall deadline', async () => {
+    const started = Date.now();
+    let received: number | undefined;
+    const outcome = await runGate({
+      env: { ...env, BMSL_GATE_TIMEOUT_SECONDS: '1' },
+      transport: ({ timeoutMs }) => {
+        received = timeoutMs;
+        return new Promise(() => undefined);
+      },
+      sleep: noSleep,
+    });
+    expect(outcome.exitCode).toBe(EXIT.TIMEOUT);
+    expect(Date.now() - started).toBeLessThan(5000);
+    expect(received).toBeLessThanOrEqual(1000);
+  });
+
   it('pending beyond the overall timeout exits TIMEOUT (no infinite job)', async () => {
     let t = 0;
     const { outcome } = await gate((w) => void (w.runs = [run({ status: 'in_progress', conclusion: null })]), { BMSL_GATE_TIMEOUT_SECONDS: '20', BMSL_GATE_POLL_SECONDS: '5' }, { now: () => (t += 1000) });

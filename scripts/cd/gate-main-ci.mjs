@@ -92,12 +92,12 @@ export function readConfig(env = process.env) {
 }
 
 /** Production transport: bounded, no redirects, body size capped. Returns { status, headers, text }. */
-export async function fetchTransport({ url, headers, signal }) {
+export async function fetchTransport({ url, headers, signal, timeoutMs = LIMITS.requestTimeoutMs }) {
   const res = await fetch(url, {
     method: 'GET',
     headers,
     redirect: 'error',
-    signal: AbortSignal.any([signal, AbortSignal.timeout(LIMITS.requestTimeoutMs)]),
+    signal: AbortSignal.any([signal, AbortSignal.timeout(Math.max(1, Math.min(timeoutMs, LIMITS.requestTimeoutMs)))]),
   });
   const text = await res.text();
   if (text.length > LIMITS.maxBodyBytes) throw new Error('response too large');
@@ -157,13 +157,16 @@ export async function runGate({
       if (now() >= deadline) throw new GateError(EXIT.TIMEOUT, 'overall timeout');
       let res;
       try {
-        res = await transport({ url, headers, signal });
-      } catch {
+        res = await callTransport(url);
+      } catch (error) {
+        if (error instanceof GateError) throw error;
         if (signal.aborted) throw new GateError(EXIT.SIGTERM, 'terminated');
         if (attempt >= LIMITS.maxAttemptsPerRequest) throw apiFail('github api unreachable');
         await waitWithinDeadline(1000 * attempt);
         continue;
       }
+      // A response that arrives after the overall deadline never counts, however successful.
+      if (now() >= deadline) throw new GateError(EXIT.TIMEOUT, 'overall timeout');
       const status = res?.status;
       if (status === 200) {
         let body;
@@ -175,14 +178,19 @@ export async function runGate({
         if (!isObject(body)) throw apiFail('malformed github response');
         return body;
       }
-      const retryAfter = Number(res?.headers?.get?.('retry-after'));
-      const remaining = res?.headers?.get?.('x-ratelimit-remaining');
-      const reset = Number(res?.headers?.get?.('x-ratelimit-reset'));
-      const limited = status === 429 || (status === 403 && (Number.isFinite(retryAfter) || remaining === '0'));
+      // Headers.get returns null when absent: only a present, purely numeric value counts (never Number(null) === 0).
+      const headerInt = (name) => {
+        const raw = res?.headers?.get?.(name);
+        return typeof raw === 'string' && /^\d+$/.test(raw.trim()) ? Number(raw.trim()) : undefined;
+      };
+      const retryAfter = headerInt('retry-after');
+      const reset = headerInt('x-ratelimit-reset');
+      const remaining = res?.headers?.get?.('x-ratelimit-remaining')?.trim();
+      const limited = status === 429 || (status === 403 && (retryAfter !== undefined || remaining === '0'));
       if (limited) {
         let waitMs;
-        if (Number.isFinite(retryAfter) && retryAfter >= 0) waitMs = retryAfter * 1000;
-        else if (Number.isFinite(reset) && reset > 0) waitMs = reset * 1000 - now();
+        if (retryAfter !== undefined) waitMs = retryAfter * 1000;
+        else if (reset !== undefined && reset > 0) waitMs = reset * 1000 - now();
         else throw apiFail('github rate limited');
         waitMs = Math.max(waitMs, 0) + LIMITS.rateLimitMarginMs;
         // Never cross the overall deadline to honour a limit: fail closed instead.
@@ -196,6 +204,30 @@ export async function runGate({
         continue;
       }
       throw apiFail(`github api status ${Number.isInteger(status) ? status : 'unknown'}`);
+    }
+  }
+
+  /** One transport call capped by the remaining overall budget; a transport that ignores its signal is raced. */
+  async function callTransport(url) {
+    const remainingMs = Math.max(1, deadline - now());
+    const controller = new AbortController();
+    const onAbort = () => controller.abort();
+    signal.addEventListener('abort', onAbort, { once: true });
+    let timer;
+    const expired = new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        controller.abort();
+        reject(new GateError(EXIT.TIMEOUT, 'overall timeout'));
+      }, remainingMs);
+    });
+    try {
+      return await Promise.race([
+        transport({ url, headers, signal: controller.signal, timeoutMs: Math.min(LIMITS.requestTimeoutMs, remainingMs) }),
+        expired,
+      ]);
+    } finally {
+      clearTimeout(timer);
+      signal.removeEventListener('abort', onAbort);
     }
   }
 
