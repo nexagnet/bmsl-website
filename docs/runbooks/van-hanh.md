@@ -109,7 +109,55 @@ Repo có `Dockerfile` + `.dockerignore` ở thư mục gốc. Builder chỉ chu�
 
 **Rollback:** triển khai lại **image trước đó đã xác minh**; giữ nguyên CSDL và volume media. Không chạy migration `down` hay ghi đè CSDL khi rollback ứng dụng; nếu migration mới không tương thích, dùng quy trình khôi phục vào CSDL mới (§8, `backup-restore.md`).
 
-**Còn thiếu bằng chứng (`NOT_PROVEN`):** build image thật (Docker) và chạy trên Northflank; quyền ghi của volume cho uid 1000; `/healthz` 200/503 trên môi trường thật; header HSTS/CSP của image thật; cấu hình CD gốc của Northflank; HTTPS/domain thật; lịch sao lưu CSDL + media; ADMIN đầu tiên và bàn giao thật; xác nhận của BMSL về analytics, liên hệ và các dữ kiện khách hàng (vẫn `UNCONFIRMED`).
+**Nhóm (group) của image và volume:** image chạy bằng `USER node:node` (uid 1000, gid 1000, vẫn không phải root; mã ứng dụng chỉ đọc). Northflank xác định quyền sở hữu volume bền vững theo **group của image tại thời điểm build**, nên group được khai báo tường minh; không có bước `chown` root khi khởi động. Quyền ghi vào volume gắn tại `/data/media` được kiểm chứng trong proof Docker của CI (xem "Bằng chứng trong CI" bên dưới), còn volume thật trên Northflank vẫn là việc điều phối viên chứng minh.
+
+### 10.1 Quy trình CD gốc (native) của Northflank: cổng "exact-main CI"
+
+Mục tiêu: mỗi lần `git push` lên `main` chỉ deploy đúng commit đã được CI chính thức (workflow `ci`, job `verify` **và** `integration`) xác nhận thành công. **Tài liệu và cấu hình dưới đây chỉ là minh hoạ; chưa có bằng chứng một lần chạy thật** (`NOT_PROVEN`) và **không được coi là "CD xong"** cho tới khi điều phối viên chứng minh một workflow được kích hoạt thật, build thật, qua cổng, deploy thật và `/healthz` 200.
+
+**Luồng (tuần tự, mọi bước dùng đúng SHA kích hoạt ban đầu):**
+1. **Trigger**: `git push` lên `main` (VCS trigger, ghim `triggers.mainPush.sha`).
+2. **Build** ứng dụng với đúng SHA kích hoạt đó (không phải `latest`, không phải đầu nhánh hiện tại).
+3. **Cổng CI (JobRun, `condition: success`)**: chạy job đã tạo sẵn từ **một image cổng cố định, đã được review trước đó (ghim theo build ID/digest bất biến, không dùng `latest`, không dùng script của chính commit ứng viên chưa được xác minh)**, với lệnh ghi đè `node scripts/cd/gate-main-ci.mjs` và biến môi trường **theo từng lần chạy** `BMSL_TARGET_SHA=${triggers.mainPush.sha}`. Job chỉ thoát 0 khi CI tin cậy của đúng SHA đó hoàn tất thành công và `main` vẫn đúng là SHA đó; mọi trường hợp khác (CI fail/cancel/skip/neutral/timeout, thiếu job hoặc bước, run giả mạo, attempt cũ, `main` đã bị vượt, lỗi/giới hạn API, quá hạn) đều thoát khác 0 và workflow dừng ở đây.
+4. **Release**: chỉ khi cổng thành công, deploy **đúng bản build ứng viên đã build ở bước 2** (tham chiếu build ID bất biến `${refs.appBuild.id}`, không phải `latest`), chờ dịch vụ healthy (`GET /healthz` = 200), rồi chạy smoke check (trang chủ, `/healthz`).
+5. **Tuần tự hoá**: khuyến nghị `concurrencyPolicy: latest` kèm chiến lược triển khai `recreate` đã được GET xác nhận (xem "Điều kiện an toàn một instance"). `latest` chỉ giữ lại lần chạy **xếp hàng** mới nhất; nó **không** huỷ công việc đang chạy (chính sách `replace` mới dừng các lần chạy đang hoạt động, theo https://northflank.com/docs/v1/application/release/configure-workflows#concurrency-policy). Cổng và release bất biến **không** làm việc thay thế (supersession) trở nên nguyên tử sau khi bước Release đã bắt đầu: một lần chạy cũ đang release vẫn có thể hoàn tất. Không được tuyên bố rằng việc huỷ một lần chạy sẽ rollback migration an toàn; không có cơ chế đó. Hành vi thật trên nền tảng vẫn là `NOT_PROVEN`.
+
+**Phải tắt** cơ chế tự deploy gốc độc lập của dịch vụ (auto-deploy theo commit/Git checks): nếu bật, nó đi vòng qua cổng. Đặc biệt, "check suite Git thành công" của Northflank chỉ phủ **một** check suite của PR và **không** chờ các suite bắt buộc khác, nên **không** được dùng làm bằng chứng "CI exact-main xong".
+
+**Cổng (`scripts/cd/gate-main-ci.mjs`) kiểm tra, cố định trong mã:** repository `nexagnet/bmsl-website`, nhánh `main`, workflow id `375023465`, đường dẫn `.github/workflows/ci.yml`, sự kiện `push`, `head_branch=main`, `head_sha` = SHA ứng viên, `head_repository` đúng repo; chọn run **mới nhất** của SHA và **attempt mới nhất**; tải job của **đúng attempt đó** (có phân trang, thiếu trang là lỗi) và yêu cầu **cả** `verify` và `integration` `completed/success`, cùng hai bước `Application verify scripts` và `Required application integration suite` đều `completed/success` (job xanh nhưng bước bị skip bị từ chối); đọc lại run/attempt/run mới nhất trước khi chấp nhận và xác nhận `main` vẫn đúng là SHA ứng viên ngay trước khi thoát 0. Chỉ gọi GitHub REST (GET) tới `api.github.com`; token là tuỳ chọn (`BMSL_GITHUB_TOKEN`, chỉ từ biến môi trường, quyền đọc tối thiểu cho repo BMSL: Actions + Contents/metadata read; **không** sao chép token OAuth rộng của người điều phối) và không bao giờ được ghi log; chỉ in SHA/run/attempt/trạng thái. Mã thoát: `0` đạt, `1` CI/không đủ điều kiện, `2` cấu hình sai, `3` `main` đã bị vượt, `4` quá hạn, `5` lỗi/giới hạn API, `143` SIGTERM. Tuỳ chỉnh có giới hạn: `BMSL_GATE_TIMEOUT_SECONDS` (mặc định 1500, tối đa 3600), `BMSL_GATE_POLL_SECONDS` (mặc định 60, 1–300).
+
+**Hạn mức API:** API GitHub không xác thực chỉ có hạn mức thấp theo IP dùng chung (60 yêu cầu/giờ). Khi còn chờ, mỗi vòng chỉ gọi **một** yêu cầu (danh sách run), các yêu cầu nặng hơn chỉ chạy khi run đã hoàn tất; `Retry-After`/`x-ratelimit-reset` được tôn trọng nếu chờ xong vẫn nằm trong hạn tổng, nếu không thì **fail closed**. Dùng được không token cho repo công khai, nhưng **không được tuyên bố "bền vững" khi chưa có bằng chứng chạy thật với hạn mức thật**; ưu tiên cấu hình token đọc-tối-thiểu dưới dạng secret của Northflank.
+
+**Cấu hình minh hoạ (không bí mật, chỉ là ví dụ; ID là chỗ giữ chỗ, không phải ID thật):** điều phối viên phải tự xác nhận bằng API/giao diện/export thật của Northflank rồi mới áp dụng; các node và trường dưới đây là hình dạng dự kiến theo tài liệu chính thức, **chưa được kiểm chứng với API tạo workflow thật**.
+
+```json
+{
+  "apiVersion": "v1.2",
+  "options": { "autorun": false, "concurrencyPolicy": "latest" },
+  "triggers": [
+    { "kind": "vcs-push", "ref": "mainPush", "spec": { "vcs": { "vcsService": "github", "accountLogin": "nexagnet", "repoUrl": "https://github.com/nexagnet/bmsl-website" }, "branchNamePatterns": ["main"] } }
+  ],
+  "spec": {
+    "kind": "Workflow",
+    "spec": {
+      "type": "sequential",
+      "steps": [
+        { "kind": "Build", "ref": "appBuild", "condition": "success", "spec": { "id": "<build-service-id>", "type": "service", "projectId": "<project-id>", "sha": "${triggers.mainPush.sha}", "branch": "main", "buildRuleFallThroughHandling": "fail" } },
+        { "kind": "JobRun", "condition": "success", "spec": { "projectId": "<project-id>", "jobId": "<gate-job-id>", "runtimeEnvironment": { "BMSL_TARGET_SHA": "${triggers.mainPush.sha}" }, "deployment": { "internal": { "buildId": "<fixed-reviewed-gate-image-build-id>" }, "docker": { "configType": "customCommand", "customCommand": "node scripts/cd/gate-main-ci.mjs" } } } },
+        { "kind": "Release", "condition": "running", "timeoutDuration": 600, "spec": { "type": "build", "origin": { "id": "<build-service-id>", "branch": "main", "build": "${refs.appBuild.id}" }, "target": { "id": "<web-service-id>", "type": "service" } } }
+      ]
+    }
+  }
+}
+```
+
+Lưu ý nền tảng: schema chính thức của release-flow dùng kind `Release` với `origin.build` là **ID build bất biến (không phải SHA)**; không được tự bịa kind `DeployBuild` hay giả định mọi node release được API workflow chung chấp nhận. Chỉ tuyên bố cấu hình triển khai được sau khi tạo/lấy/export workflow thật thành công. Phương án dự phòng đã có tài liệu độc lập: API triển khai dịch vụ với `internal.buildSHA` = SHA kích hoạt và ID build thật. Không bao giờ coi "chỉ chạy tay" là CD xong.
+
+**Điều kiện an toàn một instance (điều phối viên):** chỉ `instances: 1` **không** đủ vì chiến lược mặc định là rolling (instance cũ/mới chạy chồng và cùng chạy migration Payload không khoá). Dùng `deployment.strategy.type: recreate` (cần GET xác nhận nền tảng chấp nhận; tính năng có thể bị cờ tính năng giới hạn) hoặc bước workflow dừng-và-chờ trước khi release / khởi động-và-chờ. Nếu nền tảng không hỗ trợ, ghi rõ là điều kiện chưa đạt thay vì giả định.
+
+**Bằng chứng trong CI (không cần Northflank):** test của cổng nằm ở `tests/integration/support/cd-gate.test.ts` (cùng `never-ready.test.ts`) nhưng được cấu hình chạy bởi `pnpm test` (`vitest.config.ts` gồm `tests/integration/support/**/*.test.ts`); lệnh tập trung: `pnpm exec vitest run --config vitest.config.ts tests/integration/support/cd-gate`. Đó là test đơn vị/mock của cổng (không mạng, không token) và test chạy tiến trình thật `node scripts/cd/gate-main-ci.mjs` với fetch giả (mã thoát thật cho đạt, chờ rồi đạt và từng ca lỗi). Proof image trong `tests/integration/container-image.test.ts` chạy qua `pnpm test:integration` (job `integration` hiện có); **chưa được coi là đã xác minh cho tới khi lần chạy CI thật của job đó đạt** (`NOT_PROVEN`). Proof đó build đúng `Dockerfile` của commit, chạy image không phải root trên mạng host với CSDL **mới do lần chạy sở hữu** + volume media riêng, chờ `GET /healthz` 200 sau migration, kiểm chứng fail-closed khi thiếu cấu hình/CSDL, upload media tổng hợp rồi xoá và tạo lại container trên cùng volume (media còn, quyền vẫn bị thực thi), và chạy CLI cổng trong image không cần bí mật ứng dụng. Thiếu Docker thì test **fail** (không bỏ qua). Phần dọn dẹp chỉ xoá container/image/volume/CSDL do chính lần chạy tạo ra, CSDL bị `DROP` (không `FORCE`) sau khi không còn session.
+
+**Còn thiếu bằng chứng (`NOT_PROVEN`):** build image thật (Docker) và chạy trên Northflank; quyền ghi của volume cho uid 1000; `/healthz` 200/503 trên môi trường thật; header HSTS/CSP của image thật; cấu hình CD gốc của Northflank (workflow thật, một lần chạy thật do push kích hoạt qua cổng và release, chiến lược `recreate`, hạn mức GitHub API/token thật; hạn mức tài khoản Northflank hiện chưa cho tạo dự án BMSL); HTTPS/domain thật; lịch sao lưu CSDL + media; ADMIN đầu tiên và bàn giao thật; xác nhận của BMSL về analytics, liên hệ và các dữ kiện khách hàng (vẫn `UNCONFIRMED`).
 
 ## 11. Quyết định chính sách còn mở (cần BMSL/nhà cung cấp)
 
