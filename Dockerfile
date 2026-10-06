@@ -39,9 +39,13 @@ COPY --from=build /app/.next ./.next
 COPY --from=build /app/next.config.mjs /app/tsconfig.json ./
 COPY --from=build /app/src ./src
 COPY --from=build /app/scripts/container-start.mjs ./scripts/container-start.mjs
+# Self-contained CD gate job entrypoint (`node scripts/cd/gate-main-ci.mjs`, run with a job command override). It reads
+# only BMSL_TARGET_SHA / optional BMSL_GATE_* env and needs no database, application secret or media volume.
+COPY --from=build /app/scripts/cd/gate-main-ci.mjs ./scripts/cd/gate-main-ci.mjs
 # Writable, persistent media location. In production mount a dedicated volume at /data/media and set
-# BMSL_MEDIA_DIR=/data/media; it must be writable by uid 1000 (user "node").
+# BMSL_MEDIA_DIR=/data/media; it must be writable by uid 1000 / gid 1000 (user "node", group "node").
 RUN mkdir -p /data/media && chown -R node:node /data/media
-USER node
+# Explicit user AND group: Northflank decides persistent-volume ownership from the image group at build time.
+USER node:node
 EXPOSE 3000
 CMD ["node", "scripts/container-start.mjs"]

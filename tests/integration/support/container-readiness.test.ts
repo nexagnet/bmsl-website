@@ -82,7 +82,11 @@ describe('Dockerfile / .dockerignore assumptions', () => {
   });
 
   it('runs as non-root and never applies migrations or injects secrets at build time', () => {
-    expect(docker).toMatch(/^USER node$/m);
+    // Explicit user AND group (Northflank derives persistent-volume ownership from the image group).
+    expect(docker).toMatch(/^USER node:node$/m);
+    expect(docker).toContain('chown -R node:node /data/media');
+    // The trusted CD gate ships in the image and needs no application secrets.
+    expect(docker).toContain('COPY --from=build /app/scripts/cd/gate-main-ci.mjs ./scripts/cd/gate-main-ci.mjs');
     expect(docker).not.toMatch(/migrate|seed|DATABASE_URL|PAYLOAD_SECRET|COPY \. /);
     expect(docker).toContain('container-start.mjs');
   });
