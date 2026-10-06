@@ -1,0 +1,36 @@
+{
+  "records": [
+    {
+      "key": "service-areas/quan-ly-van-hanh",
+      "name": "Quản lý vận hành",
+      "slug": "quan-ly-van-hanh",
+      "order": 1,
+      "summary": "UNCONFIRMED: chờ BMSL xác nhận nội dung.",
+      "placeholder": true
+    },
+    {
+      "key": "service-areas/bao-ve",
+      "name": "Bảo vệ",
+      "slug": "bao-ve",
+      "order": 2,
+      "summary": "UNCONFIRMED: chờ BMSL xác nhận nội dung.",
+      "placeholder": true
+    },
+    {
+      "key": "service-areas/ve-sinh",
+      "name": "Vệ sinh",
+      "slug": "ve-sinh",
+      "order": 3,
+      "summary": "UNCONFIRMED: chờ BMSL xác nhận nội dung.",
+      "placeholder": true
+    },
+    {
+      "key": "service-areas/pccc",
+      "name": "PCCC",
+      "slug": "pccc",
+      "order": 4,
+      "summary": "UNCONFIRMED: chờ BMSL xác nhận nội dung.",
+      "placeholder": true
+    }
+  ]
+}

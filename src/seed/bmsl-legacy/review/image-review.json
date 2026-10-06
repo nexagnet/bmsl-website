@@ -1,0 +1,1420 @@
+{
+  "version": 1,
+  "note": "Quyết định duyệt ảnh bằng mắt ngày 2026-10-06. Ảnh chưa có trong danh sách này mặc định là PENDING (UNREVIEWED). Đổi decision chỉ khi BMSL đã duyệt quyền.",
+  "defaultDecision": {
+    "decision": "PENDING",
+    "class": "UNREVIEWED"
+  },
+  "images": [
+    {
+      "url": "https://baovebinhminh247.com/wp-content/uploads/2022/10/image0012.jpg",
+      "decision": "PENDING",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository."
+    },
+    {
+      "url": "https://baovebinhminh247.com/wp-content/uploads/2022/10/image002.jpg",
+      "decision": "PENDING",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository."
+    },
+    {
+      "url": "https://baovebinhminh247.com/wp-content/uploads/2022/10/img16650643116761665285136884.jpg",
+      "decision": "PENDING",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository."
+    },
+    {
+      "url": "https://baovebinhminh247.com/wp-content/uploads/2024/10/z58004854202404363ff6db2a134c41bb923426975eb90-19595308.jpg",
+      "decision": "PENDING",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository."
+    },
+    {
+      "url": "https://baovebinhminh247.com/wp-content/uploads/2024/10/z5932393085216_853a1a9f195212faac6f9ad4b021b847.jpg",
+      "decision": "PENDING",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/img16650643116761665285136884.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/logo-bmsl.jpg",
+      "decision": "COMMIT",
+      "class": "BRAND",
+      "reason": "Logo BMSL (cùng tác phẩm với logo ở Issue #74)."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128643237572_64e95f74bee60a3acd5a611787b4467e.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128654384679_07dff50005ef35b3aef4226b52bcf854.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128660791194_b3b8dc22ef5a05ba11e6941cf7e75e47.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128675616134_66ce2e5cf370c0e29339415e0293bfaa-1.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128675616134_66ce2e5cf370c0e29339415e0293bfaa.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129579785883_428e187c74e31e999c0b861d3b1e8e89.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129587734199_d514ee59f6c6778429c2d283435726df-1.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129587734199_d514ee59f6c6778429c2d283435726df.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129596536847_6dfb4a26645c9f1cba8f17493e082f1d.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129601290901_ba4422178b4a7b71462041647cb6e11e.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129606596313_d88b8896e5ae6a5a3036c9fb6656abe0-1.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129606596313_d88b8896e5ae6a5a3036c9fb6656abe0.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129611073015_a96c8daa00082677e9d05afd41fb60be-1.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129611073015_a96c8daa00082677e9d05afd41fb60be.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129616677476_f40b74663dfffdd9e0d2f0e46afd31cb-1.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129616677476_f40b74663dfffdd9e0d2f0e46afd31cb.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129620777756_be3f6f335f8f27cfe13d37557d44960b.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129626480939_64d1d78aee1564984f79b13bc7d1c4cf.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129637635889_31b4d603161d7a240bac7c8304b063e5-1.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129637635889_31b4d603161d7a240bac7c8304b063e5.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129641534619_ed8749a220b5469b1cbc1a0c61007761.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129646810100_55e326719f409db4c09cc561324154a9.jpg",
+      "decision": "COMMIT",
+      "class": "PROJECT_PHOTO",
+      "reason": "Ảnh hoặc phối cảnh toà nhà dự án gửi qua Zalo; không có người. Nguồn gốc chủ sở hữu ảnh chưa xác minh."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6727950434740_66ccc90fa6542be0c60eba433c7849b3.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6727950435796_5e789cfdedb7db7dae12cb097f288f8c.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6727950441326_6a76d9ac15189ad1cc9b2b1b310c22ca.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/0-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/1-2.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/2-2.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/2.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/20.10.jpg",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/3-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/32-banh-kem-sinh-nhat-cho-ngay-8.3.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/anh-20.10.2024.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/BAN-QUAN-LY-BMSL-CHUC-MUNG-8.3-CU-DAN.jpg",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/chung-cu-phia-bac-ha-noi-5-1651505671024.jpg",
+      "decision": "PENDING",
+      "class": "THIRD_PARTY",
+      "reason": "Ảnh có watermark của một trang báo (DÂN TRÍ): tài sản bên thứ ba."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/Di-chua-cau-an-nam-moi-2025.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03493-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03494-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03497-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03498-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03505-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03506-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03507-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03508-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03509-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03510-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03511-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03514-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03520-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03521-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03522-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03528-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03529-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03530-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03531-1.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6387780394556_0586312f9d75949375ca61c4f468e534.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6387780400378_7f9600d700c00cf06f6e93a2168c8840.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_001_8fb3c37722545cd9258a9d84b2ed45c9.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_002_636a3892cb34a1b71e52291d905e9ba8.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_003_e4199dab001d9cb6f503b4e8e999f883.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_004_4b37e41119344908398be11110d6e216.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727664495695_4f95a94d90bc083eedb20d02579055bc.jpg",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727664716243_b2eaba57e731d96a06243367f0ed9b39.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681319906_7b0a4653337230b09e0051f20ec27902.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681323737_11d72730d9ea45cd179fdea2e872af8c.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681337822_0805b685fd3dd7d76333d4f9e027fe45.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681338048_d3965b6d2726851bc1ebff3fc6487f43.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681346210_4341ac2404440641044ce2730512b4ae.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681349179_a32635d2aa227579548c2d6691046530.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681356481_a7f0d11a43e6ca90743ed96399abcd01.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681357792_8b22df70441374451bd91ee6454fbc05.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681358132_335147d2af55e664be317fa5ce695bbc.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681369417_81aad6f2528a9f44b2df147930207813.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681376385_88b302225d08f1165415e4b533ff0ad6.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681379804_ad4446bae8d4f0add6035c85dbef7aa1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681381476_81cecf9b998fd738baa494fbf7681f36.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681384138_1d40e30126cbc2d9cfce032b16be3466.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681390349_4e2c339e8ffd876be08d13eed7f53856.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681394099_c6c4302575fbfe0c46d0b5fbafe755d7.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681399767_850032ff3c4914d6addf8d3a1be2c88d.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681400008_1f8bf34a81c51f6084115b24c3772b3e.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681402335_1455576890110443ea68b9f35ae4e3af.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681409588_8f3d62290500d1079579f800d98f84f5.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681414959_0fe90cb63b88b0656f9795338a0fae86.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727687943131_5d86d80bb57d627b3c2befdb40a92742.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727926995646_e59f00a2732bcdbd95e60a2f5fdb10ae.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927015961_0dabe5a3a7c595462e87991b108b29c0.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927021612_142451146c2073cbb32606ebb65647c8.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927024376_147b0cdd8110668b26b0e69c985f6a1e.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927026896_c553fb57992056f4f80c4b2e42e03ab6.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927030022_ca68843781073a720715ff9b5e34b89c.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927052497_5dd0bb3002873a6a8347595ad5565972.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927080322_00551a85a3372d800a05230d8e4e7aec.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927081756_1108a0c144f49c57f31aa4e3f0497ce4.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927087499_2200febe79c359ccd803c81120988ea1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927088389_9a5834fe9abe2444569bcfa6e1d1fff8.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927100721_0009e6ff81c1af51c4bb97662857f272.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727940534114_9d738691d4d4d352e3ba1b1897e7a4cc.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947630560_aa9cfb7b4e53a21786603a8e3146e9b9.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947633007_5fecb049510a8b3cfbe2036f21150dfc.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947643198_41567e73237584fa3f4ae42da1ef9b29.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947644032_4b5abd12366da151105ce178310466f0.jpg",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947656377_12808f4749e60c86ab4f90cd194598fd.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947656582_614ea15074d85548ed1734968e3d108b.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947659855_732d475ae9ecaac8ed901e54f7280500.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947673035_78e93e40663a114d56e5c968ce25a4c5.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947676079_979aa3f646183f6e9b0c0ed067477f7f.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947678659_3877ef8c5c5c4fbd71fc16213dbf4e21.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947690198_d36171f735057dcfb1261b837a38572c.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947691398_4e3c4dd0d9d2688a55f59a40b95ab0bd.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947701407_6a157c151df395edfd6d88c06b50b324.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947701629_5383ff7b9eec4703fe9f64d3fa0f96d6.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947704911_eaee6381524176173dd5bf0f3f26027e.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947710042_e7b7a1803193167b3bb1078e95fcff98.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947722453_05fb5c9b81b328526583f0d14bf080eb.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947722688_28ea662e66a78938ac350fd9577a78c4.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947729491_34583525672ccbc6315768fe0c3e5fbc.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947736287_46d1f47dae01f1a3cf3ad6bcb54fd9a7.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947740692_082f8ef0cb76b4137bc2a41ef88d74a0.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947747146_5880fed37b4d378f6f1ea6d4f7bfd005.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947752750_85604f74c18034c5203a372b5dc55030.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947757733_7fa38bbc3b3ec09707fd15d39117fb87.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947759157_942d6ed611ce9126768c698b261ca3b0.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947770643_ae8a15e3beba0b47ce4e86efc067936c.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947776570_61405feb165eb8db4d4f1f93d46d2a14.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947783732_24b253d9ed91eb2b6551fec88b4936e3.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727962885750_c389f40c624166f22618c3bedea423af.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727962913858_a0ea494aa77c57c60534e3bcaa0ca4a9.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727962929674_0601dc266567fb085e0b77170f53e514.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971829239_d021b71bc1d87c5d17b10724bc69bc25.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971854744_7d2aba9e34e154c55065175fba4b4e66.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971867714_6ff37af97dcf05d4d0ab44d717cd795c.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971973412_68c04e8f427227569127eb40773b1365.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971976751_8ec88c92ad2ba50c5b9ace0a6eb0a79a.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971985503_4f21c72eb3ff37bc3c272ad93b0d2f11.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727972006435_8bd80f5f1a047c93a771153205169c62.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727972013559_bc4fd1434b3d55dae7cb9784aa73f195.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979684622_918ec81fda2de605d32e53dd4daa19b3-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979687101_2de5c63fd5f405a56554c971335b881d-2.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979704657_58571dec554a4d8f6ff41a2c49208cd2-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979708257_5c2106495f77f0631444017a07b57a1b-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979725507_6375c5edddeadd660e874639559e7135-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979733480_93df5f25eaeea2b7293b519c58a6d7bc-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979737985_b4fd5a2189599248d0ee3fabf8914d40-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979742657_3935d3877bcd9845e082b8143526dfbb-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979748078_a45ad67131b6de47a55bee8bc0e87570-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979749638_36c704e2b12b098bb2ef91d8b1712e7f-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979764192_975aee6508940332890191467492abad-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979764964_e06d0beff0cab76afe65f77c08f83e6c-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979770452_70d5606293c3dce3849ad99f2f784400-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979774770_c592686962f2abf7f7b05542335f5005-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979779416_a30c47252604dc86b95bf1a268f61ea3-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979781164_c633b8f9bd4a503b50ba1437c0f0468d-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979795387_2e2521921c33d3af44ebd212aa0b5720-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979798945_deb68c92b4a00a502f96693b1bc54321-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979807514_6de8108dc9ead8b6a59f998ad00a6943-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979809128_857827302ee1bcb5e5fe55b5178345dc-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979809129_5c0bf780b8fb87f69f18b40e557d0ac6-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979813060_e164cf2eb74061cf430eac766a4eecb3-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979819463_b5c731820f25f56294a8a23d3cecf226-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979822579_ce44a310188116c6aa1c9091e8fe6627-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979822859_a7eb0e936e2675c8eb28caa6009d5d02-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979833378_789d0824e4085080c36d416e2333747e-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979839402_7ff96dc3db8cfe3e3d3040e53a0bfe76-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979839711_d4bc025673f37183a3fd67c661958e5c-1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728016986465_25855aa0b302e0bb880564a92d7d5b32.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017002175_92f8f8645213d41dfc0ce0bb43cbde75.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017066014_cb1afa2320d9ac93ddfb195ff42f3ba8.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017067268_93592c74acabc2d8c56446a910b9242a.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017077077_c7e4bd6531ddf16abde7b7008ebac126.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895795_427a093402b57fff08ee3033f9c0d2b4.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895797_8ced39df185a2486a67cea66d3184310.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895798_ed107dd64d44f7f14c37a2f4cdf2ba66.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895799_f98429a32ec1973563ea5e35784c3e63.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895800_6369b0aecb187a1eee2ba30581196e22.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895801_04633d66e63d37fa391f8d104b9dec5d.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834806004_2d350a1266b1096d093e3662f698c5f1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834872181_b8afc3e169e0c97c9c0d68c771ce510b.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834995870_d0c4c804c4e3701ae11c849342cd90cc.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834995872_0e8c7f4ec351705c2da70c9417e9925b.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835010279_b76a1095581e6b2e40d39ccba3c34c8d.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835026154_049162787730b59a8b218ad953d771fa.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835090012_6b4201bb367acfeda99b68e95726d106.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835090015_1c085b67eb981854baa2b691d3a7cba1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835090022_aaf87c301952eafa91afd01e7929f4c1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733845142645_ac1525ca5e58a36490c54a2ef2e6ed31.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733845150658_b9f7d751130c13aeb0419baff4e02f5e.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733845161237_604518e8367cd3e4a6b4e65a01dd1b7c.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734018701304_3256752fa653ae454e592202b56db650.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734019024536_08a30a10ebdd867b34fa3a6837959fd2.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734019690620_6fddec8752e53e955a3f169ad0b244ba.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734048321662_7d6ddab821b02f273bb24b4dc02f01b8.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139806718_1375ad4a20e3538a9c18b0c20ac6caf5.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139808892_fe83268649ba8e42c924fedc0dcffb3a.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139811644_cedd5fb10c165063a8e8ce2265202331.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139822301_79baeac31062b98ba3cf6d0a4b220f5f.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139826193_e82c26f0e9de9d123eed9047c34f0cc7.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139834821_3121aa55c55b45e16f232ea2e9e506be.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139844665_e70b788e72ccb70f046013342aae7b37.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139846300_a4a517c8ce23fdf2b82ef8b19aaaaad1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734416763764_5195a096a037095e116a3212a363285b.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734501789069_5a5d8e555e93fe34da171be3db89c100.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734501929408_f4f00cb8506d7e6782042b579786f76e.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734501982317_b13251eef5c1a8dede4cc3caa186b683.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734502031210_d6aed53030605804cd57fde93ddbf9ce.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734502064219_2ec05cda6e50599933240b4241012790.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734503132398_978afed7b35f10cbfe065dcb7cfb13d5.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734503151825_e282055db0dd64b513e0d5700762ad9d.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734503178521_65c66cfb7fc395c5591767ed3886f9e2.jpg",
+      "decision": "COMMIT",
+      "class": "OBJECT",
+      "reason": "Cảnh/địa điểm/vật thể (hoa, bánh, sân khấu trống, toà nhà), không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/2.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/3.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/4.jpg",
+      "decision": "PENDING",
+      "class": "DOCUMENT",
+      "reason": "Thư cảm ơn có chữ ký và con dấu của bên thứ ba."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/43e91959-1b20-42b4-829d-02347361bc08.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/5d8e8733-46fb-4fe2-b2c9-e2331a290ba1-e1790182215703.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/5d8e8733-46fb-4fe2-b2c9-e2331a290ba1.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/IMG_7543.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/IMG_7549.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/IMG_7552.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/vesinh1-7517-6533.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/10/69dd70c7-41a9-482b-bb47-0ee54a7b3c04-e1791188996280.png",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Bang-Tieu-Chuan-Van-Hanh-Toa-Nha.png",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Colorful-BMSL-service-culture-infographic.png",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/10/IMG_7544-e1791191546749.jpg",
+      "decision": "PENDING",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Reception-and-Security-Conduct-Standards.png",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Vietnamese-training-process-table.png",
+      "decision": "COMMIT",
+      "class": "GRAPHIC",
+      "reason": "Đồ hoạ/bảng biểu/thông báo do BMSL soạn, không có người nhận diện được."
+    },
+    {
+      "url": "https://cdn-i.doisongphapluat.com.vn/media/nguyen-thi-ha/2023/01/12/z40125581449599d4dc31e6e2a3053dd7f1320878c8a6c.jpg",
+      "decision": "PENDING",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (cdn-i.doisongphapluat.com.vn): không tải về, không đưa vào repository."
+    }
+  ]
+}

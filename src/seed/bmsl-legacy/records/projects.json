@@ -1,0 +1,322 @@
+{
+  "records": [
+    {
+      "key": "projects/hoc-vien-quoc-phong",
+      "name": "Chung cư Học viện Quốc phòng",
+      "slug": "hoc-vien-quoc-phong",
+      "summary": "Chủ đầu tư: Ban Quản trị chung cư Học viện Quốc phòng\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Tại ô đất có ký hiệu O17-HH2 Khu đô thị mới Tây Hồ Tây, Phường Xuân La, Quận Tây Hồ, TP Hà Nội",
+      "scale": "02 tòa tháp, 30 tầng nổi, 02 tầng hầm, 610 căn hộ, 3 tầng thương mại",
+      "operatingSince": "T09/2020",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:b9d2731d98557c191d8fe3ba0a7b99be9f3a9ffeca785551a42cb7c9848af81c"
+      ],
+      "legacyUrls": [
+        "/chung-cu-hoc-vien-quoc-phong-dang-van-hanh/",
+        "/chung-cu-hoc-vien-quoc-phong-dang-van-hanh-2/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/ecolife-tay-ho",
+      "name": "Ecolife Tây Hồ",
+      "slug": "ecolife-tay-ho",
+      "summary": "Chủ đầu tư: Ban Quản trị tòa nhà Ecolife Tây Hồ\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Tòa nhà Ecolife, phường Xuân La, quận Tây Hồ, Hà Nội",
+      "scale": "03 tòa, cao 28-32 tầng nổi, 02 tầng hầm, 630 căn hộ, 02 tầng thương mại",
+      "operatingSince": "T6/2024",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:c621b2a4de1e6e95223a8cbd1ecdbc2eb3774f5890522bbc9894cbcc381fa15c"
+      ],
+      "legacyUrls": [
+        "/chung-cu-ecolife-tay-ho-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/newtatco-lai-xa",
+      "name": "Cụm CT1-CT2-CT3 Newtatco Lai Xá",
+      "slug": "newtatco-lai-xa",
+      "summary": "Chủ đầu tư: Ban Quản trị Cụm nhà chung cư CT1-CT2 Newtatco\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Cụm nhà chung cư CT1-CT2-CT3 Newtatco Lai Xá, H. Hoài Đức, Hà Nội",
+      "scale": "03 tòa, 261 căn hộ",
+      "operatingSince": "2022",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:19df0145e5fa5ae1376ea1b193b8114e9f1696427b0685f8fbbe152ecc8093b1"
+      ],
+      "legacyUrls": [
+        "/cum-nha-chung-cu-ct1-ct2-ct3-newtatco-lai-xa-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/phenikaa",
+      "name": "4 chung cư Phenikaa",
+      "slug": "phenikaa",
+      "summary": "Chủ đầu tư: Ban Quản trị nhà chung cư Phenikaa\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Chung cư Phenikaa 21T1, Thôn 1, xã Thạch Hòa, huyện Thạch Thất, TP Hà Nội",
+      "scale": "21 tầng nổi, 01 tầng hầm, 440 căn hộ",
+      "operatingSince": "2023",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:267ec169bcdb18af8b6ee84d4f532a5d786273d77ce0a889d6c1dc139925675a"
+      ],
+      "legacyUrls": [
+        "/4-chung-cu-phenikaa-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/jsc34",
+      "name": "Chung cư JSC34",
+      "slug": "jsc34",
+      "summary": "Chủ đầu tư: Ban Quản trị Chung cư JSC34\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Tòa nhà JSC34, Số 164 Khuất Duy Tiến, phường Nhân Chính, quận Thanh Xuân, TP Hà Nội",
+      "scale": "Gồm 19 tầng nổi, 01 tầng hầm với 174 căn hộ và 40 văn phòng",
+      "operatingSince": "T5/2022",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:494dc23c89c638e77d21bb70bd18e8a7f009922d9dc9bec6b8d356bb4e0d8248"
+      ],
+      "legacyUrls": [
+        "/chung-cu-jsc34-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/a6-nam-trung-yen",
+      "name": "Cụm A6 Nam Trung Yên",
+      "slug": "a6-nam-trung-yen",
+      "summary": "Trạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "services": [],
+      "images": [
+        "sha256:7cbd96dad5a902ca7f96e18f055d180d2c7a9c3664f33fd68283ad9cb8cc8661"
+      ],
+      "legacyUrls": [
+        "/cum-chung-cu-a6-nam-trung-yen-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/b6-nam-trung-yen",
+      "name": "Cụm B6 Nam Trung Yên",
+      "slug": "b6-nam-trung-yen",
+      "summary": "Chủ đầu tư: Ban Quản trị nhà B6A, B6B, B6C\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Cụm chung cư B6 Khu đô thị Nam Trung Yên, Quận Cầu Giấy, Hà Nội",
+      "scale": "426 căn hộ",
+      "operatingSince": "2020 (đã gia hạn thêm lần 3)",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:b9a527aaf2a495e8f91c76366bc1cbd0e32c0b07a0512df2980c2a7581722296"
+      ],
+      "legacyUrls": [
+        "/cum-chung-cu-b6-nam-trung-yen-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/bo-khoa-hoc-cong-nghe",
+      "name": "Chung cư Bộ Khoa học Công nghệ",
+      "slug": "bo-khoa-hoc-cong-nghe",
+      "summary": "Chủ đầu tư: Ban Quản trị nhà chung cư Bộ Khoa Học Công Nghệ\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Tổ 22, phường Quan Hoa, quận Cầu Giấy, Hà Nội",
+      "scale": "90 căn hộ",
+      "operatingSince": "T03/2023",
+      "services": [
+        "bao-ve",
+        "ve-sinh"
+      ],
+      "images": [
+        "sha256:b13c6355d6213a6099f526f192a6dc01c34f7d7b19bfbaf2596b1f9dedc85de8"
+      ],
+      "legacyUrls": [
+        "/chung-cu-bo-khoa-hoc-cong-nghe-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/b10-nam-trung-yen",
+      "name": "Chung cư B10 Nam Trung Yên",
+      "slug": "b10-nam-trung-yen",
+      "summary": "Chủ đầu tư: Ban Quản trị nhà chung cư B10 Nam Trung Yên",
+      "address": "Chung cư B10 Khu đô thị Nam Trung Yên, Cầu Giấy, Hà Nội",
+      "scale": "210 căn hộ",
+      "operatingSince": "T1/2024",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:0bc0aa9510a8a9ced9e31486d935abb7658eb1abf56cf434337194b68401e0c7"
+      ],
+      "legacyUrls": [
+        "/chung-cu-b10-nam-trung-yen/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/b11a-nam-trung-yen",
+      "name": "Toà B11A Nam Trung Yên",
+      "slug": "b11a-nam-trung-yen",
+      "summary": "Chủ đầu tư: Ban Quản trị nhà B11A\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Tòa nhà B11A Khu đô thị Nam Trung Yên, Quận Cầu Giấy",
+      "scale": "120 căn hộ",
+      "operatingSince": "T11/2023",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:8bc6cd0aa956933e6a9b08a270978d868d776fe8c1d656e098e19351a04d0d8a"
+      ],
+      "legacyUrls": [
+        "/toa-nha-b11a-nam-trung-yen-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/no-1b-linh-dam",
+      "name": "Chung cư Nơ 1B KĐT Linh Đàm",
+      "slug": "no-1b-linh-dam",
+      "summary": "Chủ đầu tư: Ban Quản trị chung cư 1B\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "KĐT Linh Đàm, p. Đạm Phương, Hoàng Liệt, Hoàng Mai, Hà Nội",
+      "scale": "92 căn hộ",
+      "operatingSince": "T4/2024",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:7b66bee317e72f2ed85e1d25e53b09327bc790e5c8760339dd3b7a4b7374747b"
+      ],
+      "legacyUrls": [
+        "/chung-cu-no-1b-kdt-linh-dam-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/no-1a-linh-dam",
+      "name": "Chung cư Nơ 1A KĐT Linh Đàm",
+      "slug": "no-1a-linh-dam",
+      "summary": "Chủ đầu tư: Ban Quản trị chung cư 1A\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Linh Đàm, phường Đạm Phương, Hoàng Liệt, Hoàng Mai, Hà Nội",
+      "scale": "90 căn hộ",
+      "operatingSince": "T6/2024",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:6cf017e031864ff5788285e07f33c1b712061fdd02230a012216108f2bcc312e"
+      ],
+      "legacyUrls": [
+        "/chung-cu-no-1a-kdt-linh-dam-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/b3-lang-quoc-te-thang-long",
+      "name": "Toà B3 Làng Quốc tế Thăng Long",
+      "slug": "b3-lang-quoc-te-thang-long",
+      "summary": "Chủ đầu tư: Ban Quản trị chung cư B3",
+      "address": "KĐT Làng quốc tế Thăng Long, phường Dịch Vọng, Quận Cầu Giấy,",
+      "scale": "84 căn hộ",
+      "operatingSince": "1/1/2023",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:bb81a8ffd800b06cd672a08a68f083fc1b54f7feab1fee5dab5516e00415afb1"
+      ],
+      "legacyUrls": [
+        "/toa-nha-b3-lang-quoc-te-thang-long/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/b5-lang-quoc-te-thang-long",
+      "name": "Toà B5 Làng Quốc tế Thăng Long",
+      "slug": "b5-lang-quoc-te-thang-long",
+      "summary": "Chủ đầu tư: Ban quản trị chung cư B5",
+      "address": "KĐT Làng quốc tế Thăng Long, phường Dịch Vọng, quận Cầu Giấy, Hà Nội",
+      "scale": "57 căn hộ",
+      "operatingSince": "7/9/2022",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:8bd27360329a0329131eead0f278c9c1bc58a1260e8ba4e65153206aa8ad2174"
+      ],
+      "legacyUrls": [
+        "/toa-nha-b5-lang-quoc-te-thang-long/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/ct1-a1a2-linh-dam",
+      "name": "Chung cư CT1 A1-A2 Linh Đàm",
+      "slug": "ct1-a1a2-linh-dam",
+      "summary": "Chủ đầu tư: Ban quản trị chung cư CT1 – A1&A2\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Khu nhà ở khu nhà ở xã hội CT1 A1-A2 Tây Nam Linh Đàm – phường, Đại Kim, quận Hoàng Mai, Hà Nội",
+      "scale": "217 căn hộ",
+      "operatingSince": "T5/2023",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:f0101f160841de9cf3908bf68826cc8b8307ad4692fc0d2c6be96e13a032a03c"
+      ],
+      "legacyUrls": [
+        "/chung-cu-ct1-a1a2-linh-dam-dang-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/himlam",
+      "name": "Toà Himlam",
+      "slug": "himlam",
+      "summary": "Chủ đầu tư: Ban Quản trị tòa nhà Himlam\nTrạng thái theo website cũ: đã vận hành (chưa xác nhận)",
+      "address": "Tòa nhà Himlam phường Thạch Bàn 2, Quận Long Biên, Hà Nội",
+      "scale": "126 căn hộ",
+      "operatingSince": "2020",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [
+        "sha256:469b7cd4d03c348eec909ab95d753de292f81a2b4ac175cf795f8f6923be4014"
+      ],
+      "legacyUrls": [
+        "/toa-nha-himlam-da-van-hanh/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    },
+    {
+      "key": "projects/b-ia20-ciputra",
+      "name": "Toà B-IA20 Ciputra Hà Nội",
+      "slug": "b-ia20-ciputra",
+      "summary": "Chủ đầu tư: Công ty Cổ phần đầu tư Bất động sản Đông Đô – BQP\nTrạng thái theo website cũ: đang vận hành (chưa xác nhận)",
+      "address": "Khu Đô thị Nam Thăng Long, phường Đông Ngạc, quận Bắc Từ Liêm, Hà Nội",
+      "scale": "700 căn hộ",
+      "operatingSince": "1/1/2025",
+      "services": [
+        "quan-ly-van-hanh"
+      ],
+      "images": [],
+      "legacyUrls": [
+        "/252-2/"
+      ],
+      "sourceStatus": "LEGACY-SOURCE"
+    }
+  ]
+}

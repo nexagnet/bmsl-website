@@ -1,0 +1,5411 @@
+{
+  "pack": "bmsl-legacy",
+  "version": 1,
+  "source": {
+    "site": "https://binhminhsonglo.vn",
+    "observedAt": "2026-10-06",
+    "wordpress": "6.7.1",
+    "sitemap": {
+      "urls": 51,
+      "notInInventory": []
+    }
+  },
+  "rules": [
+    "Every record is a DRAFT; projects are LEGACY-SOURCE; media rights are UNCONFIRMED; globals are unpublished drafts.",
+    "Contact phone numbers and e-mail addresses are redacted from all text; they are inventoried by count only.",
+    "Only images classified BRAND/GRAPHIC/OBJECT/PROJECT_PHOTO in review/image-review.json are committed; all others stay pending with their reason.",
+    "Facts (scale, address, status, licences, history) come from the legacy site and are not confirmed."
+  ],
+  "counts": {
+    "inventoryRows": 51,
+    "canonicalLegacyRows": 47,
+    "extraRows": 4,
+    "projects": 17,
+    "articles": 15,
+    "serviceAreas": 4,
+    "globals": 2,
+    "imageUrlsFound": 235,
+    "imagesCommitted": 57,
+    "imageUrlsCommitted": 63,
+    "imagesPendingTotal": 172,
+    "imagesPendingPerson": 164,
+    "imagesPendingThirdParty": 7,
+    "imagesPendingDocument": 1,
+    "imagesPendingUnreviewed": 0,
+    "committedBytes": 18554487
+  },
+  "inventory": [
+    {
+      "ref": "legacy:1",
+      "legacyPath": "/gioi-thieu-tong-qua/",
+      "wpType": "post",
+      "wpId": 142,
+      "title": "Giới thiệu tổng quan",
+      "dateGmt": "2024-12-06T01:49:46",
+      "wpCategories": [
+        "cong-ty"
+      ],
+      "blueprintAction": "REWRITE",
+      "target": {
+        "kind": "about-page",
+        "key": "globals/about-page"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "content-approval",
+        "legal-claims-confirmation",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 1139
+    },
+    {
+      "ref": "legacy:2",
+      "legacyPath": "/duoc-tang-danh-hieu-nguoi-tot-viec-tot-vi-da-tra-lai-tui-xach-co-500-trieu-dong-cho-kho-chu/",
+      "wpType": "post",
+      "wpId": 150,
+      "title": "Chỉ huy an ninh Bình Minh Sông Lô được tặng danh hiệu “người tốt, việc tốt” vì đã trả lại túi xách có 500 triệu đồng cho “khổ chủ”",
+      "dateGmt": "2024-12-06T01:57:30",
+      "wpCategories": [
+        "tin-tuc"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "BLOCKED_THIRD_PARTY_TEXT",
+      "images": {
+        "found": 4,
+        "committed": 0,
+        "pending": 2,
+        "external": 2
+      },
+      "needs": [
+        "republication-licence-or-owner-decision",
+        "image-rights"
+      ],
+      "notes": [
+        {
+          "kind": "text-not-committed",
+          "count": 1,
+          "details": [
+            "Bài báo đăng lại, cuối bài ghi nguồn doisongphapluat.com.vn: bản quyền văn bản thuộc toà soạn; có tên cá nhân thứ ba."
+          ]
+        }
+      ],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 4714
+    },
+    {
+      "ref": "legacy:3",
+      "legacyPath": "/xu-huong-phat-trien-nganh-dich-vu-bao-ve-co-hoi-va-thach-thuc/",
+      "wpType": "post",
+      "wpId": 153,
+      "title": "Xu hướng phát triển ngành dịch vụ bảo vệ: Cơ hội và thách thức",
+      "dateGmt": "2024-12-06T01:59:33",
+      "wpCategories": [
+        "tin-tuc"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "BLOCKED_THIRD_PARTY_TEXT",
+      "images": {
+        "found": 3,
+        "committed": 0,
+        "pending": 0,
+        "external": 3
+      },
+      "needs": [
+        "republication-licence-or-owner-decision",
+        "image-rights"
+      ],
+      "notes": [
+        {
+          "kind": "text-not-committed",
+          "count": 1,
+          "details": [
+            "Bài báo đăng lại (\"Theo báo\" nguoiduatin.vn, tác giả t/h): bản quyền văn bản thuộc toà soạn."
+          ]
+        }
+      ],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 6939
+    },
+    {
+      "ref": "legacy:4",
+      "legacyPath": "/dich-vu-quan-ly-van-hanh-toa-nha-doi-hoi-nhan-su-gioi-chuyen-nghiep-va-uy-tin-2/",
+      "wpType": "post",
+      "wpId": 158,
+      "title": "Dịch vụ quản lý vận hành tòa nhà đòi hỏi nhân sự giỏi, chuyên nghiệp và uy tín",
+      "dateGmt": "2024-12-06T02:04:26",
+      "wpCategories": [
+        "tin-tuc"
+      ],
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "BLOCKED_THIRD_PARTY_TEXT",
+      "images": {
+        "found": 1,
+        "committed": 0,
+        "pending": 0,
+        "external": 1
+      },
+      "needs": [
+        "republication-licence-or-owner-decision",
+        "image-rights"
+      ],
+      "notes": [
+        {
+          "kind": "text-not-committed",
+          "count": 1,
+          "details": [
+            "Bài phỏng vấn của phóng viên Đời sống & Pháp luật (ĐS&PL) đăng lại, ảnh lưu trên doisongphapluat.com.vn: bản quyền thuộc toà soạn. Nghi trùng bài (hậu tố -2)."
+          ]
+        }
+      ],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 7420
+    },
+    {
+      "ref": "legacy:5",
+      "legacyPath": "/chung-cu-hoc-vien-quoc-phong-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 181,
+      "title": "Chung cư Học Viện Quốc Phòng (đang vận hành)",
+      "dateGmt": "2024-12-14T02:22:15",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "projects",
+        "key": "projects/hoc-vien-quoc-phong"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 307
+    },
+    {
+      "ref": "legacy:6",
+      "legacyPath": "/chung-cu-ecolife-tay-ho-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 183,
+      "title": "Chung cư Ecolife Tây Hồ (đang vận hành)",
+      "dateGmt": "2024-12-14T02:24:02",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/ecolife-tay-ho"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 261
+    },
+    {
+      "ref": "legacy:7",
+      "legacyPath": "/cum-nha-chung-cu-ct1-ct2-ct3-newtatco-lai-xa-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 186,
+      "title": "Cụm nhà chung cư CT1-CT2-CT3 Newtatco Lai Xá (đang vận hành)",
+      "dateGmt": "2024-12-14T02:25:54",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/newtatco-lai-xa"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 229
+    },
+    {
+      "ref": "legacy:8",
+      "legacyPath": "/4-chung-cu-phenikaa-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 189,
+      "title": "Chung cư Phenikaa (đang vận hành)",
+      "dateGmt": "2024-12-14T02:29:56",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/phenikaa"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 243
+    },
+    {
+      "ref": "legacy:9",
+      "legacyPath": "/chung-cu-jsc34-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 193,
+      "title": "Chung cư JSC34 (đang vận hành)",
+      "dateGmt": "2024-12-14T07:53:30",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/jsc34"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 273
+    },
+    {
+      "ref": "legacy:10",
+      "legacyPath": "/cum-chung-cu-a6-nam-trung-yen-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 196,
+      "title": "Cụm chung cư A6 Nam Trung Yên (Đang vận hành)",
+      "dateGmt": "2024-12-14T07:56:30",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/a6-nam-trung-yen"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 0
+    },
+    {
+      "ref": "legacy:11",
+      "legacyPath": "/cum-chung-cu-b6-nam-trung-yen-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 200,
+      "title": "Cụm chung cư B6 Nam Trung Yên (đang vận hành)",
+      "dateGmt": "2024-12-14T07:58:16",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/b6-nam-trung-yen"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 227
+    },
+    {
+      "ref": "legacy:12",
+      "legacyPath": "/chung-cu-bo-khoa-hoc-cong-nghe-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 203,
+      "title": "Chung cư Bộ Khoa Học Công Nghệ (đang vận hành)",
+      "dateGmt": "2024-12-14T08:00:00",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/bo-khoa-hoc-cong-nghe"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 227
+    },
+    {
+      "ref": "legacy:13",
+      "legacyPath": "/chung-cu-b10-nam-trung-yen/",
+      "wpType": "post",
+      "wpId": 206,
+      "title": "Chung cư B10 Nam Trung Yên",
+      "dateGmt": "2024-12-14T08:01:33",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/b10-nam-trung-yen"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 211
+    },
+    {
+      "ref": "legacy:14",
+      "legacyPath": "/toa-nha-b11a-nam-trung-yen-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 210,
+      "title": "Tòa nhà B11A Nam Trung Yên (Đang vận hành)",
+      "dateGmt": "2024-12-14T08:03:18",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/b11a-nam-trung-yen"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 187
+    },
+    {
+      "ref": "legacy:15",
+      "legacyPath": "/chung-cu-no-1b-kdt-linh-dam-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 214,
+      "title": "Chung cư Nơ 1B KĐT Linh Đàm (đang vận hành)",
+      "dateGmt": "2024-12-14T08:04:56",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/no-1b-linh-dam"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 197
+    },
+    {
+      "ref": "legacy:16",
+      "legacyPath": "/chung-cu-no-1a-kdt-linh-dam-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 218,
+      "title": "Chung cư Nơ 1A KĐT Linh Đàm (đang vận hành)",
+      "dateGmt": "2024-12-14T08:06:37",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/no-1a-linh-dam"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 196
+    },
+    {
+      "ref": "legacy:17",
+      "legacyPath": "/toa-nha-b3-lang-quoc-te-thang-long/",
+      "wpType": "post",
+      "wpId": 221,
+      "title": "Tòa nhà B3 Làng quốc tế Thăng Long",
+      "dateGmt": "2024-12-14T08:09:47",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/b3-lang-quoc-te-thang-long"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [
+        {
+          "kind": "unparsed-lines",
+          "count": 1
+        }
+      ],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 207
+    },
+    {
+      "ref": "legacy:18",
+      "legacyPath": "/toa-nha-b5-lang-quoc-te-thang-long/",
+      "wpType": "post",
+      "wpId": 224,
+      "title": "Tòa nhà B5 Làng quốc tế Thăng Long",
+      "dateGmt": "2024-12-14T08:11:31",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/b5-lang-quoc-te-thang-long"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 205
+    },
+    {
+      "ref": "legacy:19",
+      "legacyPath": "/chung-cu-ct1-a1a2-linh-dam-dang-van-hanh/",
+      "wpType": "post",
+      "wpId": 228,
+      "title": "Chung cư CT1 – A1&A2 Linh Đàm (đang vận hành)",
+      "dateGmt": "2024-12-14T08:13:25",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/ct1-a1a2-linh-dam"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 242
+    },
+    {
+      "ref": "legacy:20",
+      "legacyPath": "/toa-nha-himlam-da-van-hanh/",
+      "wpType": "post",
+      "wpId": 231,
+      "title": "Tòa nhà Himlam (đã vận hành)",
+      "dateGmt": "2024-01-01T08:14:51",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/himlam"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 195
+    },
+    {
+      "ref": "legacy:21",
+      "legacyPath": "/chung-cu-hoc-vien-quoc-phong-dang-van-hanh-2/",
+      "wpType": "post",
+      "wpId": 250,
+      "title": "Chung cư Học Viện Quốc Phòng (đang vận hành)",
+      "dateGmt": "2024-12-19T09:33:46",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "projects",
+        "key": "projects/hoc-vien-quoc-phong"
+      },
+      "textStatus": "MERGED_INTO_TARGET",
+      "images": {
+        "found": 1,
+        "committed": 1,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 307
+    },
+    {
+      "ref": "legacy:22",
+      "legacyPath": "/252-2/",
+      "wpType": "post",
+      "wpId": 252,
+      "title": "Toà nhà B-IA20 Ciputra Hà Nội (Đang vận hành)",
+      "dateGmt": "2025-06-21T03:06:23",
+      "wpCategories": [
+        "du-an"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "projects",
+        "key": "projects/b-ia20-ciputra"
+      },
+      "textStatus": "SEEDED_FACTS_ONLY",
+      "images": {
+        "found": 1,
+        "committed": 0,
+        "pending": 1,
+        "external": 0
+      },
+      "needs": [
+        "project-facts",
+        "image-rights",
+        "publication-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 235
+    },
+    {
+      "ref": "legacy:23",
+      "legacyPath": "/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo/",
+      "wpType": "post",
+      "wpId": 268,
+      "title": "Tiệc tất niên năm 2023 chào đón năm mới 2024 của CBNV Công ty Bình Minh Sông Lô",
+      "dateGmt": "2025-06-21T08:07:47",
+      "wpCategories": [
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 21,
+        "committed": 0,
+        "pending": 21,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 0
+    },
+    {
+      "ref": "legacy:24",
+      "legacyPath": "/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv/",
+      "wpType": "post",
+      "wpId": 292,
+      "title": "Team Building Ba Vì 2024- Gắn kết tạo nên sức mạnh, phần thưởng cho CBNV",
+      "dateGmt": "2025-06-21T09:09:17",
+      "wpCategories": [
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 11,
+        "committed": 4,
+        "pending": 7,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 293
+    },
+    {
+      "ref": "legacy:25",
+      "legacyPath": "/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024/",
+      "wpType": "post",
+      "wpId": 304,
+      "title": "Tập huấn Nghiệp vụ Phòng cháy chữa cháy năm 2024",
+      "dateGmt": "2025-06-21T09:52:41",
+      "wpCategories": [
+        "tin-tuc"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 12,
+        "committed": 2,
+        "pending": 10,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 1054
+    },
+    {
+      "ref": "legacy:26",
+      "legacyPath": "/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep/",
+      "wpType": "post",
+      "wpId": 326,
+      "title": "Những bông hoa Khối Văn phòng Công ty Bình Minh Sông Lô – Giỏi giang xinh đẹp",
+      "dateGmt": "2025-06-21T10:13:22",
+      "wpCategories": [
+        "tin-tuc"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 13,
+        "committed": 0,
+        "pending": 13,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 443
+    },
+    {
+      "ref": "legacy:27",
+      "legacyPath": "/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10/",
+      "wpType": "post",
+      "wpId": 345,
+      "title": "Công ty Bình Minh Sông Lô tặng hoa và quà cho CBNV nữ nhân ngày 20/10",
+      "dateGmt": "2025-06-23T08:22:46",
+      "wpCategories": [
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 4,
+        "committed": 1,
+        "pending": 3,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 374
+    },
+    {
+      "ref": "legacy:28",
+      "legacyPath": "/354-2/",
+      "wpType": "post",
+      "wpId": 354,
+      "title": "TRỤ SỞ VĂN PHÒNG CÔNG TY BÌNH MINH SÔNG LÔ",
+      "dateGmt": "2025-06-23T08:44:30",
+      "wpCategories": [
+        "cong-ty"
+      ],
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "about-page",
+        "key": "globals/about-page"
+      },
+      "textStatus": "MERGED_INTO_TARGET",
+      "images": {
+        "found": 12,
+        "committed": 1,
+        "pending": 11,
+        "external": 0
+      },
+      "needs": [
+        "content-approval",
+        "legal-claims-confirmation",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 370
+    },
+    {
+      "ref": "legacy:29",
+      "legacyPath": "/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien/",
+      "wpType": "post",
+      "wpId": 369,
+      "title": "Các hoạt động mừng ngày Doanh Nhân Việt Nam, ngày Quốc tế đàn ông và ngày sinh nhật nhân viên",
+      "dateGmt": "2025-06-23T08:55:34",
+      "wpCategories": [
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 5,
+        "committed": 1,
+        "pending": 4,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 489
+    },
+    {
+      "ref": "legacy:30",
+      "legacyPath": "/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh/",
+      "wpType": "post",
+      "wpId": 389,
+      "title": "Công ty Bình Minh Sông Lô chúc mừng Ngày Đại đoàn kết 18/11 hàng năm tại một số Dự án Công ty đang quản lý vận hành",
+      "dateGmt": "2025-06-23T09:14:04",
+      "wpCategories": [
+        "tin-tuc"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 8,
+        "committed": 0,
+        "pending": 8,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "project-list-cross-check"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 400
+    },
+    {
+      "ref": "legacy:31",
+      "legacyPath": "/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien/",
+      "wpType": "post",
+      "wpId": 399,
+      "title": "CÔNG TY BÌNH MINH SÔNG LÔ KỈ NIỆM 5 NĂM THÀNH LẬP VÀ PHÁT TRIỂN",
+      "dateGmt": "2025-06-23T09:29:08",
+      "wpCategories": [
+        "cong-ty",
+        "he-thong-to-chuc",
+        "thong-tin-thong-bao",
+        "tin-tuc",
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "REWRITE",
+      "target": {
+        "kind": "articles",
+        "key": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 51,
+        "committed": 21,
+        "pending": 30,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "company-history-confirmation"
+      ],
+      "notes": [
+        {
+          "kind": "iframe-dropped",
+          "count": 1,
+          "details": [
+            "www.youtube.com"
+          ]
+        }
+      ],
+      "textFidelity": "EXACT",
+      "bodyChars": 2183
+    },
+    {
+      "ref": "legacy:32",
+      "legacyPath": "/chuc-mung-ngay-quoc-te-phu-nu-8-3/",
+      "wpType": "post",
+      "wpId": 512,
+      "title": "CHÚC MỪNG NGÀY QUỐC TẾ PHỤ NỮ 8.3",
+      "dateGmt": "2025-06-23T10:31:51",
+      "wpCategories": [
+        "kinh-doanh-bds",
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/chuc-mung-ngay-quoc-te-phu-nu-8-3"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 6,
+        "committed": 3,
+        "pending": 3,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 340
+    },
+    {
+      "ref": "legacy:33",
+      "legacyPath": "/chuc-mung-sinh-nhat-chu-tich-hoi-dong-quan-tri-cong-ty-binh-minh-song-lo/",
+      "wpType": "post",
+      "wpId": 523,
+      "title": "Chúc mừng sinh nhật Chủ tịch Hội đồng quản trị Công ty Bình Minh Sông Lô",
+      "dateGmt": "2025-06-23T10:44:57",
+      "wpCategories": [
+        "cong-ty"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "BLOCKED_OWNER_DECISION",
+      "images": {
+        "found": 7,
+        "committed": 0,
+        "pending": 7,
+        "external": 0
+      },
+      "needs": [
+        "owner-decision-republish",
+        "personal-data-consent"
+      ],
+      "notes": [
+        {
+          "kind": "text-not-committed",
+          "count": 1,
+          "details": [
+            "Blueprint 01/04: OWNER-DECISION có đăng lại thông tin cá nhân của người lãnh đạo hay không."
+          ]
+        }
+      ],
+      "textFidelity": "NOT_APPLICABLE",
+      "bodyChars": 371
+    },
+    {
+      "ref": "legacy:34",
+      "legacyPath": "/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025/",
+      "wpType": "post",
+      "wpId": 538,
+      "title": "CÔNG TY BÌNH MINH SÔNG LÔ CÙNG CBNV ĐÓN TẾT NGUYÊN ĐÁN 2025",
+      "dateGmt": "2025-06-23T11:03:46",
+      "wpCategories": [
+        "cong-ty",
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 33,
+        "committed": 1,
+        "pending": 32,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 783
+    },
+    {
+      "ref": "legacy:35",
+      "legacyPath": "/binh-minh-song-lo-long-nhan-ai-la-trach-nhiem-voi-cong-dong-ma-doanh-nghiep-ben-bi-theo-duoi/",
+      "wpType": "post",
+      "wpId": 591,
+      "title": "Bình Minh Sông Lô – Lòng nhân ái là trách nhiệm với cộng đồng mà doanh nghiệp bền bỉ theo đuổi",
+      "dateGmt": "2025-10-01T07:55:44",
+      "wpCategories": [
+        "thong-tin-thong-bao",
+        "tin-tuc",
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "KEEP",
+      "target": {
+        "kind": "articles",
+        "key": "articles/binh-minh-song-lo-long-nhan-ai-la-trach-nhiem-voi-cong-dong-ma-doanh-nghiep-ben-bi-theo-duoi"
+      },
+      "textStatus": "SEEDED",
+      "images": {
+        "found": 3,
+        "committed": 0,
+        "pending": 3,
+        "external": 0
+      },
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights"
+      ],
+      "notes": [],
+      "textFidelity": "EXACT",
+      "bodyChars": 4781
+    },
+    {
+      "ref": "legacy:36",
+      "legacyPath": "/tong-quan-co-cau-to-chuc-va-cac-phong-ban-chuyen-mon-tai-binh-minh-song-lo/",
+      "wpType": "post",
+      "wpId": 606,
+      "title": "Tổng Quan Cơ Cấu Tổ Chức Và Các Phòng Ban Chuyên Môn Tại Bình Minh Sông Lô",
+      "dateGmt": "2026-09-23T16:59:03",
+      "wpCategories": [
+        "cung-cap-dich-vu-quan-ly-van-hanh-toa-nha-chung-cu",
+        "he-thong-to-chuc"
+      ],
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "about-page",
+        "key": "globals/about-page"
+      },
+      "textStatus": "MERGED_INTO_TARGET",
+      "images": {
+        "found": 6,
+        "committed": 0,
+        "pending": 6,
+        "external": 0
+      },
+      "needs": [
+        "content-approval",
+        "legal-claims-confirmation",
+        "image-rights",
+        "official-contact-confirmation"
+      ],
+      "notes": [
+        {
+          "kind": "redacted-phone",
+          "count": 1
+        }
+      ],
+      "textFidelity": "EXACT_EXCEPT_REDACTIONS",
+      "bodyChars": 5736
+    },
+    {
+      "ref": "legacy:37",
+      "legacyPath": "/",
+      "wpType": "page",
+      "wpId": 15,
+      "title": "Trang chủ",
+      "dateGmt": "2024-11-29T04:02:49",
+      "wpCategories": [],
+      "blueprintAction": "REWRITE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "NO_SOURCE_BODY",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "home-copy-from-owner"
+      ],
+      "notes": [
+        {
+          "kind": "wordpress-page-body-empty",
+          "count": 1
+        }
+      ],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:38",
+      "legacyPath": "/trang-lien-he/",
+      "wpType": "page",
+      "wpId": 17,
+      "title": "Liên hệ",
+      "dateGmt": "2024-11-29T04:12:23",
+      "wpCategories": [],
+      "blueprintAction": "REWRITE",
+      "target": {
+        "kind": "contact-page",
+        "key": "globals/contact-page"
+      },
+      "textStatus": "SEEDED_REDACTED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "official-contact-confirmation"
+      ],
+      "notes": [
+        {
+          "kind": "redacted-email",
+          "count": 1
+        },
+        {
+          "kind": "redacted-phone",
+          "count": 3
+        }
+      ],
+      "textFidelity": "EXACT_EXCEPT_REDACTIONS",
+      "bodyChars": 362
+    },
+    {
+      "ref": "legacy:39",
+      "legacyPath": "/category/he-thong-to-chuc/",
+      "wpType": "category",
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:40",
+      "legacyPath": "/category/van-hoa-binh-minh-song-lo/",
+      "wpType": "category",
+      "blueprintAction": "REWRITE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:41",
+      "legacyPath": "/category/cong-ty/",
+      "wpType": "category",
+      "blueprintAction": "REWRITE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:42",
+      "legacyPath": "/category/thong-tin-thong-bao/",
+      "wpType": "category",
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:43",
+      "legacyPath": "/category/kinh-doanh-bds/",
+      "wpType": "category",
+      "blueprintAction": "OWNER-DECISION",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:44",
+      "legacyPath": "/category/tin-tuc/",
+      "wpType": "category",
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:45",
+      "legacyPath": "/category/dich-vu-cong-ty/cung-cap-dich-vu-quan-ly-van-hanh-toa-nha-chung-cu/",
+      "wpType": "category",
+      "blueprintAction": "MERGE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:46",
+      "legacyPath": "/category/du-an/",
+      "wpType": "category",
+      "blueprintAction": "REWRITE",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [
+        "category-taxonomy-approval"
+      ],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "legacy:47",
+      "legacyPath": "/author/admin/",
+      "wpType": "author",
+      "blueprintAction": "DROP",
+      "target": {
+        "kind": "none"
+      },
+      "textStatus": "TAXONOMY_NOT_SEEDED",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "needs": [],
+      "notes": [],
+      "textFidelity": "NOT_APPLICABLE"
+    },
+    {
+      "ref": "extra:616",
+      "legacyPath": "/tieu-chuan-nang-luc-quy-trinh-dao-tao-doi-ngu-nhan-su-van-hanh-tai-binh-minh-song-lo/",
+      "wpType": "post",
+      "wpId": 616,
+      "title": "Tiêu Chuẩn Năng Lực & Quy Trình Đào Tạo Đội Ngũ Nhân Sự Vận Hành Tại Bình Minh Sông Lô",
+      "dateGmt": "2026-10-05T08:47:02",
+      "wpCategories": [
+        "cung-cap-dich-vu-quan-ly-van-hanh-toa-nha-chung-cu"
+      ],
+      "blueprintAction": "NOT_IN_47_INVENTORY",
+      "images": {
+        "found": 3,
+        "committed": 2,
+        "pending": 1,
+        "external": 0
+      },
+      "notes": [
+        {
+          "kind": "heading-demoted",
+          "count": 1,
+          "details": [
+            "h1->h2"
+          ]
+        },
+        {
+          "kind": "link-dropped",
+          "count": 1,
+          "details": [
+            "legacy-site-link"
+          ]
+        },
+        {
+          "kind": "redacted-phone",
+          "count": 1
+        }
+      ],
+      "target": {
+        "kind": "articles",
+        "key": "articles/tieu-chuan-nang-luc-quy-trinh-dao-tao-doi-ngu-nhan-su-van-hanh-tai-binh-minh-song-lo"
+      },
+      "textStatus": "SEEDED_REDACTED",
+      "textFidelity": "EXACT_EXCEPT_REDACTIONS",
+      "bodyChars": 2389,
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights",
+        "publication-approval",
+        "owner-decision-mapping",
+        "redirect-not-in-47-inventory",
+        "official-contact-confirmation"
+      ]
+    },
+    {
+      "ref": "extra:620",
+      "legacyPath": "/bo-nguyen-tac-vang-trong-van-hoa-phuc-vu-cu-dan-danh-cho-don-vi-quan-ly-van-hanh-toa-nha/",
+      "wpType": "post",
+      "wpId": 620,
+      "title": "Bộ Nguyên Tắc Vàng Trong Văn Hóa Phục Vụ Cư Dân Dành Cho Đơn Vị Quản Lý Vận Hành Tòa Nhà",
+      "dateGmt": "2026-10-05T09:13:02",
+      "wpCategories": [
+        "cung-cap-dich-vu-quan-ly-van-hanh-toa-nha-chung-cu",
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "NOT_IN_47_INVENTORY",
+      "images": {
+        "found": 3,
+        "committed": 2,
+        "pending": 1,
+        "external": 0
+      },
+      "notes": [
+        {
+          "kind": "heading-demoted",
+          "count": 1,
+          "details": [
+            "h1->h2"
+          ]
+        },
+        {
+          "kind": "redacted-phone",
+          "count": 1
+        },
+        {
+          "kind": "unknown-element-flattened",
+          "count": 1,
+          "details": [
+            "pre"
+          ]
+        }
+      ],
+      "target": {
+        "kind": "articles",
+        "key": "articles/bo-nguyen-tac-vang-trong-van-hoa-phuc-vu-cu-dan-danh-cho-don-vi-quan-ly-van-hanh-toa-nha"
+      },
+      "textStatus": "SEEDED_REDACTED",
+      "textFidelity": "EXACT_EXCEPT_REDACTIONS",
+      "bodyChars": 7305,
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights",
+        "publication-approval",
+        "owner-decision-mapping",
+        "redirect-not-in-47-inventory",
+        "official-contact-confirmation"
+      ]
+    },
+    {
+      "ref": "extra:635",
+      "legacyPath": "/van-hoa-doanh-nghiep-binh-minh-song-lo-tan-tam-chuyen-nghiep-minh-bach/",
+      "wpType": "post",
+      "wpId": 635,
+      "title": "Văn Hóa Doanh Nghiệp Bình Minh Sông Lô: Tận Tâm – Chuyên Nghiệp – Minh Bạch",
+      "dateGmt": "2026-10-05T16:21:27",
+      "wpCategories": [
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "NOT_IN_47_INVENTORY",
+      "images": {
+        "found": 2,
+        "committed": 1,
+        "pending": 1,
+        "external": 0
+      },
+      "notes": [
+        {
+          "kind": "heading-demoted",
+          "count": 1,
+          "details": [
+            "h1->h2"
+          ]
+        },
+        {
+          "kind": "redacted-phone",
+          "count": 1
+        }
+      ],
+      "target": {
+        "kind": "articles",
+        "key": "articles/van-hoa-doanh-nghiep-binh-minh-song-lo-tan-tam-chuyen-nghiep-minh-bach"
+      },
+      "textStatus": "SEEDED_REDACTED",
+      "textFidelity": "EXACT_EXCEPT_REDACTIONS",
+      "bodyChars": 4974,
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights",
+        "publication-approval",
+        "owner-decision-mapping",
+        "redirect-not-in-47-inventory",
+        "official-contact-confirmation"
+      ]
+    },
+    {
+      "ref": "extra:639",
+      "legacyPath": "/quy-dinh-tac-phong-van-hoa-phuc-vu-cua-can-bo-nhan-vien-tai-toa-nha/",
+      "wpType": "post",
+      "wpId": 639,
+      "title": "Quy Định Tác Phong & Văn Hóa Phục Vụ Của Cán Bộ Nhân Viên Tại Tòa Nhà",
+      "dateGmt": "2026-10-05T17:35:57",
+      "wpCategories": [
+        "van-hoa-binh-minh-song-lo"
+      ],
+      "blueprintAction": "NOT_IN_47_INVENTORY",
+      "images": {
+        "found": 0,
+        "committed": 0,
+        "pending": 0,
+        "external": 0
+      },
+      "notes": [
+        {
+          "kind": "heading-demoted",
+          "count": 1,
+          "details": [
+            "h1->h2"
+          ]
+        },
+        {
+          "kind": "redacted-phone",
+          "count": 1
+        }
+      ],
+      "target": {
+        "kind": "articles",
+        "key": "articles/quy-dinh-tac-phong-van-hoa-phuc-vu-cua-can-bo-nhan-vien-tai-toa-nha"
+      },
+      "textStatus": "SEEDED_REDACTED",
+      "textFidelity": "EXACT_EXCEPT_REDACTIONS",
+      "bodyChars": 5605,
+      "needs": [
+        "selection",
+        "content",
+        "category",
+        "image-rights",
+        "publication-approval",
+        "owner-decision-mapping",
+        "redirect-not-in-47-inventory",
+        "official-contact-confirmation"
+      ]
+    }
+  ],
+  "media": [
+    {
+      "key": "sha256:04ee18a35f5e69a52608fdda32a9a1303d59a3fd40f613d2d394a31c1a93b9ad",
+      "file": "assets/04ee18a35f5e-bang-tieu-chuan-van-hanh-toa-nha.png",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Bang-Tieu-Chuan-Van-Hanh-Toa-Nha.png"
+      ],
+      "mime": "image/png",
+      "bytes": 1461157,
+      "width": 1536,
+      "height": 1024,
+      "alt": "Bảng Tiêu Chuẩn Vận Hành Tòa Nhà",
+      "altSource": "source",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/van-hoa-doanh-nghiep-binh-minh-song-lo-tan-tam-chuyen-nghiep-minh-bach"
+      ]
+    },
+    {
+      "key": "sha256:05d018e855e90270557cd5734993e0df114f3f704a2aa31cae125795eb8694fd",
+      "file": "assets/05d018e855e9-qnt03520-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03520-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 333497,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03520",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:0732cc5ced078a927c0fcc6558b3ff81f51a915f416ec1a183b69432806ed266",
+      "file": "assets/0732cc5ced07-z6727972006435-8bd80f5f1a047c93a771153205169c62.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727972006435_8bd80f5f1a047c93a771153205169c62.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 295919,
+      "width": 810,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “Team Building Ba Vì 2024- Gắn kết tạo nên sức mạnh, phần thưởng cho CBNV”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv"
+      ]
+    },
+    {
+      "key": "sha256:0bc0aa9510a8a9ced9e31486d935abb7658eb1abf56cf434337194b68401e0c7",
+      "file": "assets/0bc0aa9510a8-z6129606596313-d88b8896e5ae6a5a3036c9fb6656abe0-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129606596313_d88b8896e5ae6a5a3036c9fb6656abe0-1.jpg",
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129606596313_d88b8896e5ae6a5a3036c9fb6656abe0.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 52087,
+      "width": 514,
+      "height": 503,
+      "alt": "Ảnh dự án Chung cư B10 Nam Trung Yên",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/b10-nam-trung-yen"
+      ]
+    },
+    {
+      "key": "sha256:0f523a19d66e2e1c4908c8434b3a9c51b2ce708d58b7a16c4745beb125a25770",
+      "file": "assets/0f523a19d66e-3-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/3-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 353407,
+      "width": 1620,
+      "height": 1080,
+      "alt": "3",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:1721a06c6bc21a455b7b68c2365a4121f0f30baee32baa780bf126b0be1f0467",
+      "file": "assets/1721a06c6bc2-qnt03522-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03522-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 267906,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03522",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:19df0145e5fa5ae1376ea1b193b8114e9f1696427b0685f8fbbe152ecc8093b1",
+      "file": "assets/19df0145e5fa-z6128660791194-b3b8dc22ef5a05ba11e6941cf7e75e47.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128660791194_b3b8dc22ef5a05ba11e6941cf7e75e47.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 79532,
+      "width": 534,
+      "height": 472,
+      "alt": "Ảnh dự án Cụm CT1-CT2-CT3 Newtatco Lai Xá",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/newtatco-lai-xa"
+      ]
+    },
+    {
+      "key": "sha256:1a34bb512158374ca598d399eaf89291ba24ae3fd6e01c26c18f3e6518d69124",
+      "file": "assets/1a34bb512158-qnt03507-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03507-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 257968,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03507",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:1da1b5a20b5b774dbef931982bfdc598b369c3d50b28b548e0c9b5a6a3e16606",
+      "file": "assets/1da1b5a20b5b-z6727927030022-ca68843781073a720715ff9b5e34b89c.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927030022_ca68843781073a720715ff9b5e34b89c.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 548425,
+      "width": 1620,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “Tập huấn Nghiệp vụ Phòng cháy chữa cháy năm 2024”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024"
+      ]
+    },
+    {
+      "key": "sha256:21e51e4f8c90ea57982fc7367c82b54f98bf2508a1fd4bf0c5dc011a8444196f",
+      "file": "assets/21e51e4f8c90-z6733835090012-6b4201bb367acfeda99b68e95726d106.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835090012_6b4201bb367acfeda99b68e95726d106.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 505988,
+      "width": 1440,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “TRỤ SỞ VĂN PHÒNG CÔNG TY BÌNH MINH SÔNG LÔ”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "globals/about-page"
+      ]
+    },
+    {
+      "key": "sha256:267ec169bcdb18af8b6ee84d4f532a5d786273d77ce0a889d6c1dc139925675a",
+      "file": "assets/267ec169bcdb-z6128675616134-66ce2e5cf370c0e29339415e0293bfaa-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128675616134_66ce2e5cf370c0e29339415e0293bfaa-1.jpg",
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128675616134_66ce2e5cf370c0e29339415e0293bfaa.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 94492,
+      "width": 644,
+      "height": 497,
+      "alt": "Ảnh dự án 4 chung cư Phenikaa",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/phenikaa"
+      ]
+    },
+    {
+      "key": "sha256:2b162c3a73b281002e60094339fe2210cd31f9f3a8111496b84a1424e36c9015",
+      "file": "assets/2b162c3a73b2-z6734503132398-978afed7b35f10cbfe065dcb7cfb13d5.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734503132398_978afed7b35f10cbfe065dcb7cfb13d5.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 456054,
+      "width": 1284,
+      "height": 746,
+      "alt": "Hình ảnh trong bài “Team Building Ba Vì 2024- Gắn kết tạo nên sức mạnh, phần thưởng cho CBNV”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv"
+      ]
+    },
+    {
+      "key": "sha256:3eafa2275ae21b34c582cfb1042512dd529203e7ce1338cfb8548b8e4351c68e",
+      "file": "assets/3eafa2275ae2-qnt03506-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03506-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 320299,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03506",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:3f7b4597407a7fac9ba9763fc8a47f84f72d62048e4e25a98427e2355da81a62",
+      "file": "assets/3f7b4597407a-20-10.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/20.10.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 155809,
+      "width": 1080,
+      "height": 1080,
+      "alt": "20.10",
+      "altSource": "source",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10"
+      ]
+    },
+    {
+      "key": "sha256:469b7cd4d03c348eec909ab95d753de292f81a2b4ac175cf795f8f6923be4014",
+      "file": "assets/469b7cd4d03c-z6129646810100-55e326719f409db4c09cc561324154a9.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129646810100_55e326719f409db4c09cc561324154a9.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 52834,
+      "width": 642,
+      "height": 538,
+      "alt": "Ảnh dự án Toà Himlam",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/himlam"
+      ]
+    },
+    {
+      "key": "sha256:4816cec9a13673a89063de4d4e2532f292569e71a83d6b62a332639b60cdaaa6",
+      "file": "assets/4816cec9a136-qnt03493-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03493-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 267471,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03493",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:494dc23c89c638e77d21bb70bd18e8a7f009922d9dc9bec6b8d356bb4e0d8248",
+      "file": "assets/494dc23c89c6-z6129579785883-428e187c74e31e999c0b861d3b1e8e89.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129579785883_428e187c74e31e999c0b861d3b1e8e89.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 89661,
+      "width": 648,
+      "height": 467,
+      "alt": "Ảnh dự án Chung cư JSC34",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/jsc34"
+      ]
+    },
+    {
+      "key": "sha256:4cd87231623d60d2482d4a35d5db60133a1a0b2ef85395d79db159b018255232",
+      "file": "assets/4cd87231623d-z6733845142645-ac1525ca5e58a36490c54a2ef2e6ed31.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733845142645_ac1525ca5e58a36490c54a2ef2e6ed31.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 371238,
+      "width": 1115,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “Công ty Bình Minh Sông Lô tặng hoa và quà cho CBNV nữ nhân ngày 20/10”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10"
+      ]
+    },
+    {
+      "key": "sha256:4dc3ca526bfc7876fe1cb470ed2352c73030ebe538fccf80e312ac51b117bbce",
+      "file": "assets/4dc3ca526bfc-logo-bmsl.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/logo-bmsl.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 103420,
+      "width": 1080,
+      "height": 1080,
+      "alt": "Logo BMSL — Bình Minh Sông Lô",
+      "altSource": "derived",
+      "class": "BRAND",
+      "usedBy": []
+    },
+    {
+      "key": "sha256:4e03913a2fcf368083e287cf063f87d2861d057bb8a9f7a8cef41b40f9260d75",
+      "file": "assets/4e03913a2fcf-z6727927052497-5dd0bb3002873a6a8347595ad5565972.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927052497_5dd0bb3002873a6a8347595ad5565972.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 547002,
+      "width": 1620,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “Tập huấn Nghiệp vụ Phòng cháy chữa cháy năm 2024”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024"
+      ]
+    },
+    {
+      "key": "sha256:5b6f49f0b9b32d4a447f7473545ae3e9b13ddcc486214d88f0058f4c18bc949c",
+      "file": "assets/5b6f49f0b9b3-69dd70c7-41a9-482b-bb47-0ee54a7b3c04-e179118899628.png",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2026/10/69dd70c7-41a9-482b-bb47-0ee54a7b3c04-e1791188996280.png"
+      ],
+      "mime": "image/png",
+      "bytes": 779794,
+      "width": 720,
+      "height": 1030,
+      "alt": "Hình ảnh trong bài “Tiêu Chuẩn Năng Lực & Quy Trình Đào Tạo Đội Ngũ Nhân Sự Vận Hành Tại Bình Minh Sông Lô”",
+      "altSource": "derived",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/tieu-chuan-nang-luc-quy-trinh-dao-tao-doi-ngu-nhan-su-van-hanh-tai-binh-minh-song-lo"
+      ]
+    },
+    {
+      "key": "sha256:5d11874538e50582e3b4d27335f65b79263253adb9d581eae210a7c7737817a0",
+      "file": "assets/5d11874538e5-qnt03498-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03498-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 272714,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03498",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:5deeb76634aec1a16384ee78f4d2b6faf3b8cbcda87f65710e5a9c3e80858da6",
+      "file": "assets/5deeb76634ae-z6734416763764-5195a096a037095e116a3212a363285b.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734416763764_5195a096a037095e116a3212a363285b.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 434373,
+      "width": 1171,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “CHÚC MỪNG NGÀY QUỐC TẾ PHỤ NỮ 8.3”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/chuc-mung-ngay-quoc-te-phu-nu-8-3"
+      ]
+    },
+    {
+      "key": "sha256:60050d080da31fbf5ed9a1ccc48f18f14901cfed8f832415163db3e38bc3ecd0",
+      "file": "assets/60050d080da3-qnt03531-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03531-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 286523,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03531",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:62b36bc5a3521dc07d7d135c071b769532f63104f446a49783cb9cc451d3a6c7",
+      "file": "assets/62b36bc5a352-z6734503178521-65c66cfb7fc395c5591767ed3886f9e2.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734503178521_65c66cfb7fc395c5591767ed3886f9e2.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 361006,
+      "width": 1284,
+      "height": 724,
+      "alt": "Hình ảnh trong bài “Team Building Ba Vì 2024- Gắn kết tạo nên sức mạnh, phần thưởng cho CBNV”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv"
+      ]
+    },
+    {
+      "key": "sha256:6cf017e031864ff5788285e07f33c1b712061fdd02230a012216108f2bcc312e",
+      "file": "assets/6cf017e03186-z6129620777756-be3f6f335f8f27cfe13d37557d44960b.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129620777756_be3f6f335f8f27cfe13d37557d44960b.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 118407,
+      "width": 624,
+      "height": 567,
+      "alt": "Ảnh dự án Chung cư Nơ 1A KĐT Linh Đàm",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/no-1a-linh-dam"
+      ]
+    },
+    {
+      "key": "sha256:7b66bee317e72f2ed85e1d25e53b09327bc790e5c8760339dd3b7a4b7374747b",
+      "file": "assets/7b66bee317e7-z6129616677476-f40b74663dfffdd9e0d2f0e46afd31cb-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129616677476_f40b74663dfffdd9e0d2f0e46afd31cb-1.jpg",
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129616677476_f40b74663dfffdd9e0d2f0e46afd31cb.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 165194,
+      "width": 651,
+      "height": 620,
+      "alt": "Ảnh dự án Chung cư Nơ 1B KĐT Linh Đàm",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/no-1b-linh-dam"
+      ]
+    },
+    {
+      "key": "sha256:7cbd96dad5a902ca7f96e18f055d180d2c7a9c3664f33fd68283ad9cb8cc8661",
+      "file": "assets/7cbd96dad5a9-z6129587734199-d514ee59f6c6778429c2d283435726df-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129587734199_d514ee59f6c6778429c2d283435726df-1.jpg",
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129587734199_d514ee59f6c6778429c2d283435726df.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 86022,
+      "width": 644,
+      "height": 438,
+      "alt": "Ảnh dự án Cụm A6 Nam Trung Yên",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/a6-nam-trung-yen"
+      ]
+    },
+    {
+      "key": "sha256:88a3d18c4f0296edc9df3693adc01b9b6ba2795dc81ed2d7bf83a0e475214b92",
+      "file": "assets/88a3d18c4f02-qnt03529-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03529-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 248546,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03529",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:8a78d83b916a19b3bd3c63fc46f403acc4e4c8aca85283114114f9c77d500072",
+      "file": "assets/8a78d83b916a-qnt03505-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03505-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 242200,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03505",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:8a9807ebe110edee3cbb985d7111b32d53225b25ac1adb8f7591cf289126e152",
+      "file": "assets/8a9807ebe110-qnt03510-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03510-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 311578,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03510",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:8bc6cd0aa956933e6a9b08a270978d868d776fe8c1d656e098e19351a04d0d8a",
+      "file": "assets/8bc6cd0aa956-z6129611073015-a96c8daa00082677e9d05afd41fb60be-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129611073015_a96c8daa00082677e9d05afd41fb60be-1.jpg",
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129611073015_a96c8daa00082677e9d05afd41fb60be.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 99013,
+      "width": 600,
+      "height": 543,
+      "alt": "Ảnh dự án Toà B11A Nam Trung Yên",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/b11a-nam-trung-yen"
+      ]
+    },
+    {
+      "key": "sha256:8bd27360329a0329131eead0f278c9c1bc58a1260e8ba4e65153206aa8ad2174",
+      "file": "assets/8bd27360329a-z6129637635889-31b4d603161d7a240bac7c8304b063e5-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129637635889_31b4d603161d7a240bac7c8304b063e5-1.jpg",
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129637635889_31b4d603161d7a240bac7c8304b063e5.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 110293,
+      "width": 621,
+      "height": 471,
+      "alt": "Ảnh dự án Toà B5 Làng Quốc tế Thăng Long",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/b5-lang-quoc-te-thang-long"
+      ]
+    },
+    {
+      "key": "sha256:8dbe67e04e7d1d05bf539f84f775bff7773805e4a831978f66f90a553f1a719a",
+      "file": "assets/8dbe67e04e7d-32-banh-kem-sinh-nhat-cho-ngay-8-3.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/32-banh-kem-sinh-nhat-cho-ngay-8.3.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 164798,
+      "width": 720,
+      "height": 960,
+      "alt": "32 Banh Kem Sinh Nhat Cho Ngay 8.3",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/chuc-mung-ngay-quoc-te-phu-nu-8-3"
+      ]
+    },
+    {
+      "key": "sha256:8fa210277b750ce133c13984943609031b9d8571df443c9794bdddd1aa43a4c9",
+      "file": "assets/8fa210277b75-qnt03511-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03511-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 268020,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03511",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:926684900c19ee00e17fe4a6e6931e4322796d23d2b4d1d426ca5b15d42c4d9d",
+      "file": "assets/926684900c19-z6727664495695-4f95a94d90bc083eedb20d02579055bc.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727664495695_4f95a94d90bc083eedb20d02579055bc.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 131164,
+      "width": 1080,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “Các hoạt động mừng ngày Doanh Nhân Việt Nam, ngày Quốc tế đàn ông và ngày sinh nhật nhân viên”",
+      "altSource": "derived",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien"
+      ]
+    },
+    {
+      "key": "sha256:951dc61ce0c062c492b598bc347ddd5c557adc3f547090aecbb819a1ec477fcc",
+      "file": "assets/951dc61ce0c0-colorful-bmsl-service-culture-infographic.png",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Colorful-BMSL-service-culture-infographic.png"
+      ],
+      "mime": "image/png",
+      "bytes": 1280741,
+      "width": 1816,
+      "height": 866,
+      "alt": "Colorful Bmsl Service Culture Infographic",
+      "altSource": "source",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/bo-nguyen-tac-vang-trong-van-hoa-phuc-vu-cu-dan-danh-cho-don-vi-quan-ly-van-hanh-toa-nha"
+      ]
+    },
+    {
+      "key": "sha256:9ae2455caf7049c688767075a00e366e81e040c0eb1d93dc3a3f89088e83806a",
+      "file": "assets/9ae2455caf70-qnt03514-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03514-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 253380,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03514",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:b13c6355d6213a6099f526f192a6dc01c34f7d7b19bfbaf2596b1f9dedc85de8",
+      "file": "assets/b13c6355d621-z6129601290901-ba4422178b4a7b71462041647cb6e11e.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129601290901_ba4422178b4a7b71462041647cb6e11e.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 166719,
+      "width": 619,
+      "height": 683,
+      "alt": "Ảnh dự án Chung cư Bộ Khoa học Công nghệ",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/bo-khoa-hoc-cong-nghe"
+      ]
+    },
+    {
+      "key": "sha256:b4c09472256f0aeceb74f7ddce3ccb8912052f82862682b9f70cd817421186d7",
+      "file": "assets/b4c09472256f-ban-quan-ly-bmsl-chuc-mung-8-3-cu-dan.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/BAN-QUAN-LY-BMSL-CHUC-MUNG-8.3-CU-DAN.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 162715,
+      "width": 940,
+      "height": 788,
+      "alt": "Ban QuẢn LÝ Bmsl ChÚc MỪng 8.3 CƯ DÂn",
+      "altSource": "source",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/chuc-mung-ngay-quoc-te-phu-nu-8-3"
+      ]
+    },
+    {
+      "key": "sha256:b5dfb43aa2658d619fd15d8fa0cb5e8c0649cec5f91d0a2e893ef2e9f68c3146",
+      "file": "assets/b5dfb43aa265-qnt03521-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03521-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 259634,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03521",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:b5f782768e96df51759758201c1ae5e283c9f74809e5806fd165ff16ddfd12a8",
+      "file": "assets/b5f782768e96-qnt03497-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03497-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 299974,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03497",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:b78d3a1e98ed552276f6b9c7c970ff8a51a333bb6316976b8b37b14dbab5b4cb",
+      "file": "assets/b78d3a1e98ed-qnt03508-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03508-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 237673,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03508",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:b9a527aaf2a495e8f91c76366bc1cbd0e32c0b07a0512df2980c2a7581722296",
+      "file": "assets/b9a527aaf2a4-z6129596536847-6dfb4a26645c9f1cba8f17493e082f1d.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129596536847_6dfb4a26645c9f1cba8f17493e082f1d.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 122520,
+      "width": 644,
+      "height": 577,
+      "alt": "Ảnh dự án Cụm B6 Nam Trung Yên",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/b6-nam-trung-yen"
+      ]
+    },
+    {
+      "key": "sha256:b9d2731d98557c191d8fe3ba0a7b99be9f3a9ffeca785551a42cb7c9848af81c",
+      "file": "assets/b9d2731d9855-z6128643237572-64e95f74bee60a3acd5a611787b4467e.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128643237572_64e95f74bee60a3acd5a611787b4467e.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 85849,
+      "width": 605,
+      "height": 495,
+      "alt": "Ảnh dự án Chung cư Học viện Quốc phòng",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/hoc-vien-quoc-phong"
+      ]
+    },
+    {
+      "key": "sha256:bb81a8ffd800b06cd672a08a68f083fc1b54f7feab1fee5dab5516e00415afb1",
+      "file": "assets/bb81a8ffd800-z6129626480939-64d1d78aee1564984f79b13bc7d1c4cf.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129626480939_64d1d78aee1564984f79b13bc7d1c4cf.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 98168,
+      "width": 622,
+      "height": 500,
+      "alt": "Ảnh dự án Toà B3 Làng Quốc tế Thăng Long",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/b3-lang-quoc-te-thang-long"
+      ]
+    },
+    {
+      "key": "sha256:bdbf2abfa1127cbdad1c0547ba6a1b05f578edba7fe8a17dcb008af45bb2ae56",
+      "file": "assets/bdbf2abfa112-qnt03528-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03528-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 313718,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03528",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:c621b2a4de1e6e95223a8cbd1ecdbc2eb3774f5890522bbc9894cbcc381fa15c",
+      "file": "assets/c621b2a4de1e-z6128654384679-07dff50005ef35b3aef4226b52bcf854.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6128654384679_07dff50005ef35b3aef4226b52bcf854.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 96105,
+      "width": 514,
+      "height": 451,
+      "alt": "Ảnh dự án Ecolife Tây Hồ",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/ecolife-tay-ho"
+      ]
+    },
+    {
+      "key": "sha256:cdd0d11a29984ff34ba46a17583df3b9f343e8f71edcded307afcfa710a5054f",
+      "file": "assets/cdd0d11a2998-reception-and-security-conduct-standards.png",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Reception-and-Security-Conduct-Standards.png"
+      ],
+      "mime": "image/png",
+      "bytes": 1321112,
+      "width": 1920,
+      "height": 731,
+      "alt": "Reception And Security Conduct Standards",
+      "altSource": "source",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/bo-nguyen-tac-vang-trong-van-hoa-phuc-vu-cu-dan-danh-cho-don-vi-quan-ly-van-hanh-toa-nha"
+      ]
+    },
+    {
+      "key": "sha256:d59e4c8517cebe97d4788961204cc0cb2916c0ac3a817b876f0983e08a961f54",
+      "file": "assets/d59e4c8517ce-z6734503151825-e282055db0dd64b513e0d5700762ad9d.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734503151825_e282055db0dd64b513e0d5700762ad9d.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 400167,
+      "width": 1284,
+      "height": 855,
+      "alt": "Hình ảnh trong bài “Team Building Ba Vì 2024- Gắn kết tạo nên sức mạnh, phần thưởng cho CBNV”",
+      "altSource": "derived",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv"
+      ]
+    },
+    {
+      "key": "sha256:d6939a8436a7d43c42bdd92a6b649795c76f6e0c9e3e89f7f208a273ef425274",
+      "file": "assets/d6939a8436a7-z6727947644032-4b5abd12366da151105ce178310466f0.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947644032_4b5abd12366da151105ce178310466f0.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 289529,
+      "width": 1080,
+      "height": 1080,
+      "alt": "Hình ảnh trong bài “CÔNG TY BÌNH MINH SÔNG LÔ CÙNG CBNV ĐÓN TẾT NGUYÊN ĐÁN 2025”",
+      "altSource": "derived",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025"
+      ]
+    },
+    {
+      "key": "sha256:ed8e00d9201b6c391cfed5f497fa7831bfbf582b454c09814c5636174e016335",
+      "file": "assets/ed8e00d9201b-0-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/0-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 556051,
+      "width": 1620,
+      "height": 1080,
+      "alt": "0",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:f0101f160841de9cf3908bf68826cc8b8307ad4692fc0d2c6be96e13a032a03c",
+      "file": "assets/f0101f160841-z6129641534619-ed8749a220b5469b1cbc1a0c61007761.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6129641534619_ed8749a220b5469b1cbc1a0c61007761.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 104123,
+      "width": 651,
+      "height": 567,
+      "alt": "Ảnh dự án Chung cư CT1 A1-A2 Linh Đàm",
+      "altSource": "derived",
+      "class": "PROJECT_PHOTO",
+      "usedBy": [
+        "projects/ct1-a1a2-linh-dam"
+      ]
+    },
+    {
+      "key": "sha256:f0358a22fa0bc18324c0a7af2af8772ddec6aa3029861dcc88df55e9a7004537",
+      "file": "assets/f0358a22fa0b-qnt03530-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03530-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 257177,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03530",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:f26116b14efd85d8b3246e4cd5ba82a1c2ad64d59a113a033e316bdde29fe468",
+      "file": "assets/f26116b14efd-qnt03509-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03509-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 249306,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03509",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    },
+    {
+      "key": "sha256:f3bd21b6646908563850d82fb8b6dc313d9ff11a5488bd9f3dc0d2b51bbed22b",
+      "file": "assets/f3bd21b66469-vietnamese-training-process-table.png",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2026/10/Vietnamese-training-process-table.png"
+      ],
+      "mime": "image/png",
+      "bytes": 1033438,
+      "width": 1030,
+      "height": 1080,
+      "alt": "Vietnamese Training Process Table",
+      "altSource": "source",
+      "class": "GRAPHIC",
+      "usedBy": [
+        "articles/tieu-chuan-nang-luc-quy-trinh-dao-tao-doi-ngu-nhan-su-van-hanh-tai-binh-minh-song-lo"
+      ]
+    },
+    {
+      "key": "sha256:f7c66ec16c69b790d3c77b1b0431a07fabc5c2e4db6f62a9dd18ec9a1e6d7969",
+      "file": "assets/f7c66ec16c69-qnt03494-1.jpg",
+      "sourceUrls": [
+        "https://binhminhsonglo.vn/wp-content/uploads/2025/06/QNT03494-1.jpg"
+      ],
+      "mime": "image/jpeg",
+      "bytes": 272577,
+      "width": 720,
+      "height": 1080,
+      "alt": "Qnt03494",
+      "altSource": "source",
+      "class": "OBJECT",
+      "usedBy": [
+        "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien"
+      ]
+    }
+  ],
+  "pendingMedia": [
+    {
+      "sourceUrl": "https://baovebinhminh247.com/wp-content/uploads/2022/10/image0012.jpg",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository.",
+      "usedBy": [
+        {
+          "record": "legacy:3",
+          "blockIndex": null
+        }
+      ]
+    },
+    {
+      "sourceUrl": "https://baovebinhminh247.com/wp-content/uploads/2022/10/image002.jpg",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository.",
+      "usedBy": [
+        {
+          "record": "legacy:3",
+          "blockIndex": null
+        }
+      ]
+    },
+    {
+      "sourceUrl": "https://baovebinhminh247.com/wp-content/uploads/2022/10/img16650643116761665285136884.jpg",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository.",
+      "usedBy": [
+        {
+          "record": "legacy:3",
+          "blockIndex": null
+        }
+      ]
+    },
+    {
+      "sourceUrl": "https://baovebinhminh247.com/wp-content/uploads/2024/10/z58004854202404363ff6db2a134c41bb923426975eb90-19595308.jpg",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository.",
+      "usedBy": [
+        {
+          "record": "legacy:2",
+          "blockIndex": null
+        }
+      ]
+    },
+    {
+      "sourceUrl": "https://baovebinhminh247.com/wp-content/uploads/2024/10/z5932393085216_853a1a9f195212faac6f9ad4b021b847.jpg",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (baovebinhminh247.com): không tải về, không đưa vào repository.",
+      "usedBy": [
+        {
+          "record": "legacy:2",
+          "blockIndex": null
+        }
+      ]
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/img16650643116761665285136884.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [],
+      "sha256": "98444e8bf2f520c03ff2fed1b023613fe6c0a7590137c4c5702af9263e72d4f4",
+      "mime": "image/jpeg",
+      "bytes": 288181,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6727950434740_66ccc90fa6542be0c60eba433c7849b3.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:2",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "7e9a0970ab5683b2bbe432153e77c02596c905ef3089ae707ca07e92677a00fd",
+      "mime": "image/jpeg",
+      "bytes": 203399,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6727950435796_5e789cfdedb7db7dae12cb097f288f8c.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [],
+      "sha256": "95f940fbf34f4d7fedec8fea998d4aa3574d495a04824cb29f79041507b67c21",
+      "mime": "image/jpeg",
+      "bytes": 267698,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2024/12/z6727950441326_6a76d9ac15189ad1cc9b2b1b310c22ca.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:2",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "5da4c6770a01e9e73cc006e2bdcaf3832164546cbda9db7e51c2e5693398c19e",
+      "mime": "image/jpeg",
+      "bytes": 278298,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/1-2.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "859ba2ba76bb5cb37fa870fc10b51becd103423b558b97c0d1c75684e3d1540e",
+      "mime": "image/jpeg",
+      "bytes": 130923,
+      "width": 720,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "7bda6df22e6a32e37eacee30439453d0b8651fa3c4c4fb9f0ea0c92c12f4c5ca",
+      "mime": "image/jpeg",
+      "bytes": 304294,
+      "width": 941,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/2-2.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "32868b7e3ca35f42c5e99e1f50d1859bef1c5c6033fbf730c0795e8c71a22130",
+      "mime": "image/jpeg",
+      "bytes": 204852,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/2.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "f00f21d95cd3b880aa2c087fa861b12fc218fd7a8d52cc7cc9b17b4612534122",
+      "mime": "image/jpeg",
+      "bytes": 199264,
+      "width": 699,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/anh-20.10.2024.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "826afff80c29384e88cbf9b171b60f3a74777b5785172e8e47bb01b66c58719f",
+      "mime": "image/jpeg",
+      "bytes": 222393,
+      "width": 1281,
+      "height": 1003
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/chung-cu-phia-bac-ha-noi-5-1651505671024.jpg",
+      "class": "THIRD_PARTY",
+      "reason": "Ảnh có watermark của một trang báo (DÂN TRÍ): tài sản bên thứ ba.",
+      "usedBy": [
+        {
+          "record": "projects/b-ia20-ciputra",
+          "blockIndex": null
+        },
+        {
+          "record": "projects/b-ia20-ciputra",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "9638bd45f651cdf999adb651025f267bd1c3c09e75e8d3ddc2b7b8c3b1e31222",
+      "mime": "image/jpeg",
+      "bytes": 456044,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/Di-chua-cau-an-nam-moi-2025.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:33",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "03e9ac496416704419442597e906c3bc5f120bb3b6bdb8e95b7e8ee9acac533e",
+      "mime": "image/jpeg",
+      "bytes": 623617,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6387780394556_0586312f9d75949375ca61c4f468e534.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuc-mung-ngay-quoc-te-phu-nu-8-3",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "286bfbc7c304e9462c07ff491a2a7c2a63b42a587696af528ee9006e7f6a889d",
+      "mime": "image/jpeg",
+      "bytes": 217862,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6387780400378_7f9600d700c00cf06f6e93a2168c8840.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuc-mung-ngay-quoc-te-phu-nu-8-3",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "c0501389d0427519f0b5214f2407fc5bc785b9288249aa1003824bd6440c04b6",
+      "mime": "image/jpeg",
+      "bytes": 211463,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_001_8fb3c37722545cd9258a9d84b2ed45c9.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "6397d96ac1663409e854d64752c01708dcfdf16b9b82630d24f800241c9fd5e5",
+      "mime": "image/jpeg",
+      "bytes": 261526,
+      "width": 838,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_002_636a3892cb34a1b71e52291d905e9ba8.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "b3de4fc1193886c017937a8debbbaa75c7b14b9d956335e341de7ab711ea0266",
+      "mime": "image/jpeg",
+      "bytes": 201331,
+      "width": 651,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_003_e4199dab001d9cb6f503b4e8e999f883.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "560ad1121c71bc191a253bc8c02827d12600f3b92e92ff07617e73104efdd047",
+      "mime": "image/jpeg",
+      "bytes": 243277,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6716928137786_004_4b37e41119344908398be11110d6e216.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": null
+        },
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "59a04407f0810c19640d32faf251de1b22e6383d17a38fc39568ef7be6334f0a",
+      "mime": "image/jpeg",
+      "bytes": 358002,
+      "width": 1253,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727664716243_b2eaba57e731d96a06243367f0ed9b39.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "575b4123b038326cacb82f296ec303d741af88e4d033dfe1af72b5bec4359dac",
+      "mime": "image/jpeg",
+      "bytes": 390507,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681319906_7b0a4653337230b09e0051f20ec27902.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "2f7d5b84bc16edefcd9ef8a1bc41bc450fdb6c466a9aa6d4ee1851686077fcf4",
+      "mime": "image/jpeg",
+      "bytes": 376165,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681323737_11d72730d9ea45cd179fdea2e872af8c.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "c19ebe07a03d74d771be4a92b80378ebdf18bfc1cd30c172c8a685bf7d9627b2",
+      "mime": "image/jpeg",
+      "bytes": 396602,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681337822_0805b685fd3dd7d76333d4f9e027fe45.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "42254c8fdd851fb16509ae468fb4e77a4127cc37557bb1fb51e4ce92ff765787",
+      "mime": "image/jpeg",
+      "bytes": 447506,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681338048_d3965b6d2726851bc1ebff3fc6487f43.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "e010aa0b0aa8f252b92bddd6553abc838eb0558335b84382fd6480fff2fa51ef",
+      "mime": "image/jpeg",
+      "bytes": 406076,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681346210_4341ac2404440641044ce2730512b4ae.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "60937c6678f659fe7ab7a8d7f84c24471acb778d9264849e7e51d6a5dafefb19",
+      "mime": "image/jpeg",
+      "bytes": 149915,
+      "width": 497,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681349179_a32635d2aa227579548c2d6691046530.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "5174653f2fade239fb5fe61274018320400a2c612356b7eb3307af967d3d85a2",
+      "mime": "image/jpeg",
+      "bytes": 460170,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681356481_a7f0d11a43e6ca90743ed96399abcd01.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "bd5bac377cf1fc9823d5d1be5c0247e18e2a9d9d39f20f080741f6eae0872b48",
+      "mime": "image/jpeg",
+      "bytes": 461363,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681357792_8b22df70441374451bd91ee6454fbc05.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "95b2bb87bc9e0b5912c8e56186c49177793dd8993bc869bed05b88eed26ec998",
+      "mime": "image/jpeg",
+      "bytes": 460590,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681358132_335147d2af55e664be317fa5ce695bbc.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "ea3c6977fadaa7842c5ef06c8eb9d37a67334a4e9dec8e12e7bfd024f3792895",
+      "mime": "image/jpeg",
+      "bytes": 173749,
+      "width": 497,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681369417_81aad6f2528a9f44b2df147930207813.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "9f83734e409db665e64557f3c4d179b288103e9748eb132247f68dab68bb3c81",
+      "mime": "image/jpeg",
+      "bytes": 438896,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681376385_88b302225d08f1165415e4b533ff0ad6.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": null
+        },
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "1040f875a17af1925c2ead717c7d4990beff98893621aaa95ba468d0bd595539",
+      "mime": "image/jpeg",
+      "bytes": 381038,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681379804_ad4446bae8d4f0add6035c85dbef7aa1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "793a7ab773767a76205bdfaf3c4acbd579b39e77419a37728ad09aab91d2b0c1",
+      "mime": "image/jpeg",
+      "bytes": 174924,
+      "width": 497,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681381476_81cecf9b998fd738baa494fbf7681f36.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "93be6e57bd59748cf9820d95f4712c709be65a08a5be379943ccf2fb4210d4ff",
+      "mime": "image/jpeg",
+      "bytes": 208572,
+      "width": 497,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681384138_1d40e30126cbc2d9cfce032b16be3466.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "d1d679be90a84cb84986386a4f0357755cd37dbfa65a136576644e69db854358",
+      "mime": "image/jpeg",
+      "bytes": 178463,
+      "width": 497,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681390349_4e2c339e8ffd876be08d13eed7f53856.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "db9941fa981e2e752ae2e00defad95e3f74c4ec44a81066a8971578353342715",
+      "mime": "image/jpeg",
+      "bytes": 442980,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681394099_c6c4302575fbfe0c46d0b5fbafe755d7.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "24bebc7bccfdbc50ca643a5f32b71f49ecaf2c179d27f929a80101b43261f464",
+      "mime": "image/jpeg",
+      "bytes": 424905,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681399767_850032ff3c4914d6addf8d3a1be2c88d.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "18b7d07ec46595c196e5e9608ef281d9a36fb9d1fd889e1b1bfe935ee7dce4d0",
+      "mime": "image/jpeg",
+      "bytes": 187389,
+      "width": 497,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681400008_1f8bf34a81c51f6084115b24c3772b3e.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "0493c98ff2f6f69f413e0939ac033bedafdd4d8b4d854fe2b6c5b4834dca218b",
+      "mime": "image/jpeg",
+      "bytes": 365137,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681402335_1455576890110443ea68b9f35ae4e3af.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "3b331bab9253519ef2ff2efa7644b3bdf9e6b8ed6e011fe902a1604b780c37e2",
+      "mime": "image/jpeg",
+      "bytes": 444028,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681409588_8f3d62290500d1079579f800d98f84f5.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "92b3e830f0685bf055c40f3d13dfec6fcffbd4e4371a952bc8f8a124749d3476",
+      "mime": "image/jpeg",
+      "bytes": 187213,
+      "width": 497,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727681414959_0fe90cb63b88b0656f9795338a0fae86.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuong-trinh-tat-nien-2023-chao-don-nam-moi-2024-cua-cbnv-cong-ty-binh-minh-song-lo",
+          "blockIndex": 0
+        }
+      ],
+      "sha256": "1d95a91b0c4d7940c00d861009047c040af5d4fb3b041488593eb14353909e6d",
+      "mime": "image/jpeg",
+      "bytes": 449081,
+      "width": 1920,
+      "height": 883
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727687943131_5d86d80bb57d627b3c2befdb40a92742.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:33",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "ed0d7fc21d37dba9a43fcca71fffb4fb251c22a490241c74f8696d11e229f7e9",
+      "mime": "image/jpeg",
+      "bytes": 272361,
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727926995646_e59f00a2732bcdbd95e60a2f5fdb10ae.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": null
+        },
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "f064af7ffa696198dc2b890d8031d914bc2ec1dda9297c5767b5a6b08b15fc61",
+      "mime": "image/jpeg",
+      "bytes": 280079,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927015961_0dabe5a3a7c595462e87991b108b29c0.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "ee6751204bd930b9ed3c31ab514aa3ea4194631126a310ed1a656f38b9676502",
+      "mime": "image/jpeg",
+      "bytes": 310856,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927021612_142451146c2073cbb32606ebb65647c8.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "fc1045ea1f22b60e3f5f69093c03dd9e6e54ddb473ac67914a7051704906aa5c",
+      "mime": "image/jpeg",
+      "bytes": 414422,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927024376_147b0cdd8110668b26b0e69c985f6a1e.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "af0861e5581cb0ab21414f6cbe6720b830d9550c6d640d87575c5f96ed55200b",
+      "mime": "image/jpeg",
+      "bytes": 419650,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927026896_c553fb57992056f4f80c4b2e42e03ab6.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "427c270cbc469a4bed5157f6a5201cc447ff27b393c9726cbc28b293aa714229",
+      "mime": "image/jpeg",
+      "bytes": 427293,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927080322_00551a85a3372d800a05230d8e4e7aec.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "2451f3c33e839843002b3ad461ea0f3076bdf978155d27e7b2e97c7a2d2839c0",
+      "mime": "image/jpeg",
+      "bytes": 152464,
+      "width": 720,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927081756_1108a0c144f49c57f31aa4e3f0497ce4.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "29a1fbc82ac7c1dcffbf108a8bed5e78f7a0fc6bb26c19aeffec17f6c81fc8cf",
+      "mime": "image/jpeg",
+      "bytes": 429407,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927087499_2200febe79c359ccd803c81120988ea1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "4bf9e8dbc922c6253a0ed479c5a0723c098fc21daff08914a51198d96f396280",
+      "mime": "image/jpeg",
+      "bytes": 364943,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927088389_9a5834fe9abe2444569bcfa6e1d1fff8.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "92d2873e291f81f5924f2c86f7317958fbd5786e03647516387bce86de00fe35",
+      "mime": "image/jpeg",
+      "bytes": 323259,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727927100721_0009e6ff81c1af51c4bb97662857f272.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tap-huan-nghiep-vu-phong-chay-chua-chay-nam-2024",
+          "blockIndex": 3
+        }
+      ],
+      "sha256": "586cb596f64830e68ea321fbb47e02511eab303554e9ab71c23b763cedc757db",
+      "mime": "image/jpeg",
+      "bytes": 448163,
+      "width": 1620,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727940534114_9d738691d4d4d352e3ba1b1897e7a4cc.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/chuc-mung-ngay-quoc-te-phu-nu-8-3",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "d92160c8c7d415ebe0276aef20802ae7dec29165c34963aef7a49f83cc5f303f",
+      "mime": "image/jpeg",
+      "bytes": 234553,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947630560_aa9cfb7b4e53a21786603a8e3146e9b9.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "62b523a615f0269fbcd2b89ee49ba5cd6f27b2fd69d143f2c6bc4241e94bbdbf",
+      "mime": "image/jpeg",
+      "bytes": 202067,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947633007_5fecb049510a8b3cfbe2036f21150dfc.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "a4445c2b7e234cc6f5e06d8da4d035c49a35c264e474964b6878d440141d11ba",
+      "mime": "image/jpeg",
+      "bytes": 157158,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947643198_41567e73237584fa3f4ae42da1ef9b29.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "6378f1c66ee2bc82845f75b59dc093c6d04dff58a846d412d94085d671323c12",
+      "mime": "image/jpeg",
+      "bytes": 307743,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947656377_12808f4749e60c86ab4f90cd194598fd.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "9a41b8c1314a8cbf8337e87d85c5ce3b9b2146d2a52ebe2f8244cee92003e58c",
+      "mime": "image/jpeg",
+      "bytes": 280609,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947656582_614ea15074d85548ed1734968e3d108b.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "b36b21e7fcbedb8532260cb8c9e0912a92a5d98c8d15b9f30ff86d73d332b8ab",
+      "mime": "image/jpeg",
+      "bytes": 203657,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947659855_732d475ae9ecaac8ed901e54f7280500.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "f90eb5f0dd8be2c3579022025a5e7cc2f530cd8f16fb66b74e02f616860214ae",
+      "mime": "image/jpeg",
+      "bytes": 280843,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947673035_78e93e40663a114d56e5c968ce25a4c5.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "4514397b218d219f148d813d5c1657cd4f96b25676bad61d0edbe6a2ec2a381e",
+      "mime": "image/jpeg",
+      "bytes": 280424,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947676079_979aa3f646183f6e9b0c0ed067477f7f.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "7d6ca5551fb6e7422a5ba77f0d5c4f521d922c1e836962f572321877d29d398c",
+      "mime": "image/jpeg",
+      "bytes": 223845,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947678659_3877ef8c5c5c4fbd71fc16213dbf4e21.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "5d4d115d64e5f53c064ee8786af5422ed7b215d9aba838e4d7859a81468ffecb",
+      "mime": "image/jpeg",
+      "bytes": 195023,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947690198_d36171f735057dcfb1261b837a38572c.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "d7246858579d14ae50e1daeb539b9c679b1d4dfbd3c98e3dd8d40aef544e9182",
+      "mime": "image/jpeg",
+      "bytes": 280557,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947691398_4e3c4dd0d9d2688a55f59a40b95ab0bd.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "a22139074dff3452e1102d4515d1819d64c038f1383adc5eb8a3ef4747e5b35b",
+      "mime": "image/jpeg",
+      "bytes": 278515,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947701407_6a157c151df395edfd6d88c06b50b324.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "3a77bcd8df1523f779bae119effcc3c259b93caae0b4935d5ae5545f65dcec5f",
+      "mime": "image/jpeg",
+      "bytes": 279170,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947701629_5383ff7b9eec4703fe9f64d3fa0f96d6.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "0168d5cdc18b0cf932cc1a020ec8e483d4a1952304dce7a0e08e292d61fdc098",
+      "mime": "image/jpeg",
+      "bytes": 302329,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947704911_eaee6381524176173dd5bf0f3f26027e.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "2ee0e42672f5844a17234788d2bb4bdce60eac59df15d66dd831ea73796e5dbb",
+      "mime": "image/jpeg",
+      "bytes": 192376,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947710042_e7b7a1803193167b3bb1078e95fcff98.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "e1ee39a41e6484bd69566ef39ada4f5a91b4aece467510d8ab828dff3cb9793d",
+      "mime": "image/jpeg",
+      "bytes": 204902,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947722453_05fb5c9b81b328526583f0d14bf080eb.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "fdaf621b09d9f79e1ee14eb71ffc711938224e1c882e98b25c020f5eede3f5bb",
+      "mime": "image/jpeg",
+      "bytes": 308964,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947722688_28ea662e66a78938ac350fd9577a78c4.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "a6df55df2272f0a7abbadd35c25045ee84adae1e2f99642ec855aeb04b61ecfa",
+      "mime": "image/jpeg",
+      "bytes": 264256,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947729491_34583525672ccbc6315768fe0c3e5fbc.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "a9e6dfca037ac0ef4a2a8c9b21447d6e22ccff8ca8670984052e92caf4d4befc",
+      "mime": "image/jpeg",
+      "bytes": 337785,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947736287_46d1f47dae01f1a3cf3ad6bcb54fd9a7.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "e458eb264122c7f99259247ae7a6936ff0c6db20a146ee4dd0a0237caaa26760",
+      "mime": "image/jpeg",
+      "bytes": 209662,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947740692_082f8ef0cb76b4137bc2a41ef88d74a0.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "7329392f2edcb65e8f920de806b149f3d6c9205b27b386005a33162029b6457e",
+      "mime": "image/jpeg",
+      "bytes": 302472,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947747146_5880fed37b4d378f6f1ea6d4f7bfd005.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "dea21ca7ca89a6b3edaaaadc93e8cf5ce1b759590abc60fea201d188d952d632",
+      "mime": "image/jpeg",
+      "bytes": 214287,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947752750_85604f74c18034c5203a372b5dc55030.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "6645287b266aeac97aa050dabcea1776f64514ccff9657d9301bdaa119e4143e",
+      "mime": "image/jpeg",
+      "bytes": 175088,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947757733_7fa38bbc3b3ec09707fd15d39117fb87.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "2331464e77b1b54f557dd740e5abcddd828f91b498c55653f91b44523c5f1364",
+      "mime": "image/jpeg",
+      "bytes": 275775,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947759157_942d6ed611ce9126768c698b261ca3b0.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "eb77ef83ae1a9f6e67819953c2948f447fe668490f4b10413ccfded814409f42",
+      "mime": "image/jpeg",
+      "bytes": 173951,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947770643_ae8a15e3beba0b47ce4e86efc067936c.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": null
+        },
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "89243a7fc1dfbee5e3831d356b0fd10526e5159dea1e2d486b7de2ea6117ca8b",
+      "mime": "image/jpeg",
+      "bytes": 309429,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947776570_61405feb165eb8db4d4f1f93d46d2a14.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "1b8e5aba091a5ef8c754e0bfcdc28e123b5e15f35491ca60910f1ac4c351aca2",
+      "mime": "image/jpeg",
+      "bytes": 184343,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727947783732_24b253d9ed91eb2b6551fec88b4936e3.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "d0a158fe72e8067c6e7a65d5e3bfcc392d4821dae6bcb902811f2c31c7d75a01",
+      "mime": "image/jpeg",
+      "bytes": 285018,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727962885750_c389f40c624166f22618c3bedea423af.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "87790e56b871f9a99222bd660ce17b7921facdd7b2d6064f4941d2d472dacb91",
+      "mime": "image/jpeg",
+      "bytes": 265582,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727962913858_a0ea494aa77c57c60534e3bcaa0ca4a9.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "762c39091b07096933f49adcdf2441c8abac13c31580b47ab463645d4d68a64a",
+      "mime": "image/jpeg",
+      "bytes": 342571,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727962929674_0601dc266567fb085e0b77170f53e514.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "08d6dbe8aa647edccc028833b91e34acacc2ea57a6519a2282a5bc2317c92c74",
+      "mime": "image/jpeg",
+      "bytes": 332346,
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971829239_d021b71bc1d87c5d17b10724bc69bc25.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "cd8ae40ea7136d4cb9a35b4ccde6a8d8da9103ff266387d8b0725cadf7c694ec",
+      "mime": "image/jpeg",
+      "bytes": 485875,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971854744_7d2aba9e34e154c55065175fba4b4e66.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "ea4d901891f851ebf601da81c27d9e0cdc2c9b12d09faa91a1afb44511fa346b",
+      "mime": "image/jpeg",
+      "bytes": 435609,
+      "width": 1137,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971867714_6ff37af97dcf05d4d0ab44d717cd795c.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "f460006fc80f03a0c82615549e9c58bf31899b5c9dc09801abbdc94f868dfd85",
+      "mime": "image/jpeg",
+      "bytes": 266669,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971973412_68c04e8f427227569127eb40773b1365.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "a7424b36005ff9c8aa14f60969e0f2474b5e171267468a1e5eefff5faaedc511",
+      "mime": "image/jpeg",
+      "bytes": 427301,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971976751_8ec88c92ad2ba50c5b9ace0a6eb0a79a.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "89f551db332446bb7e7b66569f219fa51f05b15be949d7d689fe8d492485e95a",
+      "mime": "image/jpeg",
+      "bytes": 286316,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727971985503_4f21c72eb3ff37bc3c272ad93b0d2f11.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "00269a93fb5027cffaf37321d8c9dd8a315d6439dbfac8526474a584361ae437",
+      "mime": "image/jpeg",
+      "bytes": 289338,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727972013559_bc4fd1434b3d55dae7cb9784aa73f195.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": null
+        },
+        {
+          "record": "articles/du-lich-ba-vi-2024-gan-ket-tinh-dong-nghiep-phan-thuong-cho-cbnv",
+          "blockIndex": 5
+        }
+      ],
+      "sha256": "fb09574752ec904cc7a325bed8e56f3695e5549a9f0f8f4f953addcdc5f3af6e",
+      "mime": "image/jpeg",
+      "bytes": 353014,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979684622_918ec81fda2de605d32e53dd4daa19b3-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "be854119c3c3a0d011b86abbb6b4bbe235ab731a89845f06e610bbb584099c51",
+      "mime": "image/jpeg",
+      "bytes": 232395,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979687101_2de5c63fd5f405a56554c971335b881d-2.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "f734d67579a5c0ecc4b6e5428a204f237060ff234eaa8b684fca096c3b6a25ee",
+      "mime": "image/jpeg",
+      "bytes": 256240,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979704657_58571dec554a4d8f6ff41a2c49208cd2-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "9c094ce960e6d0c7b8db6b0cd42b4123f216eb36d7d07da6f15f6678ea95fdb2",
+      "mime": "image/jpeg",
+      "bytes": 268133,
+      "width": 1280,
+      "height": 845
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979708257_5c2106495f77f0631444017a07b57a1b-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "2d57b16fe72d77f374ea73cc35b25731bd0e9c2ff5128cf8fafcebeef30aa543",
+      "mime": "image/jpeg",
+      "bytes": 231454,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979725507_6375c5edddeadd660e874639559e7135-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "50bbf28e33381876de8ac3e561424807d54bb79409e0cb2f23daf2625bad3da0",
+      "mime": "image/jpeg",
+      "bytes": 235982,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979733480_93df5f25eaeea2b7293b519c58a6d7bc-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "ad8a236e940ff43203555d5b1ae4e593e43055d764d93cb5c35a9e9aa1e922e4",
+      "mime": "image/jpeg",
+      "bytes": 148646,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979737985_b4fd5a2189599248d0ee3fabf8914d40-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "a3319cd702b60adb51974607ef265f1217ec116d7c5e14ffcd2035926c642e00",
+      "mime": "image/jpeg",
+      "bytes": 180807,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979742657_3935d3877bcd9845e082b8143526dfbb-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "c6e7088d2d45ad993e62cb76d7aa02ad9f1fc0c325151c04da8a6c7ef926058a",
+      "mime": "image/jpeg",
+      "bytes": 169315,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979748078_a45ad67131b6de47a55bee8bc0e87570-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "55e29db1011f4f1f11bdc22ab566a0e665d01ee9057fd3cd0b53fba293a6c1df",
+      "mime": "image/jpeg",
+      "bytes": 258754,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979749638_36c704e2b12b098bb2ef91d8b1712e7f-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "9f3339922dbbf404aa384d86c717fe3022dbab5b74d9c72c54a4c45bd4665c09",
+      "mime": "image/jpeg",
+      "bytes": 248439,
+      "width": 1280,
+      "height": 703
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979764192_975aee6508940332890191467492abad-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "55ebc599541099626e9d8a1830fe7d790256697a08c589630cec0df17720ff13",
+      "mime": "image/jpeg",
+      "bytes": 165369,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979764964_e06d0beff0cab76afe65f77c08f83e6c-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "c1ecc335442955d712333c4df056313cf7047bd8cf247313b76747449ccf4e0d",
+      "mime": "image/jpeg",
+      "bytes": 241191,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979770452_70d5606293c3dce3849ad99f2f784400-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "2d9cba4d948117b1e0c78312cd73fca90567eed9b107415207e9e1c2689905cc",
+      "mime": "image/jpeg",
+      "bytes": 275715,
+      "width": 1280,
+      "height": 753
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979774770_c592686962f2abf7f7b05542335f5005-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "2c66da3473cf2edf9092adcbb8b4d3b110bcad2adfc4d5ec1eaa013149e03028",
+      "mime": "image/jpeg",
+      "bytes": 274472,
+      "width": 1280,
+      "height": 753
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979779416_a30c47252604dc86b95bf1a268f61ea3-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "017c8ac2766a2b11790820a9e30f943819f45cfab63131250d965b6002643299",
+      "mime": "image/jpeg",
+      "bytes": 248593,
+      "width": 1280,
+      "height": 735
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979781164_c633b8f9bd4a503b50ba1437c0f0468d-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "001ec244f6181867ce22b437d7e2ff63a7fb456cc47f8b32b66cc726f594d54e",
+      "mime": "image/jpeg",
+      "bytes": 171583,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979795387_2e2521921c33d3af44ebd212aa0b5720-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "27937dfdc234261109cd2dd1af9a02be5ecd112fb4f4c07547a8429af4945735",
+      "mime": "image/jpeg",
+      "bytes": 246135,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979798945_deb68c92b4a00a502f96693b1bc54321-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "d070c89e4921a2750435344ec61c7aa0b95b1d62cf6eb9d61740f9df42ac125b",
+      "mime": "image/jpeg",
+      "bytes": 259362,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979807514_6de8108dc9ead8b6a59f998ad00a6943-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "72ff86b01834d0b9fb252c8915a26de741d18f806092325666fb3fc84499c2ea",
+      "mime": "image/jpeg",
+      "bytes": 266982,
+      "width": 1280,
+      "height": 703
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979809128_857827302ee1bcb5e5fe55b5178345dc-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "92857657864f3f37a2868985c161e612d81f9ccb9ad883d01a557cfe0d23213f",
+      "mime": "image/jpeg",
+      "bytes": 148635,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979809129_5c0bf780b8fb87f69f18b40e557d0ac6-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "66a1085bd572bc1a228dcb5d40c52f44c4d30a3552ad6686a999db7636092d40",
+      "mime": "image/jpeg",
+      "bytes": 149493,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979813060_e164cf2eb74061cf430eac766a4eecb3-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "12865669fd8eb4a3b9c1c50f363c56727a67ec22af0aebf49e5a325c965d40b0",
+      "mime": "image/jpeg",
+      "bytes": 198875,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979819463_b5c731820f25f56294a8a23d3cecf226-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "a8b57af3bd0cc5da8c96b73c8c829845ebfe17733007b8853c637e5f716c5de4",
+      "mime": "image/jpeg",
+      "bytes": 153929,
+      "width": 1280,
+      "height": 854
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979822579_ce44a310188116c6aa1c9091e8fe6627-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "a0ce64fc3fe2d5b39d6f6c18e4a79dcaae0d7084831c5fe72cca2b6df41ba801",
+      "mime": "image/jpeg",
+      "bytes": 242830,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979822859_a7eb0e936e2675c8eb28caa6009d5d02-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "bea71ed90dc934ea961ccdfcf52991db789586a18c472761c1a0c05abf60b7b7",
+      "mime": "image/jpeg",
+      "bytes": 281932,
+      "width": 1280,
+      "height": 776
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979833378_789d0824e4085080c36d416e2333747e-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "13e25823c34e52e1de3dd35ab30b69476e046d1325e72ffc2e9ecdfd49072109",
+      "mime": "image/jpeg",
+      "bytes": 235975,
+      "width": 1280,
+      "height": 852
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979839402_7ff96dc3db8cfe3e3d3040e53a0bfe76-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "0bf2ecdb5d73ac5c49af0baa042b451e90df03b80cc6ab8e575a9ecc38dd49d7",
+      "mime": "image/jpeg",
+      "bytes": 286051,
+      "width": 1280,
+      "height": 753
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6727979839711_d4bc025673f37183a3fd67c661958e5c-1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-ki-niem-5-nam-thanh-lap-va-phat-trien",
+          "blockIndex": 24
+        }
+      ],
+      "sha256": "17016ea8b4635b9191a06d3650f11293624e856640f8762e8844912e451f2a13",
+      "mime": "image/jpeg",
+      "bytes": 253458,
+      "width": 1280,
+      "height": 735
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728016986465_25855aa0b302e0bb880564a92d7d5b32.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:33",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "2e4abc4748f910dc97670a5776cc8b5227828613c137fb5a612a2315321f28d1",
+      "mime": "image/jpeg",
+      "bytes": 463690,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017002175_92f8f8645213d41dfc0ce0bb43cbde75.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:33",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "fd3b27b4b4db824e3d620c5ef687764db0059f021b78befa6ebc063bc88f326e",
+      "mime": "image/jpeg",
+      "bytes": 528032,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017066014_cb1afa2320d9ac93ddfb195ff42f3ba8.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:33",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "0f383ab7dbd2442bf96f70d5100793f8ac98061c00e96fc60a6820be82fc5a45",
+      "mime": "image/jpeg",
+      "bytes": 582184,
+      "width": 1736,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017067268_93592c74acabc2d8c56446a910b9242a.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:33",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "7e098fae8c0f218784d12b0e44336d60a9d1b36df65e1940a2708f45bfcbf982",
+      "mime": "image/jpeg",
+      "bytes": 576426,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728017077077_c7e4bd6531ddf16abde7b7008ebac126.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "legacy:33",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "6b1d1766b9be7158110cf8293c137f5537cc4536941557b7bd6f4c9d594d9624",
+      "mime": "image/jpeg",
+      "bytes": 471762,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895795_427a093402b57fff08ee3033f9c0d2b4.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "03341674e5398c5eab3cebc2d465ce0ae0f3885892852d11e4f1d5b6e3fe0b00",
+      "mime": "image/jpeg",
+      "bytes": 279528,
+      "width": 1267,
+      "height": 860
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895797_8ced39df185a2486a67cea66d3184310.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "135ee54f1c46e46deca5ea81cf1fb0335c598202b3384cd89fa5216f8e11a7c1",
+      "mime": "image/jpeg",
+      "bytes": 277516,
+      "width": 1251,
+      "height": 956
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895798_ed107dd64d44f7f14c37a2f4cdf2ba66.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "c30f3eeb4be3d54420215ff74f4749fd391460ff9592db92292ccd3616db5ea1",
+      "mime": "image/jpeg",
+      "bytes": 273348,
+      "width": 1265,
+      "height": 960
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895799_f98429a32ec1973563ea5e35784c3e63.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "16adef9975bda13006583181a4e1f634333eb891f6b5af20bfc3616ddb0261d2",
+      "mime": "image/jpeg",
+      "bytes": 277330,
+      "width": 1284,
+      "height": 957
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895800_6369b0aecb187a1eee2ba30581196e22.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "3c6f9ec348d26976843158d696e32496997e95ad9ae89e897e30be8f9cad3a89",
+      "mime": "image/jpeg",
+      "bytes": 291618,
+      "width": 1284,
+      "height": 939
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6728230895801_04633d66e63d37fa391f8d104b9dec5d.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/nhung-bong-hoa-khoi-van-phong-cong-ty-binh-minh-song-lo-gioi-giang-xinh-dep",
+          "blockIndex": 2
+        }
+      ],
+      "sha256": "dd0bafc5e82f378dc3e93a4fd6761b797f89d4a48b6f6b10565e21bd578d1743",
+      "mime": "image/jpeg",
+      "bytes": 268028,
+      "width": 1250,
+      "height": 940
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834806004_2d350a1266b1096d093e3662f698c5f1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 10
+        }
+      ],
+      "sha256": "f1b0c8b0ffc01b13d5d11c8ba4c0339abdfdd67fb4b768fa5c9ee06d58c9b835",
+      "mime": "image/jpeg",
+      "bytes": 523552,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834872181_b8afc3e169e0c97c9c0d68c771ce510b.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 10
+        }
+      ],
+      "sha256": "d51a2aa5556bf664fb036d183b7b1288e271b111a4c61afc5aaf18c447ad5e80",
+      "mime": "image/jpeg",
+      "bytes": 565640,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834995870_d0c4c804c4e3701ae11c849342cd90cc.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 10
+        }
+      ],
+      "sha256": "fe4a27ce8f0fcd2c82477c23024a9d99d6a1bc873d7ebe65ebfff0316cb6d10e",
+      "mime": "image/jpeg",
+      "bytes": 520592,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733834995872_0e8c7f4ec351705c2da70c9417e9925b.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 10
+        }
+      ],
+      "sha256": "38d9b1fda8f4089c7d60b76f114f11f91f7a385d77dea2b6aef183633b7a5cd6",
+      "mime": "image/jpeg",
+      "bytes": 576204,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835010279_b76a1095581e6b2e40d39ccba3c34c8d.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 10
+        }
+      ],
+      "sha256": "4ca90886401e2c9fd8acb4fa12353dc10f9f34ea68bcb10fb997cd166c6159cc",
+      "mime": "image/jpeg",
+      "bytes": 438799,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835026154_049162787730b59a8b218ad953d771fa.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 10
+        }
+      ],
+      "sha256": "9ab451b237d2387506a66baac5262b5c9fa1be9620cd0f5009536cc8eb326ce7",
+      "mime": "image/jpeg",
+      "bytes": 483725,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835090015_1c085b67eb981854baa2b691d3a7cba1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 11
+        }
+      ],
+      "sha256": "0d2ca0cc0efa4d99e9beec796548b85efc74a348881b4d7559ad155447c61746",
+      "mime": "image/jpeg",
+      "bytes": 541053,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733835090022_aaf87c301952eafa91afd01e7929f4c1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 11
+        }
+      ],
+      "sha256": "756f2a8577b7d76f813b1bdce0bb627bb7bd21b960cbbbe0c52f1691d7ef276c",
+      "mime": "image/jpeg",
+      "bytes": 336101,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733845150658_b9f7d751130c13aeb0419baff4e02f5e.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "e636ef66d5582b352126819087348f34ab181ff527493217eb9efebed0b84b7b",
+      "mime": "image/jpeg",
+      "bytes": 174332,
+      "width": 1526,
+      "height": 640
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6733845161237_604518e8367cd3e4a6b4e65a01dd1b7c.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-tang-hoa-va-qua-cho-cbnv-nu-nhan-ngay-20-10",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "e74d016fdf2db8e363e90351388f393354016068ac0c6a7f642a8c5c30ee974b",
+      "mime": "image/jpeg",
+      "bytes": 287973,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734018701304_3256752fa653ae454e592202b56db650.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 11
+        }
+      ],
+      "sha256": "7722cc1933b85ee7955caa65ff52367b298c53fa4a6dcf43873336ad6d14cc2c",
+      "mime": "image/jpeg",
+      "bytes": 670699,
+      "width": 1732,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734019024536_08a30a10ebdd867b34fa3a6837959fd2.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 11
+        }
+      ],
+      "sha256": "4493919483ea9a3c6d274b11c864444269f8d6651db1bc975ca23f0483335c3a",
+      "mime": "image/jpeg",
+      "bytes": 572025,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734019690620_6fddec8752e53e955a3f169ad0b244ba.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 11
+        }
+      ],
+      "sha256": "46cd7afc98fee3e05c7d9cffbd75870ec7d7f023030b7939243b267fbcb2617e",
+      "mime": "image/jpeg",
+      "bytes": 507332,
+      "width": 1521,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734048321662_7d6ddab821b02f273bb24b4dc02f01b8.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien",
+          "blockIndex": null
+        },
+        {
+          "record": "articles/cac-hoat-dong-mung-ngay-doanh-nhan-viet-nam-ngay-quoc-te-dan-ong-va-ngay-sinh-nhat-nhan-vien",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "87e36827bce23d8b20198448f67e936d426e5666eef7edfb2f3ca8fba86871b8",
+      "mime": "image/jpeg",
+      "bytes": 215281,
+      "width": 1277,
+      "height": 741
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139806718_1375ad4a20e3538a9c18b0c20ac6caf5.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "8c976385b2e720dfc359b26e934feda674f7b1e0b9d906d5994db44418a29ff9",
+      "mime": "image/jpeg",
+      "bytes": 407647,
+      "width": 1284,
+      "height": 1069
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139808892_fe83268649ba8e42c924fedc0dcffb3a.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "3743ba63c7a5d2d8f2ea83f96326a1ffb08dfffb13d07e5ed1ec35a62170173f",
+      "mime": "image/jpeg",
+      "bytes": 349592,
+      "width": 830,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139811644_cedd5fb10c165063a8e8ce2265202331.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "dfb7149450b09862348ca66b9cda26eee60558d366ccddb353ec33e1b88b7106",
+      "mime": "image/jpeg",
+      "bytes": 317426,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139822301_79baeac31062b98ba3cf6d0a4b220f5f.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "4c65fb03a4bbd2fae514ab7e77a2a50fb528f3a363ef3fe28cf10e9a2cb776e7",
+      "mime": "image/jpeg",
+      "bytes": 271306,
+      "width": 1276,
+      "height": 956
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139826193_e82c26f0e9de9d123eed9047c34f0cc7.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "55e720af3769da23358ff3c9724eadf1d6a14482e703f767cc2eed024aa0f272",
+      "mime": "image/jpeg",
+      "bytes": 249272,
+      "width": 1111,
+      "height": 956
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139834821_3121aa55c55b45e16f232ea2e9e506be.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": null
+        },
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "547e87669fe3da1874261527a58debb4f579776e01ef8263f50eb9a37e79f1ef",
+      "mime": "image/jpeg",
+      "bytes": 570928,
+      "width": 1683,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139844665_e70b788e72ccb70f046013342aae7b37.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "8c5b5193a64ca71eeff47c11da3f1f3c6b6e3975a618d717dc26c8ab487f72bb",
+      "mime": "image/jpeg",
+      "bytes": 258335,
+      "width": 1093,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734139846300_a4a517c8ce23fdf2b82ef8b19aaaaad1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-chuc-mung-ngay-dai-doan-ket-18-11-hang-nam-tai-mot-so-du-an-cong-ty-dang-quan-ly-van-hanh",
+          "blockIndex": 1
+        }
+      ],
+      "sha256": "6d7146324655021d2c7674773a0483e23191a2abe2498cc23c84ab0fd14a46fd",
+      "mime": "image/jpeg",
+      "bytes": 516776,
+      "width": 1524,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734501789069_5a5d8e555e93fe34da171be3db89c100.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "4e4268bff2d9e5fdd6f7bb1db295e8c572afc79d9abdcb9e70ab9eeb26ca23bd",
+      "mime": "image/jpeg",
+      "bytes": 410002,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734501929408_f4f00cb8506d7e6782042b579786f76e.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "89c9089dd4c451c0bd4924ac2b3e696becfce1f55ea49ab47e5c31ac0176ccde",
+      "mime": "image/jpeg",
+      "bytes": 278828,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734501982317_b13251eef5c1a8dede4cc3caa186b683.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "5040972d91694fde4d3b8afd72fc29035d22e38ac44772d692c5075789f9474d",
+      "mime": "image/jpeg",
+      "bytes": 271963,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734502031210_d6aed53030605804cd57fde93ddbf9ce.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "3845730a68823850c231a3867189d39989c2bad2e8217ef5578210c81ad6036b",
+      "mime": "image/jpeg",
+      "bytes": 254519,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/06/z6734502064219_2ec05cda6e50599933240b4241012790.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/cong-ty-binh-minh-song-lo-cung-cbnv-don-tet-nguyen-dan-2025",
+          "blockIndex": 4
+        }
+      ],
+      "sha256": "c7ce39d665128cbab4d1821678a92a1c7943f8e32433567aab977d7a9b61a423",
+      "mime": "image/jpeg",
+      "bytes": 352360,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/binh-minh-song-lo-long-nhan-ai-la-trach-nhiem-voi-cong-dong-ma-doanh-nghiep-ben-bi-theo-duoi",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "70c1afe055f6180a7dce10580157ab04f9f5b7098996a15d4d03c6dfcb2a419b",
+      "mime": "image/jpeg",
+      "bytes": 499421,
+      "width": 1621,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/2.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/binh-minh-song-lo-long-nhan-ai-la-trach-nhiem-voi-cong-dong-ma-doanh-nghiep-ben-bi-theo-duoi",
+          "blockIndex": 12
+        }
+      ],
+      "sha256": "21e6b82a62b9d3a41a2e702677b11ca63185d5c140485f21559e052ee05577a9",
+      "mime": "image/jpeg",
+      "bytes": 420642,
+      "width": 1621,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/3.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/binh-minh-song-lo-long-nhan-ai-la-trach-nhiem-voi-cong-dong-ma-doanh-nghiep-ben-bi-theo-duoi",
+          "blockIndex": 16
+        }
+      ],
+      "sha256": "42e51be84951ba20fc97ddb6162f865596c88532188eb49d0c32e59d16661d3f",
+      "mime": "image/jpeg",
+      "bytes": 511078,
+      "width": 1621,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2025/10/4.jpg",
+      "class": "DOCUMENT",
+      "reason": "Thư cảm ơn có chữ ký và con dấu của bên thứ ba.",
+      "usedBy": [
+        {
+          "record": "articles/binh-minh-song-lo-long-nhan-ai-la-trach-nhiem-voi-cong-dong-ma-doanh-nghiep-ben-bi-theo-duoi",
+          "blockIndex": 19
+        }
+      ],
+      "sha256": "e8818cd6e49b5121b8900dab4be5ffd9773235a7b92c0591d17d0fd83fea31ea",
+      "mime": "image/jpeg",
+      "bytes": 192762,
+      "width": 642,
+      "height": 901
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/43e91959-1b20-42b4-829d-02347361bc08.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/van-hoa-doanh-nghiep-binh-minh-song-lo-tan-tam-chuyen-nghiep-minh-bach",
+          "blockIndex": 20
+        },
+        {
+          "record": "globals/about-page",
+          "blockIndex": 34
+        }
+      ],
+      "sha256": "d75c85d318772333810055da99513c98a118a07d525199491c392ae5ea0c2e05",
+      "mime": "image/jpeg",
+      "bytes": 554201,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/5d8e8733-46fb-4fe2-b2c9-e2331a290ba1-e1790182215703.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/quy-dinh-tac-phong-van-hoa-phuc-vu-cua-can-bo-nhan-vien-tai-toa-nha",
+          "blockIndex": null
+        }
+      ],
+      "sha256": "b5df6bc160697124e5b2bae1cd0cb2a2e7f3fa112d57061d117b07730da58d6c",
+      "mime": "image/jpeg",
+      "bytes": 90186,
+      "width": 810,
+      "height": 668
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/5d8e8733-46fb-4fe2-b2c9-e2331a290ba1.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 29
+        }
+      ],
+      "sha256": "d9eb49dbdee81d9468fa0e5a603662b16137ec20b3d56fb4491f8651b067cacf",
+      "mime": "image/jpeg",
+      "bytes": 193373,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/IMG_7543.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/van-hoa-doanh-nghiep-binh-minh-song-lo-tan-tam-chuyen-nghiep-minh-bach",
+          "blockIndex": null
+        },
+        {
+          "record": "globals/about-page",
+          "blockIndex": 21
+        }
+      ],
+      "sha256": "c4694d2d8fac09b047a13920c1612e3917c45108dd89d3117cc6f4b9be2623e0",
+      "mime": "image/jpeg",
+      "bytes": 354852,
+      "width": 1253,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/IMG_7549.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 16
+        }
+      ],
+      "sha256": "4caf2720f72d5e0960d53b511ceaf8299316d9d86495f6e6bb865c09b66b68e7",
+      "mime": "image/jpeg",
+      "bytes": 251602,
+      "width": 810,
+      "height": 1080
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/IMG_7552.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/tieu-chuan-nang-luc-quy-trinh-dao-tao-doi-ngu-nhan-su-van-hanh-tai-binh-minh-song-lo",
+          "blockIndex": 7
+        },
+        {
+          "record": "globals/about-page",
+          "blockIndex": 42
+        }
+      ],
+      "sha256": "1bb937fdd652e1e936ee68cd91d90a41e578022070253d2d6710dd2bb0d41414",
+      "mime": "image/jpeg",
+      "bytes": 278585,
+      "width": 1276,
+      "height": 956
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/09/vesinh1-7517-6533.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "globals/about-page",
+          "blockIndex": 38
+        }
+      ],
+      "sha256": "4ad55d1d983702ca423995a848536c1aad565677732e5c92b787e28d4ecfe6b6",
+      "mime": "image/jpeg",
+      "bytes": 100563,
+      "width": 890,
+      "height": 593
+    },
+    {
+      "sourceUrl": "https://binhminhsonglo.vn/wp-content/uploads/2026/10/IMG_7544-e1791191546749.jpg",
+      "class": "PERSON",
+      "reason": "Ảnh có người nhận diện được (nhân viên, cư dân, khách, trẻ em): cần đồng ý của người trong ảnh trước khi đưa vào repository công khai.",
+      "usedBy": [
+        {
+          "record": "articles/bo-nguyen-tac-vang-trong-van-hoa-phuc-vu-cu-dan-danh-cho-don-vi-quan-ly-van-hanh-toa-nha",
+          "blockIndex": 44
+        }
+      ],
+      "sha256": "b0900e9f3e79d397326029dc97d9d4db32afb8ca37d668255765a0562e414df2",
+      "mime": "image/jpeg",
+      "bytes": 148798,
+      "width": 945,
+      "height": 820
+    },
+    {
+      "sourceUrl": "https://cdn-i.doisongphapluat.com.vn/media/nguyen-thi-ha/2023/01/12/z40125581449599d4dc31e6e2a3053dd7f1320878c8a6c.jpg",
+      "class": "THIRD_PARTY_HOST",
+      "reason": "Ảnh lưu trên website của bên thứ ba (cdn-i.doisongphapluat.com.vn): không tải về, không đưa vào repository.",
+      "usedBy": [
+        {
+          "record": "legacy:4",
+          "blockIndex": null
+        }
+      ]
+    }
+  ]
+}

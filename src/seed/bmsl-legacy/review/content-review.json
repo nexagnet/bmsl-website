@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "note": "Bài mà VĂN BẢN không được commit vào repository công khai. Dòng kiểm kê vẫn giữ (tiêu đề, ngày, chuyên mục, số ảnh) cùng lý do. Gỡ khỏi danh sách này chỉ khi có quyết định của owner hoặc giấy phép đăng lại, rồi chạy lại generator.",
+  "blocked": [
+    {
+      "ref": "legacy:2",
+      "class": "THIRD_PARTY_TEXT",
+      "reason": "Bài báo đăng lại, cuối bài ghi nguồn doisongphapluat.com.vn: bản quyền văn bản thuộc toà soạn; có tên cá nhân thứ ba."
+    },
+    {
+      "ref": "legacy:3",
+      "class": "THIRD_PARTY_TEXT",
+      "reason": "Bài báo đăng lại (\"Theo báo\" nguoiduatin.vn, tác giả t/h): bản quyền văn bản thuộc toà soạn."
+    },
+    {
+      "ref": "legacy:4",
+      "class": "THIRD_PARTY_TEXT",
+      "reason": "Bài phỏng vấn của phóng viên Đời sống & Pháp luật (ĐS&PL) đăng lại, ảnh lưu trên doisongphapluat.com.vn: bản quyền thuộc toà soạn. Nghi trùng bài (hậu tố -2)."
+    },
+    {
+      "ref": "legacy:33",
+      "class": "OWNER_DECISION",
+      "reason": "Blueprint 01/04: OWNER-DECISION có đăng lại thông tin cá nhân của người lãnh đạo hay không."
+    }
+  ]
+}
