@@ -46,9 +46,10 @@ từ file; chỉ cần cập nhật hash trong `src/lib/brand-logo.test.ts`).
 
 * Header và footer dùng `next/image` với import tĩnh từ `src/assets/brand/bmsl-logo.jpg` (Next đóng gói vào
   `/_next/static/media/…`, không phụ thuộc WordPress khi chạy).
-* **Không đặt trong `public/`**: `Dockerfile` hiện chỉ `COPY` `src`, `scripts`, `next.config.mjs` và `tsconfig.json`, nên
-  `public/` sẽ không có trong image production (logo sẽ 404). Import tĩnh và favicon theo quy ước `icon.*` của App Router
-  đi cùng `src/`, không cần sửa Dockerfile. Đây là điểm khác với gợi ý `public/` trong Task Contract.
+* **Không đặt trong `public/`**: `Dockerfile` chỉ `COPY` `.next`, `src`, `scripts`, `next.config.mjs`, `tsconfig.json` và không có
+  `public/`, nên asset đặt ở đó sẽ không vào image. Import tĩnh được Next phát ra trong `.next/static/media/`
+  (đã nằm trong image) và favicon theo quy ước `icon.*` đi cùng `src/`; không cần sửa Dockerfile. Việc này đã được kiểm
+  chứng trên image thật (mục Kiểm chứng). Đây là điểm khác với gợi ý `public/` trong Task Contract.
 * `alt` = "BMSL — Bình Minh Sông Lô" (chữ có trong logo). Liên kết trang chủ có `aria-label` "BMSL — Bình Minh Sông Lô —
   Trang chủ". Không có wordmark chữ đặt cạnh logo (tránh lặp tên).
 * Logo là JPEG nền trắng nên ở footer tối được đặt trên một tấm nền trắng bo góc.
@@ -66,11 +67,24 @@ thứ ba khác.
 
 ```bash
 pnpm exec vitest run src/lib/brand-logo.test.ts   # hash/kích thước tệp, header/footer, 8 điều hướng
-pnpm test:integration                             # http-smoke: logo + favicon được phục vụ, không có binhminhsonglo.vn
+pnpm test:integration                             # http-smoke (Linux/CI): logo + favicon được phục vụ, không có binhminhsonglo.vn
 ```
 
-Ảnh chụp từ bản build production chạy với PostgreSQL cục bộ (dữ liệu tổng hợp) nằm ở `docs/brand/screenshots/`:
-`header-{320,390,768,1024,1440}.png`, `menu-open-{320,390}.png`, `footer-{320,390,1440}.png`. Đo bằng Playwright: không tràn
-ngang ở 320/390/768/1024/1440, ảnh logo tải được (640×508), vùng chạm liên kết logo ≥ 44 px ở ≤768 px, thứ tự Tab: "Bỏ qua điều
-hướng" → logo. Ở 1024 px thanh điều hướng xuống hai dòng vì 8 mục + CTA không vừa một hàng; logo mới hẹp hơn wordmark cũ nên
-không làm tình trạng này xấu đi (chưa chụp đối chứng "trước": `NOT_PROVEN`).
+**Image Docker thực tế** (`docker build .` từ `Dockerfile` không đổi, chạy với PostgreSQL cô lập, `BMSL_MEDIA_DIR=/data/media`):
+
+| URL phục vụ | HTTP | MIME | Byte | SHA-256 khớp tệp trong repo |
+| --- | --- | --- | --- | --- |
+| `/_next/static/media/bmsl-logo.<hash>.jpg` | 200 | `image/jpeg` | 35 985 | `32088230…e5d7` ✔ |
+| `/icon-<hash>.jpg?…` (`<link rel="icon">`) | 200 | `image/jpeg` | 6 022 | `8febbd53…414c1` ✔ |
+| `/apple-icon-<hash>.jpg?…` (`<link rel="apple-touch-icon">`) | 200 | `image/jpeg` | 5 740 | `73f6806d…24e2f` ✔ |
+
+HTML trang chủ có 0 tham chiếu tới `binhminhsonglo.vn` và 0 tham chiếu `wordmark`; `/healthz` trả 200.
+
+**Ảnh chụp** (Playwright, chụp từ image của `main` = *trước* và từ image của nhánh này = *sau*; PostgreSQL cục bộ, dữ liệu
+tổng hợp) nằm ở `docs/brand/screenshots/`: `before-*.png` và `header-*`, `menu-open-*`, `footer-*` (sau), ở 320/390/768/1024/1440 px.
+Không tràn ngang ở cả hai bản. Chiều cao header trước → sau: 320/390 px 62 → 69, 768 px 65 → 69, 1024 px 114 → 114, 1440 px
+72 → 88. Ở 1024 px thanh điều hướng đã xuống hai dòng sẵn trên `main` (8 mục + CTA), không phải do thay đổi này. Vùng chạm
+liên kết logo ≥ 44 px ở ≤ 768 px; thứ tự Tab: "Bỏ qua điều hướng" → logo.
+
+Chữ trong logo (tên và khẩu hiệu) rất nhỏ ở chiều cao header 40–60 px vì đó là logo dạng khối nguyên bản; chữ đọc được rõ ở
+footer. Đây là đánh đổi của việc không tách/vẽ lại logo.
