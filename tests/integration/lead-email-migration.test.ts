@@ -25,7 +25,7 @@ beforeAll(async () => {
   const { default: config } = await import('../../src/payload.config');
   payload = await getPayload({ config });
   expect(migrations.at(-1)?.name).toBe(NEW);
-  await payload.db.migrate({ migrations: migrations.slice(0, -1) });
+  await payload.db.migrate({ migrations: migrations.slice(0, -1) as never });
 });
 
 afterAll(async () => {
