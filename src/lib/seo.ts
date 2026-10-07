@@ -37,11 +37,36 @@ export function isPublicContentPath(path: unknown): path is string {
   return segments.every(isPublicSlug);
 }
 
-const MEDIA_FILE = /^\/api\/media-assets\/file\/[A-Za-z0-9][A-Za-z0-9._-]{0,200}$/;
+const MEDIA_PREFIX = '/api/media-assets/file/';
+// Raw filename segment: unreserved characters and percent escapes only (query, hash, slash, backslash never match).
+const MEDIA_RAW_SEGMENT = /^[A-Za-z0-9._~%-]{1,600}$/;
+// Decoded filename must not hold control/line-separator characters, path separators or a "%" (double encoding).
+const MEDIA_FORBIDDEN_DECODED = /[\p{Cc}\p{Zl}\p{Zp}/\\%]/u;
 
-/** Same-site path of an uploaded media file. Only this exact shape may reach <img>, OG or JSON-LD images. */
-export const isApprovedMediaPath = (path: unknown): path is string =>
-  typeof path === 'string' && MEDIA_FILE.test(path) && !path.includes('..');
+/**
+ * Same-site path of an uploaded media file. Only this exact shape may reach <img>, OG or JSON-LD images:
+ * "/api/media-assets/file/<one filename>" where the filename is plain ASCII or valid percent-encoded UTF-8 (Payload
+ * encodes spaces and Unicode). The segment is decoded exactly once; malformed encodings, decoded separators, control
+ * characters, dot segments and double encoding (a decoded "%") are rejected.
+ */
+export const isApprovedMediaPath = (path: unknown): path is string => {
+  if (typeof path !== 'string' || !path.startsWith(MEDIA_PREFIX)) return false;
+  const raw = path.slice(MEDIA_PREFIX.length);
+  if (!MEDIA_RAW_SEGMENT.test(raw)) return false;
+  let name: string;
+  try {
+    name = decodeURIComponent(raw);
+  } catch {
+    return false;
+  }
+  return (
+    name.length > 0 &&
+    name.length <= 200 &&
+    !name.startsWith('.') &&
+    !name.includes('..') &&
+    !MEDIA_FORBIDDEN_DECODED.test(name)
+  );
+};
 
 /** SITE_URL must be a bare http(s) origin; anything else is a configuration error, never silently repaired. */
 export function normalizeSiteUrl(raw: string): string {
