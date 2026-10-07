@@ -50,7 +50,7 @@ export type WpPost = {
   categories?: number[];
 };
 export type WpTerm = { id: number; slug: string; name: string };
-export type WpMedia = { id: number; source_url: string; alt_text?: string };
+export type WpMedia = { id: number; source_url: string; alt_text?: string; post?: number };
 export type WpSnapshot = {
   site: string;
   wordpress: string;

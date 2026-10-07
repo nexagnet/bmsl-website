@@ -1,7 +1,8 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { buildPack, type ContentReviewFile, type ImageFetcher, type ReviewFile, type WpMedia, type WpPost, type WpSnapshot, type WpTerm } from './generator';
+import { buildPack, type ContentReviewFile, type ImageFetcher, type ReviewFile } from './generator';
 import { MAX_ASSET_BYTES, PACK_FILES, packProblems } from './pack';
+import { get, loadSnapshot } from './source-fetch';
 
 // EXPLICIT, network-using step: re-reads the public legacy site and rewrites the committed seed pack.
 //   pnpm seed:bmsl-legacy:generate --observed-at 2026-10-06
@@ -9,12 +10,9 @@ import { MAX_ASSET_BYTES, PACK_FILES, packProblems } from './pack';
 // contacted (public WordPress REST + /wp-content/uploads images); other hosts are never fetched. Nothing here
 // writes to a database. Image rights come only from review/image-review.json (unlisted images stay pending).
 
-const SITE = 'https://binhminhsonglo.vn';
 const REPO_ROOT = path.resolve(import.meta.dirname, '../../..');
 const PACK_DIR = path.join(REPO_ROOT, 'src/seed/bmsl-legacy');
 const REPORT = path.join(REPO_ROOT, 'docs/migration/w75-legacy-seed-report.md');
-const HEADERS = { 'user-agent': 'bmsl-website-seed-generator (read-only audit)', accept: 'application/json, image/*, */*' };
-const FETCH_TIMEOUT_MS = 30_000;
 
 function parseArgs(argv: readonly string[]): { observedAt: string } {
   let observedAt: string | undefined;
@@ -24,62 +22,6 @@ function parseArgs(argv: readonly string[]): { observedAt: string } {
   }
   if (!observedAt || !/^\d{4}-\d{2}-\d{2}$/.test(observedAt)) throw new Error('--observed-at YYYY-MM-DD is required (keeps the output deterministic)');
   return { observedAt };
-}
-
-async function get(url: string, kind: 'json-or-xml' | 'image') {
-  const u = new URL(url);
-  const allowedPath =
-    kind === 'image'
-      ? u.pathname.startsWith('/wp-content/uploads/')
-      : u.pathname.startsWith('/wp-json/wp/v2/') || /^\/wp-sitemap[\w-]*\.xml$/.test(u.pathname) || u.pathname === '/';
-  if (u.origin !== SITE || !allowedPath || u.pathname.includes('..') || u.username || u.password) throw new Error(`Refusing to fetch ${u.origin}${u.pathname}`);
-  // redirect: 'error' so a redirect can never lead to another host. The legacy server is slow and throttles bursts:
-  // a network error or a 429/5xx is retried with backoff; any other answer (including 404) is returned as it is.
-  let last: unknown;
-  for (let attempt = 1; attempt <= 4; attempt += 1) {
-    try {
-      const res = await fetch(u, { headers: HEADERS, redirect: 'error', signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
-      if (res.status !== 429 && res.status < 500) return res;
-      last = new Error(`HTTP ${res.status}`);
-    } catch (error) {
-      last = error;
-    }
-    await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
-  }
-  throw last instanceof Error ? last : new Error('fetch failed');
-}
-
-async function pagedJson<T>(endpoint: string, params: string, optional = false): Promise<T[]> {
-  const out: T[] = [];
-  for (let page = 1; ; page += 1) {
-    const res = await get(`${SITE}/wp-json/wp/v2/${endpoint}?${params}&page=${page}`, 'json-or-xml');
-    if (!res.ok) {
-      if (optional) break;
-      throw new Error(`${endpoint} page ${page}: HTTP ${res.status}`);
-    }
-    out.push(...((await res.json()) as T[]));
-    if (page >= Number(res.headers.get('x-wp-totalpages') ?? '1')) break;
-  }
-  return out;
-}
-
-async function loadSnapshot(): Promise<WpSnapshot> {
-  const fields = '_fields=id,date_gmt,slug,status,title,content,excerpt,featured_media,categories';
-  const posts = await pagedJson<WpPost>('posts', `per_page=100&${fields}`);
-  const pages = await pagedJson<WpPost>('pages', `per_page=100&${fields}`);
-  const categories = await pagedJson<WpTerm>('categories', 'per_page=100&_fields=id,slug,name');
-  // The public media list omits attachments of non-public parents; whatever is listed only improves alt text/covers.
-  const media = await pagedJson<WpMedia>('media', 'per_page=50&_fields=id,source_url,alt_text', true);
-
-  const sitemapUrls = new Set<string>();
-  const index = await (await get(`${SITE}/wp-sitemap.xml`, 'json-or-xml')).text();
-  for (const loc of index.matchAll(/<loc>([^<]+)<\/loc>/g)) {
-    const child = await (await get(loc[1]!, 'json-or-xml')).text();
-    for (const l of child.matchAll(/<loc>([^<]+)<\/loc>/g)) sitemapUrls.add(l[1]!);
-  }
-  const home = await (await get(`${SITE}/`, 'json-or-xml')).text();
-  const wordpress = /<meta name="generator" content="WordPress ([\d.]+)"/.exec(home)?.[1] ?? 'version not stated';
-  return { site: SITE, wordpress, posts, pages, categories, media, sitemapUrls: [...sitemapUrls].sort() };
 }
 
 const imageFailures: string[] = [];
