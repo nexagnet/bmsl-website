@@ -3,6 +3,8 @@
 Trạng thái: **sẵn sàng kỹ thuật, chưa bàn giao.** Sẵn sàng kỹ thuật không bằng khách hàng nghiệm thu và không bằng bàn giao production hoàn tất.
 Mọi mục cần dữ liệu/bằng chứng thật mà chưa có đều ghi `NOT_PROVEN`; không có ký nhận, bàn giao hay hoàn thành nào được bịa ra.
 
+Ma trận theo từng điều khoản hợp đồng, gói đầu vào cho BMSL và các bước UAT: xem [`contract-acceptance-matrix.md`](contract-acceptance-matrix.md). Mọi SHA/CI dưới đây là **lịch sử**, không phải CI xanh của HEAD hiện tại.
+
 ## 1. Mốc bằng chứng chính xác
 
 | Mục | Giá trị |
