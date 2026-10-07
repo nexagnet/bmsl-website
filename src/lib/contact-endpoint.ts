@@ -7,7 +7,9 @@ import {
   rateLimitFromEnv,
   readBoundedBody,
 } from './request-guard';
-import { submitContact } from './contact-submission';
+import { type LeadNotifier, submitContact } from './contact-submission';
+import { resolveLeadEmailConfig } from './lead-email-config';
+import { runLeadNotificationQueue } from './lead-notification';
 
 // HTTP layer of the write-only /lien-he/gui endpoint. Every failure answers with a fixed, PII-free JSON body, and
 // nothing in this file logs request content.
@@ -20,6 +22,14 @@ const fail = (status: number, extra: Record<string, unknown> = {}, headers?: Hea
 type Deps = {
   getPayload: () => Promise<Payload>;
   allow?: () => boolean;
+  /** Injectable notifier (tests). Default: nudge the durable queue; see below. */
+  notify?: (payload: Payload) => LeadNotifier;
+};
+
+// The durable work (outbox row + queued job) was already committed with the lead. This only asks the queue to run it now
+// instead of waiting for the next autoRun tick; it is not awaited, never throws and does nothing while e-mail is OFF.
+const defaultNotify = (payload: Payload): LeadNotifier => async () => {
+  if (resolveLeadEmailConfig().enabled) void runLeadNotificationQueue(payload);
 };
 
 let sharedLimiter: ReturnType<typeof createRateLimiter> | undefined;
@@ -58,7 +68,7 @@ export async function handleContactPost(request: Request, deps: Deps): Promise<R
   }
 
   try {
-    const result = await submitContact(payload, raw);
+    const result = await submitContact(payload, raw, (deps.notify ?? defaultNotify)(payload));
     return Response.json(result.body, { status: result.status });
   } catch {
     console.error('contact submission failed unexpectedly');
