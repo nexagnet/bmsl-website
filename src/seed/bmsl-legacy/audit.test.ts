@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { auditSource, bodyImageUrls, renderAuditReport, renderLedgerCsv, sourceFactLines } from './audit';
 import type { WpPost, WpSnapshot } from './generator';
+import type { LexicalDoc } from './lexical';
 import type { InventoryRow, Manifest, MediaEntry, PendingMediaEntry, ProjectRecord } from './pack';
 
 // Synthetic fixtures only: no real source text, no network, no disk.
@@ -48,15 +49,39 @@ const plainChars = (html: string) =>
     .replace(/\s+/g, ' ')
     .trim().length;
 
+const lexDoc = (...paragraphs: string[]): LexicalDoc => ({
+  root: {
+    type: 'root',
+    format: '',
+    indent: 0,
+    version: 1,
+    direction: 'ltr',
+    children: paragraphs.map((t) => ({
+      type: 'paragraph',
+      format: '',
+      indent: 0,
+      version: 1,
+      direction: 'ltr',
+      children: [{ type: 'text', text: t, format: 0, detail: 0, mode: 'normal', style: '', version: 1 }],
+    })),
+  },
+});
+
+// Text bodies: two articles-like sources of the SAME length with different words, a source holding a phone number, and an assembled about page.
+const ART = '<p>Bài viết gốc số một</p>';
+const CONTACT = '<p>Gọi +84 912 345 678 để biết thêm</p>';
+const ABOUT_A = '<p>Giới thiệu công ty</p>';
+const ABOUT_B = '<p>Văn phòng tại Hà Nội</p>';
+
 function fixture() {
   const snapshot: WpSnapshot = {
     site: 'https://binhminhsonglo.vn',
     wordpress: '6.7.1',
-    posts: [post(10, 'full', 'Toà full (đang vận hành)', FULL), post(11, 'a6', 'A6 (Đang vận hành)', IMAGE_ONLY), post(12, 'third', 'Toà bên thứ ba', THIRD_PARTY)],
+    posts: [post(10, 'full', 'Toà full (đang vận hành)', FULL), post(11, 'a6', 'A6 (Đang vận hành)', IMAGE_ONLY), post(12, 'third', 'Toà bên thứ ba', THIRD_PARTY), post(20, 'art', 'Bài một', ART), post(21, 'contact', 'Liên hệ', CONTACT), post(22, 'about-a', 'Giới thiệu', ABOUT_A), post(23, 'about-b', 'Văn phòng', ABOUT_B)],
     pages: [],
     categories: [],
     media: [],
-    sitemapUrls: ['https://binhminhsonglo.vn/full/', 'https://binhminhsonglo.vn/a6/', 'https://binhminhsonglo.vn/third/'],
+    sitemapUrls: ['https://binhminhsonglo.vn/full/', 'https://binhminhsonglo.vn/a6/', 'https://binhminhsonglo.vn/third/', 'https://binhminhsonglo.vn/art/', 'https://binhminhsonglo.vn/contact/', 'https://binhminhsonglo.vn/about-a/', 'https://binhminhsonglo.vn/about-b/'],
   };
   const full = media('full', fullBytes);
   const a6 = media('a6', a6Bytes);
@@ -75,6 +100,20 @@ function fixture() {
     needs: [],
     notes: [],
   });
+  const textRow = (ref: string, wpId: number, slug: string, target: InventoryRow['target'], textStatus: InventoryRow['textStatus'], bodyChars: number): InventoryRow => ({
+    ref,
+    legacyPath: `/${slug}/`,
+    wpType: 'post',
+    wpId,
+    title: slug,
+    target,
+    textStatus,
+    textFidelity: 'EXACT',
+    bodyChars,
+    images: { found: 0, committed: 0, pending: 0, external: 0 },
+    needs: [],
+    notes: [],
+  });
   const manifest: Manifest = {
     pack: 'bmsl-legacy',
     version: 1,
@@ -85,6 +124,10 @@ function fixture() {
       row('legacy:1', 10, 'full', 'projects/full', 'Toà full', plainChars(FULL)),
       row('legacy:2', 11, 'a6', 'projects/a6', 'A6', 0),
       row('legacy:3', 12, 'third', 'projects/third', 'Toà bên thứ ba', plainChars(THIRD_PARTY)),
+      textRow('legacy:4', 20, 'art', { kind: 'articles', key: 'articles/art' }, 'SEEDED', plainChars(ART)),
+      textRow('legacy:5', 21, 'contact', { kind: 'contact-page', key: 'globals/contact-page' }, 'SEEDED_REDACTED', plainChars(CONTACT)),
+      textRow('legacy:6', 22, 'about-a', { kind: 'about-page', key: 'globals/about-page' }, 'SEEDED', plainChars(ABOUT_A)),
+      textRow('legacy:7', 23, 'about-b', { kind: 'about-page', key: 'globals/about-page' }, 'MERGED_INTO_TARGET', plainChars(ABOUT_B)),
     ],
     media: [full, a6],
     pendingMedia: [pending],
@@ -107,7 +150,15 @@ function fixture() {
     { key: 'projects/third', name: 'Toà bên thứ ba', slug: 'third', address: 'Z', services: [], images: [], legacyUrls: ['/third/'], sourceStatus: 'LEGACY-SOURCE' },
   ];
   const assets: Record<string, Buffer | undefined> = { 'assets/full.jpg': fullBytes, 'assets/a6.jpg': a6Bytes };
-  return { snapshot, manifest, projects, assets, readAsset: (f: string) => assets[f] };
+  const records = {
+    articles: [{ key: 'articles/art', title: 'Bài một', slug: 'art', body: lexDoc('Bài viết gốc số một'), publishedAt: '2024-12-14T00:00:00.000Z', legacyUrl: '/art/' }],
+    globals: [
+      { key: 'globals/contact-page', slug: 'contact-page' as const, title: 'Liên hệ', body: lexDoc('Gọi [số điện thoại — chờ BMSL xác nhận] để biết thêm') },
+      { key: 'globals/about-page', slug: 'about-page' as const, title: 'Giới thiệu', body: lexDoc('Giới thiệu công ty', 'Văn phòng', 'Văn phòng tại Hà Nội') },
+    ],
+    serviceAreas: [],
+  };
+  return { snapshot, manifest, projects, records, assets, readAsset: (f: string) => assets[f] };
 }
 
 describe('sourceFactLines', () => {
@@ -205,9 +256,50 @@ describe('auditSource', () => {
     expect(renderLedgerCsv(a)).toContain('LIBRARY_ONLY');
   });
 
+  it('compares the current source text with the committed record: unchanged text, redacted contact data and an assembled page all match', () => {
+    const a = auditSource(fixture());
+    expect(a.problems).toEqual([]);
+    const check = (ref: string) => a.matrix.find((r) => r.ref === ref)!;
+    expect(check('legacy:4')).toMatchObject({ contentCheck: 'MATCH', fidelity: 'EXACT' });
+    expect(check('legacy:5')).toMatchObject({ contentCheck: 'MATCH_EXCEPT_REDACTIONS', fidelity: 'EXACT' });
+    expect(check('legacy:6').contentCheck).toBe('MATCH');
+    expect(check('legacy:7').contentCheck).toBe('MATCH');
+    expect(check('legacy:4').seedTextSha256).toMatch(/^[0-9a-f]{12}$/);
+  });
+
+  it('fails when the source text changes to DIFFERENT text of exactly the same length (a length check alone would pass)', () => {
+    const f = fixture();
+    const changed = '<p>Bài viết gốc số hai</p>';
+    expect(plainChars(changed)).toBe(plainChars(ART));
+    f.snapshot.posts.find((p) => p.id === 20)!.content.rendered = changed;
+    const a = auditSource(f);
+    const row = a.matrix.find((r) => r.ref === 'legacy:4')!;
+    expect(row.bodyCheck).toBe('SAME_AS_SEED');
+    expect(row).toMatchObject({ contentCheck: 'DIFFERS', fidelity: 'DIFFERS' });
+    expect(a.problems.join('\n')).toContain('legacy:4: văn bản nguồn hiện tại khác bản ghi seed articles/art');
+  });
+
+  it('fails when a section of the assembled about page changes without changing its length', () => {
+    const f = fixture();
+    f.snapshot.posts.find((p) => p.id === 23)!.content.rendered = '<p>Văn phòng tại Đà Lạt</p>';
+    const a = auditSource(f);
+    expect(a.matrix.find((r) => r.ref === 'legacy:7')).toMatchObject({ bodyCheck: 'SAME_AS_SEED', contentCheck: 'DIFFERS' });
+    expect(a.problems.join('\n')).toContain('legacy:7: văn bản nguồn hiện tại khác');
+  });
+
+  it('fails when a changed contact number or text is hidden behind the redaction rule, without echoing it', () => {
+    const f = fixture();
+    f.snapshot.posts.find((p) => p.id === 21)!.content.rendered = '<p>Hãy +84 987 654 321 để biết thêm</p>';
+    const a = auditSource(f);
+    expect(a.matrix.find((r) => r.ref === 'legacy:5')!.contentCheck).toBe('DIFFERS');
+    const report = renderAuditReport(a);
+    expect(report).not.toContain('987 654 321');
+    expect(report).not.toContain('Hãy');
+  });
+
   it('renders a report that carries hashes and facts but never the source body text', () => {
     const f = fixture();
-    f.snapshot.posts[0]!.content.rendered = FULL.replace('<p>Hà Nội</p>', '<p>Hà Nội</p><p>Liên hệ (+84) 912 345 678</p>');
+    f.snapshot.posts[0]!.content.rendered = FULL.replace('<p>Hà Nội</p>', '<p>Hà Nội</p><p>Liên hệ +84 912 345 678</p>');
     f.manifest.inventory[0]!.bodyChars = undefined;
     const report = renderAuditReport(auditSource(f));
     expect(report).toContain('Ma trận truy vết từng URL');

@@ -1,13 +1,14 @@
 import { createHash } from 'node:crypto';
-import { normalizeImageUrl, parseProjectFacts, plainTextOfHtml, type WpPost, type WpSnapshot } from './generator';
+import { fidelity, normalizeImageUrl, parseProjectFacts, plainTextOfHtml, type WpPost, type WpSnapshot } from './generator';
 import { type HNode, isElement, parseHtml, textOf } from './html';
-import type { InventoryRow, Manifest, MediaEntry, ProjectRecord } from './pack';
+import { type LexicalDoc, lexicalPlainText } from './lexical';
+import type { ArticleRecord, GlobalRecord, InventoryRow, Manifest, MediaEntry, ProjectRecord, ServiceAreaRecord } from './pack';
 
 // Source-fidelity audit (Issue #80): compares what the legacy WordPress site serves now with what the committed seed pack
 // holds. Pure: the caller injects the WordPress snapshot and a reader for the committed asset files; nothing here touches the
 // network, the disk or a database. It reports; it never repairs, and it never decides rights (that stays in review/*.json).
 
-export type FidelityClass = 'EXACT' | 'FACTS_ONLY' | 'MISSING' | 'BLOCKED';
+export type FidelityClass = 'EXACT' | 'FACTS_ONLY' | 'MISSING' | 'BLOCKED' | 'DIFFERS';
 export type GapClass = 'DATA_MISSING' | 'SOURCE_ABSENT' | 'SCHEMA_MISMATCH' | 'PRIVACY/RIGHTS_PENDING' | 'EXISTING_BUT_DRAFT';
 
 const OWN_HOST = /(^|\.)binhminhsonglo\.vn$/;
@@ -99,6 +100,13 @@ export type MatrixRow = {
   seedBodyChars?: number;
   /** `DRIFT` = the legacy body now differs from the one the seed was generated from. */
   bodyCheck: 'SAME_AS_SEED' | 'DRIFT' | 'NO_BODY' | 'NOT_A_DOCUMENT';
+  /**
+   * Current source text compared with the COMMITTED record body (not with the manifest's old verdict): `MATCH_EXCEPT_REDACTIONS`
+   * = equal once the phone/email placeholders are accounted for. `NOT_COMPARED` = no committed text for this row (blocked, facts-only, taxonomy).
+   */
+  contentCheck: 'MATCH' | 'MATCH_EXCEPT_REDACTIONS' | 'DIFFERS' | 'NOT_COMPARED';
+  /** SHA-256 (12) of the normalised text of the committed record body; the text itself is never reported. */
+  seedTextSha256?: string;
   imagesInSource?: number;
   imagesInSeedRow: number;
   target: string;
@@ -131,13 +139,18 @@ export type AuditInput = {
   snapshot: WpSnapshot;
   manifest: Manifest;
   projects: ProjectRecord[];
+  /** The committed records whose bodies are compared with the current source text. */
+  records: { articles: ArticleRecord[]; globals: GlobalRecord[]; serviceAreas: ServiceAreaRecord[] };
   readAsset: (file: string) => Buffer | undefined;
   mediaReported?: number;
 };
 
 const pathOf = (url: string) => decodeURIComponent(new URL(url).pathname);
 
-function classify(row: InventoryRow, source: SourceDoc | undefined): Pick<MatrixRow, 'fidelity' | 'gap' | 'reason'> {
+function classify(row: InventoryRow, source: SourceDoc | undefined, contentCheck: MatrixRow['contentCheck']): Pick<MatrixRow, 'fidelity' | 'gap' | 'reason'> {
+  if (contentCheck === 'DIFFERS') {
+    return { fidelity: 'DIFFERS', gap: 'DATA_MISSING', reason: 'Văn bản nguồn hiện tại KHÁC bản ghi seed đã commit (kể cả khi cùng độ dài): nguồn đã đổi sau khi tạo seed, cần tạo lại pack và duyệt.' };
+  }
   switch (row.textStatus) {
     case 'SEEDED':
     case 'SEEDED_REDACTED':
@@ -170,7 +183,7 @@ function classify(row: InventoryRow, source: SourceDoc | undefined): Pick<Matrix
 }
 
 export function auditSource(input: AuditInput): AuditResult {
-  const { snapshot, manifest, projects, readAsset } = input;
+  const { snapshot, manifest, projects, records, readAsset } = input;
   const problems: string[] = [];
   const docs: SourceDoc[] = [
     ...snapshot.posts.map((p) => ({ ...p, wpType: 'post' as const })),
@@ -181,6 +194,17 @@ export function auditSource(input: AuditInput): AuditResult {
   const mediaById = new Map(snapshot.media.map((m) => [m.id, m]));
 
   // ---- 1. per-URL matrix ----------------------------------------------------------------------------------------------
+  const committedBody = (row: InventoryRow): { doc: LexicalDoc; mode: 'whole' | 'within' } | undefined => {
+    const key = row.target.key;
+    if (!key) return undefined;
+    const rec = key.startsWith('articles/')
+      ? records.articles.find((a) => a.key === key)
+      : key.startsWith('globals/')
+        ? records.globals.find((g) => g.key === key)
+        : records.serviceAreas.find((a) => a.key === key);
+    // The about-page is assembled from several sources, so each one must appear inside it; every other body is one source.
+    return rec?.body ? { doc: rec.body, mode: row.target.kind === 'about-page' ? 'within' : 'whole' } : undefined;
+  };
   const matrix: MatrixRow[] = manifest.inventory.map((row) => {
     const source = row.wpId !== undefined ? docById.get(row.wpId) : undefined;
     const text = source ? bodyText(source) : undefined;
@@ -193,6 +217,11 @@ export function auditSource(input: AuditInput): AuditResult {
           : 'DRIFT';
     if (row.wpId !== undefined && !source) problems.push(`${row.ref}: wpId ${row.wpId} không còn trong snapshot nguồn`);
     if (bodyCheck === 'DRIFT') problems.push(`${row.ref}: thân bài nguồn hiện ${text!.length} ký tự, seed ghi ${row.bodyChars} (nguồn đã đổi sau khi tạo seed?)`);
+    // Reuse the generator's own comparison (same normalisation and redaction rules) against the committed record body.
+    const committed = source ? committedBody(row) : undefined;
+    const verdict = committed && source ? fidelity(source.content.rendered, committed.doc, committed.mode) : undefined;
+    const contentCheck: MatrixRow['contentCheck'] = verdict === 'EXACT' ? 'MATCH' : verdict === 'EXACT_EXCEPT_REDACTIONS' ? 'MATCH_EXCEPT_REDACTIONS' : verdict === 'DIFFERS' ? 'DIFFERS' : 'NOT_COMPARED';
+    if (contentCheck === 'DIFFERS') problems.push(`${row.ref}: văn bản nguồn hiện tại khác bản ghi seed ${row.target.key} (thân bài nguồn ${text!.length} ký tự, SHA-256 ${sha256(text!).slice(0, 12)})`);
     return {
       ref: row.ref,
       legacyPath: row.legacyPath,
@@ -205,11 +234,13 @@ export function auditSource(input: AuditInput): AuditResult {
       sourceBodySha256: text !== undefined ? sha256(text) : undefined,
       seedBodyChars: row.bodyChars,
       bodyCheck,
+      contentCheck,
+      seedTextSha256: committed ? sha256(squash(lexicalPlainText(committed.doc))).slice(0, 12) : undefined,
       imagesInSource: source ? new Set(bodyImageUrls(source.content.rendered)).size : undefined,
       imagesInSeedRow: row.images.found,
       target: row.target.key ?? row.target.kind,
       textStatus: row.textStatus,
-      ...classify(row, source),
+      ...classify(row, source, contentCheck),
     };
   });
 
@@ -420,15 +451,16 @@ export function renderAuditReport(a: AuditResult): string {
   L.push('| Nhóm (đích · trạng thái) | Số dòng |', '| --- | --- |', ...a.reconciliation.map((r) => `| ${cell(r.group)} | ${r.rows} |`), '');
 
   L.push('## 2. Ma trận truy vết từng URL', '');
-  L.push('Độ khớp: EXACT = văn bản seed khớp nguồn (trừ SĐT/email); FACTS_ONLY = trang dự án chỉ có dòng dữ kiện; MISSING = không có văn bản để seed (lý do ghi rõ); BLOCKED = có ở nguồn nhưng không được commit.', '');
+  L.push('Độ khớp: EXACT = văn bản seed khớp nguồn (trừ SĐT/email); FACTS_ONLY = trang dự án chỉ có dòng dữ kiện; MISSING = không có văn bản để seed (lý do ghi rõ); BLOCKED = có ở nguồn nhưng không được commit; DIFFERS = văn bản nguồn hiện tại khác bản ghi đã commit.', '');
+  L.push('"Văn bản so với bản ghi đã commit" so văn bản nguồn hiện tại với đúng bản ghi trong Git (cùng quy tắc chuẩn hoá và che SĐT/email với generator), không chỉ so độ dài. Dòng không có văn bản được commit (bị chặn, dự án chỉ có dữ kiện, trang lưu trữ) chỉ so được độ dài (NOT_COMPARED); dự án được so từng trường ở mục 3.', '');
   L.push(
-    '| Ref | URL cũ | Loại/ID | Tiêu đề | Ngày | Chuyên mục | Thân bài nguồn (ký tự · SHA-256 12) | So với seed | Ảnh nguồn / dòng seed | Đích | Độ khớp | Phân loại | Lý do |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| Ref | URL cũ | Loại/ID | Tiêu đề | Ngày | Chuyên mục | Thân bài nguồn (ký tự · SHA-256 12) | Độ dài so với seed | Văn bản so với bản ghi đã commit | Ảnh nguồn / dòng seed | Đích | Độ khớp | Phân loại | Lý do |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
   );
   for (const r of a.matrix) {
     const body = r.sourceBodyChars !== undefined ? `${r.sourceBodyChars} · ${r.sourceBodySha256!.slice(0, 12)}` : '';
     L.push(
-      `| ${r.ref} | \`${cell(r.legacyPath)}\` | ${r.wpType}${r.wpId !== undefined ? ` #${r.wpId}` : ''} | ${cell(r.title)} | ${r.dateGmt?.slice(0, 10) ?? ''} | ${cell(r.categories.join(', '))} | ${body} | ${r.bodyCheck} | ${r.imagesInSource ?? ''} / ${r.imagesInSeedRow} | ${cell(r.target)} | ${r.fidelity} | ${r.gap} | ${cell(r.reason)} |`,
+      `| ${r.ref} | \`${cell(r.legacyPath)}\` | ${r.wpType}${r.wpId !== undefined ? ` #${r.wpId}` : ''} | ${cell(r.title)} | ${r.dateGmt?.slice(0, 10) ?? ''} | ${cell(r.categories.join(', '))} | ${body} | ${r.bodyCheck} | ${r.contentCheck} | ${r.imagesInSource ?? ''} / ${r.imagesInSeedRow} | ${cell(r.target)} | ${r.fidelity} | ${r.gap} | ${cell(r.reason)} |`,
     );
   }
   L.push('');

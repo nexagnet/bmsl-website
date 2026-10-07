@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { auditSource, renderAuditReport, renderLedgerCsv } from './audit';
-import type { Manifest, ProjectRecord } from './pack';
+import type { ArticleRecord, GlobalRecord, Manifest, ProjectRecord, ServiceAreaRecord } from './pack';
 import { loadSnapshot, reportedTotal } from './source-fetch';
 
 // EXPLICIT, network-using, READ-ONLY step (Issue #80): re-reads the public legacy site and compares it with the committed
@@ -16,7 +16,8 @@ const DOCS = path.join(REPO_ROOT, 'docs/migration');
 try {
   const check = process.argv.slice(2).includes('--check');
   const manifest = JSON.parse(readFileSync(path.join(PACK_DIR, 'manifest.json'), 'utf8')) as Manifest;
-  const { records: projects } = JSON.parse(readFileSync(path.join(PACK_DIR, 'records/projects.json'), 'utf8')) as { records: ProjectRecord[] };
+  const records = <T>(name: string) => (JSON.parse(readFileSync(path.join(PACK_DIR, `records/${name}.json`), 'utf8')) as { records: T[] }).records;
+  const projects = records<ProjectRecord>('projects');
 
   console.log('Reading the public legacy site (read-only)...');
   const snapshot = await loadSnapshot();
@@ -27,6 +28,7 @@ try {
     snapshot,
     manifest,
     projects,
+    records: { articles: records<ArticleRecord>('articles'), globals: records<GlobalRecord>('globals'), serviceAreas: records<ServiceAreaRecord>('service-areas') },
     mediaReported,
     readAsset: (file) => {
       try {

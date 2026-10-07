@@ -7,7 +7,7 @@ Issue #80 (R2, Claude Code Desktop, thủ công, chỉ đọc nguồn + chỉ ch
 ## 1. Kết luận
 
 * **Seed trong Git khớp nguồn WordPress tại thời điểm chạy (2026-10-07), không có sai lệch**: 51 dòng kiểm kê ↔ 42 bài/trang công khai + 9 trang
-  lưu trữ; độ dài thân bài nguồn bằng độ dài ghi trong manifest ở mọi dòng; 17 bản ghi dự án khớp từng dòng dữ kiện (địa điểm, quy mô,
+  lưu trữ; **văn bản nguồn hiện tại được so với đúng bản ghi đã commit** ở cả 19 dòng có văn bản được seed (13 khớp hoàn toàn, 6 khớp sau khi che SĐT/email), bằng chính hàm `fidelity()` của generator, không chỉ so độ dài; 17 bản ghi dự án khớp từng dòng dữ kiện (địa điểm, quy mô,
   chủ đầu tư, năm, trạng thái, dịch vụ); 235 URL ảnh = 62 đã commit (56 tệp, SHA-256 băm lại từ tệp trong repo) + 172 chờ duyệt + 1 ảnh logo
   đã duyệt nhưng không bản ghi nào dùng.
 * **Không có nội dung dự án nào bị mất do parser.** Mỗi trang dự án nguồn chỉ có 1 ảnh và tối đa 5 dòng "Nhãn : giá trị", không có
@@ -44,9 +44,10 @@ Issue #80 (R2, Claude Code Desktop, thủ công, chỉ đọc nguồn + chỉ ch
   mọi trang REST nay gửi `orderby=id&order=asc` (thứ tự mặc định theo ngày không phải thứ tự toàn phần nên các mục cùng dấu thời gian
   về nguyên tắc có thể lặp/bỏ sót giữa các trang; ảnh bìa/alt text được tra qua danh sách này). Trên nguồn hiện nay hai cách sắp xếp
   trả cùng 293 mục, nên đây là phòng ngừa chứ không phải lỗi đã quan sát được.
+* `generator.ts`: chỉ **export** `fidelity()` (thêm tham số `mode`, mặc định giữ hành vi cũ nên pack sinh ra không đổi) để audit dùng lại cùng quy tắc chuẩn hoá/che SĐT, email, không có parser thứ hai.
 * `audit.ts`, `audit-cli.ts` (mới): bộ đối chiếu độc lập (tự đọc dòng dữ kiện từ HTML nguồn, ngoại trừ ánh xạ dịch vụ dùng lại
   `parseProjectFacts`), kiểm 235 URL ảnh, băm lại 56 tệp, đối soát số lượng với manifest, phát hiện nguồn đổi sau lúc tạo seed,
-  bài/URL mới chưa có trong kiểm kê, đoạn văn nguồn chưa vào seed. Báo cáo **không bao giờ in văn bản nguồn** (chỉ độ dài + SHA-256 12 ký tự).
+  bài/URL mới chưa có trong kiểm kê, đoạn văn nguồn chưa vào seed, và **văn bản nguồn đổi mà giữ nguyên độ dài** (so nội dung với bản ghi đã commit; trang giới thiệu gộp 3 nguồn thì mỗi nguồn phải nằm trong trang). Có test hồi quy cho ca cùng độ dài khác chữ, ca che SĐT hợp lệ và ca đổi số điện thoại (không in lại số). Báo cáo **không bao giờ in văn bản nguồn** (chỉ độ dài + SHA-256 12 ký tự).
 * `package.json`: thêm script `seed:bmsl-legacy:audit`. **Không** thêm vào build, start, container-start hay CD.
 * Không đổi schema, migration, loader, pack, quyền ảnh, `.github/**`, `deploy/**`, `infra/**`.
 
@@ -94,4 +95,5 @@ Seed chạy offline: chỉ đọc pack trong Git; ảnh được sao chép từ 
 * Chưa đọc được 12 tệp media của đối tượng không công khai; chưa đọc DB production (cố ý, không được phép).
 * Quyền sử dụng ảnh/văn bản, và mọi dữ kiện lịch sử/pháp lý/liên hệ: vẫn `UNCONFIRMED`, thuộc BMSL.
 * Audit đối chiếu với **nguồn tại thời điểm chạy** (2026-10-07). Nếu website cũ đổi sau đó, chạy lại.
+* Với 32 dòng không có văn bản được commit (4 bị chặn, trang chủ rỗng, 9 trang lưu trữ, 18 nguồn dự án) chỉ phát hiện được thay đổi **độ dài**; dự án được so từng trường dữ kiện nhưng không so toàn văn. Vì không có văn bản trong Git để so, thay đổi cùng độ dài ở các dòng bị chặn không bị phát hiện.
 * Chưa có reviewer độc lập và CI exact-head cho PR này (làm sau khi mở PR).
