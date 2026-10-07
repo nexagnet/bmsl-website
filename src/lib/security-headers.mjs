@@ -19,6 +19,8 @@ export function buildCsp(env = {}) {
     'img-src': ["'self'", 'data:', 'blob:', ...(ga4 ? GA4_CONNECT.slice(0, 2) : [])],
     'font-src': ["'self'", 'data:'],
     'connect-src': ["'self'", ...(ga4 ? GA4_CONNECT : [])],
+    // Only the OpenStreetMap origin, used by the click-to-load office map (rendered solely for approved coordinates).
+    'frame-src': ["'self'", 'https://www.openstreetmap.org'],
     'frame-ancestors': ["'none'"],
     'base-uri': ["'self'"],
     'form-action': ["'self'"],
