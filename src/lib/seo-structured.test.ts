@@ -72,6 +72,52 @@ describe('strict public path validation', () => {
     }
   });
 
+  it('accepts encoded Unicode/space media filenames and ASCII, rejects unsafe variants', () => {
+    const base = '/api/media-assets/file/';
+    for (const f of [
+      '%E1%BA%A2nh%20ch%E1%BB%A5p%20m%C3%A0n%20h%C3%ACnh%202026-08-29%20220316.png',
+      'a-1.jpg',
+      'My_Photo.2.PNG',
+    ]) {
+      expect(isApprovedMediaPath(base + f), f).toBe(true);
+    }
+    for (const f of [
+      '%',
+      '%E1%BA',
+      '%ZZ',
+      'a%2Fb.png',
+      'a%2fb.png',
+      'a%5Cb.png',
+      '%2e%2e',
+      '%2e%2e%2fusers',
+      '%252e%252e',
+      'a%252Fb',
+      '..',
+      '.hidden',
+      'a..b.png',
+      '%00.png',
+      'a%0Ab.png',
+      'a.png?x=1',
+      'a.png#x',
+      'a b.png',
+      'a/b.png',
+      'a\\b.png',
+      '',
+    ]) {
+      expect(isApprovedMediaPath(base + f), f).toBe(false);
+    }
+    for (const p of [
+      '/api/users/me',
+      '/api/media-assets/file',
+      '/api/media-assets/other/a.png',
+      'https://cdn.evil.example/api/media-assets/file/a.png',
+      '//cdn.evil.example/api/media-assets/file/a.png',
+      null,
+    ]) {
+      expect(isApprovedMediaPath(p), String(p)).toBe(false);
+    }
+  });
+
   it('validates slugs', () => {
     expect(isPublicSlug('bao-ve-1')).toBe(true);
     for (const s of ['', '..', 'a/b', 'a b', 'A', 'a--b', '-a', 'a-', '%2e', 'a?b', 'a\\b', 1, null, 'a'.repeat(121)]) {
