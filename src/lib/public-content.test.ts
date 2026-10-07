@@ -58,6 +58,22 @@ describe('media rights gate', () => {
     expect(toSeo({ ogImage: { ...approved, rightsStatus: 'UNCONFIRMED' } }).image).toBeUndefined();
   });
 
+  it('keeps APPROVED media with an encoded Unicode/space filename and still hides UNCONFIRMED', () => {
+    const url = '/api/media-assets/file/%E1%BA%A2nh%20ch%E1%BB%A5p%20m%C3%A0n%20h%C3%ACnh%202026-08-29%20220316.png';
+    const p = toProject({
+      ...pub,
+      sourceStatus: 'CONFIRMED',
+      id: 1,
+      name: 'P',
+      slug: 'p',
+      images: [
+        { ...approved, id: 5, url },
+        { ...approved, id: 6, url, rightsStatus: 'UNCONFIRMED' },
+      ],
+    });
+    expect(p?.images.map((i) => [i.id, i.url])).toEqual([['5', url]]);
+  });
+
   it('hides documents whose file is not approved', () => {
     expect(toDocument({ ...pub, id: 1, title: 'D', file: { ...approved, rightsStatus: 'UNCONFIRMED' } })).toBeUndefined();
     expect(toDocument({ ...pub, id: 1, title: 'D', file: approved })?.url).toBe('/api/media-assets/file/a.jpg');
