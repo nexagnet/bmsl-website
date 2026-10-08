@@ -281,6 +281,20 @@ export function toDocument(d: unknown): DocumentView | undefined {
     : undefined;
 }
 
+/**
+ * A link target restricted to same-site internal paths (e.g. /lien-he, /dich-vu).
+ * Rejects external http(s) URLs, protocol-relative //paths, backslashes, and control characters.
+ */
+export function safeInternalLinkHref(url: unknown): string | undefined {
+  const value = text(url);
+  // eslint-disable-next-line no-control-regex
+  if (!value || /[\u0000-\u001f\u007f\\]/.test(value)) return undefined;
+  if (value.startsWith('/') && !value.startsWith('//')) {
+    return value;
+  }
+  return undefined;
+}
+
 export type HeroView = {
   enabled: boolean;
   kicker?: string;
@@ -295,7 +309,7 @@ export type HeroView = {
   layoutPreset: 'editorial' | 'split';
 };
 
-/** Maps and gates HomePage hero fields. Only APPROVED media is admitted; links are sanitized. */
+/** Maps and gates HomePage hero fields. Only APPROVED media is admitted; links are sanitized to safe internal paths. */
 export function toHero(v: unknown): HeroView | undefined {
   if (!isDoc(v)) return undefined;
   const enabled = v.enabled !== false;
@@ -303,9 +317,9 @@ export function toHero(v: unknown): HeroView | undefined {
   const headline = text(v.headline);
   const supportingText = text(v.supportingText);
   const primaryLabel = text(v.primaryCtaText) || 'Đặt lịch khảo sát';
-  const primaryHref = safeLinkHref(v.primaryCtaLink) || '/lien-he?requestType=khao-sat';
+  const primaryHref = safeInternalLinkHref(v.primaryCtaLink) || '/lien-he?requestType=khao-sat';
   const secondaryLabel = text(v.secondaryCtaText);
-  const secondaryHref = safeLinkHref(v.secondaryCtaLink);
+  const secondaryHref = safeInternalLinkHref(v.secondaryCtaLink);
   const desktopImage = toPublicImage(v.desktopImage);
   const mobileImage = toPublicImage(v.mobileImage);
   const focalPoint = v.focalPoint === 'top' || v.focalPoint === 'bottom' ? v.focalPoint : 'center';

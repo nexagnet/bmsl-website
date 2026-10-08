@@ -72,7 +72,7 @@ describe('HomePage Hero Mapping & Security Gate', () => {
     expect(hero?.enabled).toBe(false);
   });
 
-  it('sanitizes unsafe CTA URLs (javascript:, protocol-relative)', () => {
+  it('sanitizes unsafe CTA URLs (javascript:, protocol-relative, external http/https)', () => {
     const hero = toHero({
       primaryCtaText: 'Bấm vào đây',
       primaryCtaLink: 'javascript:alert("hacked")',
@@ -80,10 +80,28 @@ describe('HomePage Hero Mapping & Security Gate', () => {
       secondaryCtaLink: '//evil.com/phishing',
     });
 
-    // Unsafe primary link falls back to safe default
+    // Unsafe primary link falls back to safe default internal path
     expect(hero?.primaryCta.href).toBe('/lien-he?requestType=khao-sat');
     // Unsafe secondary link is dropped completely
     expect(hero?.secondaryCta).toBeUndefined();
+
+    // External http(s) URLs are rejected for Hero CTAs, enforcing safe same-site navigation
+    const heroWithExternal = toHero({
+      primaryCtaLink: 'https://external-site.com/survey',
+      secondaryCtaText: 'Trang ngoài',
+      secondaryCtaLink: 'http://malicious.org/services',
+    });
+    expect(heroWithExternal?.primaryCta.href).toBe('/lien-he?requestType=khao-sat');
+    expect(heroWithExternal?.secondaryCta).toBeUndefined();
+
+    // Valid internal paths are preserved
+    const heroWithValid = toHero({
+      primaryCtaLink: '/lien-he?requestType=khao-sat',
+      secondaryCtaText: 'Dịch vụ',
+      secondaryCtaLink: '/dich-vu/quan-ly-van-hanh',
+    });
+    expect(heroWithValid?.primaryCta.href).toBe('/lien-he?requestType=khao-sat');
+    expect(heroWithValid?.secondaryCta?.href).toBe('/dich-vu/quan-ly-van-hanh');
   });
 
   it('enforces MediaAssets rights gate: admits APPROVED media and blocks UNCONFIRMED media', () => {

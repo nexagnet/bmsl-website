@@ -9,17 +9,14 @@ export interface HeroSectionProps {
 }
 
 export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSectionProps) {
-  // Allow CMS admin to disable the Hero section if required
+  // If CMS admin disabled the Hero section, preserve semantic H1 for page heading hierarchy
   if (hero && hero.enabled === false) {
-    return null;
+    return <h1 className="sr-only">{defaultTitle || SITE_NAME}</h1>;
   }
 
-  const kicker = hero?.kicker || 'QUẢN LÝ VẬN HÀNH BẤT ĐỘNG SẢN CHUYÊN NGHIỆP';
+  const kicker = hero?.kicker;
   const headline = hero?.headline || defaultTitle || SITE_NAME;
-  const supportingText =
-    hero?.supportingText ||
-    defaultBodyText ||
-    'Đồng hành cùng Ban Quản trị và Chủ đầu tư kiến tạo không gian sống an toàn, minh bạch và tiêu chuẩn vận hành bền vững.';
+  const supportingText = hero?.supportingText || defaultBodyText;
   const primaryCta = hero?.primaryCta || { label: SURVEY_CTA.label, href: SURVEY_CTA.href };
   const secondaryCta = hero?.secondaryCta || { label: 'Xem dịch vụ', href: '/dich-vu' };
   const desktopImage = hero?.desktopImage;
@@ -89,63 +86,6 @@ export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSection
               </Link>
             ) : null}
           </div>
-
-          <div className="hero-editorial-credentials" aria-label="Tiêu chuẩn năng lực BMSL">
-            <span className="credential-item">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              Minh bạch quy trình
-            </span>
-            <span className="credential-divider" aria-hidden="true">
-              ·
-            </span>
-            <span className="credential-item">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              An toàn PCCC chuẩn mực
-            </span>
-            <span className="credential-divider" aria-hidden="true">
-              ·
-            </span>
-            <span className="credential-item">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              Đồng hành cùng BQT
-            </span>
-          </div>
         </div>
 
         <div className="hero-editorial-media">
@@ -157,62 +97,59 @@ export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSection
                 ) : null}
                 <img
                   src={desktopImage.url}
-                  alt={desktopImage.alt || 'Ảnh công trình kiến trúc do BMSL quản lý vận hành'}
+                  alt={desktopImage.alt || 'Hình ảnh kiến trúc công trình'}
                   {...(desktopImage.width && desktopImage.height
                     ? { width: desktopImage.width, height: desktopImage.height }
                     : {})}
                   fetchPriority="high"
                   decoding="async"
                   className="hero-media-img"
-                  sizes="(min-width: 64rem) 46vw, 100vw"
                 />
               </picture>
               <div className="hero-media-overlay" aria-hidden="true" />
               <div className="hero-media-frame-corner top-left" aria-hidden="true" />
               <div className="hero-media-frame-corner bottom-right" aria-hidden="true" />
-              <div className="hero-media-caption">
-                <span className="caption-tag">BMSL FACILITY</span>
-                <span className="caption-text">Chuẩn mực trong từng chi tiết vận hành</span>
-              </div>
             </div>
           ) : (
-            <div className="hero-fallback-matrix" aria-label="4 lĩnh vực dịch vụ cốt lõi">
+            <div className="hero-fallback-matrix" aria-label="Lĩnh vực dịch vụ vận hành">
               <div className="matrix-header">
-                <span className="matrix-title">LĨNH VỰC VẬN HÀNH CỐT LÕI</span>
-                <span className="matrix-badge">BMSL · STANDARD</span>
+                <span className="matrix-title">LĨNH VỰC DỊCH VỤ</span>
+                <span className="matrix-badge">BMSL</span>
               </div>
               <div className="matrix-grid">
-                <div className="matrix-item">
+                <Link href="/dich-vu/quan-ly-van-hanh" className="matrix-item">
                   <span className="matrix-num">01</span>
                   <h3 className="matrix-item-title">Quản lý vận hành</h3>
-                  <p className="matrix-item-desc">
-                    Điều hành tổng thể tòa nhà, tối ưu chi phí và quản lý dịch vụ cư dân chuẩn mực.
-                  </p>
-                </div>
-                <div className="matrix-item">
+                  <span className="matrix-item-link" aria-hidden="true">
+                    Chi tiết &rarr;
+                  </span>
+                </Link>
+                <Link href="/dich-vu/bao-ve" className="matrix-item">
                   <span className="matrix-num">02</span>
-                  <h3 className="matrix-item-title">An ninh & Bảo vệ</h3>
-                  <p className="matrix-item-desc">
-                    Lực lượng chuyên nghiệp, kiểm soát an ninh 24/7 và phản ứng nhanh sự cố.
-                  </p>
-                </div>
-                <div className="matrix-item">
+                  <h3 className="matrix-item-title">Bảo vệ</h3>
+                  <span className="matrix-item-link" aria-hidden="true">
+                    Chi tiết &rarr;
+                  </span>
+                </Link>
+                <Link href="/dich-vu/ve-sinh" className="matrix-item">
                   <span className="matrix-num">03</span>
-                  <h3 className="matrix-item-title">Vệ sinh môi trường</h3>
-                  <p className="matrix-item-desc">
-                    Quy trình vệ sinh công nghiệp khép kín, giữ gìn cảnh quan sạch đẹp, văn minh.
-                  </p>
-                </div>
-                <div className="matrix-item">
+                  <h3 className="matrix-item-title">Vệ sinh</h3>
+                  <span className="matrix-item-link" aria-hidden="true">
+                    Chi tiết &rarr;
+                  </span>
+                </Link>
+                <Link href="/dich-vu/pccc" className="matrix-item">
                   <span className="matrix-num">04</span>
-                  <h3 className="matrix-item-title">Kỹ thuật & PCCC</h3>
-                  <p className="matrix-item-desc">
-                    Bảo trì hệ thống cơ điện (M&E), diễn tập và duy trì an toàn phòng cháy chữa cháy.
-                  </p>
-                </div>
+                  <h3 className="matrix-item-title">PCCC</h3>
+                  <span className="matrix-item-link" aria-hidden="true">
+                    Chi tiết &rarr;
+                  </span>
+                </Link>
               </div>
               <div className="matrix-footer">
-                <span className="matrix-note">Cam kết thực hiện theo quy trình và tiêu chuẩn hợp đồng</span>
+                <Link href="/dich-vu" className="matrix-footer-link">
+                  Xem tất cả dịch vụ &rarr;
+                </Link>
               </div>
             </div>
           )}

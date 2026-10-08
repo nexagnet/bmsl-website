@@ -717,46 +717,6 @@ main:focus {
 }
 
 /* Credential Reassurance Bar */
-.hero-editorial-credentials {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.65rem 0.85rem;
-  font-size: 0.825rem;
-  color: var(--color-muted);
-  font-weight: 500;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border-subtle);
-}
-
-.credential-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: var(--color-text-secondary);
-}
-
-.credential-item svg {
-  color: var(--color-brand-accent);
-  flex-shrink: 0;
-}
-
-.credential-divider {
-  color: var(--color-border-strong);
-  font-weight: 700;
-}
-
-@media (max-width: 32rem) {
-  .hero-editorial-credentials {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  .credential-divider {
-    display: none;
-  }
-}
-
 /* Media Column & Architectural Viewport */
 .hero-editorial-media {
   position: relative;
@@ -843,45 +803,6 @@ main:focus {
   border-right: 2px solid rgba(255, 255, 255, 0.85);
 }
 
-/* Caption bar inside visual */
-.hero-media-caption {
-  position: absolute;
-  bottom: 0.85rem;
-  left: 0.85rem;
-  right: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.5rem 0.85rem;
-  background: rgba(10, 25, 47, 0.82);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-sm);
-  color: #ffffff;
-  z-index: 4;
-}
-
-.caption-tag {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.2rem 0.45rem;
-  background-color: var(--color-brand-accent);
-  color: #ffffff;
-  border-radius: 3px;
-  line-height: 1;
-}
-
-.caption-text {
-  font-size: 0.825rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.92);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /* ==========================================================================
    Fallback: Architectural Editorial Matrix (Text-first Mode)
    ========================================================================== */
@@ -927,13 +848,13 @@ main:focus {
 .matrix-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 @media (min-width: 30rem) {
   .matrix-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 1.25rem;
+    gap: 1.25rem 1rem;
   }
 }
 
@@ -941,6 +862,20 @@ main:focus {
   display: flex;
   flex-direction: column;
   position: relative;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.matrix-item:hover,
+.matrix-item:focus-visible {
+  border-color: var(--color-brand-accent);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 .matrix-num {
@@ -959,24 +894,34 @@ main:focus {
   line-height: 1.35;
 }
 
-.matrix-item-desc {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: var(--color-muted);
-  margin: 0;
+.matrix-item-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-brand-secondary);
+  margin-top: 0.25rem;
 }
 
 .matrix-footer {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px dashed var(--color-border);
 }
 
-.matrix-note {
-  font-size: 0.775rem;
-  color: var(--color-muted);
-  font-style: italic;
-  display: block;
+.matrix-footer-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-brand-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.15s ease;
+}
+
+.matrix-footer-link:hover,
+.matrix-footer-link:focus-visible {
+  color: var(--color-brand-accent);
+  text-decoration: underline;
 }
 
 /* Hair-line architectural divider beneath Hero */
