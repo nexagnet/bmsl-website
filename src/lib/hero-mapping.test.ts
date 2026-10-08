@@ -8,6 +8,7 @@ describe('HomePage Hero Mapping & Security Gate', () => {
     url: '/api/media-assets/file/approved-building.jpg',
     width: 1920,
     height: 1080,
+    mimeType: 'image/jpeg',
     rightsStatus: 'APPROVED',
   };
 
@@ -17,6 +18,7 @@ describe('HomePage Hero Mapping & Security Gate', () => {
     url: '/api/media-assets/file/unconfirmed.jpg',
     width: 800,
     height: 600,
+    mimeType: 'image/jpeg',
     rightsStatus: 'UNCONFIRMED',
   };
 
@@ -119,6 +121,14 @@ describe('HomePage Hero Mapping & Security Gate', () => {
     });
     // Unconfirmed mobile image must be blocked
     expect(heroWithApproved?.mobileImage).toBeUndefined();
+  });
+
+  it('rejects APPROVED PDFs and unknown MIME types as Hero images, retaining the safe fallback', () => {
+    const pdf = { ...approvedMedia, id: 77, url: '/api/media-assets/file/approved.pdf', mimeType: 'application/pdf' };
+    expect(toHero({ desktopImage: pdf })?.desktopImage).toBeUndefined();
+    expect(toHero({ mobileImage: pdf })?.mobileImage).toBeUndefined();
+    expect(toHero({ desktopImage: { ...approvedMedia, mimeType: undefined } })?.desktopImage).toBeUndefined();
+    expect(toHero({ desktopImage: approvedMedia })?.desktopImage?.url).toBe(approvedMedia.url);
   });
 
   it('rejects remote or unauthorized image URLs even if labelled APPROVED', () => {

@@ -320,6 +320,13 @@ export type HeroView = {
   layoutPreset: 'editorial' | 'split';
 };
 
+/** A MediaAssets upload can be an APPROVED PDF, but a Hero <img> requires an actual raster image. */
+const HERO_IMAGE_MIME_TYPES = new Set(['image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/avif']);
+const toHeroImage = (value: unknown): PublicImage | undefined =>
+  isDoc(value) && typeof value.mimeType === 'string' && HERO_IMAGE_MIME_TYPES.has(value.mimeType)
+    ? toPublicImage(value)
+    : undefined;
+
 /** Maps and gates HomePage hero fields. Only APPROVED media is admitted; links are sanitized to safe internal paths. */
 export function toHero(v: unknown): HeroView | undefined {
   if (!isDoc(v)) return undefined;
@@ -331,8 +338,8 @@ export function toHero(v: unknown): HeroView | undefined {
   const primaryHref = safeInternalLinkHref(v.primaryCtaLink) || '/lien-he?requestType=khao-sat';
   const secondaryLabel = text(v.secondaryCtaText);
   const secondaryHref = safeInternalLinkHref(v.secondaryCtaLink);
-  const desktopImage = toPublicImage(v.desktopImage);
-  const mobileImage = toPublicImage(v.mobileImage);
+  const desktopImage = toHeroImage(v.desktopImage);
+  const mobileImage = toHeroImage(v.mobileImage);
   const focalPoint = v.focalPoint === 'top' || v.focalPoint === 'bottom' ? v.focalPoint : 'center';
   const overlayPreset = v.overlayPreset === 'strong' || v.overlayPreset === 'none' ? v.overlayPreset : 'soft';
   const layoutPreset = v.layoutPreset === 'split' ? 'split' : 'editorial';
