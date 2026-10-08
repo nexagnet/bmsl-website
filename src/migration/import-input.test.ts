@@ -83,8 +83,10 @@ describe('import safety guard', () => {
     it('still needs explicit --write and BMSL_IMPORT_ALLOW_STAGING', () => {
       expect(() => run({ ...declared, BMSL_IMPORT_ALLOW_STAGING: undefined })).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
       expect(() => run(prod)).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
-      // write absent: a non-local production-mode dry-run needs the declaration too
-      expect(() => run(prod, { write: false })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      // write absent: a non-local production-mode dry-run is still refused, first for the missing staging permission
+      expect(() => run(prod, { write: false })).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
+      // with staging permission but no declaration, the declaration is the refusal
+      expect(() => run({ ...prod, BMSL_IMPORT_ALLOW_STAGING: 'true' }, { write: false })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
       expect(() => run(declared, { write: false })).not.toThrow();
     });
 
