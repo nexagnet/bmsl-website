@@ -105,9 +105,10 @@ describe('public rendering data path', () => {
     const articles = (await payload.find({ collection: 'articles', ...PUBLIC })).docs
       .map(toArticle)
       .filter(Boolean);
-    expect(articles.map((a) => a?.href)).toEqual([
-      '/kien-thuc/cat/visible-article',
+    // The public DB query has no explicit sort: validate membership, not insertion order.
+    expect(articles.map((a) => a?.href).sort()).toEqual([
       '/kien-thuc/bai-viet/orphan-article',
+      '/kien-thuc/cat/visible-article',
     ]);
   });
 
