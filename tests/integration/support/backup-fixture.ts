@@ -114,7 +114,7 @@ try {
   } else {
     throw new Error(`unknown BKP_FIXTURE_CMD ${String(cmd)}`);
   }
-  console.log(`FIXTURE_RESULT:${JSON.stringify(result)}`);
+  console.log(`\nFIXTURE_RESULT:${JSON.stringify(result)}`); // leading newline: never glued to an unterminated log fragment
 } catch (error) {
   console.error(error instanceof Error ? (error.stack ?? error.message) : error);
   exitCode = 1;
