@@ -3,7 +3,7 @@
 Issue #78 (R2, **Phase A only**). Tài liệu này **không** cấp quyền ghi production. Không có lệnh nào trong tài liệu này
 đã được chạy trên production; không đọc/ghi DB hay volume Northflank. Base đã refresh: `main` @ `5131e599d24328655b977fa7092d0b228e4efd18`. Không có thay đổi mã ứng dụng trong PR này; chỉ tài liệu/evidence.
 
-**Trạng thái bằng chứng: `STAGING-PROVEN; WAITING_OWNER_DATA_GATE`** — "staging" ở đây là PostgreSQL/media cô lập và dữ liệu synthetic/local/CI, KHÔNG phải dữ liệu riêng tư Northflank. Không có đọc/ghi DB/volume Northflank. Owner đã xác nhận Northflank hiện là DEV/TEST, chưa có production; tuy vậy mọi import vào persistent DB/volume Northflank vẫn là data-write gate riêng và chưa được ủy quyền.
+**Trạng thái bằng chứng: `SEED-ISOLATED-PROVEN; WAITING_SEED_RESTORE_PROOF_AND_OWNER_DATA_GATE`** — "staging" ở đây là PostgreSQL/media cô lập và dữ liệu synthetic/local/CI, KHÔNG phải dữ liệu riêng tư Northflank. Không có đọc/ghi DB/volume Northflank. Theo quyết định owner được ghi tại Issue #81 (https://github.com/nexagnet/bmsl-website/issues/81#issuecomment-6030817032), Northflank hiện là DEV/TEST, chưa có production; tuy vậy mọi import vào persistent DB/volume Northflank vẫn là data-write gate riêng và chưa được ủy quyền.
 
 ## 1. Ánh xạ seed → CMS (từ `src/seed/bmsl-legacy`, loader hiện có)
 
@@ -82,9 +82,9 @@ SHA deploy + image tag, phạm vi ghi; CI exact-head xanh; reviewer tin cậy tr
 7. DỪNG/Rollback: gặp bất kỳ sai khác → dừng. Rollback mã **không** là rollback dữ liệu. Khôi phục dữ liệu chỉ qua restore
    đã thử (DB + media cùng thời điểm) và theo quyết định owner; **không** xoá dữ liệu nghiệp vụ có trước.
 
-## 5. Bằng chứng staging cô lập — ĐÃ CÓ
+## 5. Bằng chứng kiểm thử cô lập — phần đã chứng minh
 
-Không cần dựng importer/harness thứ hai. Bằng chứng được ghép từ các proof đã merge và CI bắt buộc hiện tại.
+Không cần dựng importer/harness thứ hai. Bằng chứng được ghép từ các proof đã merge và CI bắt buộc hiện tại; **chưa có một lần backup/restore của chính DB vừa được nhập bộ seed W78**. Vì vậy đây là bằng chứng import cô lập + thử cơ chế backup độc lập, không phải nghiệm thu toàn bộ W78.
 
 ### 5.1 Empty staging — import đầy đủ từ pack
 
@@ -128,7 +128,7 @@ restoredDatabaseDistinct = true
 sessionsAfterWorkers = 0
 ```
 
-Proof này dùng dữ liệu synthetic và temp directory; restore đích là DB khác, schema/content/migration/media hash được so sánh và resource được cleanup. Nó chứng minh cơ chế recovery hiện tại, không phải quyền restore lên Northflank.
+Proof này dùng dữ liệu synthetic và temp directory; restore đích là DB khác, schema/content/migration/media hash được so sánh và resource được cleanup. Nó chứng minh **cơ chế** recovery hiện tại trên dữ liệu synthetic độc lập (4 media), **không phải rehearsal khôi phục database chứa 38 bản ghi + 56 ảnh seed W78** và không phải quyền restore lên Northflank.
 
 ### 5.4 Browser/CMS proof
 
@@ -147,13 +147,13 @@ Proof này dùng dữ liệu synthetic và temp directory; restore đích là DB
 | Draft / LEGACY-SOURCE / UNCONFIRMED | W75/#80 runtime + integration tests | PROVEN |
 | anonymous negative access | W75 runtime + legacy-seed + browser HTTP integration | PROVEN |
 | authenticated CMS representative views | committed W75 synthetic screenshots + current ADMIN/EDITOR browser suite | PROVEN |
-| staging backup/restore recovery | W5C required integration run 37615468154 | PROVEN |
-| persistent preflight avoids Payload startup migration | §3 SQL read-only-role / isolated-clone design | PROVEN-DESIGN |
+| cơ chế backup/restore trên dữ liệu synthetic độc lập | W5C required integration run 37615468154 | PROVEN-MECHANISM |
+| backup/restore đúng DB + media W78 sau import | chưa chạy end-to-end với 38 bản ghi + 56 ảnh | NOT_PROVEN / REQUIRED |\n| persistent preflight avoids Payload startup migration | §3 SQL read-only-role / isolated-clone design, công cụ chưa có | DESIGN-ONLY / NOT_PROVEN |
 | actual private Northflank collision counts | deliberately not accessed | NOT_PROVEN / OWNER DATA GATE |
 | rights/categories/publication approval | business decision, not inferred | NOT_PROVEN / OWNER DECISION |
 | real production import | production not created/authorized | NOT_PROVEN |
 
-Kết luận Phase A: **STAGING-PROVEN; WAITING_OWNER_DATA_GATE**. Không có lý do kỹ thuật để viết importer mới hoặc reset môi trường. Phase B chỉ bắt đầu khi owner chỉ rõ target persistent, phạm vi ghi, backup/restore point và dữ liệu được phép chạm.
+Kết luận trung gian Phase A: **SEED-ISOLATED-PROVEN; WAITING_SEED_RESTORE_PROOF_AND_OWNER_DATA_GATE**. Không cần importer mới, nhưng **chưa đóng #78** cho tới khi backup/restore seed-specific được chứng minh trên DB/media cô lập và preflight design-gap được xử lý hoặc tách thành tiêu chí chưa hoàn thành. Phase B trên Northflank persistent cần owner chốt target/phạm vi ghi/backup point.
 
 ## 7. OWNER GATE REQUIRED — báo cáo ngắn
 
