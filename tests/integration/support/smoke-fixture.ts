@@ -264,6 +264,31 @@ try {
       data: { title: 'Synthetic UAT Approved Document', file: media.id, _status: 'published' },
     });
     result = { documentId: doc.id, mediaId: media.id, filename: media.filename, url: media.url };
+  } else if (cmd === 'dossier') {
+    // Synthetic capability dossier: a published Document in the `ho-so-nang-luc` category with an APPROVED file.
+    const media = await payload.create({
+      collection: 'media-assets',
+      data: { alt: 'synthetic capability dossier', rightsStatus: 'APPROVED', source: MARKERS.mediaSource },
+      file: { data: pdf, mimetype: 'application/pdf', name: 'synthetic-capability-dossier.pdf', size: pdf.length },
+    });
+    const doc = await payload.create({
+      collection: 'documents',
+      data: { title: 'Synthetic Capability Dossier', category: 'ho-so-nang-luc', file: media.id, _status: 'published' },
+    });
+    result = { dossierId: doc.id, url: media.url };
+  } else if (cmd === 'editorial') {
+    // Editorial UAT: a published category and an APPROVED cover image for the article that the ADMIN/EDITOR flow creates
+    // through the REST API in the browser suite. Service/article content itself is entered by those roles, not here.
+    const cover = await payload.create({
+      collection: 'media-assets',
+      data: { alt: 'synthetic editorial cover', rightsStatus: 'APPROVED', source: MARKERS.mediaSource },
+      file: { data: png, mimetype: 'image/png', name: 'synthetic-editorial-cover.png', size: png.length },
+    });
+    const category = await payload.create({
+      collection: 'article-categories',
+      data: { name: 'Chuyên mục thử nghiệm', slug: 'synthetic-editorial-category', order: 1, _status: 'published' },
+    });
+    result = { coverId: Number(cover.id), categoryId: Number(category.id), coverFilename: String(cover.filename) };
   } else if (cmd === 'revoke') {
     const id = Number(process.env.SMOKE_FIXTURE_MEDIA_ID);
     if (!Number.isInteger(id)) throw new Error('SMOKE_FIXTURE_MEDIA_ID is required');

@@ -15,6 +15,7 @@ import {
 import { assertSafeAdminUrl } from './support/disposable-db';
 import { JOBS } from './support/markers';
 import { registerBrowserBlocks } from './support/browser-blocks';
+import { registerEditorialBlocks } from './support/editorial-blocks';
 import { registerSecurityBlocks } from './support/security-blocks';
 import { parseFixtureResult } from './support/fixture-output';
 
@@ -328,6 +329,22 @@ describe('HTTP smoke: W5A SEO and analytics output', () => {
     expect(html).toContain('href="tel:0900000000"');
     expect(html).toContain('data-analytics-event="phone_click"');
     expect(html).not.toContain('zalo.me');
+  });
+
+  it('contract CTAs fall back honestly: dossier request link, tour link, no Zalo apply button, no fake file', async () => {
+    const home = await (await get('/')).text();
+    expect(home).toContain('Nhận hồ sơ năng lực');
+    expect(home).toContain('href="/lien-he?requestType=khac&amp;context=ho-so-nang-luc"');
+    expect(home).not.toContain('document_download" data-link-location="home_hero"');
+    const about = await (await get('/gioi-thieu')).text();
+    expect(about).toContain('Xem dự án');
+    expect(about).toContain('href="/du-an"');
+    const project = await (await get(`/du-an/${PUBLISHED_PROJECT.slug}`)).text();
+    expect(project).toContain('Đăng ký tham quan');
+    expect(project).toContain(`href="/lien-he?requestType=khac&amp;project=${PUBLISHED_PROJECT.slug}"`);
+    const job = await (await get(`/tuyen-dung/${JOBS.confirmed}`)).text();
+    expect(job).not.toContain('Nộp hồ sơ qua Zalo');
+    expect(job).not.toContain('zalo.me');
   });
 
   it('sitemap excludes the published noindex singleton and private routes, includes indexable pages', async () => {
@@ -682,7 +699,7 @@ describe('W5B4 schema drift (nondestructive generator dry run)', () => {
 // W5B4: executed Chromium/Firefox/WebKit UAT, axe and Lighthouse against the same server and database. It must stay
 // registered last: it enables analytics in the published SiteSettings and revokes media of its own. The initial ADMIN
 // is resolved from the database by the suite (the W5B2 bootstrap race decides which candidate wins).
-registerBrowserBlocks({
+const browserContext = {
   get base() {
     return base;
   },
@@ -697,4 +714,8 @@ registerBrowserBlocks({
   publishedSlug: PUBLISHED_PROJECT.slug,
   legacySlugs: manifest.projects.map((p) => p.slug),
   runFixture,
-});
+};
+registerBrowserBlocks(browserContext);
+// Issue #84: editorial role flow and representative page/CTA rendering. Registered after the browser blocks, which
+// provision the Playwright engines and publish the synthetic SiteSettings it relies on.
+registerEditorialBlocks(browserContext);
