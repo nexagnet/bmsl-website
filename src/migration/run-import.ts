@@ -4,7 +4,7 @@ import type { Payload } from 'payload';
 import { getPayload } from 'payload';
 import config from '../payload.config';
 import { getDatabaseUrl } from '../lib/database';
-import { assertImportAllowed, parseArgs } from './cli';
+import { assertImportAllowed, describeMode, parseArgs } from './cli';
 import { parseExternalInput } from './external-input';
 import manifest from './legacy-manifest.json';
 import { formatReport, runLegacyImport } from './importer';
@@ -43,6 +43,7 @@ try {
   }
 
   try {
+    console.log(describeMode(args.write));
     payload = await getPayload({ config });
     const report = await runLegacyImport(payload, { write: args.write, externalInput });
     console.log(formatReport(report));

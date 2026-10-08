@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { assertImportAllowed, parseArgs } from './cli';
+import { assertImportAllowed, describeMode, parseArgs } from './cli';
 import { ExternalInputError, parseExternalInput } from './external-input';
 import manifest from './legacy-manifest.json';
 
@@ -33,6 +33,8 @@ describe('import safety guard', () => {
 
   it('refuses writes in production or against a non-local DB without explicit staging opt-in', () => {
     expect(() => assertImportAllowed({ ...ok, env: { NODE_ENV: 'production' } })).toThrow(/production/i);
+    // NODE_ENV=production on a local DB with no declaration is still denied
+    expect(() => assertImportAllowed({ ...ok, env: { NODE_ENV: 'production', BMSL_IMPORT_ALLOW_STAGING: 'true' } })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
     const remote = 'postgresql://u:p@db.example.test:5432/bmsl';
     expect(() => assertImportAllowed({ ...ok, databaseUrl: remote })).toThrow(/non-local|staging/i);
     expect(() =>
@@ -40,7 +42,76 @@ describe('import safety guard', () => {
     ).not.toThrow();
     expect(() =>
       assertImportAllowed({ ...ok, databaseUrl: remote, env: { NODE_ENV: 'production', BMSL_IMPORT_ALLOW_STAGING: 'true' } }),
-    ).toThrow(/production/i);
+    ).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+  });
+
+  describe('NODE_ENV=production optimized runtime on an owner-declared DEV target', () => {
+    const remote = 'postgresql://user:s3cretpw@db.dev.example.test:5432/bmsl_dev';
+    const prod = { NODE_ENV: 'production' };
+    const declared = {
+      ...prod,
+      BMSL_IMPORT_ALLOW_STAGING: 'true',
+      BMSL_IMPORT_TARGET_ENV: 'dev',
+      BMSL_IMPORT_TARGET_ACK: 'db.dev.example.test/bmsl_dev',
+    };
+    const run = (env: Record<string, string | undefined>, over: Record<string, unknown> = {}) =>
+      assertImportAllowed({ ...ok, databaseUrl: remote, env, ...over });
+
+    it('allows write with declaration + exact ack + staging permission, without touching NODE_ENV', () => {
+      const env = { ...declared };
+      expect(() => run(env)).not.toThrow();
+      expect(env.NODE_ENV).toBe('production');
+      expect(() => run({ ...declared, BMSL_IMPORT_TARGET_ENV: 'staging' })).not.toThrow();
+      expect(() => assertImportAllowed({ ...ok, env: { ...declared, BMSL_IMPORT_TARGET_ACK: 'localhost/bmsl_test' } })).not.toThrow();
+    });
+
+    it('fails closed on absent, production, unknown or ambiguous declaration', () => {
+      for (const v of [undefined, '', 'production', 'prod', 'test', 'dev,production']) {
+        const env = { ...declared, BMSL_IMPORT_TARGET_ENV: v };
+        expect(() => run(env)).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      }
+    });
+
+    it('fails closed on missing or mismatched acknowledgement (host or database)', () => {
+      for (const ack of [undefined, '', 'db.dev.example.test', 'db.dev.example.test/other', 'other.example.test/bmsl_dev', 'DB.DEV.example.test/bmsl_dev']) {
+        expect(() => run({ ...declared, BMSL_IMPORT_TARGET_ACK: ack })).toThrow(/BMSL_IMPORT_TARGET_ACK/);
+      }
+    });
+
+    it('still needs explicit --write and BMSL_IMPORT_ALLOW_STAGING', () => {
+      expect(() => run({ ...declared, BMSL_IMPORT_ALLOW_STAGING: undefined })).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
+      expect(() => run(prod)).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
+      // write absent: a non-local production-mode dry-run needs the declaration too
+      expect(() => run(prod, { write: false })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      expect(() => run(declared, { write: false })).not.toThrow();
+    });
+
+    it('rejects a half-declared non-production staging write and unparseable URLs, never echoing credentials', () => {
+      const env = { BMSL_IMPORT_ALLOW_STAGING: 'true', BMSL_IMPORT_TARGET_ENV: 'production' };
+      expect(() => run(env)).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      for (const bad of ['not a url s3cretpw', 'postgresql://user:s3cretpw@host', 'postgresql://user:s3cretpw@/db']) {
+        let message = '';
+        try {
+          run(declared, { databaseUrl: bad });
+        } catch (e) {
+          message = (e as Error).message;
+        }
+        expect(message).not.toBe('');
+        expect(message).not.toContain('s3cretpw');
+      }
+      for (const env2 of [{ ...declared, BMSL_IMPORT_TARGET_ACK: 'x/y' }, prod]) {
+        try {
+          run(env2);
+        } catch (e) {
+          expect((e as Error).message).not.toContain('s3cretpw');
+        }
+      }
+    });
+
+    it('labels dry-run as migration-capable, not read-only', () => {
+      expect(describeMode(false)).toMatch(/NOT read-only/);
+      expect(describeMode(true)).toMatch(/WRITE/);
+    });
   });
 
   it('refuses input files stored inside this public repository', () => {

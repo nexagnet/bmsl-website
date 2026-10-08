@@ -57,8 +57,17 @@ pnpm migrate:legacy --input /path/outside/repo.json  # dry-run with approved art
 pnpm migrate:legacy --write [--input ...]            # explicit write, draft only
 ```
 
-- Local or staging only. Writes are refused when `NODE_ENV=production`, or when the database host is not
-  local unless `BMSL_IMPORT_ALLOW_STAGING=true`. Input files located inside this repository are refused.
+- Local or staging only. Writes to a non-local host need `BMSL_IMPORT_ALLOW_STAGING=true`. Input files located
+  inside this repository are refused.
+- `NODE_ENV=production` is the optimized Node runtime of the web image, not a statement about the data, and is never
+  changed to run an import. A write under it is accepted only with ALL of: `--write`, `BMSL_IMPORT_ALLOW_STAGING=true`,
+  `BMSL_IMPORT_TARGET_ENV=dev` (or `staging`) and `BMSL_IMPORT_TARGET_ACK=<host>/<database>` matching the configured
+  `DATABASE_URL` exactly (credentials/port are ignored and never logged). Absent, `production`, unknown or mismatched
+  values are refused before Payload starts. A non-local dry-run under `NODE_ENV=production` needs the same declaration.
+  The declaration is an operator attestation, not proof the database is dev. It authorizes one manual non-clobber
+  import only, never startup/build/deploy seeding.
+- Dry-run still starts Payload (migration-capable) and prints `MODE: DRY-RUN ... NOT read-only inventory`; use a SQL
+  read-only role/transaction or a clone for live read-only inventory.
 - Projects: 17 draft profiles from the manifest (name, slug, all legacy source URLs, `LEGACY-SOURCE`).
   Both Hoc vien Quoc phong sources are kept on one profile. No address, scale, operating date, service or image is set.
 - Articles: only from external input. The root must be exactly `{ "articles": [...] }`; any other root key or a

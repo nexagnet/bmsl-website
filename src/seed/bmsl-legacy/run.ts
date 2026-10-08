@@ -2,7 +2,7 @@ import path from 'node:path';
 import type { Payload } from 'payload';
 import { getPayload } from 'payload';
 import { getDatabaseUrl } from '../../lib/database';
-import { assertImportAllowed } from '../../migration/cli';
+import { assertImportAllowed, describeMode } from '../../migration/cli';
 import config from '../../payload.config';
 import { formatSeedReport, loadPack, runSeed } from './loader';
 
@@ -37,6 +37,7 @@ try {
   });
   const loaded = loadPack();
   try {
+    console.log(describeMode(args.write));
     payload = await getPayload({ config });
     const report = await runSeed(payload, loaded, { write: args.write });
     console.log(formatSeedReport(report));
