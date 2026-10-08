@@ -3,7 +3,7 @@ import path from 'node:path';
 import pg from 'pg';
 import { type APIRequestContext, type Browser, type BrowserType, chromium, firefox, request, webkit } from 'playwright';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { SURVEY_CTA } from '../../../src/lib/site';
+import { ABOUT_CTA, DOSSIER_REQUEST_CTA, PROJECT_VISIT_LABEL, projectVisitHref, SURVEY_CTA, ZALO_APPLY_LABEL } from '../../../src/lib/site';
 import { ENGINES, type Engine, SIZES } from './browser-policy';
 import type { BrowserUatContext } from './browser-blocks';
 import { JOBS } from './markers';
@@ -190,7 +190,42 @@ export function registerEditorialBlocks(ctx: BrowserUatContext): void {
               await surveyCta(page);
             }), 180_000);
 
-          it('project: published CONFIRMED project, working survey CTA', () => open(`/du-an/${ctx.publishedSlug}`, surveyCta), 180_000);
+          // Project contract action is the visit registration (existing `khac` category + safe project context), not the survey CTA.
+          it('project: published CONFIRMED project, working visit CTA preserving project context', () =>
+            open(`/du-an/${ctx.publishedSlug}`, async (page) => {
+              const cta = page.locator('.survey-cta-section a.button');
+              await cta.scrollIntoViewIfNeeded();
+              await cta.waitFor({ state: 'visible' });
+              expect((await cta.innerText()).trim()).toBe(PROJECT_VISIT_LABEL);
+              expect(await cta.getAttribute('href')).toBe(projectVisitHref(ctx.publishedSlug));
+              const box = await cta.boundingBox();
+              expect(box && box.width > 0 && box.x >= 0 && box.x + box.width <= view.width + 1, 'CTA inside viewport').toBe(true);
+              await cta.click();
+              await page.waitForURL(/\/lien-he\?requestType=khac&project=/, { timeout: 30_000 });
+              await page.locator('form.contact-form').waitFor({ state: 'visible', timeout: 30_000 });
+              await expect.poll(() => page.locator('select[name="requestType"]').inputValue(), { timeout: 15_000 }).toBe('khac');
+              await expect.poll(() => page.locator('textarea[name="message"]').inputValue(), { timeout: 15_000 }).toContain(ctx.publishedSlug);
+            }), 180_000);
+
+          it('home: hero action is the dossier action and opens a prefilled request when no dossier is published', () =>
+            open('/', async (page) => {
+              const cta = page.locator('.hero-card a.button');
+              await cta.waitFor({ state: 'visible' });
+              expect((await cta.innerText()).trim()).toBe(DOSSIER_REQUEST_CTA.label);
+              expect(await cta.getAttribute('href')).toBe(DOSSIER_REQUEST_CTA.href);
+              await cta.click();
+              await page.waitForURL(/\/lien-he\?requestType=khac&context=ho-so-nang-luc/, { timeout: 30_000 });
+              await expect.poll(() => page.locator('textarea[name="message"]').inputValue(), { timeout: 15_000 }).toContain('hồ sơ năng lực');
+            }), 180_000);
+
+          it('about: "Xem dự án" leads to the projects page', () =>
+            open('/gioi-thieu', async (page) => {
+              const link = page.getByRole('link', { name: ABOUT_CTA.label, exact: true });
+              await link.scrollIntoViewIfNeeded();
+              await link.waitFor({ state: 'visible' });
+              await link.click();
+              await page.waitForURL(/\/du-an$/, { timeout: 30_000 });
+            }), 180_000);
 
           it('document: the approved document link is visible and points at an approved file', () =>
             open('/quy-trinh-minh-bach', async (page) => {
@@ -209,6 +244,12 @@ export function registerEditorialBlocks(ctx: BrowserUatContext): void {
               await apply.scrollIntoViewIfNeeded();
               await apply.waitFor({ state: 'visible' });
               expect(await page.locator('main').innerText()).toContain('Synthetic apply instruction');
+              // `analytics-on` (earlier browser block) published a synthetic SiteSettings.zalo, so the apply action must render.
+              const zalo = page.getByRole('link', { name: ZALO_APPLY_LABEL });
+              await zalo.scrollIntoViewIfNeeded();
+              await zalo.waitFor({ state: 'visible' });
+              expect(await zalo.getAttribute('href')).toBe('https://zalo.me/0900000001');
+              expect(await zalo.getAttribute('data-analytics-event')).toBe('zalo_click');
             }), 180_000);
         });
       }
@@ -239,5 +280,16 @@ export function registerEditorialBlocks(ctx: BrowserUatContext): void {
         await editor.dispose();
       }
     }, 240_000);
+
+    it('a published dossier with an APPROVED file turns the home hero action into a real download with its analytics hook', async () => {
+      const made = (await ctx.runFixture('dossier')) as { url: string };
+      const html = await (await fetch(`${ctx.base}/`)).text();
+      expect(html).toContain('Nhận hồ sơ năng lực');
+      expect(html).toContain(`href="${made.url}"`);
+      expect(html).toContain('data-analytics-event="document_download" data-link-location="home_hero"');
+      const file = await fetch(`${ctx.base}${made.url}`);
+      expect(file.status).toBe(200);
+      expect(file.headers.get('content-type') ?? '').toMatch(/pdf/);
+    }, 120_000);
   });
 }

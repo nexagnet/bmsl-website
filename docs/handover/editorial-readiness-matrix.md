@@ -48,3 +48,12 @@ Không gọi hợp đồng là `CONTENT ACCEPTED` cho tới khi khách xác nh�
 ## 4. Chưa làm trong lần này
 
 Chạy PostgreSQL + media cô lập, luồng ADMIN/EDITOR create/draft/preview/publish/revoke, ảnh chụp trình duyệt desktop/mobile, idempotence của seed: **chưa chạy** (môi trường builder không có PostgreSQL/trình duyệt). Đây là việc `DEV_RUNTIME_PENDING` cho CI tích hợp hoặc staging cô lập.
+
+## 5. Hành động theo hợp đồng và banner (PR #98)
+
+- Trang chủ: nút chính "Nhận hồ sơ năng lực". Chỉ tải tệp khi có Document đã công bố, phân loại `ho-so-nang-luc`, tệp APPROVED; nếu không thì dẫn tới `/lien-he?requestType=khac&context=ho-so-nang-luc` (không tạo tệp giả).
+- Giới thiệu: liên kết "Xem dự án" tới `/du-an`.
+- Chi tiết dự án: "Đăng ký tham quan" tới `/lien-he?requestType=khac&project=<slug>` (dùng loại `khac` sẵn có, không thêm enum/migration; chỉ slug hợp lệ được điền vào nội dung).
+- Chi tiết tuyển dụng: "Nộp hồ sơ qua Zalo" chỉ hiện khi SiteSettings.zalo đã công bố và hợp lệ; không có thì không hiện và không gọi ra ngoài.
+- Banner: 4 global (trang chủ, giới thiệu, quy trình, liên hệ) chỉ có `title`, `body` (Lexical), `seo`. `RichText` có thể hiển thị ảnh UPLOAD nhúng nếu media APPROVED, nhưng **không có trường/CRUD banner riêng**. Trạng thái: `NOT_PROVEN`; cần R2 kế nhiệm có schema + migration sau #93.
+- Phần chứng minh trình duyệt/CI của mục này chưa chạy trong môi trường builder; xem CI đúng head.

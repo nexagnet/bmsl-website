@@ -330,6 +330,22 @@ describe('HTTP smoke: W5A SEO and analytics output', () => {
     expect(html).not.toContain('zalo.me');
   });
 
+  it('contract CTAs fall back honestly: dossier request link, tour link, no Zalo apply button, no fake file', async () => {
+    const home = await (await get('/')).text();
+    expect(home).toContain('Nhận hồ sơ năng lực');
+    expect(home).toContain('href="/lien-he?requestType=khac&amp;context=ho-so-nang-luc"');
+    expect(home).not.toContain('document_download" data-link-location="home_hero"');
+    const about = await (await get('/gioi-thieu')).text();
+    expect(about).toContain('Xem dự án');
+    expect(about).toContain('href="/du-an"');
+    const project = await (await get(`/du-an/${PUBLISHED_PROJECT.slug}`)).text();
+    expect(project).toContain('Đăng ký tham quan');
+    expect(project).toContain(`href="/lien-he?requestType=khac&amp;project=${PUBLISHED_PROJECT.slug}"`);
+    const job = await (await get(`/tuyen-dung/${JOBS.confirmed}`)).text();
+    expect(job).not.toContain('Nộp hồ sơ qua Zalo');
+    expect(job).not.toContain('zalo.me');
+  });
+
   it('sitemap excludes the published noindex singleton and private routes, includes indexable pages', async () => {
     const sitemap = await (await get('/sitemap.xml')).text();
     expect(sitemap).not.toContain('/lien-he');

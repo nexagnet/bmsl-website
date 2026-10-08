@@ -2,7 +2,7 @@
 
 import { type FormEvent, useEffect, useState } from 'react';
 import { emitAnalyticsEvent, formSubmitParams } from '../lib/analytics';
-import { DEFAULT_REQUEST_TYPE, requestTypeFromSearch } from '../lib/request-type';
+import { contextMessageFromSearch, DEFAULT_REQUEST_TYPE, requestTypeFromSearch } from '../lib/request-type';
 
 type State = 'idle' | 'sending' | 'sent' | 'invalid' | 'error';
 
@@ -19,10 +19,12 @@ export function ContactForm() {
   const [state, setState] = useState<State>('idle');
   const [invalid, setInvalid] = useState<string[]>([]);
   const [requestType, setRequestType] = useState<string>(DEFAULT_REQUEST_TYPE);
+  const [message, setMessage] = useState('');
 
   // Read after hydration so the page stays statically rendered; unknown values keep the safe default.
   useEffect(() => {
     setRequestType(requestTypeFromSearch(window.location.search));
+    setMessage(contextMessageFromSearch(window.location.search));
   }, []);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -55,6 +57,7 @@ export function ContactForm() {
         if (submitParams) emitAnalyticsEvent('form_submit', submitParams);
         form.reset();
         setRequestType(DEFAULT_REQUEST_TYPE);
+        setMessage('');
         setInvalid([]);
         setState('sent');
       } else if (response.status === 400) {
@@ -96,7 +99,7 @@ export function ContactForm() {
         </label>
         <label>
           Nội dung
-          <textarea name="message" required maxLength={4000} rows={5} aria-invalid={bad('message')} />
+          <textarea name="message" required maxLength={4000} rows={5} value={message} onChange={(e) => setMessage(e.target.value)} aria-invalid={bad('message')} />
         </label>
         {/* Honeypot: hidden from people and assistive tech; bots that fill it are discarded server-side. */}
         <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px' }}>
