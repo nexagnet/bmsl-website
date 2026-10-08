@@ -15,6 +15,7 @@ import {
 import { assertSafeAdminUrl } from './support/disposable-db';
 import { JOBS } from './support/markers';
 import { registerBrowserBlocks } from './support/browser-blocks';
+import { registerEditorialBlocks } from './support/editorial-blocks';
 import { registerSecurityBlocks } from './support/security-blocks';
 
 // Real HTTP proof (W4/W5A): a production Next build + `next start` against a DISPOSABLE PostgreSQL database that
@@ -681,7 +682,7 @@ describe('W5B4 schema drift (nondestructive generator dry run)', () => {
 // W5B4: executed Chromium/Firefox/WebKit UAT, axe and Lighthouse against the same server and database. It must stay
 // registered last: it enables analytics in the published SiteSettings and revokes media of its own. The initial ADMIN
 // is resolved from the database by the suite (the W5B2 bootstrap race decides which candidate wins).
-registerBrowserBlocks({
+const browserContext = {
   get base() {
     return base;
   },
@@ -696,4 +697,8 @@ registerBrowserBlocks({
   publishedSlug: PUBLISHED_PROJECT.slug,
   legacySlugs: manifest.projects.map((p) => p.slug),
   runFixture,
-});
+};
+registerBrowserBlocks(browserContext);
+// Issue #84: editorial role flow and representative page/CTA rendering. Registered after the browser blocks, which
+// provision the Playwright engines and publish the synthetic SiteSettings it relies on.
+registerEditorialBlocks(browserContext);
