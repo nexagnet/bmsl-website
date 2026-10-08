@@ -1,5 +1,5 @@
 import { isApprovedMediaPath, isPrivatePath, isPublicContentPath, isPublicSlug } from './seo';
-import { paths } from './site';
+import { paths, UNCATEGORIZED_SEGMENT } from './site';
 
 // Pure mappers from CMS documents to public view models. They are defensive on purpose:
 // the access layer is authoritative, these only guarantee that nothing unpublished,
@@ -160,24 +160,31 @@ export type ArticleView = {
   href: string;
   excerpt?: string;
   body: unknown;
-  category: CategoryView;
+  /** Only a publicly published category; undefined for uncategorized articles (never a phantom category). */
+  category?: CategoryView;
   cover?: PublicImage;
   publishedAt?: string;
   seo: PublicSeo;
 };
 
-/** An article needs a published category to have a canonical URL; otherwise it is not public. */
+/**
+ * A published article is public with or without a category. A category that is missing, unpublished or unreadable
+ * (bare id) is ignored and the article gets the uncategorized canonical path (see UNCATEGORIZED_SEGMENT).
+ */
 export function toArticle(d: unknown): ArticleView | undefined {
   if (!isPublished(d)) return undefined;
   const title = text(d.title);
   const slug = slugOf(d.slug);
   const category = toCategory(d.category);
-  if (!title || !slug || !category) return undefined;
+  // Preserve fail-closed validation for a *published* but malformed category (e.g. an unsafe slug).
+  // Missing or unpublished categories still receive the safe, uncategorized article URL.
+  if (isDoc(d.category) && d.category._status === 'published' && !category) return undefined;
+  if (!title || !slug) return undefined;
   return {
     id: String(d.id),
     title,
     slug,
-    href: paths.article(category.slug, slug),
+    href: paths.article(category?.slug, slug),
     excerpt: text(d.excerpt),
     body: d.body,
     category,
@@ -186,6 +193,10 @@ export function toArticle(d: unknown): ArticleView | undefined {
     seo: toSeo(d.seo),
   };
 }
+
+/** An article is served only at its own canonical path, so a categorized article has no duplicate fallback URL. */
+export const articleMatchesSegment = (article: ArticleView, segment: string): boolean =>
+  (article.category?.slug ?? UNCATEGORIZED_SEGMENT) === segment;
 
 export type JobView = {
   id: string;
