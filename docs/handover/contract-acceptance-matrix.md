@@ -1,100 +1,153 @@
-# Ma trận nghiệm thu hợp đồng ↔ repo, và gói đầu vào cho BMSL (Issue #86, điều phối #81)
+# Ma trận nghiệm thu hợp đồng ↔ repo, và gói đầu vào cho BMSL (Issue #86 bản đầu, sửa theo Issue #96, điều phối #81)
 
-Trạng thái: **bản soạn để chủ và BMSL xem xét. Không phải nghiệm thu.** CI xanh ≠ BMSL nghiệm thu. Tài liệu này không tạo bằng chứng, chữ ký hay biên bản nào.
+Trạng thái: **bản soạn để chủ và BMSL xem xét. Không phải nghiệm thu.** CI xanh ≠ BMSL nghiệm thu. Tài liệu này không tạo bằng chứng, chữ ký hay biên bản nào, và không diễn giải pháp lý.
 Bổ sung cho [`uat-handover-matrix.md`](uat-handover-matrix.md) (mốc CI/SHA lịch sử, cutover) — không thay thế.
 
-## 0. Giới hạn của lần soạn này (đọc trước)
+## 0. Nguồn và giới hạn (đọc trước)
 
-| Nguồn | Tình trạng khi soạn (2026-10-07) |
+| Nguồn | Tình trạng |
 | --- | --- |
-| Văn bản hợp đồng (Google Docs, Điều 2, Điều 7, Phụ lục 01–02) | Builder **không đọc được** bản gốc. Các hàng dưới đây dựa trên tóm tắt trong Issue #86 và `docs/blueprint/`. Mỗi con số/điều khoản phải được người ký đối chiếu lại với văn bản gốc: `NOT_PROVEN` |
-| Hợp đồng đã ký hay còn là bản nháp chỉnh sửa được | **Chưa xác nhận.** Không coi đây là bản đã ký. Nếu chỉ là bản nháp, mọi hàng "hợp đồng" bên dưới có thể đổi |
-| Trạng thái sống của Issue/PR #78–#85 và #81 | Builder không truy vấn được GitHub API. Cột "Issue/phụ thuộc" chỉ ghi số Issue theo Issue #86; nội dung và trạng thái từng Issue: `NOT_PROVEN`, điều phối viên điền từ #81 |
-| CI của `main` hiện tại (`40a09b688f2c3685509d44366d9908affac8ce9b`) | **Không được kiểm.** Số CI trong `uat-handover-matrix.md` là lịch sử của `f363129…`, không phải HEAD hiện tại |
-| Chạy mã / môi trường | Không chạy gì trong lần soạn này (docs-only, R0) |
+| Hợp đồng `HD_Thiet_ke_Website_NetViet.docx` | Điều phối viên **đã đọc độc lập bản đính kèm riêng tư vào 2026-10-08** và nêu yêu cầu đã làm sạch trong Issue #96. Builder **không** truy cập bản gốc và không giả vờ đã đọc; mọi hàng "theo hợp đồng" dưới đây là theo tóm tắt của điều phối viên. Không chép nguyên văn hợp đồng vào repo. |
+| Ký / thanh toán / hạn chót | Không khẳng định gì từ tệp này. Cửa sổ khách xem xét và "duyệt" trong lịch 4 giai đoạn **không** có nghĩa đã nghiệm thu. |
+| Bản ghi của bản đầu (2026-10-07) | Bản đầu ghi rằng chưa đọc hợp đồng và chưa biết ánh xạ Issue; điều đó đã được thay bằng mục này. Các điểm không nhất quán lấy từ bản đầu (mục 7) giữ nguyên ở dạng lịch sử, `NOT_PROVEN`. |
+| Trạng thái sống Issue #78/#81/#83/#84, PR #79/#93, SHA `main`, CI | Builder chạy trong sandbox không có quyền gọi GitHub API, nên **không tự re-fetch được**. Các giá trị ở mục 3 là quan sát của điều phối viên (có mốc thời gian), được ghi lại nguyên trạng. Ai dùng ma trận này phải re-fetch trước khi dựa vào. |
+| Chạy mã / môi trường | Không chạy gì (docs-only, R0). Không ghi vào Northflank. |
 
-Quy ước "đã chứng minh": chỉ test có trong repo (tên tệp) và CI của **đúng SHA** mới tính. Bằng chứng từ Issue/CI cũ là lịch sử.
+Quy ước "đã chứng minh": chỉ test có trong repo (tên tệp) và CI của **đúng SHA** mới tính là bằng chứng CODE/CI. Không nhúng SHA của chính commit chứa tài liệu này.
 
-## 1. Ma trận nghiệm thu theo hợp đồng
+## 1. Bốn lớp bằng chứng (không được trộn)
 
-Cột "Đã chứng minh hiện có": test/mã tồn tại trong repo tại `40a09b6` (có tệp), **chưa** chạy lại; chạy xanh trên đúng SHA = `NOT_PROVEN` cho tới khi có run CI cụ thể.
+| Lớp | Ý nghĩa | Ví dụ ở đây |
+| --- | --- | --- |
+| CODE/CI | Mã + test + CI xanh của đúng SHA | Cơ chế SMTP/outbox (#82), sửa test (#85), audit nguồn (#80) |
+| DEV runtime mới | Quan sát tươi trên môi trường Northflank DEV hiện có, có thời điểm | Chưa có. Số đếm có xác thực của #78: `UNKNOWN` |
+| MISSING_SOURCE | Khách chưa cung cấp tư liệu/quyết định | Dữ kiện công ty, ảnh + quyền, hộp thư nhận, GA4 |
+| Khách duyệt / production-bàn giao tương lai | Người ký của BMSL; bàn giao thật | Nghiệm thu, đào tạo, domain chính thức |
 
-| CASE | Năng lực theo hợp đồng | Đã chứng minh hiện có (tệp trong repo) | NOT_PROVEN (runtime / khách duyệt) | Issue/phụ thuộc | Quyết định chủ sở hữu | Bằng chứng cần |
-| --- | --- | --- | --- | --- | --- | --- |
-| C-01 | 8 trang: Trang chủ, Giới thiệu, Dịch vụ, Dự án, Quy trình & Minh bạch, Kiến thức & tin tức, Tuyển dụng, Liên hệ | IA: `docs/blueprint/05-ia-wireframes.md`; test điều hướng: `tests/integration/http-smoke.test.ts`, `seo-content.test.ts` | Điều hướng + SEO trên **nội dung thật đã duyệt**, trên staging đúng SHA | #78–#85 (ánh xạ: `NOT_PROVEN`) | BMSL duyệt cấu trúc/nội dung từng trang | CI đúng SHA + ảnh chụp/biên bản UAT sau khi nhập nội dung |
-| C-02 | Form liên hệ gửi **email** | Lưu lead bền trước hiệu ứng phụ: `tests/integration/payload.test.ts`, `http-smoke.test.ts` | Gửi email thật tới **hộp thư test**, rồi hộp thư chính thức; SMTP/provider chưa duyệt | Chưa rõ (`NOT_PROVEN`) | BMSL cung cấp hộp thư nhận; chọn nhà cung cấp gửi mail | Một lần gửi thử thấy trong hộp thư test + dòng lead trong CSDL (không đính PII) |
-| C-03 | Hotline / Zalo / bản đồ / CTA | Cổng `CONFIRMED` cho dữ kiện liên hệ (`docs/blueprint/06`); legacy ≠ hợp đồng | Giá trị thật chưa được xác nhận; bấm gọi/Zalo/bản đồ trên thiết bị thật | #1 trong `07-open-questions.md` | BMSL xác nhận bằng văn bản | Văn bản xác nhận + kiểm tra trên điện thoại thật |
-| C-04 | Tối đa 21 hồ sơ dự án, ≤10 ảnh/dự án | 17 hồ sơ nháp `LEGACY-SOURCE` (`tests/integration/legacy-seed.test.ts`, `docs/blueprint/03`); 21/10 là **giới hạn nghiệm thu**, không phải trần CMS | Danh sách dự án được duyệt; ảnh + quyền dùng; phản hồi BQT | #75 đã merge (PR #77, lịch sử); còn lại `NOT_PROVEN` | BMSL duyệt dự án nào công khai, quyền ảnh | Danh sách duyệt + biểu mẫu quyền ảnh (không đưa vào Git) |
-| C-05 | 4 lĩnh vực dịch vụ | Cấu trúc trang Dịch vụ (`05`) | Nội dung 4 dịch vụ chưa được BMSL cung cấp/duyệt | `NOT_PROVEN` | BMSL cung cấp mô tả 4 dịch vụ | Văn bản duyệt |
-| C-06 | Đúng 5 chuyên mục do BMSL duyệt; ≤10 bài đầu BMSL cung cấp | Bài đề xuất theo slug: `docs/blueprint/04`; `selectionApproved=false`, 0 bài tính là đã chuyển | 5 tên chuyên mục và danh sách ≤10 bài chưa có | #11, #13 trong `07` | BMSL chốt 5 tên và ≤10 bài. Không đổi giới hạn trên | Văn bản duyệt |
-| C-07 | ≤5 tuyển dụng, ≤5 tài liệu | Giới hạn ghi nhận (`05`); tin cũ `LEGACY-SOURCE` đang ẩn | Vị trí, lương, hạn nộp, tệp tài liệu giá/minh bạch chưa có | #9, #10 trong `07` | BMSL cung cấp/duyệt | Tệp đã duyệt + văn bản |
-| C-08 | SEO, GA4, Google Search Console | Sitemap, JSON-LD có điều kiện, noindex, analytics giả lập + đồng ý trước khi tải GA4 (`seo-content.test.ts`, `docs/security/W5B4-browser-uat.md`) | GA4 thật, 4 sự kiện trên property thật, quyền sở hữu GSC, chính sách cookie | #15 trong `07` | BMSL cung cấp mã GA4/quyền GSC; quyết định chính sách cookie | Property GA4 thật thấy sự kiện; xác minh GSC |
-| C-09 | Trình duyệt Chrome / Safari / Edge / Firefox | Chromium, Firefox, WebKit tự động (`docs/security/W5B4-browser-uat.md`, lịch sử) | Safari và Edge **thương hiệu**, thiết bị thật | `NOT_PROVEN` | Người nghiệm thu chọn thiết bị | Bảng kết quả theo trình duyệt/thiết bị |
-| C-10 | HTTPS, chống spam | Kiểm tra header/chống spam trong test tích hợp (`http-smoke.test.ts`) | TLS trên **domain chính thức**; cơ chế chống spam ngoài edge | `NOT_PROVEN` | BMSL cấp domain/DNS | Kiểm tra trên domain thật |
-| C-11 | Sao lưu nếu host hỗ trợ | `scripts/backup/`, `tests/integration/backup-restore.test.ts`, `docs/runbooks/backup-restore.md` | Sao lưu **off-site** của host; một lần restore thử từ bản off-site | `NOT_PROVEN` | BMSL/host ký quyết định lịch sao lưu | Cấu hình lịch + biên bản restore thử |
-| C-12 | Bàn giao ADMIN, mã nguồn, CSDL | `docs/handover/huong-dan-cms.md` §2, `docs/runbooks/van-hanh.md` | Chuyển giao ADMIN thật; giao mã/CSDL thật | `NOT_PROVEN` | Chủ quyết ai nhận | Biên bản giao nhận (không ghi mật khẩu) |
-| C-13 | Một buổi đào tạo (tối đa 2 giờ) | Chương trình: `huong-dan-cms.md` §9–§10 | Buổi đào tạo chưa diễn ra | `NOT_PROVEN` | Chốt lịch/người tham dự | Biên bản đào tạo có chữ ký |
-| C-14 | Nội dung do khách xác nhận (dữ kiện công ty, giấy phép, cam kết) | Mọi dữ kiện giữ `UNCONFIRMED` (`07` §1, §3) | Toàn bộ chưa xác nhận | #4–#7 trong `07` | BMSL | Văn bản xác nhận |
+CODE/CI xanh **không** chứng minh Northflank đã cấu hình hay email đã gửi tới hộp thư.
 
-Phân biệt: hàng chỉ thiếu tài liệu khách (C-04…C-07, C-14) là **thiếu vật liệu khách**, không phải lỗi lập trình. Hàng thiếu runtime (C-02, C-08…C-11) là việc kỹ thuật/hạ tầng còn lại.
+## 2. Đặt tên môi trường
 
-## 2. Gói yêu cầu đầu vào gửi BMSL (theo 8 trang)
+Môi trường Northflank hiện tại là **DEV (bản nháp, chủ đã cho phép nhập vào)**, không phải production. Chủ nêu hướng này trong Issue #78 (được trích lại trong Issue #96; Builder chưa đọc lại nguyên văn). Mọi chỗ trước đây gọi môi trường hiện tại là "production" trong ma trận này đã đổi thành "DEV". Từ "production" chỉ dùng cho tương lai: domain chính thức, nội dung công khai đã duyệt, bàn giao. Riêng `uat-handover-matrix.md` chưa được sửa trong Issue này; nếu còn chữ "production" chỉ môi trường hiện tại thì cần một task tài liệu riêng.
 
-Không đưa số điện thoại, email, địa chỉ thật hay dữ liệu cá nhân vào Git công khai: BMSL gửi qua kênh riêng; repo chỉ ghi "đã nhận / chưa nhận".
+Phân biệt nội dung: **nguồn** (tư liệu khách cung cấp) ≠ **lưu trữ** (archive legacy `LEGACY-SOURCE`) ≠ **nháp** (trong CMS DEV, chưa công khai) ≠ **đã xuất bản** (công khai, đã duyệt). Nhập toàn bộ archive vào DEV là việc phát triển bổ sung do chủ yêu cầu, khác với tập chọn lọc xuất bản ban đầu.
+
+## 3. Bằng chứng GitHub do điều phối viên quan sát (2026-10-08)
+
+Chưa được Builder re-fetch. Dùng làm liên kết ngoài, không phải bằng chứng của tài liệu này.
+
+| Mục | Quan sát | Ý nghĩa |
+| --- | --- | --- |
+| `main` | `5131e599d24328655b977fa7092d0b228e4efd18` | CI cùng SHA: run `37615468154`, `verify` + `integration` success. Chỉ chứng minh CODE/CI cho SHA đó |
+| #80 audit nguồn, #82 cơ chế SMTP/outbox, #85 sửa test, #86 ma trận cũ | Đã đóng/merge | Cơ chế + CI. **Không** chứng minh Northflank đã cấu hình hay email đã giao |
+| #78 | Mở rộng thành nhập bản nháp từ nguồn hiện có vào Northflank **DEV** do chủ cho phép; không phải production | Số đếm có xác thực: `UNKNOWN` |
+| PR #93 | Đầu hiện tại `d7e2e4f`, CI run `37717635686` là `ACTION_REQUIRED` | Không có tuyên bố xanh cho head hiện tại |
+| #84 | Đang khởi chạy sửa và chứng minh độc lập 8 trang bằng dữ liệu tổng hợp | Nguồn thật và xuất bản vẫn là việc riêng |
+| #83, #81, PR #79 | Builder không có trạng thái sống | `NOT_PROVEN`; re-fetch |
+
+## 4. Ma trận theo trang và CTA (8 trang)
+
+| Trang | Nội dung theo hợp đồng (tóm tắt) | CTA | Mã/test hiện có (CODE) | Chủ / phụ thuộc | Trạng thái |
+| --- | --- | --- | --- | --- | --- |
+| Trang chủ | Thông điệp, số liệu năng lực, giấy phép, dự án tiêu biểu | Nhận hồ sơ năng lực | IA `docs/blueprint/05-ia-wireframes.md`; `tests/integration/http-smoke.test.ts` | #84 (sửa/chứng minh tổng hợp); nội dung thật MISSING_SOURCE | Số liệu/giấy phép `UNCONFIRMED` |
+| Giới thiệu | Lịch sử 5 năm, đội ngũ, năng lực pháp lý, văn hoá | Xem dự án | như trên | #84; MISSING_SOURCE | `UNCONFIRMED` |
+| Dịch vụ | Vận hành, bảo vệ/an ninh, vệ sinh, PCCC; phạm vi/quy trình/cam kết | Đăng ký khảo sát | như trên | #84; BMSL mô tả 4 lĩnh vực | MISSING_SOURCE |
+| Dự án | Vị trí, quy mô, ảnh thật, ngày vận hành, phản hồi BQT | Đăng ký tham quan | `tests/integration/legacy-seed.test.ts`, `docs/blueprint/03` | #78 (nhập nháp DEV), #84; quyền ảnh MISSING_SOURCE | 17 hồ sơ nháp `LEGACY-SOURCE`; chưa xuất bản |
+| Quy trình & Minh bạch | Tiếp nhận 30 ngày, mẫu báo cáo thu chi, khung giá QĐ33 | Tải báo cáo mẫu | `docs/blueprint/05` | #84; tệp tài liệu MISSING_SOURCE | `UNCONFIRMED` |
+| Kiến thức & tin tức | 5 chuyên mục: pháp lý / phí / kỹ thuật / an toàn / tin công ty | Tư vấn | `seo-content.test.ts`, `docs/blueprint/04` | #78, #84; BMSL chốt tên + bài | `selectionApproved=false` |
+| Tuyển dụng | Vị trí, lương, quyền lợi, video nhân viên nếu có | Ứng tuyển qua Zalo | `docs/blueprint/05` | #84; BMSL cung cấp | Tin cũ `LEGACY-SOURCE` đang ẩn |
+| Liên hệ | Form, hotline, Zalo, bản đồ trụ sở | Gửi yêu cầu | `payload.test.ts`, `http-smoke.test.ts` (lead lưu bền trước hiệu ứng phụ) | #82 (cơ chế, đã đóng); cấu hình Northflank + hộp thư nhận chưa chứng minh | Giá trị liên hệ `UNCONFIRMED` |
+
+"120 bài SEO" là chiến lược năng lực/nội dung, **không** phải nghĩa vụ đầu vào ban đầu.
+
+## 5. Trần đầu vào ban đầu
+
+Đây là **trần**, không phải tối thiểu; không bịa số lượng cho đủ.
+
+| Hạng mục | Trần | Hiện có (nguồn) | Ghi chú |
+| --- | --- | --- | --- |
+| Hồ sơ dự án | ≤21 | 17 nháp `LEGACY-SOURCE` | Chưa xuất bản mục nào; BMSL duyệt |
+| Ảnh mỗi dự án | ≤10 | Chưa nhận | Cần quyền dùng ảnh (không đưa vào Git) |
+| Chuyên mục | 5 | Tên do BMSL chốt | Không tự đặt tên mới thay hợp đồng |
+| Bài đầu BMSL cung cấp | ≤10 | 0 được duyệt | Phân biệt với bài archive nhập DEV |
+| Tuyển dụng | ≤5 | Chưa nhận | |
+| Tài liệu tải về | ≤5 | Chưa nhận | |
+
+Nhập toàn bộ archive vào DEV là phát triển bổ sung do chủ yêu cầu (#78), không thay đổi các trần trên cho tập xuất bản ban đầu.
+
+## 6. Yêu cầu kỹ thuật và bàn giao
+
+| CASE | Yêu cầu | CODE hiện có | NOT_PROVEN (DEV runtime / khách duyệt) | Issue |
+| --- | --- | --- | --- | --- |
+| T-01 | Thiết kế tuỳ biến, responsive, tiếng Việt | `docs/blueprint/05` | Trên nội dung thật, thiết bị thật | #84 |
+| T-02 | Chrome/Safari/Edge/Firefox hiện hành trên Windows/macOS/iOS/Android | Chromium/Firefox/WebKit tự động (`docs/security/W5B4-browser-uat.md`, lịch sử) | Safari, Edge thương hiệu, thiết bị thật | `NOT_PROVEN` |
+| T-03 | CMS thêm/sửa/xoá bài, dự án, tuyển dụng, banner, tải về; vai trò ≥ ADMIN/EDITOR | `docs/handover/huong-dan-cms.md` | Đăng nhập ADMIN/EDITOR trên DEV | #78 |
+| T-04 | URL thân thiện, title/description từng trang/bài, sitemap, robots, structured data cơ bản, tối ưu ảnh | `seo-content.test.ts`; JSON-LD có điều kiện, noindex | Trên nội dung thật đã duyệt | `NOT_PROVEN` |
+| T-05 | GA4 + Search Console; sự kiện điện thoại/Zalo/form/tải về | Analytics giả lập + đồng ý trước khi tải GA4 | Property thật, quyền GSC, chính sách cookie | MISSING_SOURCE |
+| T-06 | HTTPS, chống spam, sao lưu tự động nếu host hỗ trợ | `http-smoke.test.ts`; `scripts/backup/`, `backup-restore.test.ts`, `docs/runbooks/backup-restore.md` | TLS domain chính thức; sao lưu off-site; restore thử | `NOT_PROVEN` |
+| T-07 | Tối ưu hiệu năng (phụ thuộc hosting) | — | Chưa đo | `NOT_PROVEN` |
+| T-08 | Form liên hệ gửi email | Cơ chế SMTP/outbox (#82, `docs/runbooks/lead-email.md`) | Email thật tới hộp thư test rồi chính thức; Northflank chưa chứng minh đã cấu hình | `NOT_PROVEN` |
+| H-01 | Bàn giao: ADMIN cao nhất, sao lưu mã nguồn + CSDL, hướng dẫn sử dụng | `huong-dan-cms.md`, `docs/runbooks/van-hanh.md` | Chuyển giao thật; chỉ là tương lai | `NOT_PROVEN` |
+| H-02 | Một buổi đào tạo ≤2 giờ | Chương trình `huong-dan-cms.md` §9–§10 | Chưa diễn ra | `NOT_PROVEN` |
+| H-03 | Lịch 4 giai đoạn: IA 5 ngày / thiết kế 10 / dựng + nhập đầu vào 12 / kiểm thử + bàn giao 3; tổng 30 ngày làm việc | — | Cửa sổ khách xem xét/duyệt **không** ngụ ý đã nghiệm thu; không khẳng định hạn chót | — |
+| H-04 | Dữ kiện do khách xác nhận (công ty, giấy phép, cam kết) | Giữ `UNCONFIRMED` (`07-open-questions.md`) | Toàn bộ chưa xác nhận | MISSING_SOURCE |
+
+## 7. Điểm không nhất quán (lịch sử từ bản đầu, chỉ để các bên ký quyết định)
+
+Không đề xuất cách giải quyết; điều phối viên chưa xác nhận các điểm này trong Issue #96. `NOT_PROVEN` cho tới khi đối chiếu văn bản gốc.
+
+1. Điều 4: 10 ngày làm việc; Phụ lục 02: 30 ngày (xem C1 trong `07-open-questions.md`).
+2. Điều 3.3: số tiền bằng số và bằng chữ khác nhau.
+3. Điều 1.5 dẫn chiếu 18.3, có vẻ phải là 17.3.
+4. Điều 3.2 dẫn chiếu Điều 7, trong khi thay đổi phạm vi ở Điều 6.
+5. Thông tin pháp lý của các bên còn để trống.
+6. Chưa rõ bản ký cuối hay bản nháp.
+
+## 8. Gói yêu cầu đầu vào gửi BMSL
+
+Không đưa số điện thoại, email, địa chỉ hay dữ liệu cá nhân vào Git; BMSL gửi qua kênh riêng, repo chỉ ghi "đã nhận / chưa nhận".
 
 | Trang | BMSL cần cung cấp | Trạng thái |
 | --- | --- | --- |
 | Toàn site | Tên công ty chính thức, logo, màu, phông | Chưa nhận |
-| Trang chủ | Thông điệp chính, số liệu công ty đã duyệt (số toà/căn/nhân sự) | Chưa nhận |
-| Giới thiệu | Giấy phép/năng lực pháp lý hiện hành, lịch sử, đội ngũ | Chưa nhận |
-| Dịch vụ | Mô tả 4 lĩnh vực dịch vụ | Chưa nhận |
-| Dự án | Danh sách 17 dự án hiện có (so với hợp đồng ≤21) đã duyệt công khai, trạng thái, ảnh (≤10/dự án), văn bản quyền dùng ảnh/đồng ý người trong ảnh, phản hồi BQT | Chưa nhận |
-| Quy trình & Minh bạch | Quy trình 30 ngày, giá theo QĐ33, tài liệu báo cáo (≤5) | Chưa nhận |
-| Kiến thức & tin tức | 5 tên chuyên mục, danh sách ≤10 bài đầu | Chưa nhận |
-| Tuyển dụng | ≤5 vị trí kèm lương, quyền lợi, hạn nộp, địa điểm | Chưa nhận |
-| Liên hệ & vận hành | Địa chỉ, hotline, Zalo, hộp thư nhận form, vị trí bản đồ; chính sách cookie/dữ liệu cá nhân theo quy định địa phương; GA4 và quyền Search Console; domain chính thức, host, xác nhận sao lưu | Chưa nhận |
+| Trang chủ | Thông điệp, số liệu năng lực, giấy phép, dự án tiêu biểu đã duyệt | Chưa nhận |
+| Giới thiệu | Lịch sử, đội ngũ, năng lực pháp lý, văn hoá | Chưa nhận |
+| Dịch vụ | Mô tả 4 lĩnh vực, quy trình, cam kết | Chưa nhận |
+| Dự án | Duyệt công khai trong các hồ sơ (≤21), ảnh (≤10/dự án), quyền ảnh, ngày vận hành, phản hồi BQT | Chưa nhận |
+| Quy trình & Minh bạch | Quy trình 30 ngày, báo cáo thu chi mẫu, khung giá QĐ33, tài liệu (≤5) | Chưa nhận |
+| Kiến thức & tin tức | 5 tên chuyên mục, ≤10 bài đầu | Chưa nhận |
+| Tuyển dụng | ≤5 vị trí: lương, quyền lợi, hạn nộp, video nếu có, kênh Zalo | Chưa nhận |
+| Liên hệ & vận hành | Địa chỉ, hotline, Zalo, hộp thư nhận form, bản đồ; cookie/dữ liệu cá nhân; GA4 + GSC; domain, host, sao lưu | Chưa nhận |
 
-## 3. Điểm không nhất quán của hợp đồng — chỉ để các bên ký quyết định
+## 9. Các bước DEV → bàn giao (chạy sau khi có nội dung duyệt)
 
-Không đề xuất cách giải quyết. Đối chiếu với văn bản gốc; có thể hợp đồng chỉ là bản nháp, chưa ký.
-
-1. Điều 4: 10 ngày làm việc; Phụ lục 02: 30 ngày (xem C1 trong `07-open-questions.md`).
-2. Điều 3.3: số tiền bằng số và bằng chữ khác nhau (27 triệu so với 25 triệu). Không trích thêm số khác.
-3. Điều 1.5 dẫn chiếu 18.3, trong khi có vẻ phải là 17.3.
-4. Điều 3.2 dẫn chiếu Điều 7, trong khi thay đổi phạm vi nằm ở Điều 6.
-5. Thông tin pháp lý của các bên còn để trống.
-6. Chưa rõ văn bản là bản ký cuối hay bản nháp còn chỉnh sửa.
-
-Mục 3 và 4 lấy từ Issue #86; `NOT_PROVEN` cho tới khi đối chiếu văn bản gốc.
-
-## 4. Các bước bàn giao / UAT (chạy sau khi có nội dung duyệt)
-
-Mọi bước ghi **SHA triển khai chính xác** và loại bằng chứng. Không sinh bằng chứng giả; không có biên bản chính thức nào được tạo ở đây.
+Mọi bước ghi SHA chính xác, thời điểm và loại bằng chứng. Không có biên bản nào được tạo ở đây.
 
 | Bước | Việc | Loại bằng chứng | Kết quả |
 | --- | --- | --- | --- |
-| 1 | Ghi SHA đã triển khai lên staging và CI `verify` + `integration` của đúng SHA | URL run CI | `NOT_PROVEN` |
-| 2 | Điều hướng 8 trang + kiểm tra SEO trên nội dung thật | Ảnh chụp/ghi chú theo trang | `NOT_PROVEN` |
-| 3 | Gửi form tới **hộp thư test**; kiểm tra lead đã lưu trong CSDL | Ảnh hộp thư (che PII) + xác nhận dòng lead | `NOT_PROVEN` |
-| 4 | CMS: đăng nhập ADMIN và EDITOR; kiểm tra cổng quyền ảnh (`APPROVED`) và `CONFIRMED` | Ghi chú theo vai trò | `NOT_PROVEN` |
-| 5 | GA4: đồng ý trước khi tải, 4 sự kiện trên property thật | Báo cáo realtime GA4 | `NOT_PROVEN` |
-| 6 | Trình duyệt/điện thoại: Chrome, Safari, Edge, Firefox, ít nhất một điện thoại thật | Bảng kết quả | `NOT_PROVEN` |
-| 7 | Sao lưu + restore thử, rồi restore từ bản off-site | Biên bản restore | `NOT_PROVEN` |
-| 8 | Domain chính thức + TLS | Kết quả kiểm tra | `NOT_PROVEN` |
-| 9 | Đào tạo (tối đa 2 giờ) | Biên bản có chữ ký | `NOT_PROVEN` |
-| 10 | BMSL ký nghiệm thu | Văn bản ký của BMSL/chủ | `NOT_PROVEN` — chỉ con người ký |
+| 1 | Ghi SHA triển khai lên DEV và CI `verify` + `integration` của đúng SHA | URL run CI | `NOT_PROVEN` |
+| 2 | Số đếm có xác thực của nội dung nhập DEV (#78) | Số đếm + thời điểm | `UNKNOWN` |
+| 3 | Điều hướng 8 trang + SEO trên nội dung thật | Ảnh chụp/ghi chú | `NOT_PROVEN` |
+| 4 | Gửi form tới hộp thư test; lead đã lưu trong CSDL | Ảnh hộp thư (che PII) + xác nhận dòng lead | `NOT_PROVEN` |
+| 5 | CMS: ADMIN và EDITOR; cổng quyền ảnh và `CONFIRMED` | Ghi chú theo vai trò | `NOT_PROVEN` |
+| 6 | GA4: đồng ý trước khi tải, sự kiện điện thoại/Zalo/form/tải về | Báo cáo realtime | `NOT_PROVEN` |
+| 7 | Trình duyệt/thiết bị | Bảng kết quả | `NOT_PROVEN` |
+| 8 | Sao lưu + restore thử, rồi từ bản off-site | Biên bản restore | `NOT_PROVEN` |
+| 9 | Domain chính thức + TLS (production tương lai) | Kết quả kiểm tra | `NOT_PROVEN` |
+| 10 | Đào tạo (≤2 giờ) | Biên bản có chữ ký | `NOT_PROVEN` |
+| 11 | BMSL ký nghiệm thu | Văn bản ký | `NOT_PROVEN` — chỉ con người ký |
 
-## 5. Theo dõi và phát hành
+## 10. Theo dõi và phát hành
 
-- Điều phối #81; các Issue #78, #80, #82, #83, #84, #85 theo Issue #86. Cột "Issue/phụ thuộc" ở §1 do điều phối viên cập nhật khi trạng thái sống được xác minh.
-- Northflank CD gốc có thể phát hành khi có push lên `main`. **Kể cả commit chỉ có tài liệu** cần phê duyệt production riêng của chủ trước khi merge; Issue này không merge hay triển khai.
+- Điều phối #81. Chủ sở hữu Issue theo mục 4 và 6; cập nhật khi trạng thái sống được xác minh.
+- Northflank CD gốc có thể phát hành khi có push lên `main`; cần phê duyệt riêng của chủ trước khi merge. Issue này không merge hay triển khai.
 
 ## PROVEN
 
-- Các tệp/test được nêu có trong repo tại `40a09b688f2c3685509d44366d9908affac8ce9b` (tham chiếu tên tệp, chưa chạy lại).
+- Tài liệu chỉ ghi lại yêu cầu do điều phối viên cung cấp; các tệp/test được nêu là tên tệp trong repo (chưa chạy lại trong Issue này).
 
 ## NOT_PROVEN
 
-- Nội dung hợp đồng gốc, và việc đã ký hay còn là bản nháp.
-- Trạng thái sống của #78–#85, #81 và CI của `main` hiện tại.
-- Mọi runtime, sự chấp thuận của khách và nghiệm thu ở §1 và §4.
+- Nội dung hợp đồng gốc (Builder không truy cập), ký/thanh toán/hạn chót.
+- Trạng thái sống của #78/#81/#83/#84, PR #79/#93, SHA `main` và CI: Builder không re-fetch được; các giá trị là quan sát của điều phối viên.
+- Cấu hình Northflank, email thật đã giao, số đếm DEV có xác thực, mọi runtime, khách duyệt và nghiệm thu.
