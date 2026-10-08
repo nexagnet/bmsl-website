@@ -840,8 +840,8 @@ main:focus {
 
 .matrix-badge {
   font-size: 0.725rem;
-  font-weight: 600;
-  color: var(--color-muted);
+  font-weight: 700;
+  color: var(--color-text-secondary);
   letter-spacing: 0.06em;
 }
 
@@ -866,13 +866,13 @@ main:focus {
   padding: 1rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: #ffffff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .matrix-item:hover,
 .matrix-item:focus-visible {
-  border-color: var(--color-brand-accent);
+  border-color: var(--color-brand-secondary);
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
   transform: translateY(-1px);
   outline: none;
@@ -880,7 +880,8 @@ main:focus {
 
 .matrix-item.is-static {
   cursor: default;
-  opacity: 0.85;
+  background: var(--color-surface);
+  border-style: dashed;
 }
 
 .matrix-item.is-static:hover,
@@ -893,7 +894,7 @@ main:focus {
 .matrix-num {
   font-size: 0.75rem;
   font-weight: 800;
-  color: var(--color-brand-accent);
+  color: var(--color-brand-secondary);
   margin-bottom: 0.25rem;
   letter-spacing: 0.05em;
 }
@@ -915,8 +916,8 @@ main:focus {
 
 .matrix-item-status {
   font-size: 0.775rem;
-  font-weight: 500;
-  color: var(--color-muted);
+  font-weight: 600;
+  color: var(--color-text-secondary);
   margin-top: 0.25rem;
 }
 
