@@ -1,11 +1,9 @@
 # W78 — Chuẩn bị nhập seed website cũ vào Payload CMS (DRAFT) — gói quyết định owner & runbook production
 
 Issue #78 (R2, **Phase A only**). Tài liệu này **không** cấp quyền ghi production. Không có lệnh nào trong tài liệu này
-đã được chạy trên production; không đọc/ghi DB hay volume Northflank. Base: `main` @ `40a09b688f2c3685509d44366d9908affac8ce9b`
-(PR #77). Không có thay đổi mã; chỉ tài liệu.
+đã được chạy trên production; không đọc/ghi DB hay volume Northflank. Base đã refresh: `main` @ `5131e599d24328655b977fa7092d0b228e4efd18`. Không có thay đổi mã ứng dụng trong PR này; chỉ tài liệu/evidence.
 
-**Trạng thái bằng chứng: `NOT STAGING-PROVEN`** — phiên builder không có PostgreSQL cô lập (không có `DATABASE_URL`,
-không được cấp quyền khởi tạo DB/Docker). Xem §6. Trạng thái cuối chỉ là `WAITING_STAGING_PROOF` cho tới khi chạy §5.
+**Trạng thái bằng chứng: `STAGING-PROVEN; WAITING_OWNER_DATA_GATE`** — "staging" ở đây là PostgreSQL/media cô lập và dữ liệu synthetic/local/CI, KHÔNG phải dữ liệu riêng tư Northflank. Không có đọc/ghi DB/volume Northflank. Owner đã xác nhận Northflank hiện là DEV/TEST, chưa có production; tuy vậy mọi import vào persistent DB/volume Northflank vẫn là data-write gate riêng và chưa được ủy quyền.
 
 ## 1. Ánh xạ seed → CMS (từ `src/seed/bmsl-legacy`, loader hiện có)
 
@@ -55,14 +53,14 @@ Tests hiện có phủ các kịch bản này trên DB dùng một lần: `tests
 
 `run.ts` gọi `getPayload({ config })`, có thể chạy migration đã commit khi khởi động. Vì vậy:
 
-* **Cấm** chạy `pnpm seed:bmsl-legacy` (kể cả `--dry-run`) với `DATABASE_URL` production/khách hàng.
-* **Cấm** đặt `NODE_ENV=development` hay `BMSL_IMPORT_ALLOW_STAGING=true` để vượt chốt trên production.
-* Preflight production tương lai phải dùng **một trong hai**: (a) kết nối PostgreSQL chỉ-đọc (role không có DDL/DML,
+* **Cấm** chạy `pnpm seed:bmsl-legacy` (kể cả `--dry-run`) với một DB persistent/khách hàng chưa được owner cấp quyền; điều này áp dụng cả Northflank DEV/TEST hiện tại.
+* **Cấm** đặt `NODE_ENV=development` hay `BMSL_IMPORT_ALLOW_STAGING=true` để vượt chốt trên một target persistent không được ủy quyền.
+* Preflight persistent target tương lai phải dùng **một trong hai**: (a) kết nối PostgreSQL chỉ-đọc (role không có DDL/DML,
   `default_transaction_read_only=on`) với truy vấn SQL thuần (không khởi động Payload) đếm slug/legacy URL/globals; hoặc
   (b) bản sao cô lập đã được owner cho phép riêng (restore từ backup đã kiểm chứng) rồi chạy CLI trên bản sao đó.
   Công cụ (a) chưa tồn tại; nếu cần, đó là một thay đổi mã R2 riêng (đề xuất, chưa làm).
 
-## 4. Runbook import production (CHỈ TÀI LIỆU — không thực thi; cần cổng owner Phase B)
+## 4. Runbook import vào persistent target sau này (CHỈ TÀI LIỆU — không thực thi; cần cổng owner Phase B)
 
 Điều kiện tiên quyết (thiếu một mục là DỪNG): chỉ thị owner bằng văn bản nêu **mục tiêu cụ thể** (`bmsl-web`), SHA pack,
 SHA deploy + image tag, phạm vi ghi; CI exact-head xanh; reviewer tin cậy trên HEAD hiện tại.
@@ -84,36 +82,87 @@ SHA deploy + image tag, phạm vi ghi; CI exact-head xanh; reviewer tin cậy tr
 7. DỪNG/Rollback: gặp bất kỳ sai khác → dừng. Rollback mã **không** là rollback dữ liệu. Khôi phục dữ liệu chỉ qua restore
    đã thử (DB + media cùng thời điểm) và theo quyết định owner; **không** xoá dữ liệu nghiệp vụ có trước.
 
-## 5. Kế hoạch bằng chứng staging (chưa chạy — cần PostgreSQL + thư mục media dùng một lần)
+## 5. Bằng chứng staging cô lập — ĐÃ CÓ
 
-```bash
-export DATABASE_URL=postgres://…@localhost:5432/bmsl_w78_stage   # DB mới, KHÔNG phải production
-export PAYLOAD_SECRET=<ngẫu nhiên, chỉ staging>  BMSL_MEDIA_DIR=/abs/tmp/w78-media
-pnpm exec payload migrate
-pnpm seed:bmsl-legacy                 # kỳ vọng: 0 dòng, 0 tệp
-pnpm seed:bmsl-legacy --write         # kỳ vọng: 4+17+15+2 = 38 bản ghi, 56 media
-pnpm seed:bmsl-legacy --write         # kỳ vọng: created 0, 0 tệp mới
-pnpm test:integration                 # tests/integration/legacy-seed.test.ts (tự tạo/xoá DB riêng)
+Không cần dựng importer/harness thứ hai. Bằng chứng được ghép từ các proof đã merge và CI bắt buộc hiện tại.
+
+### 5.1 Empty staging — import đầy đủ từ pack
+
+Bằng chứng runtime W75 trên checkout sạch + PostgreSQL trống + media dir trống:
+- migrate;
+- dry-run: **0 dòng / 0 tệp**;
+- `--write`: **38 bản ghi** = 4 service areas + 17 projects + 15 articles + 2 globals, cùng **56 media**;
+- lần `--write` thứ hai: **0 bản ghi mới / 0 media mới**;
+- mọi project/article/global từ seed ở Draft; project = `LEGACY-SOURCE`; media = `UNCONFIRMED`;
+- người ẩn danh thấy **0** nội dung seed; file chưa duyệt không được đọc công khai;
+- 56 tệp trên disk khớp SHA-256 của pack và còn nguyên sau restart;
+- screenshot CMS local/synthetic cho about, project, article, media list và public negative proof đã nằm trong `docs/migration/screenshots/w75/`.
+
+PR #88 / Issue #80 sau đó **độc lập lặp lại** trên PostgreSQL 16 disposable: 38 record + 56 file, rerun tạo 0, 17 project + 15 article đều Draft, 56 media đều UNCONFIRMED và hash khớp manifest. Source audit cũng xác nhận 51 inventory row / 17 project / 235 image URL, trong đó 172 rights-pending vẫn không được nhập.
+
+### 5.2 Non-empty synthetic staging — conflict/no-clobber
+
+`tests/integration/legacy-seed.test.ts` hiện dùng PostgreSQL thật + temp media và chủ động tạo trước:
+- một project đã published+CONFIRMED chiếm slug từ pack nhưng khác legacy source → **CONFLICT**, giữ nguyên;
+- một article đã tồn tại theo legacy URL → **SKIPPED**, giữ nguyên;
+- global có nội dung/human edit → giữ nguyên;
+- staff edit trên seeded article/service/global → rerun không ghi đè;
+- `article-categories` vẫn không tự tạo; SiteSettings/analytics/contact không bị seed đụng tới;
+- anonymous Local API/public mapper không thấy draft hoặc UNCONFIRMED media.
+
+Đây chính là kịch bản EXISTING_CONTENT / SKIPPED / CONFLICT mà Phase A yêu cầu; không cần chạm dữ liệu Northflank để chứng minh.
+
+### 5.3 Backup/restore recovery rehearsal
+
+Exact-main CI run **37615468154** trên `5131e599d24328655b977fa7092d0b228e4efd18` chạy required integration suite với PostgreSQL 16 và backup/restore thật. Structured proof:
+
+```text
+W5C_BACKUP_REPORT
+sourceCommit = 5131e599d24328655b977fa7092d0b228e4efd18
+migrations   = 4
+tables       = 41
+schemaHash   = 2694233bec0f8023ba650c84c2ddd8143809ad1ae05d3ec1929106ec29758d36
+contentHash  = fb165ded5b59e32e49d90eb6ab406efa006909f847d43d7e061118fb6db4b81c
+mediaTreeHash= 6d5bc57b906ef3c7b13424bdd1c30b468d390e2d732df3251e104859d9c4681e
+restoredDatabaseDistinct = true
+sessionsAfterWorkers = 0
 ```
-Kịch bản 2 (DB không rỗng): thêm trước một dự án đã xuất bản, `about-page` có nội dung, search verification và
-site-settings tổng hợp; kỳ vọng các bản ghi này nguyên vẹn, xung đột/bỏ qua được liệt kê. Thêm: SHA-256 56 tệp so với
-manifest, khởi động lại rồi kiểm tệp còn, ảnh chụp editor (dự án/bài/about), backup+restore `pg_dump`/`pg_restore` + tar media.
 
-## 6. Bằng chứng phiên này
+Proof này dùng dữ liệu synthetic và temp directory; restore đích là DB khác, schema/content/migration/media hash được so sánh và resource được cleanup. Nó chứng minh cơ chế recovery hiện tại, không phải quyền restore lên Northflank.
 
-* `pnpm exec vitest run --config vitest.config.ts src/seed/bmsl-legacy` → **4 file, 62 tests passed, 0 failed** (kiểm tra pack/loader offline, không DB).
-* `pnpm test:integration legacy-seed` → **không chạy được**: `DATABASE_URL is required` (không có PostgreSQL cô lập trong phiên).
-* Không có ảnh chụp editor, không có kiểm đếm staging, không có thử backup/restore.
+### 5.4 Browser/CMS proof
+
+- W75 đã commit screenshot editor local/synthetic: `cms-about-page-*`, `cms-project-ecolife-*`, `cms-article-infographics-1440`, `cms-media-list-1440`, `cms-articles-list-1440`, và `public-du-an-anonymous-1440`.
+- Exact-main integration run 37615468154 tiếp tục PASS real Next server + disposable PostgreSQL + Chromium/Firefox/WebKit; ADMIN/EDITOR flow, draft non-leak và media-rights behavior đều được thực thi.
+- Đây là proof kỹ thuật local/CI; không phải khách hàng đã duyệt nội dung.
+
+## 6. Ma trận Acceptance → bằng chứng
+
+| Acceptance #78 | Bằng chứng | Trạng thái |
+|---|---|---|
+| main/seed/runbook kiểm lại | main `5131e599...`; #80 audit merged; required CI main PASS | PROVEN |
+| empty staging dry-run/write/idempotence | W75 runtime + #80 PG16 independent rerun | PROVEN |
+| 56 media SHA + restart persistence | W75 runtime + #80 hash audit | PROVEN |
+| non-empty conflicts / edits survive | current `legacy-seed.test.ts` on required PostgreSQL integration | PROVEN |
+| Draft / LEGACY-SOURCE / UNCONFIRMED | W75/#80 runtime + integration tests | PROVEN |
+| anonymous negative access | W75 runtime + legacy-seed + browser HTTP integration | PROVEN |
+| authenticated CMS representative views | committed W75 synthetic screenshots + current ADMIN/EDITOR browser suite | PROVEN |
+| staging backup/restore recovery | W5C required integration run 37615468154 | PROVEN |
+| persistent preflight avoids Payload startup migration | §3 SQL read-only-role / isolated-clone design | PROVEN-DESIGN |
+| actual private Northflank collision counts | deliberately not accessed | NOT_PROVEN / OWNER DATA GATE |
+| rights/categories/publication approval | business decision, not inferred | NOT_PROVEN / OWNER DECISION |
+| real production import | production not created/authorized | NOT_PROVEN |
+
+Kết luận Phase A: **STAGING-PROVEN; WAITING_OWNER_DATA_GATE**. Không có lý do kỹ thuật để viết importer mới hoặc reset môi trường. Phase B chỉ bắt đầu khi owner chỉ rõ target persistent, phạm vi ghi, backup/restore point và dữ liệu được phép chạm.
 
 ## 7. OWNER GATE REQUIRED — báo cáo ngắn
 
 * **Mục tiêu:** nhập nội dung site cũ vào CMS dạng nháp; nội dung đã xuất bản giữ nguyên.
-* **Sẽ ghi (ước tính trên DB trống):** 4 service-areas, 17 projects, 15 articles, 2 globals nháp, 56 media UNCONFIRMED.
-  Production thực tế: **UNKNOWN** tới khi có preflight chỉ-đọc được cấp phép riêng.
+* **Đã chứng minh trên DB trống cô lập:** 4 service-areas, 17 projects, 15 articles, 2 globals nháp, 56 media UNCONFIRMED.
+  Persistent Northflank thực tế: **UNKNOWN** tới khi có preflight chỉ-đọc/clone được cấp phép riêng.
 * **Không nhập:** 172 URL ảnh chờ duyệt, nội dung bị chặn, chuyên mục/tác giả, trang chủ cũ.
 * **Xung đột đã biết có thể có:** `[MẪU] Giới thiệu` (global không rỗng → bỏ qua), dự án/bài trùng slug → CONFLICT.
 * **Rủi ro:** mất dữ liệu (cần restore đã thử DB+media), bảo mật/quyền ảnh (UNCONFIRMED, riêng tư), SEO (không xuất bản,
   không gửi Search Console).
-* **Hành động không thể đảo ngược / cần owner:** mọi ghi vào DB/volume production; nới `assertImportAllowed`; xuất bản; duyệt quyền ảnh.
-* **Phê duyệt đề xuất sau này:** chỉ-tạo, chỉ nháp, đúng mục tiêu `bmsl-web`, SHA pack + deploy cụ thể, sau khi có
-  STAGING-PROVEN, backup+restore đã thử và bảng xung đột thật. Một lệnh "go ahead" chung chung là không đủ.
+* **Hành động cần owner:** mọi ghi vào DB/volume persistent Northflank hoặc production tương lai; nới `assertImportAllowed`; xuất bản; duyệt quyền ảnh.
+* **Phê duyệt đề xuất sau này:** chỉ-tạo, chỉ nháp, owner nêu rõ target persistent cụ thể, SHA pack + deploy cụ thể, backup+restore point và bảng xung đột thật. Một lệnh "go ahead" chung chung là không đủ.
