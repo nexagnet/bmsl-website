@@ -50,7 +50,7 @@ export type WpPost = {
   categories?: number[];
 };
 export type WpTerm = { id: number; slug: string; name: string };
-export type WpMedia = { id: number; source_url: string; alt_text?: string };
+export type WpMedia = { id: number; source_url: string; alt_text?: string; post?: number };
 export type WpSnapshot = {
   site: string;
   wordpress: string;
@@ -131,11 +131,17 @@ const stripContacts = (s: string) =>
       .replace(/\[\/?[a-z_]+(?:\s[^\]]*)?\]/gi, ''),
   );
 
-function fidelity(sourceHtml: string, doc: LexicalDoc): InventoryRow['textFidelity'] {
+/**
+ * Compares the (current) source HTML with a committed Lexical body. `whole`: the body is that one source; `within`: the body
+ * is a page assembled from several sources (about-page), so the source text must appear in it. Contact data redacted by the
+ * converter is accounted for; the result never contains text.
+ */
+export function fidelity(sourceHtml: string, doc: LexicalDoc, mode: 'whole' | 'within' = 'whole'): InventoryRow['textFidelity'] {
   const source = norm(plainTextOfHtml(sourceHtml));
   const seed = norm(lexicalPlainText(doc));
-  if (source === seed) return 'EXACT';
-  if (stripContacts(source) === stripPlaceholders(seed)) return 'EXACT_EXCEPT_REDACTIONS';
+  const same = (a: string, b: string) => (mode === 'whole' ? a === b : b.includes(a));
+  if (same(source, seed)) return 'EXACT';
+  if (same(stripContacts(source), stripPlaceholders(seed))) return 'EXACT_EXCEPT_REDACTIONS';
   return 'DIFFERS';
 }
 
