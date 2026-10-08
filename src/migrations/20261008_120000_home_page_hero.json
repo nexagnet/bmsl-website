@@ -5475,8 +5475,8 @@
           "method": "btree",
           "with": {}
         },
-        "home_page_hero_desktop_image_idx": {
-          "name": "home_page_hero_desktop_image_idx",
+        "home_page_hero_hero_desktop_image_idx": {
+          "name": "home_page_hero_hero_desktop_image_idx",
           "columns": [
             {
               "expression": "hero_desktop_image_id",
@@ -5490,8 +5490,8 @@
           "method": "btree",
           "with": {}
         },
-        "home_page_hero_mobile_image_idx": {
-          "name": "home_page_hero_mobile_image_idx",
+        "home_page_hero_hero_mobile_image_idx": {
+          "name": "home_page_hero_hero_mobile_image_idx",
           "columns": [
             {
               "expression": "hero_mobile_image_id",
@@ -5802,8 +5802,8 @@
           "method": "btree",
           "with": {}
         },
-        "_home_page_v_version_hero_desktop_image_idx": {
-          "name": "_home_page_v_version_hero_desktop_image_idx",
+        "_home_page_v_version_hero_version_hero_desktop_image_idx": {
+          "name": "_home_page_v_version_hero_version_hero_desktop_image_idx",
           "columns": [
             {
               "expression": "version_hero_desktop_image_id",
@@ -5817,8 +5817,8 @@
           "method": "btree",
           "with": {}
         },
-        "_home_page_v_version_hero_mobile_image_idx": {
-          "name": "_home_page_v_version_hero_mobile_image_idx",
+        "_home_page_v_version_hero_version_hero_mobile_image_idx": {
+          "name": "_home_page_v_version_hero_version_hero_mobile_image_idx",
           "columns": [
             {
               "expression": "version_hero_mobile_image_id",

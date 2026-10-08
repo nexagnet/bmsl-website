@@ -44,10 +44,10 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_home_page_v" ADD CONSTRAINT "_home_page_v_version_hero_desktop_image_id_media_assets_id_fk" FOREIGN KEY ("version_hero_desktop_image_id") REFERENCES "public"."media_assets"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_home_page_v" ADD CONSTRAINT "_home_page_v_version_hero_mobile_image_id_media_assets_id_fk" FOREIGN KEY ("version_hero_mobile_image_id") REFERENCES "public"."media_assets"("id") ON DELETE set null ON UPDATE no action;
 
-  CREATE INDEX "home_page_hero_desktop_image_idx" ON "home_page" USING btree ("hero_desktop_image_id");
-  CREATE INDEX "home_page_hero_mobile_image_idx" ON "home_page" USING btree ("hero_mobile_image_id");
-  CREATE INDEX "_home_page_v_version_hero_desktop_image_idx" ON "_home_page_v" USING btree ("version_hero_desktop_image_id");
-  CREATE INDEX "_home_page_v_version_hero_mobile_image_idx" ON "_home_page_v" USING btree ("version_hero_mobile_image_id");`);
+  CREATE INDEX "home_page_hero_hero_desktop_image_idx" ON "home_page" USING btree ("hero_desktop_image_id");
+  CREATE INDEX "home_page_hero_hero_mobile_image_idx" ON "home_page" USING btree ("hero_mobile_image_id");
+  CREATE INDEX "_home_page_v_version_hero_version_hero_desktop_image_idx" ON "_home_page_v" USING btree ("version_hero_desktop_image_id");
+  CREATE INDEX "_home_page_v_version_hero_version_hero_mobile_image_idx" ON "_home_page_v" USING btree ("version_hero_mobile_image_id");`);
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
@@ -57,10 +57,10 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
   ALTER TABLE "_home_page_v" DROP CONSTRAINT "_home_page_v_version_hero_desktop_image_id_media_assets_id_fk";
   ALTER TABLE "_home_page_v" DROP CONSTRAINT "_home_page_v_version_hero_mobile_image_id_media_assets_id_fk";
 
-  DROP INDEX IF EXISTS "home_page_hero_desktop_image_idx";
-  DROP INDEX IF EXISTS "home_page_hero_mobile_image_idx";
-  DROP INDEX IF EXISTS "_home_page_v_version_hero_desktop_image_idx";
-  DROP INDEX IF EXISTS "_home_page_v_version_hero_mobile_image_idx";
+  DROP INDEX IF EXISTS "home_page_hero_hero_desktop_image_idx";
+  DROP INDEX IF EXISTS "home_page_hero_hero_mobile_image_idx";
+  DROP INDEX IF EXISTS "_home_page_v_version_hero_version_hero_desktop_image_idx";
+  DROP INDEX IF EXISTS "_home_page_v_version_hero_version_hero_mobile_image_idx";
 
   ALTER TABLE "home_page" DROP COLUMN "hero_enabled";
   ALTER TABLE "home_page" DROP COLUMN "hero_kicker";
