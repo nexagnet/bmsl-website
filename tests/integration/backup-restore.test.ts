@@ -18,6 +18,7 @@ import {
 import { toPublicError } from '../../scripts/backup/safety.mjs';
 import { createOwnedDatabase, dropDisposableDatabase, runInGroup } from './support/db-lifecycle';
 import { assertSafeAdminUrl, databaseUrlFor } from './support/disposable-db';
+import { parseFixtureResult } from './support/fixture-output';
 
 // W5C synthetic, disposable backup/restore proof. It runs inside the existing required `pnpm test:integration` step
 // (real PostgreSQL service; pg_dump/pg_restore must exist and match: a missing tool FAILS this file, nothing skips).
@@ -81,9 +82,8 @@ async function fixture(cmd: string, dbName: string, mediaDir: string): Promise<R
     },
     timeoutMs: 240_000,
   });
-  const line = out.split('\n').find((l) => l.startsWith('FIXTURE_RESULT:'));
-  if (!line) throw new Error(`fixture ${cmd} produced no result\n${out.slice(-3000)}`);
-  const result = JSON.parse(line.slice('FIXTURE_RESULT:'.length)) as Record<string, unknown>;
+  const result = parseFixtureResult(out);
+  if (!result) throw new Error(`fixture ${cmd} produced no result\n${out.slice(-3000)}`);
   expect(await sessions(dbName), `fixture ${cmd} left a PostgreSQL session open on ${dbName}`).toBe(0);
   return result;
 }
