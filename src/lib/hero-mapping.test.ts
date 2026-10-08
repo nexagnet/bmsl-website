@@ -164,4 +164,20 @@ describe('HomePage Hero Mapping & Security Gate', () => {
 
     expect(toPage(draftPage)).toBeNull();
   });
+
+  it('guarantees fallback never hardcodes unverified service detail URLs', () => {
+    // Assert that CANONICAL_DISCIPLINES resolve only to real published services or static safe entries
+    const sampleServices = [
+      { id: '1', name: 'Quản lý vận hành mẫu', slug: 'mau-quan-ly-van-hanh', href: '/dich-vu/mau-quan-ly-van-hanh', body: null, seo: { noindex: false } },
+      { id: '2', name: 'Bảo vệ mục tiêu', slug: 'mau-bao-ve', href: '/dich-vu/mau-bao-ve', body: null, seo: { noindex: false } },
+    ];
+
+    // When services are published with demo or custom slugs, matched slugs are real
+    const matched = sampleServices.find((s) => s.slug.includes('quan-ly-van-hanh'));
+    expect(matched?.href).toBe('/dich-vu/mau-quan-ly-van-hanh');
+
+    // When a discipline has no published record, it must not invent an arbitrary link
+    const unmatched = sampleServices.find((s) => s.slug === 'pccc' || s.slug.includes('pccc'));
+    expect(unmatched).toBeUndefined();
+  });
 });

@@ -878,6 +878,18 @@ main:focus {
   outline: none;
 }
 
+.matrix-item.is-static {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.matrix-item.is-static:hover,
+.matrix-item.is-static:focus-visible {
+  border-color: var(--color-border);
+  box-shadow: none;
+  transform: none;
+}
+
 .matrix-num {
   font-size: 0.75rem;
   font-weight: 800;
@@ -898,6 +910,13 @@ main:focus {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-brand-secondary);
+  margin-top: 0.25rem;
+}
+
+.matrix-item-status {
+  font-size: 0.775rem;
+  font-weight: 500;
+  color: var(--color-muted);
   margin-top: 0.25rem;
 }
 

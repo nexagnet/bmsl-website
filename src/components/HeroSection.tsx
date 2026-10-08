@@ -1,14 +1,22 @@
 import Link from 'next/link';
-import type { HeroView } from '../lib/public-content';
+import type { HeroView, ServiceView } from '../lib/public-content';
 import { SITE_NAME, SURVEY_CTA } from '../lib/site';
 
 export interface HeroSectionProps {
   hero?: HeroView;
   defaultTitle?: string;
   defaultBodyText?: string;
+  services?: ServiceView[];
 }
 
-export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSectionProps) {
+const CANONICAL_DISCIPLINES = [
+  { key: 'quan-ly-van-hanh', name: 'Quản lý vận hành' },
+  { key: 'bao-ve', name: 'Bảo vệ' },
+  { key: 've-sinh', name: 'Vệ sinh' },
+  { key: 'pccc', name: 'PCCC' },
+] as const;
+
+export function HeroSection({ hero, defaultTitle, defaultBodyText, services }: HeroSectionProps) {
   // If CMS admin disabled the Hero section, preserve semantic H1 for page heading hierarchy
   if (hero && hero.enabled === false) {
     return <h1 className="sr-only">{defaultTitle || SITE_NAME}</h1>;
@@ -24,6 +32,8 @@ export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSection
   const focalPoint = hero?.focalPoint || 'center';
   const overlayPreset = hero?.overlayPreset || 'soft';
   const layoutPreset = hero?.layoutPreset || 'editorial';
+
+  const publishedServices = services ?? [];
 
   return (
     <section
@@ -117,34 +127,29 @@ export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSection
                 <span className="matrix-badge">BMSL</span>
               </div>
               <div className="matrix-grid">
-                <Link href="/dich-vu/quan-ly-van-hanh" className="matrix-item">
-                  <span className="matrix-num">01</span>
-                  <h3 className="matrix-item-title">Quản lý vận hành</h3>
-                  <span className="matrix-item-link" aria-hidden="true">
-                    Chi tiết &rarr;
-                  </span>
-                </Link>
-                <Link href="/dich-vu/bao-ve" className="matrix-item">
-                  <span className="matrix-num">02</span>
-                  <h3 className="matrix-item-title">Bảo vệ</h3>
-                  <span className="matrix-item-link" aria-hidden="true">
-                    Chi tiết &rarr;
-                  </span>
-                </Link>
-                <Link href="/dich-vu/ve-sinh" className="matrix-item">
-                  <span className="matrix-num">03</span>
-                  <h3 className="matrix-item-title">Vệ sinh</h3>
-                  <span className="matrix-item-link" aria-hidden="true">
-                    Chi tiết &rarr;
-                  </span>
-                </Link>
-                <Link href="/dich-vu/pccc" className="matrix-item">
-                  <span className="matrix-num">04</span>
-                  <h3 className="matrix-item-title">PCCC</h3>
-                  <span className="matrix-item-link" aria-hidden="true">
-                    Chi tiết &rarr;
-                  </span>
-                </Link>
+                {CANONICAL_DISCIPLINES.map((discipline, idx) => {
+                  const matched = publishedServices.find(
+                    (s) => s.slug === discipline.key || s.slug.includes(discipline.key)
+                  );
+
+                  return matched ? (
+                    <Link key={discipline.key} href={matched.href} className="matrix-item">
+                      <span className="matrix-num">{String(idx + 1).padStart(2, '0')}</span>
+                      <h3 className="matrix-item-title">{matched.name || discipline.name}</h3>
+                      <span className="matrix-item-link" aria-hidden="true">
+                        Chi tiết &rarr;
+                      </span>
+                    </Link>
+                  ) : (
+                    <div key={discipline.key} className="matrix-item is-static">
+                      <span className="matrix-num">{String(idx + 1).padStart(2, '0')}</span>
+                      <h3 className="matrix-item-title">{discipline.name}</h3>
+                      <span className="matrix-item-status" aria-hidden="true">
+                        Đang cập nhật
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
               <div className="matrix-footer">
                 <Link href="/dich-vu" className="matrix-footer-link">
