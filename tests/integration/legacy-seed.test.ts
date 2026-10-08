@@ -252,10 +252,19 @@ describe('approved images in rich text (synthetic records, same public read path
 describe('seed guards', () => {
   const base = { env: {} as Record<string, string | undefined>, databaseUrl: 'postgresql://u:p@localhost:5432/db', repoRoot: path.resolve(import.meta.dirname, '../..') };
 
-  it('refuses to write in production and to a non-local database unless staging is explicitly allowed', () => {
+  it('requires a complete DEV/STAGING target acknowledgement before any non-local Payload startup', () => {
+    const remote = 'postgresql://u:p@db.internal.example:5432/x';
+    const declaredDev = {
+      BMSL_IMPORT_ALLOW_STAGING: 'true',
+      BMSL_IMPORT_TARGET_ENV: 'dev',
+      BMSL_IMPORT_TARGET_ACK: 'db.internal.example/x',
+    };
     expect(() => assertImportAllowed({ ...base, write: true, env: { NODE_ENV: 'production' } })).toThrow(/production/);
-    expect(() => assertImportAllowed({ ...base, write: true, databaseUrl: 'postgresql://u:p@db.internal.example:5432/x' })).toThrow(/non-local/);
-    expect(() => assertImportAllowed({ ...base, write: true, databaseUrl: 'postgresql://u:p@db.internal.example:5432/x', env: { BMSL_IMPORT_ALLOW_STAGING: 'true' } })).not.toThrow();
-    expect(() => assertImportAllowed({ ...base, write: false, env: { NODE_ENV: 'production' } })).not.toThrow();
+    expect(() => assertImportAllowed({ ...base, write: true, databaseUrl: remote })).toThrow(/non-local/);
+    expect(() => assertImportAllowed({ ...base, write: true, databaseUrl: remote, env: { BMSL_IMPORT_ALLOW_STAGING: 'true' } })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+    expect(() => assertImportAllowed({ ...base, write: false, databaseUrl: remote, env: { BMSL_IMPORT_ALLOW_STAGING: 'true' } })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+    expect(() => assertImportAllowed({ ...base, write: false, env: { NODE_ENV: 'production' } })).toThrow(/production/);
+    expect(() => assertImportAllowed({ ...base, write: true, databaseUrl: remote, env: declaredDev })).not.toThrow();
+    expect(() => assertImportAllowed({ ...base, write: false, databaseUrl: remote, env: declaredDev })).not.toThrow();
   });
 });

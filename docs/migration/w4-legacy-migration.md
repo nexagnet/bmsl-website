@@ -57,8 +57,22 @@ pnpm migrate:legacy --input /path/outside/repo.json  # dry-run with approved art
 pnpm migrate:legacy --write [--input ...]            # explicit write, draft only
 ```
 
-- Local or staging only. Writes are refused when `NODE_ENV=production`, or when the database host is not
-  local unless `BMSL_IMPORT_ALLOW_STAGING=true`. Input files located inside this repository are refused.
+- Local or declared DEV/staging only. Input files located inside this repository are refused.
+- Default DENY, for dry-run and `--write` alike (both start migration-capable Payload). Only a local host
+  (`localhost`, `127.0.0.1`, `::1`) with `NODE_ENV` not `production` (disposable local development) is exempt. EVERY
+  other invocation, independent of `NODE_ENV`, needs ALL of: `BMSL_IMPORT_ALLOW_STAGING=true`,
+  `BMSL_IMPORT_TARGET_ENV=dev` (or `staging`) and `BMSL_IMPORT_TARGET_ACK=<host>/<database>` matching the configured
+  `DATABASE_URL` exactly; a non-default port is part of it: `<host>:<port>/<database>` (implicit port = 5432;
+  credentials are ignored and never logged). Absent, `production`, unknown, half-declared or mismatched values are
+  refused before Payload starts.
+- `DATABASE_URL` must be `postgres://` or `postgresql://` with one host and a database name. Multi-host, empty
+  database, malformed encoding, and query parameters other than TLS/timeout settings (e.g. `host`, `port`, `dbname`,
+  which could override the acknowledged authority) are refused with a generic message.
+- `NODE_ENV=production` is the optimized Node runtime of the web image, not a statement about the data, and is never
+  changed to run an import. The declaration is an operator attestation, not proof the database is dev. It authorizes
+  one manual non-clobber import only, never startup/build/deploy seeding.
+- Dry-run still starts Payload (migration-capable) and prints `MODE: DRY-RUN ... NOT read-only inventory`; use a SQL
+  read-only role/transaction or a clone for live read-only inventory.
 - Projects: 17 draft profiles from the manifest (name, slug, all legacy source URLs, `LEGACY-SOURCE`).
   Both Hoc vien Quoc phong sources are kept on one profile. No address, scale, operating date, service or image is set.
 - Articles: only from external input. The root must be exactly `{ "articles": [...] }`; any other root key or a

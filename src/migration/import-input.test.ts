@@ -1,6 +1,6 @@
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
-import { assertImportAllowed, parseArgs } from './cli';
+import { describe, expect, it, vi } from 'vitest';
+import { assertImportAllowed, describeMode, initAfterGuard, parseArgs } from './cli';
 import { ExternalInputError, parseExternalInput } from './external-input';
 import manifest from './legacy-manifest.json';
 
@@ -33,14 +33,160 @@ describe('import safety guard', () => {
 
   it('refuses writes in production or against a non-local DB without explicit staging opt-in', () => {
     expect(() => assertImportAllowed({ ...ok, env: { NODE_ENV: 'production' } })).toThrow(/production/i);
+    // NODE_ENV=production on a local DB with no declaration is still denied
+    expect(() => assertImportAllowed({ ...ok, env: { NODE_ENV: 'production', BMSL_IMPORT_ALLOW_STAGING: 'true' } })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
     const remote = 'postgresql://u:p@db.example.test:5432/bmsl';
     expect(() => assertImportAllowed({ ...ok, databaseUrl: remote })).toThrow(/non-local|staging/i);
+    // staging permission alone is no longer enough: a complete declaration + ack is required
+    expect(() => assertImportAllowed({ ...ok, databaseUrl: remote, env: { BMSL_IMPORT_ALLOW_STAGING: 'true' } })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
     expect(() =>
-      assertImportAllowed({ ...ok, databaseUrl: remote, env: { BMSL_IMPORT_ALLOW_STAGING: 'true' } }),
-    ).not.toThrow();
+      assertImportAllowed({ ...ok, databaseUrl: remote, env: { NODE_ENV: 'development', BMSL_IMPORT_ALLOW_STAGING: 'true' } }),
+    ).toThrow(/BMSL_IMPORT_TARGET_ENV/);
     expect(() =>
       assertImportAllowed({ ...ok, databaseUrl: remote, env: { NODE_ENV: 'production', BMSL_IMPORT_ALLOW_STAGING: 'true' } }),
-    ).toThrow(/production/i);
+    ).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+  });
+
+  describe('NODE_ENV=production optimized runtime on an owner-declared DEV target', () => {
+    const remote = 'postgresql://user:s3cretpw@db.dev.example.test:5432/bmsl_dev';
+    const prod = { NODE_ENV: 'production' };
+    const declared = {
+      ...prod,
+      BMSL_IMPORT_ALLOW_STAGING: 'true',
+      BMSL_IMPORT_TARGET_ENV: 'dev',
+      BMSL_IMPORT_TARGET_ACK: 'db.dev.example.test/bmsl_dev',
+    };
+    const run = (env: Record<string, string | undefined>, over: Record<string, unknown> = {}) =>
+      assertImportAllowed({ ...ok, databaseUrl: remote, env, ...over });
+
+    it('allows write with declaration + exact ack + staging permission, without touching NODE_ENV', () => {
+      const env = { ...declared };
+      expect(() => run(env)).not.toThrow();
+      expect(env.NODE_ENV).toBe('production');
+      expect(() => run({ ...declared, BMSL_IMPORT_TARGET_ENV: 'staging' })).not.toThrow();
+      expect(() => assertImportAllowed({ ...ok, env: { ...declared, BMSL_IMPORT_TARGET_ACK: 'localhost/bmsl_test' } })).not.toThrow();
+    });
+
+    it('fails closed on absent, production, unknown or ambiguous declaration', () => {
+      for (const v of [undefined, '', 'production', 'prod', 'test', 'dev,production']) {
+        const env = { ...declared, BMSL_IMPORT_TARGET_ENV: v };
+        expect(() => run(env)).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      }
+    });
+
+    it('fails closed on missing or mismatched acknowledgement (host or database)', () => {
+      for (const ack of [undefined, '', 'db.dev.example.test', 'db.dev.example.test/other', 'other.example.test/bmsl_dev', 'DB.DEV.example.test/bmsl_dev']) {
+        expect(() => run({ ...declared, BMSL_IMPORT_TARGET_ACK: ack })).toThrow(/BMSL_IMPORT_TARGET_ACK/);
+      }
+    });
+
+    it('still needs explicit --write and BMSL_IMPORT_ALLOW_STAGING', () => {
+      expect(() => run({ ...declared, BMSL_IMPORT_ALLOW_STAGING: undefined })).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
+      expect(() => run(prod)).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
+      // write absent: a non-local production-mode dry-run is still refused, first for the missing staging permission
+      expect(() => run(prod, { write: false })).toThrow(/BMSL_IMPORT_ALLOW_STAGING/);
+      // with staging permission but no declaration, the declaration is the refusal
+      expect(() => run({ ...prod, BMSL_IMPORT_ALLOW_STAGING: 'true' }, { write: false })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      expect(() => run(declared, { write: false })).not.toThrow();
+    });
+
+    it('rejects a half-declared non-production staging write and unparseable URLs, never echoing credentials', () => {
+      const env = { BMSL_IMPORT_ALLOW_STAGING: 'true', BMSL_IMPORT_TARGET_ENV: 'production' };
+      expect(() => run(env)).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      for (const bad of ['not a url s3cretpw', 'postgresql://user:s3cretpw@host', 'postgresql://user:s3cretpw@/db']) {
+        let message = '';
+        try {
+          run(declared, { databaseUrl: bad });
+        } catch (e) {
+          message = (e as Error).message;
+        }
+        expect(message).not.toBe('');
+        expect(message).not.toContain('s3cretpw');
+      }
+      for (const env2 of [{ ...declared, BMSL_IMPORT_TARGET_ACK: 'x/y' }, prod]) {
+        try {
+          run(env2);
+        } catch (e) {
+          expect((e as Error).message).not.toContain('s3cretpw');
+        }
+      }
+    });
+
+    it('labels dry-run as migration-capable, not read-only', () => {
+      expect(describeMode(false)).toMatch(/NOT read-only/);
+      expect(describeMode(true)).toMatch(/WRITE/);
+    });
+  });
+
+  describe('non-local target is denied by default regardless of NODE_ENV and write/dry-run', () => {
+    const remote = 'postgresql://user:s3cretpw@db.dev.example.test/bmsl_dev';
+    const full = { BMSL_IMPORT_ALLOW_STAGING: 'true', BMSL_IMPORT_TARGET_ENV: 'dev', BMSL_IMPORT_TARGET_ACK: 'db.dev.example.test/bmsl_dev' };
+    const run = (env: Record<string, string | undefined>, over: Record<string, unknown> = {}) =>
+      assertImportAllowed({ ...ok, databaseUrl: remote, env, ...over });
+
+    it('refuses unset/development/test NODE_ENV with only the staging flag, for write and dry-run', () => {
+      for (const nodeEnv of [undefined, 'development', 'test']) {
+        for (const write of [true, false]) {
+          expect(() => run({ NODE_ENV: nodeEnv }, { write })).toThrow(/non-local/);
+          expect(() => run({ NODE_ENV: nodeEnv, BMSL_IMPORT_ALLOW_STAGING: 'true' }, { write })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+          expect(() => run({ NODE_ENV: nodeEnv, ...full, BMSL_IMPORT_TARGET_ACK: undefined }, { write })).toThrow(/BMSL_IMPORT_TARGET_ACK/);
+          expect(() => run({ NODE_ENV: nodeEnv, ...full }, { write })).not.toThrow();
+        }
+      }
+    });
+
+    it('refuses a production declaration and a half declaration', () => {
+      expect(() => run({ ...full, BMSL_IMPORT_TARGET_ENV: 'production' }, { write: false })).toThrow(/BMSL_IMPORT_TARGET_ENV/);
+      expect(() => run({ BMSL_IMPORT_TARGET_ENV: 'dev', BMSL_IMPORT_TARGET_ACK: full.BMSL_IMPORT_TARGET_ACK })).toThrow(/non-local/);
+    });
+
+    it('refuses a local DB under NODE_ENV=production dry-run without declaration', () => {
+      expect(() => assertImportAllowed({ ...ok, write: false, env: { NODE_ENV: 'production' } })).toThrow(/production/);
+    });
+
+    it('binds the acknowledgement to the port (implicit 5432 normalized)', () => {
+      const withPort = 'postgresql://u:p@db.dev.example.test:6543/bmsl_dev';
+      expect(() => run(full, { databaseUrl: withPort })).toThrow(/BMSL_IMPORT_TARGET_ACK/);
+      expect(() => run({ ...full, BMSL_IMPORT_TARGET_ACK: 'db.dev.example.test:6543/bmsl_dev' }, { databaseUrl: withPort })).not.toThrow();
+      expect(() => run(full, { databaseUrl: 'postgres://u:p@db.dev.example.test:5432/bmsl_dev' })).not.toThrow();
+      expect(() => run({ ...full, BMSL_IMPORT_TARGET_ACK: 'db.dev.example.test:5432/bmsl_dev' })).toThrow(/BMSL_IMPORT_TARGET_ACK/);
+    });
+
+    it('refuses ambiguous or non-postgres URLs without echoing them, even for local hosts', () => {
+      const bad = [
+        'mysql://u:s3cretpw@db.dev.example.test/bmsl_dev',
+        'http://u:s3cretpw@db.dev.example.test/bmsl_dev',
+        'postgresql://u:s3cretpw@a.example.test,b.example.test/bmsl_dev',
+        'postgresql://u:s3cretpw@db.dev.example.test/',
+        'postgresql://u:s3cretpw@db.dev.example.test/bmsl_dev?host=prod.example.test',
+        'postgresql://u:s3cretpw@db.dev.example.test/bmsl_dev?port=6543',
+        'postgresql://u:s3cretpw@db.dev.example.test/bmsl_dev?dbname=prod',
+        'postgresql://u:s3cretpw@db.dev.example.test/bmsl%ZZ',
+        'postgresql://u:s3cretpw@localhost/bmsl_test?hostaddr=10.0.0.1',
+        'postgresql://u:s3cretpw@db.dev.example.test:99999/bmsl_dev',
+      ];
+      for (const databaseUrl of bad) {
+        let message = '';
+        try {
+          run(full, { databaseUrl });
+        } catch (e) {
+          message = (e as Error).message;
+        }
+        expect(message, databaseUrl.replace('s3cretpw', '***')).toMatch(/unambiguous/);
+        expect(message).not.toContain('s3cretpw');
+        expect(message).not.toContain('prod.example');
+      }
+      expect(() => run(full, { databaseUrl: `${remote}?sslmode=require` })).not.toThrow();
+    });
+
+    it('never calls the Payload initializer when the guard refuses, and calls it once when allowed', async () => {
+      const init = vi.fn(async () => 'payload');
+      await expect(initAfterGuard({ ...ok, write: false, databaseUrl: remote, env: {} }, init)).rejects.toThrow(/non-local/);
+      await expect(initAfterGuard({ ...ok, databaseUrl: remote, env: { BMSL_IMPORT_ALLOW_STAGING: 'true' } }, init)).rejects.toThrow();
+      expect(init).not.toHaveBeenCalled();
+      await expect(initAfterGuard({ ...ok, write: false, databaseUrl: remote, env: full }, init)).resolves.toBe('payload');
+      expect(init).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('refuses input files stored inside this public repository', () => {
