@@ -71,7 +71,7 @@ describe('public rendering data path', () => {
     expect(projects[0]?.bqtFeedback).toBeUndefined();
   });
 
-  it('hides drafts of services and articles; articles need a published category', async () => {
+  it('hides drafts but exposes published articles with or without a published category', async () => {
     await payload.create({
       collection: 'service-areas',
       data: { name: 'Published service', slug: 'published-service', summary: 's', order: 1, _status: 'published' },
@@ -105,7 +105,10 @@ describe('public rendering data path', () => {
     const articles = (await payload.find({ collection: 'articles', ...PUBLIC })).docs
       .map(toArticle)
       .filter(Boolean);
-    expect(articles.map((a) => a?.href)).toEqual(['/kien-thuc/cat/visible-article']);
+    expect(articles.map((a) => a?.href)).toEqual([
+      '/kien-thuc/cat/visible-article',
+      '/kien-thuc/bai-viet/orphan-article',
+    ]);
   });
 
   it('returns the safe empty state for an unpublished singleton page', async () => {

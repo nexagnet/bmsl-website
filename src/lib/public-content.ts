@@ -176,6 +176,9 @@ export function toArticle(d: unknown): ArticleView | undefined {
   const title = text(d.title);
   const slug = slugOf(d.slug);
   const category = toCategory(d.category);
+  // Preserve fail-closed validation for a *published* but malformed category (e.g. an unsafe slug).
+  // Missing or unpublished categories still receive the safe, uncategorized article URL.
+  if (isDoc(d.category) && d.category._status === 'published' && !category) return undefined;
   if (!title || !slug) return undefined;
   return {
     id: String(d.id),
