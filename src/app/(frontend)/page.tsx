@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ArticleCards, Empty, ProjectCards, ServiceCards, SurveyCta } from '../../components/blocks';
-import { RichText } from '../../components/RichText';
+import { HeroSection } from '../../components/HeroSection';
 import { getArticles, getPage, getProjects, getServices } from '../../lib/cms';
 import { buildMetadata } from '../../lib/metadata';
-import { SITE_NAME, SURVEY_CTA } from '../../lib/site';
+import { richTextToPlain } from '../../lib/public-content';
+import { SITE_NAME } from '../../lib/site';
 
 export const generateMetadata = async (): Promise<Metadata> =>
   buildMetadata('/', SITE_NAME, (await getPage('home-page'))?.seo);
@@ -18,23 +19,11 @@ export default async function HomePage() {
   ]);
   return (
     <>
-      <section className="container hero">
-        <div className="hero-card">
-          <h1>{page?.title ?? SITE_NAME}</h1>
-          <div className="prose">
-            <RichText data={page?.body} />
-          </div>
-          <p style={{ marginTop: '1.75rem', marginBottom: 0 }}>
-            <Link className="button" href={SURVEY_CTA.href}>
-              {SURVEY_CTA.label}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        hero={page?.hero}
+        defaultTitle={page?.title}
+        defaultBodyText={page?.body ? richTextToPlain(page.body) : undefined}
+      />
       <section className="container section" aria-labelledby="home-services">
         <h2 id="home-services">Dịch vụ</h2>
         {services.length ? <ServiceCards items={services} /> : <Empty>Nội dung đang được cập nhật.</Empty>}

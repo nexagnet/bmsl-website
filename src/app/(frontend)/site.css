@@ -495,7 +495,7 @@ main:focus {
   background: currentColor;
 }
 
-/* Hero Section */
+/* Hero Section (Legacy backwards-compatibility) */
 .hero {
   padding: 4rem 0 3rem;
   position: relative;
@@ -523,15 +523,480 @@ main:focus {
   }
 }
 
-.hero-card::after {
-  content: "";
+/* ==========================================================================
+   BMSL Architectural Editorial Hero System
+   Designed specifically for corporate property & facility management.
+   ========================================================================== */
+
+.hero-editorial {
+  position: relative;
+  padding: 3.5rem 0 3.25rem;
+  background-color: var(--color-bg);
+  overflow: hidden;
+}
+
+@media (min-width: 48rem) {
+  .hero-editorial {
+    padding: 4.5rem 0 4rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .hero-editorial {
+    padding: 5.5rem 0 4.75rem;
+  }
+}
+
+.hero-editorial-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+/* Asymmetric Grid on Desktop */
+@media (min-width: 64rem) {
+  .hero-editorial.preset-editorial .hero-editorial-inner {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 3.5rem;
+  }
+
+  .hero-editorial.preset-split .hero-editorial-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 4rem;
+  }
+
+  .hero-editorial.text-first .hero-editorial-inner {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 4rem;
+  }
+}
+
+/* Content Column */
+.hero-editorial-content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+/* Kicker / Overline */
+.hero-editorial-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.hero-editorial-kicker .kicker-line {
+  display: inline-block;
+  width: 2rem;
+  height: 2px;
+  background-color: var(--color-brand-accent);
+  flex-shrink: 0;
+}
+
+.hero-editorial-kicker .kicker-text {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-secondary);
+  line-height: 1.4;
+}
+
+/* Editorial Headline H1 */
+.hero-editorial-headline {
+  font-size: clamp(2.15rem, 3.8vw + 0.5rem, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  color: var(--color-brand-primary);
+  margin: 0 0 1.25rem;
+  text-wrap: balance;
+}
+
+/* Supporting Description */
+.hero-editorial-description {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin: 0 0 2rem;
+  max-width: 54ch;
+  text-wrap: pretty;
+}
+
+@media (max-width: 48rem) {
+  .hero-editorial-description {
+    font-size: 1.025rem;
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+  }
+}
+
+/* Action Button Cluster */
+.hero-editorial-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+}
+
+.button.hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-brand-primary);
+  border: 1px solid var(--color-brand-primary);
+  border-radius: var(--radius);
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(10, 25, 47, 0.16);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 48px;
+}
+
+.button.hero-btn-primary:hover {
+  background: var(--color-brand-secondary);
+  border-color: var(--color-brand-secondary);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(10, 25, 47, 0.22);
+}
+
+.button.hero-btn-primary:active {
+  transform: translateY(0);
+}
+
+.button.hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.65rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-brand-primary);
+  background: transparent;
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  text-decoration: none;
+  box-shadow: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 48px;
+}
+
+.button.hero-btn-secondary:hover {
+  background: var(--color-surface);
+  border-color: var(--color-brand-primary);
+  color: var(--color-brand-primary);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+  transform: translateY(-1px);
+}
+
+.button.hero-btn-secondary:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 26rem) {
+  .hero-editorial-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Credential Reassurance Bar */
+.hero-editorial-credentials {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.85rem;
+  font-size: 0.825rem;
+  color: var(--color-muted);
+  font-weight: 500;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.credential-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-secondary);
+}
+
+.credential-item svg {
+  color: var(--color-brand-accent);
+  flex-shrink: 0;
+}
+
+.credential-divider {
+  color: var(--color-border-strong);
+  font-weight: 700;
+}
+
+@media (max-width: 32rem) {
+  .hero-editorial-credentials {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .credential-divider {
+    display: none;
+  }
+}
+
+/* Media Column & Architectural Viewport */
+.hero-editorial-media {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  background-color: var(--color-surface);
+}
+
+@media (min-width: 64rem) {
+  .hero-media-wrapper {
+    aspect-ratio: 16 / 11;
+  }
+}
+
+.hero-media-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-media-wrapper.focal-center .hero-media-img {
+  object-position: center;
+}
+
+.hero-media-wrapper.focal-top .hero-media-img {
+  object-position: top center;
+}
+
+.hero-media-wrapper.focal-bottom .hero-media-img {
+  object-position: bottom center;
+}
+
+/* Overlay Presets */
+.hero-media-overlay {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 20rem;
-  height: 20rem;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.06) 0%, transparent 70%);
+  inset: 0;
   pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hero-media-wrapper.overlay-soft .hero-media-overlay {
+  background: linear-gradient(180deg, rgba(10, 25, 47, 0.05) 0%, rgba(10, 25, 47, 0.45) 100%);
+}
+
+.hero-media-wrapper.overlay-strong .hero-media-overlay {
+  background: linear-gradient(180deg, rgba(10, 25, 47, 0.2) 0%, rgba(10, 25, 47, 0.75) 100%);
+}
+
+.hero-media-wrapper.overlay-none .hero-media-overlay {
+  display: none;
+}
+
+/* Architectural Corner Ticks */
+.hero-media-frame-corner {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.hero-media-frame-corner.top-left {
+  top: 0.75rem;
+  left: 0.75rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.85);
+  border-left: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.hero-media-frame-corner.bottom-right {
+  bottom: 0.75rem;
+  right: 0.75rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.85);
+  border-right: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+/* Caption bar inside visual */
+.hero-media-caption {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 0.85rem;
+  right: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.85rem;
+  background: rgba(10, 25, 47, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  z-index: 4;
+}
+
+.caption-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.45rem;
+  background-color: var(--color-brand-accent);
+  color: #ffffff;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.caption-text {
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   Fallback: Architectural Editorial Matrix (Text-first Mode)
+   ========================================================================== */
+.hero-fallback-matrix {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: 1.75rem;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 48rem) {
+  .hero-fallback-matrix {
+    padding: 2.25rem 2rem;
+  }
+}
+
+.matrix-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.matrix-title {
+  font-size: 0.775rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-brand-secondary);
+}
+
+.matrix-badge {
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: 0.06em;
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 30rem) {
+  .matrix-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1.25rem;
+  }
+}
+
+.matrix-item {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.matrix-num {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--color-brand-accent);
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+.matrix-item-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-brand-primary);
+  margin: 0 0 0.35rem;
+  line-height: 1.35;
+}
+
+.matrix-item-desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.matrix-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--color-border);
+}
+
+.matrix-note {
+  font-size: 0.775rem;
+  color: var(--color-muted);
+  font-style: italic;
+  display: block;
+}
+
+/* Hair-line architectural divider beneath Hero */
+.hero-architectural-rule {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-border) 20%, var(--color-border) 80%, transparent 100%);
+}
+
+/* Prefers-reduced-motion compliance */
+@media (prefers-reduced-motion: reduce) {
+  .hero-media-img,
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* Headings & Editorial Typography */

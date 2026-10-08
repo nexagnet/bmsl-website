@@ -281,12 +281,63 @@ export function toDocument(d: unknown): DocumentView | undefined {
     : undefined;
 }
 
-export type PageView = { title?: string; body: unknown; seo: PublicSeo };
+export type HeroView = {
+  enabled: boolean;
+  kicker?: string;
+  headline?: string;
+  supportingText?: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  desktopImage?: PublicImage;
+  mobileImage?: PublicImage;
+  focalPoint: 'center' | 'top' | 'bottom';
+  overlayPreset: 'soft' | 'strong' | 'none';
+  layoutPreset: 'editorial' | 'split';
+};
+
+/** Maps and gates HomePage hero fields. Only APPROVED media is admitted; links are sanitized. */
+export function toHero(v: unknown): HeroView | undefined {
+  if (!isDoc(v)) return undefined;
+  const enabled = v.enabled !== false;
+  const kicker = text(v.kicker);
+  const headline = text(v.headline);
+  const supportingText = text(v.supportingText);
+  const primaryLabel = text(v.primaryCtaText) || 'Đặt lịch khảo sát';
+  const primaryHref = safeLinkHref(v.primaryCtaLink) || '/lien-he?requestType=khao-sat';
+  const secondaryLabel = text(v.secondaryCtaText);
+  const secondaryHref = safeLinkHref(v.secondaryCtaLink);
+  const desktopImage = toPublicImage(v.desktopImage);
+  const mobileImage = toPublicImage(v.mobileImage);
+  const focalPoint = v.focalPoint === 'top' || v.focalPoint === 'bottom' ? v.focalPoint : 'center';
+  const overlayPreset = v.overlayPreset === 'strong' || v.overlayPreset === 'none' ? v.overlayPreset : 'soft';
+  const layoutPreset = v.layoutPreset === 'split' ? 'split' : 'editorial';
+
+  return {
+    enabled,
+    kicker,
+    headline,
+    supportingText,
+    primaryCta: { label: primaryLabel, href: primaryHref },
+    secondaryCta: secondaryLabel && secondaryHref ? { label: secondaryLabel, href: secondaryHref } : undefined,
+    desktopImage,
+    mobileImage,
+    focalPoint,
+    overlayPreset,
+    layoutPreset,
+  };
+}
+
+export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: HeroView };
 
 /** Singleton pages: null (safe empty state) unless published. */
 export function toPage(d: unknown): PageView | null {
   if (!isPublished(d)) return null;
-  return { title: text(d.title), body: d.body, seo: toSeo(d.seo) };
+  return {
+    title: text(d.title),
+    body: d.body,
+    seo: toSeo(d.seo),
+    hero: toHero(d.hero),
+  };
 }
 
 /** True when a Lexical value holds at least one block with content. */
