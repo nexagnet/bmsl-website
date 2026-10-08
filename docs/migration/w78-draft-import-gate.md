@@ -3,7 +3,7 @@
 Issue #78 (R2, **Phase A only**). Tài liệu này **không** cấp quyền ghi production. Không có lệnh nào trong tài liệu này
 đã được chạy trên production; không đọc/ghi DB hay volume Northflank. Base đã refresh: `main` @ `5131e599d24328655b977fa7092d0b228e4efd18`. Không có thay đổi mã ứng dụng trong PR này; chỉ tài liệu/evidence.
 
-**Trạng thái bằng chứng: `SEED-ISOLATED-PROVEN; WAITING_SEED_RESTORE_PROOF_AND_OWNER_DATA_GATE`** — "staging" ở đây là PostgreSQL/media cô lập và dữ liệu synthetic/local/CI, KHÔNG phải dữ liệu riêng tư Northflank. Không có đọc/ghi DB/volume Northflank. Theo quyết định owner được ghi tại Issue #81 (https://github.com/nexagnet/bmsl-website/issues/81#issuecomment-6030817032), Northflank hiện là DEV/TEST, chưa có production; tuy vậy mọi import vào persistent DB/volume Northflank vẫn là data-write gate riêng và chưa được ủy quyền.
+**Trạng thái bằng chứng: `SEED-ISOLATED-PROVEN; WAITING_SEED_RESTORE_PROOF_AND_OWNER_DATA_GATE`** — "staging" ở đây là PostgreSQL/media cô lập và dữ liệu synthetic/local/CI, KHÔNG phải dữ liệu riêng tư Northflank. Không có đọc/ghi DB/volume Northflank. Theo quyết định owner được ghi tại Issue #81 (https://github.com/nexagnet/bmsl-website/issues/81#issuecomment-6030949836), Northflank hiện là DEV/TEST, chưa có production; tuy vậy mọi import vào persistent DB/volume Northflank vẫn là data-write gate riêng và chưa được ủy quyền.
 
 ## 1. Ánh xạ seed → CMS (từ `src/seed/bmsl-legacy`, loader hiện có)
 
