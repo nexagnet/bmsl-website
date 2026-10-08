@@ -41,6 +41,31 @@ export const SiteSettings: GlobalConfig = {
         { name: 'email', type: 'email', label: 'Email' },
         { name: 'hotline', type: 'text', label: 'Hotline' },
         { name: 'zalo', type: 'text', label: 'Zalo' },
+        {
+          name: 'mapLatitude',
+          type: 'number',
+          label: 'Vĩ độ trụ sở',
+          min: 8,
+          max: 24,
+          admin: { description: 'Chỉ nhập tọa độ do BMSL xác nhận. Không suy đoán từ nguồn khác.' },
+        },
+        {
+          name: 'mapLongitude',
+          type: 'number',
+          label: 'Kinh độ trụ sở',
+          min: 102,
+          max: 110,
+          admin: { description: 'Chỉ nhập tọa độ do BMSL xác nhận. Không suy đoán từ nguồn khác.' },
+        },
+        {
+          name: 'mapApproved',
+          type: 'checkbox',
+          defaultValue: false,
+          label: 'BMSL đã duyệt hiển thị bản đồ',
+          admin: {
+            description: 'Mặc định tắt. Bản đồ OpenStreetMap chỉ hiển thị khi bật mục này và có đủ vĩ độ, kinh độ hợp lệ.',
+          },
+        },
       ],
     },
     {
