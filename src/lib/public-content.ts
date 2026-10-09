@@ -292,12 +292,84 @@ export function toDocument(d: unknown): DocumentView | undefined {
     : undefined;
 }
 
-export type PageView = { title?: string; body: unknown; seo: PublicSeo };
+/**
+ * A link target restricted to same-site internal paths (e.g. /lien-he, /dich-vu).
+ * Rejects external http(s) URLs, protocol-relative //paths, backslashes, and control characters.
+ */
+export function safeInternalLinkHref(url: unknown): string | undefined {
+  const value = text(url);
+  // eslint-disable-next-line no-control-regex
+  if (!value || /[\u0000-\u001f\u007f\\]/.test(value)) return undefined;
+  if (value.startsWith('/') && !value.startsWith('//')) {
+    return value;
+  }
+  return undefined;
+}
+
+export type HeroView = {
+  enabled: boolean;
+  kicker?: string;
+  headline?: string;
+  supportingText?: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  desktopImage?: PublicImage;
+  mobileImage?: PublicImage;
+  focalPoint: 'center' | 'top' | 'bottom';
+  overlayPreset: 'soft' | 'strong' | 'none';
+  layoutPreset: 'editorial' | 'split';
+};
+
+/** A MediaAssets upload can be an APPROVED PDF, but a Hero <img> requires an actual raster image. */
+const HERO_IMAGE_MIME_TYPES = new Set(['image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/avif']);
+const toHeroImage = (value: unknown): PublicImage | undefined =>
+  isDoc(value) && typeof value.mimeType === 'string' && HERO_IMAGE_MIME_TYPES.has(value.mimeType)
+    ? toPublicImage(value)
+    : undefined;
+
+/** Maps and gates HomePage hero fields. Only APPROVED media is admitted; links are sanitized to safe internal paths. */
+export function toHero(v: unknown): HeroView | undefined {
+  if (!isDoc(v)) return undefined;
+  const enabled = v.enabled !== false;
+  const kicker = text(v.kicker);
+  const headline = text(v.headline);
+  const supportingText = text(v.supportingText);
+  const primaryLabel = text(v.primaryCtaText) || 'Đặt lịch khảo sát';
+  const primaryHref = safeInternalLinkHref(v.primaryCtaLink) || '/lien-he?requestType=khao-sat';
+  const secondaryLabel = text(v.secondaryCtaText);
+  const secondaryHref = safeInternalLinkHref(v.secondaryCtaLink);
+  const desktopImage = toHeroImage(v.desktopImage);
+  const mobileImage = toHeroImage(v.mobileImage);
+  const focalPoint = v.focalPoint === 'top' || v.focalPoint === 'bottom' ? v.focalPoint : 'center';
+  const overlayPreset = v.overlayPreset === 'strong' || v.overlayPreset === 'none' ? v.overlayPreset : 'soft';
+  const layoutPreset = v.layoutPreset === 'split' ? 'split' : 'editorial';
+
+  return {
+    enabled,
+    kicker,
+    headline,
+    supportingText,
+    primaryCta: { label: primaryLabel, href: primaryHref },
+    secondaryCta: secondaryLabel && secondaryHref ? { label: secondaryLabel, href: secondaryHref } : undefined,
+    desktopImage,
+    mobileImage,
+    focalPoint,
+    overlayPreset,
+    layoutPreset,
+  };
+}
+
+export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: HeroView };
 
 /** Singleton pages: null (safe empty state) unless published. */
 export function toPage(d: unknown): PageView | null {
   if (!isPublished(d)) return null;
-  return { title: text(d.title), body: d.body, seo: toSeo(d.seo) };
+  return {
+    title: text(d.title),
+    body: d.body,
+    seo: toSeo(d.seo),
+    hero: toHero(d.hero),
+  };
 }
 
 /** True when a Lexical value holds at least one block with content. */

@@ -11,6 +11,7 @@ import { migrations } from '../../src/migrations';
 
 process.env.PAYLOAD_SECRET ??= 'synthetic-integration-secret';
 const NEW = '20261007_075550_lead_email_outbox';
+const newIndex = migrations.findIndex((m) => m.name === NEW);
 const ENABLED = { LEAD_EMAIL_ENABLED: 'true', SMTP_HOST: '127.0.0.1', SMTP_PORT: '1', LEAD_EMAIL_FROM: 'a@bmsl-sandbox.example', LEAD_EMAIL_TO: 'b@bmsl-sandbox.example' };
 
 let payload: Payload;
@@ -24,8 +25,8 @@ beforeAll(async () => {
   await pool.query('drop schema if exists public cascade; create schema public;');
   const { default: config } = await import('../../src/payload.config');
   payload = await getPayload({ config });
-  expect(migrations.at(-1)?.name).toBe(NEW);
-  await payload.db.migrate({ migrations: migrations.slice(0, -1) as never });
+  expect(newIndex).toBeGreaterThan(-1);
+  await payload.db.migrate({ migrations: migrations.slice(0, newIndex) as never });
 });
 
 afterAll(async () => {
@@ -47,7 +48,7 @@ describe('lead e-mail outbox migration', () => {
   });
 
   it('applies additively: every existing lead is untouched and none is ever notified retroactively', async () => {
-    await payload.db.migrate();
+    await payload.db.migrate({ migrations: migrations.slice(0, newIndex + 1) as never });
     expect((await pool.query('select 1 from payload_migrations where name = $1', [NEW])).rowCount).toBe(1);
     expect(await columns('contact_leads')).toEqual(
       expect.arrayContaining(['notification_state', 'notification_attempts', 'notification_last_attempt_at', 'notification_lease_until', 'notification_sent_at', 'notification_last_error']),
@@ -71,7 +72,7 @@ describe('lead e-mail outbox migration', () => {
     expect(await tableExists('payload_jobs')).toBe(false);
     expect(Number((await pool.query('select count(*)::int c from contact_leads')).rows[0].c)).toBe(3);
 
-    await payload.db.migrate();
+    await payload.db.migrate({ migrations: migrations.slice(0, newIndex + 1) as never });
     expect(await columns('contact_leads')).toContain('notification_state');
     expect(Number((await pool.query('select count(*)::int c from contact_leads')).rows[0].c)).toBe(3);
   });
