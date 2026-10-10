@@ -23,7 +23,6 @@ export default async function HomePage() {
         hero={page?.hero}
         defaultTitle={page?.title}
         defaultBodyText={page?.body ? richTextToPlain(page.body) : undefined}
-        services={services}
       />
       <section className="container section" aria-labelledby="home-services">
         <h2 id="home-services">Dịch vụ</h2>
