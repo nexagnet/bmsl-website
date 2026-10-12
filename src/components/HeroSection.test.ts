@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -52,4 +54,15 @@ describe('HeroSection', () => {
     expect(html).toContain(long.trim().slice(0, 20));
     expect(html).toContain('href="/dich-vu"');
   });
+
+  it('uses a Vietnamese-complete serif font stack without Georgia on .hero-editorial-headline', () => {
+    const css = readFileSync(resolve(import.meta.dirname, '../app/(frontend)/site.css'), 'utf8');
+    const match = /\.hero-editorial-headline\s*\{([^}]+)\}/.exec(css);
+    expect(match).not.toBeNull();
+    const block = match![1];
+    expect(block).toContain("'Palatino Linotype'");
+    expect(block).toContain("'Times New Roman'");
+    expect(block).not.toContain('Georgia');
+  });
 });
+
