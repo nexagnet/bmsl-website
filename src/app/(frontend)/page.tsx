@@ -44,7 +44,7 @@ export default async function HomePage() {
       </section>
       {latest.articles.length ? (
         <section className="container section alt" aria-labelledby="home-articles">
-          <h2 id="home-articles">Kiến thức</h2>
+          <h2 id="home-articles">Tin tức</h2>
           <ArticleCards items={latest.articles} />
         </section>
       ) : null}

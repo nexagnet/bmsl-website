@@ -26,10 +26,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   ]);
   return (
     <>
-      <Crumbs items={[{ label: 'Kiến thức', href: '/kien-thuc' }, { label: category.name }]} />
+      <Crumbs items={[{ label: 'Tin tức', href: '/kien-thuc' }, { label: category.name }]} />
       <JsonLd
         data={breadcrumbLd(getSiteUrl(), [
-          { name: 'Kiến thức', path: '/kien-thuc' },
+          { name: 'Tin tức', path: '/kien-thuc' },
           { name: category.name, path: category.href },
         ])}
       />
