@@ -9,7 +9,7 @@ export const NAV_ITEMS = [
   { label: 'Dịch vụ', href: '/dich-vu' },
   { label: 'Dự án', href: '/du-an' },
   { label: 'Quy trình & Minh bạch', href: '/quy-trinh-minh-bach' },
-  { label: 'Kiến thức', href: '/kien-thuc' },
+  { label: 'Tin tức', href: '/kien-thuc' },
   { label: 'Tuyển dụng', href: '/tuyen-dung' },
   { label: 'Liên hệ', href: '/lien-he' },
 ] as const;
