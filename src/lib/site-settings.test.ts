@@ -44,4 +44,31 @@ describe('published SiteSettings view', () => {
     expect(toSiteSettings({ ...pub }).hotline).toBeUndefined();
     expect(toSiteSettings({ ...pub, contact: { hotline: 'javascript:alert(1)', zalo: 'https://evil.example' } })).toEqual({});
   });
+
+  it('accepts 1800/1900 service numbers and rejects look-alikes', () => {
+    expect(toSiteSettings({ ...pub, contact: { hotline: '1900 1234' } }).hotline).toEqual({ label: '1900 1234', href: 'tel:19001234' });
+    expect(toSiteSettings({ ...pub, contact: { hotline: '1700 1234' } }).hotline).toBeUndefined();
+    expect(toSiteSettings({ ...pub, contact: { hotline: '1900' } }).hotline).toBeUndefined();
+  });
+
+  it('builds the office map only from approved, in-range synthetic coordinates', () => {
+    const ok = { mapLatitude: 10.5, mapLongitude: 106.5, mapApproved: true };
+    const map = toSiteSettings({ ...pub, contact: ok }).map;
+    expect(map?.embedSrc).toBe(
+      'https://www.openstreetmap.org/export/embed.html?bbox=106.496000,10.496000,106.504000,10.504000&layer=mapnik&marker=10.500000,106.500000',
+    );
+    expect(map?.linkHref).toBe('https://www.openstreetmap.org/?mlat=10.500000&mlon=106.500000#map=17/10.500000/106.500000');
+    for (const bad of [
+      { ...ok, mapApproved: false },
+      { ...ok, mapApproved: 'true' },
+      { mapLatitude: 10.5, mapApproved: true },
+      { ...ok, mapLatitude: 106.5, mapLongitude: 10.5 },
+      { ...ok, mapLatitude: '10.5' },
+      { ...ok, mapLongitude: Number.NaN },
+    ]) {
+      expect(toSiteSettings({ ...pub, contact: bad }).map, JSON.stringify(bad)).toBeUndefined();
+    }
+    expect(toSiteSettings({ _status: 'draft', contact: ok }).map).toBeUndefined();
+    expect(toSiteSettings({ ...pub, contact: { address: ' Địa chỉ thử nghiệm ' } }).address).toBe('Địa chỉ thử nghiệm');
+  });
 });

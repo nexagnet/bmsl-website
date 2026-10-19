@@ -18,6 +18,10 @@ describe('security headers', () => {
     expect(get({ HSTS_ENABLED: 'true' }, 'Strict-Transport-Security')).toBe('max-age=31536000');
   });
 
+  it('allows framing only the OpenStreetMap origin', () => {
+    expect(buildCsp({})).toContain("frame-src 'self' https://www.openstreetmap.org;");
+  });
+
   it('adds only the explicit GA4 origins when configured and never a wildcard', () => {
     const off = buildCsp({});
     expect(off).not.toContain('googletagmanager');
