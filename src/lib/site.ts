@@ -9,7 +9,7 @@ export const NAV_ITEMS = [
   { label: 'Dịch vụ', href: '/dich-vu' },
   { label: 'Dự án', href: '/du-an' },
   { label: 'Quy trình & Minh bạch', href: '/quy-trinh-minh-bach' },
-  { label: 'Kiến thức', href: '/kien-thuc' },
+  { label: 'Tin tức', href: '/kien-thuc' },
   { label: 'Tuyển dụng', href: '/tuyen-dung' },
   { label: 'Liên hệ', href: '/lien-he' },
 ] as const;
@@ -19,11 +19,19 @@ export const SURVEY_CTA = { label: 'Đặt lịch khảo sát', href: '/lien-he?
 /** Fixed public routes that exist regardless of CMS content. */
 export const STATIC_PUBLIC_PATHS: string[] = NAV_ITEMS.map((i) => i.href);
 
+/**
+ * Path segment that stands in for the category of a published article without a publicly published category:
+ * /kien-thuc/bai-viet/<slug>. It is a technical namespace, not a category: no category record is created, and it
+ * is never used for an article that has a published category (that one stays at /kien-thuc/<category>/<slug>).
+ */
+export const UNCATEGORIZED_SEGMENT = 'bai-viet';
+
 export const paths = {
   service: (slug: string) => `/dich-vu/${slug}`,
   project: (slug: string) => `/du-an/${slug}`,
   category: (slug: string) => `/kien-thuc/${slug}`,
-  article: (categorySlug: string, slug: string) => `/kien-thuc/${categorySlug}/${slug}`,
+  article: (categorySlug: string | undefined, slug: string) =>
+    `/kien-thuc/${categorySlug ?? UNCATEGORIZED_SEGMENT}/${slug}`,
   job: (slug: string) => `/tuyen-dung/${slug}`,
 };
 

@@ -2,6 +2,7 @@ import config from '@payload-config';
 import { getPayload } from 'payload';
 import {
   type ArticleView,
+  articleMatchesSegment,
   type CategoryView,
   type DocumentView,
   type JobView,
@@ -113,7 +114,7 @@ export const getArticle = (categorySlug: string, slug: string): Promise<ArticleV
       ...PUBLIC,
     });
     const article = toArticle(r.docs[0]);
-    return article && article.category.slug === categorySlug ? article : null;
+    return article && articleMatchesSegment(article, categorySlug) ? article : null;
   });
 
 export const getJobs = (): Promise<JobView[]> =>

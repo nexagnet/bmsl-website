@@ -16,6 +16,7 @@ import { assertSafeAdminUrl } from './support/disposable-db';
 import { JOBS } from './support/markers';
 import { registerBrowserBlocks } from './support/browser-blocks';
 import { registerSecurityBlocks } from './support/security-blocks';
+import { parseFixtureResult } from './support/fixture-output';
 
 // Real HTTP proof (W4/W5A): a production Next build + `next start` against a DISPOSABLE PostgreSQL database that
 // this file creates and drops itself (never the shared database, never any other database). Synthetic data only.
@@ -81,9 +82,9 @@ async function runFixture(cmd: string, extra: Record<string, string> = {}): Prom
     SMOKE_FIXTURE_CMD: cmd,
     ...extra,
   });
-  const line = out.split('\n').find((l) => l.startsWith('FIXTURE_RESULT:'));
-  if (!line) throw new Error(`fixture ${cmd} produced no result\n${tail(out)}`);
-  return JSON.parse(line.slice('FIXTURE_RESULT:'.length)) as Record<string, unknown>;
+  const parsed = parseFixtureResult(out);
+  if (!parsed) throw new Error(`fixture ${cmd} produced no result\n${tail(out)}`);
+  return parsed;
 }
 
 const freePort = () =>

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  articleMatchesSegment,
   buildSitemapEntries,
   hasRichText,
   safeLinkHref,
@@ -12,6 +13,7 @@ import {
   toSeo,
   toService,
 } from './public-content';
+import { isPublicContentPath } from './seo';
 import { NAV_ITEMS, STATIC_PUBLIC_PATHS, SURVEY_CTA } from './site';
 
 const approved = { id: 1, alt: 'Ảnh', url: '/api/media-assets/file/a.jpg', rightsStatus: 'APPROVED' };
@@ -167,9 +169,37 @@ describe('route mapping', () => {
     expect(article?.href).toBe('/kien-thuc/c/a');
   });
 
-  it('does not expose an article whose category is unpublished or unreadable', () => {
-    expect(toArticle({ ...pub, id: 1, title: 'A', slug: 'a', category: 2 })).toBeUndefined();
-    expect(toArticle({ ...pub, id: 1, title: 'A', slug: 'a', category: { _status: 'draft', id: 2, name: 'C', slug: 'c' } })).toBeUndefined();
+  it('keeps a published article visible at the uncategorized path when its category is missing, unpublished or unreadable', () => {
+    const base = { ...pub, id: 1, title: 'A', slug: 'a' };
+    for (const category of [undefined, null, 2, { _status: 'draft', id: 2, name: 'C', slug: 'c' }]) {
+      const article = toArticle({ ...base, category });
+      expect(article?.href).toBe('/kien-thuc/bai-viet/a');
+      expect(article?.category).toBeUndefined();
+      expect(isPublicContentPath(article?.href)).toBe(true);
+    }
+  });
+
+  it('still hides unpublished articles regardless of category', () => {
+    expect(toArticle({ _status: 'draft', id: 1, title: 'A', slug: 'a' })).toBeUndefined();
+    expect(toArticle({ id: 1, title: 'A', slug: 'a', category: null })).toBeUndefined();
+  });
+
+  it('serves each article only at its own canonical path', () => {
+    const plain = toArticle({ ...pub, id: 1, title: 'A', slug: 'a' });
+    const categorized = toArticle({ ...pub, id: 2, title: 'B', slug: 'b', category: { ...pub, id: 2, name: 'C', slug: 'c' } });
+    expect(articleMatchesSegment(plain!, 'bai-viet')).toBe(true);
+    expect(articleMatchesSegment(plain!, 'c')).toBe(false);
+    expect(articleMatchesSegment(categorized!, 'c')).toBe(true);
+    expect(articleMatchesSegment(categorized!, 'bai-viet')).toBe(false);
+  });
+
+  it('maps nine uncategorized published fixtures into a full list and sitemap without duplicates', () => {
+    const docs = Array.from({ length: 9 }, (_, i) => ({ ...pub, id: i + 1, title: `T${i}`, slug: `bai-${i}`, category: null }));
+    const views = docs.map(toArticle).filter((a) => !!a);
+    expect(views).toHaveLength(9);
+    const entries = buildSitemapEntries('https://example.test', [], views.map((v) => v.href));
+    expect(entries).toHaveLength(9);
+    expect(entries[0]?.url).toBe('https://example.test/kien-thuc/bai-viet/bai-0');
   });
 });
 

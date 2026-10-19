@@ -15,7 +15,134 @@ const page = (slug: string, label: string): GlobalConfig => ({
   ],
 });
 
-export const HomePage = page('home-page', 'Trang chủ');
+export const HomePage: GlobalConfig = {
+  slug: 'home-page',
+  label: 'Trang chủ',
+  access: adminSingletonAccess,
+  versions: drafts,
+  fields: [
+    { name: 'title', type: 'text', label: 'Tiêu đề' },
+    { name: 'body', type: 'richText', label: 'Nội dung' },
+    {
+      name: 'hero',
+      type: 'group',
+      label: 'Cấu hình Hero Section',
+      admin: {
+        description: 'Quản trị nội dung và hình ảnh của Hero section trên Trang chủ (chỉ ADMIN có quyền sửa).',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: true,
+          label: 'Bật Hero Section',
+        },
+        {
+          name: 'kicker',
+          type: 'text',
+          label: 'Dòng Kicker / Eyebrow',
+          admin: {
+            placeholder: 'VẬN HÀNH BẤT ĐỘNG SẢN CHUẨN MỰC',
+            description: 'Dòng tiêu đề phụ nhỏ phía trên tiêu đề chính.',
+          },
+        },
+        {
+          name: 'headline',
+          type: 'text',
+          label: 'Tiêu đề chính (H1)',
+          admin: {
+            placeholder: 'Quản lý vận hành bất động sản chuyên nghiệp & minh bạch',
+            description: 'Để trống sẽ tự động dùng tiêu đề Trang chủ hoặc tên website.',
+          },
+        },
+        {
+          name: 'supportingText',
+          type: 'textarea',
+          label: 'Mô tả hỗ trợ',
+          admin: {
+            placeholder: 'Đồng hành cùng Ban Quản trị và Chủ đầu tư tối ưu hóa giá trị tài sản, kiến tạo không gian sống an toàn và bền vững.',
+            description: 'Đoạn văn ngắn làm rõ giá trị dịch vụ.',
+          },
+        },
+        {
+          name: 'primaryCtaText',
+          type: 'text',
+          label: 'Nút hành động chính (Nhãn)',
+          admin: { placeholder: 'Đặt lịch khảo sát' },
+        },
+        {
+          name: 'primaryCtaLink',
+          type: 'text',
+          label: 'Nút hành động chính (Đường dẫn)',
+          admin: { placeholder: '/lien-he?requestType=khao-sat' },
+        },
+        {
+          name: 'secondaryCtaText',
+          type: 'text',
+          label: 'Nút hành động phụ (Nhãn)',
+          admin: { placeholder: 'Xem dịch vụ' },
+        },
+        {
+          name: 'secondaryCtaLink',
+          type: 'text',
+          label: 'Nút hành động phụ (Đường dẫn)',
+          admin: { placeholder: '/dich-vu' },
+        },
+        {
+          name: 'desktopImage',
+          type: 'upload',
+          relationTo: 'media-assets',
+          label: 'Ảnh kiến trúc Desktop',
+          admin: {
+            description: 'Chỉ ảnh có rightsStatus=APPROVED mới hiển thị công khai. Nếu chưa duyệt sẽ dùng fallback.',
+          },
+        },
+        {
+          name: 'mobileImage',
+          type: 'upload',
+          relationTo: 'media-assets',
+          label: 'Ảnh kiến trúc Mobile (tùy chọn)',
+          admin: {
+            description: 'Tùy chọn ảnh crop riêng cho màn hình di động. Cần rightsStatus=APPROVED.',
+          },
+        },
+        {
+          name: 'focalPoint',
+          type: 'select',
+          label: 'Điểm lấy nét ảnh (Focal Point)',
+          defaultValue: 'center',
+          options: [
+            { label: 'Căn giữa (Center)', value: 'center' },
+            { label: 'Lấy phần trên (Top)', value: 'top' },
+            { label: 'Lấy phần dưới (Bottom)', value: 'bottom' },
+          ],
+        },
+        {
+          name: 'overlayPreset',
+          type: 'select',
+          label: 'Mức độ phủ tương phản (Overlay)',
+          defaultValue: 'soft',
+          options: [
+            { label: 'Phủ nhẹ (Soft)', value: 'soft' },
+            { label: 'Phủ đậm (Strong)', value: 'strong' },
+            { label: 'Không phủ (None)', value: 'none' },
+          ],
+        },
+        {
+          name: 'layoutPreset',
+          type: 'select',
+          label: 'Bố cục (Layout Preset)',
+          defaultValue: 'editorial',
+          options: [
+            { label: 'Architectural Editorial (Mặc định)', value: 'editorial' },
+            { label: 'Quiet Split (Cân xứng)', value: 'split' },
+          ],
+        },
+      ],
+    },
+    seoField,
+  ],
+};
 export const AboutPage = page('about-page', 'Giới thiệu');
 export const ProcessPage = page('process-page', 'Quy trình và minh bạch');
 export const ContactPage = page('contact-page', 'Trang liên hệ');

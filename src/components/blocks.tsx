@@ -183,18 +183,20 @@ export const ArticleCards = ({ items }: { items: ArticleView[] }) => (
           </div>
         )}
         <p className="muted" style={{ fontSize: '0.85rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span
-            style={{
-              background: 'var(--color-surface-subtle)',
-              color: 'var(--color-brand-secondary)',
-              padding: '0.15rem 0.5rem',
-              borderRadius: 'var(--radius-sm)',
-              fontWeight: 600,
-              fontSize: '0.8rem',
-            }}
-          >
-            {a.category.name}
-          </span>
+          {a.category ? (
+            <span
+              style={{
+                background: 'var(--color-surface-subtle)',
+                color: 'var(--color-brand-secondary)',
+                padding: '0.15rem 0.5rem',
+                borderRadius: 'var(--radius-sm)',
+                fontWeight: 600,
+                fontSize: '0.8rem',
+              }}
+            >
+              {a.category.name}
+            </span>
+          ) : null}
           {formatDate(a.publishedAt) ? <span>{formatDate(a.publishedAt)}</span> : null}
         </p>
         <h3>

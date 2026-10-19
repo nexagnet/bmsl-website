@@ -26,15 +26,15 @@ export default async function ArticlePage({ params }: Props) {
     <>
       <Crumbs
         items={[
-          { label: 'Kiến thức', href: '/kien-thuc' },
-          { label: article.category.name, href: article.category.href },
+          { label: 'Tin tức', href: '/kien-thuc' },
+          ...(article.category ? [{ label: article.category.name, href: article.category.href }] : []),
           { label: article.title },
         ]}
       />
       <JsonLd
         data={breadcrumbLd(getSiteUrl(), [
-          { name: 'Kiến thức', path: '/kien-thuc' },
-          { name: article.category.name, path: article.category.href },
+          { name: 'Tin tức', path: '/kien-thuc' },
+          ...(article.category ? [{ name: article.category.name, path: article.category.href }] : []),
           { name: article.title, path: article.href },
         ])}
       />

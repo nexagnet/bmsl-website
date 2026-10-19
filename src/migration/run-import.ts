@@ -4,7 +4,7 @@ import type { Payload } from 'payload';
 import { getPayload } from 'payload';
 import config from '../payload.config';
 import { getDatabaseUrl } from '../lib/database';
-import { assertImportAllowed, parseArgs } from './cli';
+import { assertImportAllowed, describeMode, initAfterGuard, parseArgs } from './cli';
 import { parseExternalInput } from './external-input';
 import manifest from './legacy-manifest.json';
 import { formatReport, runLegacyImport } from './importer';
@@ -18,13 +18,14 @@ let payload: Payload | undefined;
 let exitCode = 0;
 try {
   const args = parseArgs(process.argv.slice(2));
-  assertImportAllowed({
+  const guard = {
     write: args.write,
     env: process.env,
     databaseUrl: getDatabaseUrl(),
     repoRoot: path.resolve(import.meta.dirname, '../..'),
     inputPath: args.input,
-  });
+  };
+  assertImportAllowed(guard);
 
   let externalInput: unknown;
   if (args.input) {
@@ -43,7 +44,8 @@ try {
   }
 
   try {
-    payload = await getPayload({ config });
+    console.log(describeMode(args.write));
+    payload = await initAfterGuard(guard, () => getPayload({ config }));
     const report = await runLegacyImport(payload, { write: args.write, externalInput });
     console.log(formatReport(report));
     console.log(JSON.stringify(report, null, 2));
