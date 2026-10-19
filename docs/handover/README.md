@@ -9,6 +9,7 @@ Gói này là **vật liệu đã chuẩn bị để xem xét**. Nó không ph�
 | [`../runbooks/backup-restore.md`](../runbooks/backup-restore.md) | Công cụ sao lưu/khôi phục thử (`scripts/backup/`), quy tắc an toàn, bằng chứng tổng hợp, giới hạn |
 | [`uat-handover-matrix.md`](uat-handover-matrix.md) | Ma trận UAT ↔ bằng chứng (SHA/CI), danh sách xác nhận khách hàng, danh sách sẵn sàng phát hành, điều kiện cutover |
 | [`contract-acceptance-matrix.md`](contract-acceptance-matrix.md) | Ma trận nghiệm thu hợp đồng ↔ repo (Issue #86), gói yêu cầu đầu vào cho BMSL theo 8 trang, mâu thuẫn hợp đồng cho người ký, các bước UAT/bàn giao |
+| [`editorial-ux-audit-2026-10-19.md`](editorial-ux-audit-2026-10-19.md) | Rà soát trải nghiệm public 8 khu vực trên DEV (2026-10-19): lỗi UI vs nội dung, Hero vs đặc tả, bằng chứng #105/#109, đánh giá PR #98, bảng chặn đầu vào BMSL |
 | [`../security/W5B4-browser-uat.md`](../security/W5B4-browser-uat.md) | Bằng chứng trình duyệt/axe/Lighthouse/analytics (đã làm mới từ CI chính xác) |
 
 Quy tắc: không mật khẩu mặc định, không dữ kiện BMSL bịa, không bí mật thật; mọi dữ kiện khách hàng giữ `UNCONFIRMED` cho tới khi BMSL xác nhận.
