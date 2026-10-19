@@ -39,8 +39,7 @@ COPY --from=build /app/.next ./.next
 COPY --from=build /app/next.config.mjs /app/tsconfig.json ./
 COPY --from=build /app/src ./src
 COPY --from=build /app/scripts/container-start.mjs ./scripts/container-start.mjs
-# Reference documents (not served by Next.js; no public route). Copied from the build context.
-COPY assets/tai-lieu ./assets/tai-lieu
+# Reference documents under assets/tai-lieu are intentionally NOT copied into the image (publication-risk audit; see docs/security/tai-lieu-publication-audit.md).
 # Self-contained CD gate job entrypoint (`node scripts/cd/gate-main-ci.mjs`, run with a job command override). It reads
 # only BMSL_TARGET_SHA / optional BMSL_GATE_* env and needs no database, application secret or media volume.
 COPY --from=build /app/scripts/cd/gate-main-ci.mjs ./scripts/cd/gate-main-ci.mjs
