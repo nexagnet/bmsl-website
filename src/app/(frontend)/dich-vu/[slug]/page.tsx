@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Crumbs } from '../../../../components/blocks';
-import { CtaBand, PageHero, RelatedServices, SectionHeading } from '../../../../components/catalog';
+import { Crumbs, SectionHeading, SurveyCta } from '../../../../components/blocks';
+import { PageHero, RelatedServices } from '../../../../components/catalog';
 import { JsonLd } from '../../../../components/JsonLd';
 import { RichText } from '../../../../components/RichText';
 import { getService, getServices } from '../../../../lib/cms';
@@ -44,12 +44,12 @@ export default async function ServiceDetailPage({ params }: Props) {
       {related.length ? (
         <section className="detail-section tinted">
           <div className="container">
-            <SectionHeading overline="Dịch vụ khác" title="Các dịch vụ liên quan" />
+            <SectionHeading id="related-title" overline="Dịch vụ khác" title="Các dịch vụ liên quan" />
             <RelatedServices items={related} />
           </div>
         </section>
       ) : null}
-      <CtaBand title="Đặt lịch khảo sát cho dịch vụ này" {...SERVICE_CTA} />
+      <SurveyCta title="Đặt lịch khảo sát cho dịch vụ này" cta={SERVICE_CTA} />
     </>
   );
 }

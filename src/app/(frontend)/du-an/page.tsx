@@ -1,24 +1,16 @@
-import type { Metadata } from "next";
-import { Empty, Pager } from "../../../components/blocks";
-import {
-  CtaBand,
-  FilterChips,
-  PageHero,
-  ProjectGrid,
-} from "../../../components/catalog";
-import { getProjects } from "../../../lib/cms";
-import { buildMetadata } from "../../../lib/metadata";
-import { paginateProjects, projectFilters } from "../../../lib/project-filter";
-import { PROJECT_CTA } from "../../../lib/site";
+import type { Metadata } from 'next';
+import { Empty, Pager, SurveyCta } from '../../../components/blocks';
+import { FilterChips, PageHero, ProjectGrid } from '../../../components/catalog';
+import { getProjects } from '../../../lib/cms';
+import { buildMetadata } from '../../../lib/metadata';
+import { paginateProjects, projectFilters } from '../../../lib/project-filter';
+import { PROJECT_CTA } from '../../../lib/site';
 
-export const metadata: Metadata = buildMetadata(
-  "/du-an",
-  "Dự án đang vận hành",
-);
+export const metadata: Metadata = buildMetadata('/du-an', 'Dự án đang vận hành');
 
 type Props = {
   searchParams: Promise<{
-    "dich-vu"?: string | string[];
+    'dich-vu'?: string | string[];
     page?: string | string[];
   }>;
 };
@@ -27,10 +19,8 @@ export default async function ProjectsPage({ searchParams }: Props) {
   const query = await searchParams;
   const projects = await getProjects();
   const filters = projectFilters(projects);
-  const result = paginateProjects(projects, query["dich-vu"], query.page);
-  const base = result.active
-    ? `/du-an?dich-vu=${encodeURIComponent(result.active)}`
-    : "/du-an";
+  const result = paginateProjects(projects, query['dich-vu'], query.page);
+  const base = result.active ? `/du-an?dich-vu=${encodeURIComponent(result.active)}` : '/du-an';
   return (
     <>
       <PageHero
@@ -45,9 +35,9 @@ export default async function ProjectsPage({ searchParams }: Props) {
               label="Lọc dự án theo dịch vụ"
               items={[
                 {
-                  key: "all",
-                  label: "Tất cả",
-                  href: "/du-an",
+                  key: 'all',
+                  label: 'Tất cả',
+                  href: '/du-an',
                   active: !result.active,
                 },
                 ...filters.map((f) => ({
@@ -59,22 +49,11 @@ export default async function ProjectsPage({ searchParams }: Props) {
               ]}
             />
           ) : null}
-          {result.items.length ? (
-            <ProjectGrid items={result.items} />
-          ) : (
-            <Empty>Chưa có dự án được công bố.</Empty>
-          )}
-          <Pager
-            base={base}
-            page={result.page}
-            totalPages={result.totalPages}
-          />
+          {result.items.length ? <ProjectGrid items={result.items} /> : <Empty>Chưa có dự án được công bố.</Empty>}
+          <Pager base={base} page={result.page} totalPages={result.totalPages} />
         </div>
       </section>
-      <CtaBand
-        title="Muốn tham quan một dự án đang vận hành?"
-        {...PROJECT_CTA}
-      />
+      <SurveyCta title="Muốn tham quan một dự án đang vận hành?" cta={PROJECT_CTA} />
     </>
   );
 }

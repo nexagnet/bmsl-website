@@ -1,42 +1,32 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { ProjectView, ServiceView } from '../lib/public-content';
-import { Img } from './blocks';
+import { Img, Overline } from './blocks';
 
 /** UI-03 building blocks (Figma HiFi: Dịch vụ, Dự án). Only CMS data is rendered; nothing here is sample content. */
 
 export const PageHero = ({ overline, title, lead }: { overline: string; title: string; lead?: string }) => (
   <section className="page-hero">
     <div className="container">
-      <p className="overline">{overline}</p>
+      <Overline>{overline}</Overline>
       <h1>{title}</h1>
       {lead ? <p className="page-hero-lead">{lead}</p> : null}
     </div>
   </section>
 );
 
-export const SectionHeading = ({ overline, title }: { overline: string; title: string }) => (
-  <div className="section-heading">
-    <p className="overline">{overline}</p>
-    <h2>{title}</h2>
-  </div>
-);
-
-export const CtaBand = ({ title, text, label, href }: { title: string; text?: string; label: string; href: string }) => (
-  <section className="survey-cta-section cta-band" aria-labelledby="cta-title">
-    <div className="container">
-      <p className="overline">Kết nối cùng BMSL</p>
-      <h2 id="cta-title">{title}</h2>
-      {text ? <p className="cta-band-text">{text}</p> : null}
-      <Link className="button gold" href={href}>
-        {label}
-      </Link>
-    </div>
-  </section>
-);
-
 const Arrow = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <line x1="5" y1="12" x2="19" y2="12" />
     <polyline points="12 5 19 12 12 19" />
   </svg>
@@ -50,7 +40,7 @@ export const ServiceRows = ({ items }: { items: ServiceView[] }) => (
         <section key={s.id} className={`service-row ${i % 2 ? 'alt' : ''}`}>
           <div className="container service-row-inner">
             <div className="service-row-text">
-              <p className="overline">{n} / Dịch vụ</p>
+              <Overline>{n} / Dịch vụ</Overline>
               <h2>
                 <Link href={s.href}>{s.name}</Link>
               </h2>
@@ -75,7 +65,16 @@ export const RelatedServices = ({ items }: { items: ServiceView[] }) => (
     {items.map((s) => (
       <li key={s.id} className="tile">
         <span className="tile-icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
           </svg>
@@ -101,7 +100,16 @@ export const ProjectGrid = ({ items }: { items: ProjectView[] }) => (
               <Img image={p.images[0]} sizes="(min-width: 64rem) 33vw, (min-width: 48rem) 50vw, 100vw" />
             ) : (
               <span className="project-tile-empty" aria-hidden="true">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14" />
                 </svg>
               </span>
@@ -130,9 +138,15 @@ export const ProjectGrid = ({ items }: { items: ProjectView[] }) => (
   </ul>
 );
 
-export const FilterChips = ({ label, items }: { label: string; items: { key: string; label: ReactNode; href: string; active: boolean }[] }) => (
+export const FilterChips = ({
+  label,
+  items,
+}: {
+  label: string;
+  items: { key: string; label: ReactNode; href: string; active: boolean }[];
+}) => (
   <nav aria-label={label}>
-    <ul className="chips">
+    <ul className="chips chips-pill">
       {items.map((c) => (
         <li key={c.key}>
           <Link href={c.href} aria-current={c.active ? 'page' : undefined}>

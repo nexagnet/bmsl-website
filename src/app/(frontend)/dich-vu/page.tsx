@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { Empty } from '../../../components/blocks';
-import { CtaBand, PageHero, ServiceRows } from '../../../components/catalog';
+import { Empty, SurveyCta } from '../../../components/blocks';
+import { PageHero, ServiceRows } from '../../../components/catalog';
 import { getServices } from '../../../lib/cms';
 import { buildMetadata } from '../../../lib/metadata';
 import { SERVICE_CTA } from '../../../lib/site';
@@ -19,7 +19,7 @@ export default async function ServicesPage() {
           <Empty>Nội dung đang được cập nhật.</Empty>
         </section>
       )}
-      <CtaBand title="Cần khảo sát hiện trạng toà nhà?" text="Để lại thông tin để BMSL liên hệ sắp lịch khảo sát." {...SERVICE_CTA} />
+      <SurveyCta title="Cần khảo sát hiện trạng toà nhà?" description="Để lại thông tin để BMSL liên hệ sắp lịch khảo sát." cta={SERVICE_CTA} />
     </>
   );
 }
