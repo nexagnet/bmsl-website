@@ -242,13 +242,20 @@ describe('optional process steps', () => {
   it('is empty by default and drops rows without a title', () => {
     expect(toPage({ ...pub, title: 'T' })?.steps).toEqual([]);
     expect(toPage({ ...pub, steps: 'x' })?.steps).toEqual([]);
-    expect(toPage({ ...pub, steps: [null, { description: 'no title' }, { title: '  ' }] })?.steps).toEqual([]);
+    expect(
+      toPage({ ...pub, steps: [null, { description: 'no title', confirmed: true }, { title: '  ', confirmed: true }] })?.steps,
+    ).toEqual([]);
   });
 
   it('keeps the entered order and optional fields only when present', () => {
     const steps = toPage({
       ...pub,
-      steps: [{ title: 'B1', description: 'd', duration: '5' }, { title: 'B2' }],
+      steps: [
+        { title: 'B1', description: 'd', duration: '5', confirmed: true },
+        { title: 'B2', confirmed: true },
+        { title: 'B3 chưa xác nhận' },
+        { title: 'B4', confirmed: false },
+      ],
     })?.steps;
     expect(steps).toEqual([
       { title: 'B1', description: 'd', duration: '5' },
@@ -292,5 +299,40 @@ describe('optional About blocks', () => {
     expect(page?.team[1]?.photo).toBeUndefined();
     expect(page?.capabilities).toEqual([{ name: 'Giấy phép A', issuer: 'Đơn vị', validity: 'Còn hiệu lực' }]);
     expect(page?.values).toEqual([{ title: 'Giá trị A', description: undefined }]);
+  });
+});
+
+describe('optional home blocks', () => {
+  it('are empty by default', () => {
+    const page = toPage({ ...pub });
+    expect([page?.stats, page?.featuredProjects]).toEqual([[], []]);
+  });
+
+  it('shows only confirmed stats and never maps the internal source note', () => {
+    const stats = toPage({
+      ...pub,
+      stats: [
+        { label: 'Năm', value: '5', source: 'nội bộ', confirmed: true },
+        { label: 'Chưa duyệt', value: '9' },
+        { label: '', value: '1', confirmed: true },
+      ],
+    })?.stats;
+    expect(stats).toEqual([{ label: 'Năm', value: '5' }]);
+    expect(JSON.stringify(stats)).not.toContain('nội bộ');
+  });
+
+  it('keeps only published CONFIRMED featured projects, in the chosen order', () => {
+    const ok = (id: number, slug: string) => ({ ...pub, id, name: slug, slug, sourceStatus: 'CONFIRMED' });
+    const featured = toPage({
+      ...pub,
+      featuredProjects: [
+        ok(2, 'b'),
+        7,
+        { ...ok(3, 'c'), sourceStatus: 'LEGACY-SOURCE' },
+        { ...ok(4, 'd'), _status: 'draft' },
+        ok(1, 'a'),
+      ],
+    })?.featuredProjects;
+    expect(featured?.map((p) => p.slug)).toEqual(['b', 'a']);
   });
 });
