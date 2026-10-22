@@ -58,6 +58,6 @@ describe('process steps migration', () => {
       overrideAccess: true,
     });
     const read = await payload.findGlobal({ slug: 'process-page', overrideAccess: false, depth: 0 });
-    expect((read.steps ?? []).map((s) => s.title)).toEqual(['Synthetic B1', 'Synthetic B2']);
+    expect((read.steps ?? []).map((s: { title?: string | null }) => s.title)).toEqual(['Synthetic B1', 'Synthetic B2']);
   });
 });
