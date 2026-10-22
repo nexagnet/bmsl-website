@@ -52,6 +52,8 @@ describe('process steps migration', () => {
   });
 
   it('saves ordered steps through the CMS', async () => {
+    // The current config includes later additive columns (for example the confirmation flag): apply every migration.
+    await payload.db.migrate();
     await payload.updateGlobal({
       slug: 'process-page',
       data: { steps: [{ title: 'Synthetic B1' }, { title: 'Synthetic B2', duration: 'x' }], _status: 'published' },

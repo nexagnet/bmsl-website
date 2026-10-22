@@ -7,6 +7,7 @@ import * as migration_20261009_120000_request_type_tham_quan from './20261009_12
 import * as migration_20261022_095100_service_cover_project_type from './20261022_095100_service_cover_project_type';
 import * as migration_20261022_101846_process_steps from './20261022_101846_process_steps';
 import * as migration_20261022_102156_about_blocks from './20261022_102156_about_blocks';
+import * as migration_20261022_104053_home_blocks_step_confirmed from './20261022_104053_home_blocks_step_confirmed';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20261022_102156_about_blocks.up,
     down: migration_20261022_102156_about_blocks.down,
     name: '20261022_102156_about_blocks',
+  },
+  {
+    up: migration_20261022_104053_home_blocks_step_confirmed.up,
+    down: migration_20261022_104053_home_blocks_step_confirmed.down,
+    name: '20261022_104053_home_blocks_step_confirmed',
   },
 ];

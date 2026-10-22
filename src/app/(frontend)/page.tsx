@@ -17,6 +17,8 @@ export default async function HomePage() {
     getProjects(6),
     getArticles({ limit: 3 }),
   ]);
+  // Curated featured projects (confirmed + published only, as mapped) win; otherwise the default list.
+  const shownProjects = page?.featuredProjects.length ? page.featuredProjects : projects;
   return (
     <>
       <HeroSection
@@ -24,6 +26,20 @@ export default async function HomePage() {
         defaultTitle={page?.title}
         defaultBodyText={page?.body ? richTextToPlain(page.body) : undefined}
       />
+      {page?.stats.length ? (
+        <section className="section" aria-label="Số liệu năng lực">
+          <div className="container">
+            <ul className="home-stats">
+              {page.stats.map((st, i) => (
+                <li key={`${i}-${st.label}`}>
+                  <p className="home-stat-value">{st.value}</p>
+                  <p>{st.label}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
       <section className="section" aria-labelledby="home-services">
         <div className="container">
           <SectionHeading
@@ -35,7 +51,7 @@ export default async function HomePage() {
           {services.length ? <ServiceCards items={services} /> : <Empty>Nội dung đang được cập nhật.</Empty>}
         </div>
       </section>
-      {projects.length ? (
+      {shownProjects.length ? (
         <section className="section" aria-labelledby="home-projects">
           <div className="container">
             <SectionHeading
@@ -44,7 +60,7 @@ export default async function HomePage() {
               title="Dự án"
               action={{ label: 'Xem tất cả dự án →', href: '/du-an' }}
             />
-            <ProjectCards items={projects} />
+            <ProjectCards items={shownProjects} />
           </div>
         </section>
       ) : null}
