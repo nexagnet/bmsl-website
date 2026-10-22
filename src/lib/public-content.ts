@@ -78,6 +78,8 @@ export type ServiceView = {
   slug: string;
   summary?: string;
   body: unknown;
+  /** Optional cover: only an APPROVED raster image; undefined when absent, unapproved or revoked. */
+  cover?: PublicImage;
   href: string;
   seo: PublicSeo;
 };
@@ -93,6 +95,7 @@ export function toService(d: unknown): ServiceView | undefined {
     slug,
     summary: text(d.summary),
     body: d.body,
+    cover: toHeroImage(d.cover),
     href: paths.service(slug),
     seo: toSeo(d.seo),
   };
@@ -130,6 +133,7 @@ export function toProject(d: unknown): ProjectView | undefined {
   if (d.sourceStatus !== 'CONFIRMED') return undefined;
   const facts = [
     { label: 'Vị trí', value: text(d.address) },
+    { label: 'Loại hình', value: text(d.projectType) },
     { label: 'Quy mô', value: text(d.scale) },
     { label: 'Vận hành từ', value: text(d.operatingSince) },
   ].filter((f): f is { label: string; value: string } => !!f.value);

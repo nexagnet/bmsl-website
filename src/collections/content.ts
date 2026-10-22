@@ -35,6 +35,15 @@ export const ServiceAreas: CollectionConfig = {
     slugField,
     { name: 'summary', type: 'textarea', required: true, label: 'Tóm tắt' },
     { name: 'body', type: 'richText', label: 'Nội dung' },
+    {
+      name: 'cover',
+      type: 'upload',
+      relationTo: 'media-assets',
+      label: 'Ảnh đại diện dịch vụ',
+      admin: {
+        description: 'Tùy chọn. Chỉ hiển thị công khai khi tệp có rightsStatus=APPROVED. Để trống nếu chưa có ảnh được duyệt.',
+      },
+    },
     { name: 'order', type: 'number', required: true, defaultValue: 0, label: 'Thứ tự hiển thị' },
     seoField,
   ],
@@ -101,6 +110,14 @@ export const Projects: CollectionConfig = {
       type: 'text',
       label: 'Quy mô',
       admin: { description: 'UNCONFIRMED: số toà/căn chỉ nhập khi có nguồn.' },
+    },
+    {
+      name: 'projectType',
+      type: 'text',
+      label: 'Loại hình dự án',
+      admin: {
+        description: 'Tùy chọn, nhập tự do (danh mục loại hình chưa được BMSL chốt). UNCONFIRMED cho tới khi nguồn xác nhận.',
+      },
     },
     {
       name: 'operatingSince',

@@ -4,6 +4,7 @@ import * as migration_20261005_150000_job_confirmed_facts from './20261005_15000
 import * as migration_20261007_075550_lead_email_outbox from './20261007_075550_lead_email_outbox';
 import * as migration_20261008_120000_home_page_hero from './20261008_120000_home_page_hero';
 import * as migration_20261009_120000_request_type_tham_quan from './20261009_120000_request_type_tham_quan';
+import * as migration_20261022_095100_service_cover_project_type from './20261022_095100_service_cover_project_type';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20261009_120000_request_type_tham_quan.up,
     down: migration_20261009_120000_request_type_tham_quan.down,
     name: '20261009_120000_request_type_tham_quan',
+  },
+  {
+    up: migration_20261022_095100_service_cover_project_type.up,
+    down: migration_20261022_095100_service_cover_project_type.down,
+    name: '20261022_095100_service_cover_project_type',
   },
 ];

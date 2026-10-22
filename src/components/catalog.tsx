@@ -50,9 +50,15 @@ export const ServiceRows = ({ items }: { items: ServiceView[] }) => (
                 <span className="visually-hidden"> {s.name}</span>
               </Link>
             </div>
-            <div className="service-row-mark" aria-hidden="true">
-              <span>{n}</span>
-            </div>
+            {s.cover ? (
+              <div className="service-row-mark has-image">
+                <Img image={s.cover} sizes="(min-width: 64rem) 40vw, 50vw" />
+              </div>
+            ) : (
+              <div className="service-row-mark" aria-hidden="true">
+                <span>{n}</span>
+              </div>
+            )}
           </div>
         </section>
       );
