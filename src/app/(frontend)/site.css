@@ -52,7 +52,24 @@
   --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
 
   /* Typography & Sizing */
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Figma "BMSL HiFi" tokens (navy / gold, Lora + Be Vietnam Pro) */
+  --bmsl-navy: #0f2d63;
+  --bmsl-navy2: #1b4286;
+  --bmsl-cream: #f4f8fd;
+  --bmsl-bronze: #c8a24e;
+  --bmsl-bronze-dark: #8f6f25;
+  --bmsl-text: #1d2b45;
+  --bmsl-muted: #5e6e87;
+  --bmsl-white: #ffffff;
+  --bmsl-line: #dce5f0;
+  --bmsl-pale: #eaf1fa;
+  --bmsl-on-dark-muted: #b9c8e0;
+  --bmsl-radius: 14px;
+  --bmsl-radius-pill: 999px;
+  --shadow-card: 0 6px 20px rgba(15, 46, 99, 0.1);
+  --font-display: 'Lora', 'Noto Serif', Georgia, 'Times New Roman', serif;
+
+  --font-body: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 16px;
@@ -144,16 +161,13 @@ a:hover {
   }
 }
 
-/* Header & Navigation */
+/* Header & Navigation (Figma "01 / Global Header", "BMSL / Nav link", "BMSL / Button") */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  background: var(--bmsl-white);
+  border-bottom: 1px solid var(--bmsl-line);
 }
 
 .header-row {
@@ -161,8 +175,8 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding-top: 0.85rem;
-  padding-bottom: 0.85rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
   position: relative;
 }
 
@@ -193,18 +207,18 @@ a:hover {
   display: inline-block;
   margin-bottom: 1rem;
   padding: 0.5rem 0.75rem;
-  /* The artwork has a white background, so it sits on a white plate on the dark footer. */
-  background: #ffffff;
-  border-radius: var(--radius);
+  /* The artwork has a white background, so it sits on a white plate. */
+  background: var(--bmsl-white);
+  border-radius: 10px;
 }
 
 .footer-logo .brand-logo-img {
-  height: 6rem;
+  height: 5rem;
 }
 
 @media (min-width: 48.01rem) {
   .footer-logo .brand-logo-img {
-    height: 7rem;
+    height: 6rem;
   }
 }
 
@@ -214,7 +228,7 @@ a:hover {
   white-space: nowrap;
 }
 
-/* Navigation Lists */
+/* Navigation lists: 14px medium, bronze underline marks hover and the current page. */
 .nav-list {
   list-style: none;
   margin: 0;
@@ -226,24 +240,49 @@ a:hover {
 }
 
 .nav-list a {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  color: var(--color-text-secondary);
+  padding: 0.5rem 0.6rem;
+  color: var(--bmsl-text);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
-  border-radius: var(--radius-sm);
-  transition: all 0.15s ease;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: nowrap;
+  border-radius: 2px;
+}
+
+.nav-list a::after {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.15rem;
+  width: 1.5rem;
+  height: 2px;
+  background: var(--bmsl-bronze);
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
 .nav-list a:hover {
-  color: var(--color-brand-primary);
-  background-color: var(--color-surface-subtle);
-  text-decoration: none;
+  color: var(--bmsl-navy);
 }
 
-/* Mobile Menu Disclosure */
+.nav-list a:hover::after {
+  opacity: 0.5;
+}
+
+.nav-list a[aria-current="page"] {
+  color: var(--bmsl-navy);
+  font-weight: 600;
+}
+
+.nav-list a[aria-current="page"]::after {
+  opacity: 1;
+}
+
+/* Mobile menu disclosure (native <details>) */
 .mobile-menu {
   position: relative;
   flex-shrink: 0;
@@ -255,17 +294,17 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 2.75rem;
   padding: 0.5rem 0.85rem;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-brand-primary);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  color: var(--bmsl-navy);
+  background: transparent;
+  border: 1.5px solid var(--bmsl-navy);
+  border-radius: var(--bmsl-radius-pill);
   user-select: none;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: all 0.15s ease;
 }
 
 .mobile-menu summary::-webkit-details-marker {
@@ -273,11 +312,9 @@ a:hover {
 }
 
 .mobile-menu summary:hover {
-  background: var(--color-surface-subtle);
-  border-color: var(--color-border-strong);
+  background: var(--bmsl-pale);
 }
 
-/* Icon indicator for summary */
 .mobile-menu summary::before {
   content: "";
   display: inline-block;
@@ -302,25 +339,28 @@ a:hover {
 .mobile-menu[open] .nav-list {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 0;
   position: absolute;
   top: calc(100% + 0.65rem);
-  left: -4rem;
-  right: -4rem;
-  background: #ffffff;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-xl);
-  padding: 0.75rem 0.5rem;
+  right: 0;
+  width: 18rem;
+  background: var(--bmsl-white);
+  border: 1px solid var(--bmsl-line);
+  border-radius: var(--bmsl-radius);
+  box-shadow: var(--shadow-card);
+  padding: 0.25rem 1rem;
   z-index: 60;
-  min-width: 16rem;
 }
 
 @media (max-width: 40rem) {
   .mobile-menu[open] .nav-list {
     position: fixed;
-    top: 4.25rem;
+    top: 4.5rem;
     left: 1rem;
     right: 1rem;
+    width: auto;
     max-height: calc(100vh - 5.5rem);
     overflow-y: auto;
   }
@@ -328,23 +368,34 @@ a:hover {
 
 .mobile-menu[open] .nav-list li {
   width: 100%;
+  border-bottom: 1px solid var(--bmsl-line);
+}
+
+.mobile-menu[open] .nav-list li:last-child {
+  border-bottom: 0;
 }
 
 .mobile-menu[open] .nav-list a {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0.75rem 1rem;
-  min-height: 44px;
+  min-height: 48px;
+  padding: 0.75rem 0;
   font-size: 1rem;
-  color: var(--color-text);
-  border-radius: var(--radius-sm);
-  border-bottom: 1px solid var(--color-border-subtle);
+  white-space: normal;
 }
 
-.mobile-menu[open] .nav-list a:hover {
-  background-color: var(--color-surface);
-  color: var(--color-brand-secondary);
+.mobile-menu[open] .nav-list a::after {
+  left: auto;
+  right: 0;
+  bottom: auto;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: none;
+  border-top: 2px solid var(--bmsl-bronze);
+  border-right: 2px solid var(--bmsl-bronze);
+  transform: rotate(45deg) scale(0.9);
+  opacity: 1;
 }
 
 .desktop-nav {
@@ -360,26 +411,48 @@ a:hover {
   }
 }
 
+/* 1024-1279px: the 8 links plus logo and CTA need tighter spacing to stay on one line. */
+@media (min-width: 64rem) and (max-width: 79.99rem) {
+  .header-row {
+    gap: 0.5rem;
+  }
+
+  .brand-logo-img {
+    height: 3rem;
+  }
+
+  .nav-list {
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+
+  .nav-list a {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.8125rem;
+  }
+
+  .nav-list a::after {
+    left: 0.4rem;
+  }
+
+  .header-row .button {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8125rem;
+  }
+}
+
 @media (max-width: 48rem) {
   .header-row {
     gap: 0.65rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
   }
 
   .brand-logo-img {
     height: 2.75rem;
   }
 
-  .mobile-menu summary {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.9rem;
-    gap: 0.4rem;
-  }
-
   .header-row .button {
-    padding: 0.5rem 0.95rem;
-    font-size: 0.875rem;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8125rem;
   }
 }
 
@@ -394,59 +467,51 @@ a:hover {
 
   .mobile-menu summary {
     padding: 0.4rem 0.6rem;
-    font-size: 0.825rem;
+    font-size: 0.8125rem;
     gap: 0.35rem;
   }
 
   .header-row .button {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.825rem;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.75rem;
   }
 }
 
-/* Buttons */
+/* Buttons (Figma "BMSL / Button"): navy pill with white label, navy outline secondary. */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.65rem 1.35rem;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--color-brand-secondary) 0%, var(--color-brand-accent) 100%);
-  color: var(--color-accent-contrast);
+  padding: 0.85rem 1.6rem;
+  border-radius: var(--bmsl-radius-pill);
+  background: var(--bmsl-navy);
+  color: var(--bmsl-white);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   line-height: 1.4;
-  border: 1px solid transparent;
-  box-shadow: 0 2px 4px rgba(30, 58, 138, 0.2);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid var(--bmsl-navy);
+  box-shadow: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
 }
 
 .button:hover {
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-secondary) 100%);
-  box-shadow: 0 4px 8px rgba(30, 58, 138, 0.28);
-  transform: translateY(-1px);
-}
-
-.button:active {
-  transform: translateY(0);
+  color: var(--bmsl-white);
+  background: var(--bmsl-navy2);
+  border-color: var(--bmsl-navy2);
 }
 
 .button.secondary {
   background: transparent;
-  color: var(--color-brand-secondary);
-  border: 1.5px solid var(--color-brand-secondary);
-  box-shadow: none;
+  color: var(--bmsl-navy);
+  border-color: var(--bmsl-navy);
 }
 
 .button.secondary:hover {
-  background: var(--color-surface-subtle);
-  color: var(--color-brand-primary);
-  border-color: var(--color-brand-primary);
-  transform: translateY(-1px);
+  background: var(--bmsl-navy);
+  color: var(--bmsl-white);
 }
 
 /* Main Area & Sections */
@@ -852,19 +917,21 @@ main:focus {
 
 /* Headings & Editorial Typography */
 h1 {
+  font-family: var(--font-display);
   font-size: clamp(2rem, 3.5vw + 0.5rem, 3.25rem);
   line-height: 1.2;
   letter-spacing: -0.025em;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--color-brand-primary);
   margin: 0 0 1.25rem;
 }
 
 h2 {
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.2vw + 0.3rem, 2.15rem);
   line-height: 1.3;
   letter-spacing: -0.02em;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-brand-primary);
   margin: 0 0 1rem;
 }
@@ -1376,48 +1443,63 @@ h3 {
   border-radius: var(--radius);
 }
 
-/* Footer */
+/* Footer (Figma "BMSL / Footer") */
 .site-footer {
-  background: var(--color-surface-dark);
-  color: var(--color-text-inverse-muted);
-  border-top: 1px solid var(--color-border-dark);
-  padding: 4.5rem 0 2.5rem;
+  background: var(--bmsl-navy);
+  color: var(--bmsl-on-dark-muted);
+  padding: 4rem 0 1.25rem;
 }
 
 .footer-top {
   display: grid;
   gap: 2.5rem;
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
 }
 
 @media (min-width: 52rem) {
   .footer-top {
-    grid-template-columns: 1.5fr 2fr;
+    grid-template-columns: 1fr 1.6fr;
     gap: 4rem;
   }
 }
 
-.footer-brand p {
-  color: var(--color-text-inverse-muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  max-width: 24rem;
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 1.75rem 2rem;
+}
+
+.footer-col h2 {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.33;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bmsl-bronze);
+}
+
+.footer-col ul {
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
 
-.site-footer .nav-list {
-  gap: 0.5rem 1rem;
+.footer-col a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  color: var(--bmsl-white);
+  font-size: 0.875rem;
+  text-decoration: none;
 }
 
-.site-footer .nav-list a {
-  color: #cbd5e1;
-  padding: 0.4rem 0.5rem;
-  font-size: 0.925rem;
-}
-
-.site-footer .nav-list a:hover {
-  color: #ffffff;
-  background: var(--color-surface-dark-subtle);
+.footer-col a:hover {
+  color: var(--bmsl-white);
+  text-decoration: underline;
+  text-decoration-color: var(--bmsl-bronze);
+  text-underline-offset: 0.35em;
 }
 
 .footer-contacts {
@@ -1425,58 +1507,38 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
-  margin: 1.5rem 0 0;
+  margin: 1.25rem 0 0;
 }
 
 .footer-contacts a {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.45rem 0.95rem;
-  border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius-full);
-  background: var(--color-surface-dark-subtle);
-  color: #e2e8f0;
+  min-height: 2.75rem;
+  padding: 0.45rem 1rem;
+  border: 1.5px solid var(--bmsl-navy2);
+  border-radius: var(--bmsl-radius-pill);
+  color: var(--bmsl-white);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.15s ease;
 }
 
 .footer-contacts a:hover {
-  background: #1e3a8a;
-  border-color: #2563eb;
-  color: #ffffff;
-}
-
-.site-footer .muted,
-.footer-bottom,
-.footer-bottom p,
-.footer-bottom .muted {
-  color: #cbd5e1;
+  background: var(--bmsl-navy2);
+  color: var(--bmsl-white);
 }
 
 .footer-bottom {
-  border-top: 1px solid var(--color-border-dark);
-  padding-top: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #cbd5e1;
+  border-top: 1px solid var(--bmsl-navy2);
+  padding-top: 1.25rem;
+  font-size: 0.75rem;
 }
 
-@media (min-width: 48rem) {
-  .footer-bottom {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.footer-bottom p {
+.footer-bottom p,
+.footer-bottom .muted {
   margin: 0;
-  color: #cbd5e1;
+  color: var(--bmsl-on-dark-muted);
 }
 
 /* Reduced Motion */

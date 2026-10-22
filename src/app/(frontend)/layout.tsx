@@ -6,6 +6,18 @@ import { SiteShell } from '../../components/SiteShell';
 import { getSiteSettings } from '../../lib/cms';
 import { getSiteUrl, SITE_NAME } from '../../lib/site';
 import { organizationLd } from '../../lib/structured-data';
+import '@fontsource/be-vietnam-pro/vietnamese-400.css';
+import '@fontsource/be-vietnam-pro/vietnamese-500.css';
+import '@fontsource/be-vietnam-pro/vietnamese-600.css';
+import '@fontsource/be-vietnam-pro/latin-ext-400.css';
+import '@fontsource/be-vietnam-pro/latin-ext-500.css';
+import '@fontsource/be-vietnam-pro/latin-ext-600.css';
+import '@fontsource/be-vietnam-pro/latin-400.css';
+import '@fontsource/be-vietnam-pro/latin-500.css';
+import '@fontsource/be-vietnam-pro/latin-600.css';
+import '@fontsource/lora/vietnamese-600.css';
+import '@fontsource/lora/latin-ext-600.css';
+import '@fontsource/lora/latin-600.css';
 import './site.css';
 
 // Content comes from PostgreSQL and is rendered per request (no database at build time).

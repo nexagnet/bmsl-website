@@ -3,6 +3,13 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import logo from '../assets/brand/bmsl-logo.jpg';
 import { NAV_ITEMS, SITE_NAME, SURVEY_CTA } from '../lib/site';
+import { MobileMenu } from './MobileMenu';
+import { NavLinks } from './NavLinks';
+
+const navHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
+
+/** Footer column "Khám phá" lists the public areas (Figma "BMSL / Footer"); no destination is added or dropped. */
+const FOOTER_EXPLORE = ['/gioi-thieu', '/dich-vu', '/du-an', '/quy-trinh-minh-bach', '/kien-thuc', '/tuyen-dung'].map(navHref);
 
 /** Accessible name of the logo; the wording is the text printed in the original BMSL logo (docs/brand/logo.md). */
 const LOGO_ALT = `${SITE_NAME} — Bình Minh Sông Lô`;
@@ -10,20 +17,6 @@ const LOGO_ALT = `${SITE_NAME} — Bình Minh Sông Lô`;
 function BrandLogo({ priority = false }: { priority?: boolean }) {
   // Local static import (no WordPress hotlink). Width/height come from the file so the aspect ratio never distorts.
   return <Image className="brand-logo-img" src={logo} alt={LOGO_ALT} priority={priority} />;
-}
-
-function Nav({ label }: { label: string }) {
-  return (
-    <nav aria-label={label}>
-      <ul className="nav-list">
-        {NAV_ITEMS.map((item) => (
-          <li key={item.href}>
-            <Link href={item.href}>{item.label}</Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
 }
 
 type Props = {
@@ -44,13 +37,11 @@ export function SiteShell({ children, hotline, zalo }: Props) {
           <Link className="brand-logo" href="/" aria-label={`${LOGO_ALT} — Trang chủ`}>
             <BrandLogo priority />
           </Link>
-          {/* Mobile menu is a native disclosure: keyboard- and screen-reader-operable without JavaScript. */}
-          <details className="mobile-menu">
-            <summary>Menu</summary>
-            <Nav label="Điều hướng chính (di động)" />
-          </details>
+          <MobileMenu>
+            <NavLinks label="Điều hướng chính (di động)" closeMenuOnNavigate />
+          </MobileMenu>
           <div className="desktop-nav">
-            <Nav label="Điều hướng chính" />
+            <NavLinks label="Điều hướng chính" />
           </div>
           <Link className="button" href={SURVEY_CTA.href}>
             {SURVEY_CTA.label}
@@ -89,9 +80,29 @@ export function SiteShell({ children, hotline, zalo }: Props) {
                 </div>
               ) : null}
             </div>
-            <div>
-              <Nav label="Điều hướng chân trang" />
-            </div>
+            <nav className="footer-nav" aria-label="Điều hướng chân trang">
+              <section className="footer-col">
+                <h2>Khám phá</h2>
+                <ul>
+                  {FOOTER_EXPLORE.map((item) => (
+                    <li key={item.href}>
+                      <Link href={item.href}>{item.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section className="footer-col">
+                <h2>Kết nối</h2>
+                <ul>
+                  <li>
+                    <Link href={navHref('/lien-he').href}>{navHref('/lien-he').label}</Link>
+                  </li>
+                  <li>
+                    <Link href={SURVEY_CTA.href}>{SURVEY_CTA.label}</Link>
+                  </li>
+                </ul>
+              </section>
+            </nav>
           </div>
           <div className="footer-bottom">
             <p className="muted">© {SITE_NAME}</p>
