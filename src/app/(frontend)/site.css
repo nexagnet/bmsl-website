@@ -1635,6 +1635,18 @@ h3 {
   font-size: 0.875rem;
 }
 
+/* The hero reserves two lines for the title and the lead on phones, so a web-font swap (different wrapping) cannot
+   move the form below it (Lighthouse CLS budget). */
+@media (max-width: 47.99rem) {
+  .contact-hero h1 {
+    min-height: 2.5em;
+  }
+
+  .contact-hero .page-hero-lead {
+    min-height: 3.3em;
+  }
+}
+
 /* Mobile action bar (Figma "BMSL / Mobile action bar"): fixed to the bottom below 48rem, hidden above. */
 .mobile-action-bar {
   display: none;

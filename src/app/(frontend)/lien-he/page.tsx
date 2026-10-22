@@ -33,13 +33,11 @@ export default async function ContactPage() {
 
   return (
     <>
-      <section className="page-hero">
+      <section className="page-hero contact-hero">
         <div className="container">
           <Overline>Liên hệ</Overline>
           <h1>Gửi yêu cầu cho BMSL</h1>
-          <p className="page-hero-lead">
-            Điền form để BMSL liên hệ lại với bạn{rows.length ? ', hoặc liên hệ trực tiếp qua thông tin liên hệ trên trang' : ''}.
-          </p>
+          <p className="page-hero-lead">Điền form để BMSL liên hệ lại với bạn.</p>
         </div>
       </section>
       <section className="section section-white" aria-label="Gửi yêu cầu và thông tin liên hệ">
