@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Crumbs, Img, SurveyCta } from '../../../../../components/blocks';
-import { NewsGrid, Overline } from '../../../../../components/content-ui';
+import { Crumbs, Img, Overline, SurveyCta } from '../../../../../components/blocks';
+import { NewsGrid } from '../../../../../components/content-ui';
 import { JsonLd } from '../../../../../components/JsonLd';
 import { RichText } from '../../../../../components/RichText';
 import { getArticle, getArticles } from '../../../../../lib/cms';

@@ -1,5 +1,5 @@
-import { Empty } from '../../../components/blocks';
-import { CtaBand, DocumentGrid, Overline, PageHero } from '../../../components/content-ui';
+import { Empty, Overline } from '../../../components/blocks';
+import { CtaBand, DocumentGrid, PageHero } from '../../../components/content-ui';
 import { RichText } from '../../../components/RichText';
 import { singletonMetadata } from '../../../components/SingletonPage';
 import { getDocuments, getPage } from '../../../lib/cms';

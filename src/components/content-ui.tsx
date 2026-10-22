@@ -2,15 +2,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { ArticleView, DocumentView, JobView } from '../lib/public-content';
 import { formatDate } from '../lib/public-content';
-import { Img } from './blocks';
-
-/** Figma "Overline row": short gold rule + small caps label. */
-export const Overline = ({ children }: { children: ReactNode }) => (
-  <p className="overline">
-    <span className="overline-rule" aria-hidden="true" />
-    {children}
-  </p>
-);
+import { Img, Overline } from './blocks';
 
 /** Flat hero of the Figma content pages. The lead is optional: it is only rendered when real text is given. */
 export function PageHero({ overline, title, lead }: { overline: string; title: string; lead?: ReactNode }) {
@@ -30,7 +22,7 @@ export function CtaBand({ title, children }: { title: string; children: ReactNod
   return (
     <section className="cta-band" aria-labelledby="cta-band-title">
       <div className="container">
-        <Overline>KẾT NỐI CÙNG BMSL</Overline>
+        <Overline tone="gold">KẾT NỐI CÙNG BMSL</Overline>
         <h2 id="cta-band-title">{title}</h2>
         <div className="cta-band-actions">{children}</div>
       </div>

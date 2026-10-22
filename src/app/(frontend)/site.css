@@ -1678,26 +1678,6 @@ h3 {
   border: 0;
 }
 
-.overline {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--bmsl-bronze-dark);
-}
-
-.overline-rule {
-  flex: none;
-  width: 2rem;
-  height: 2px;
-  background: var(--bmsl-bronze);
-}
-
 .pg-hero {
   background: var(--bmsl-cream);
   padding: 3rem 0 2.5rem;
@@ -1774,7 +1754,7 @@ h3 {
 .link-cta {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--bmsl-bronze-dark);
+  color: var(--bmsl-bronze-text);
   text-decoration: none;
 }
 
@@ -1920,7 +1900,7 @@ a.link-cta:hover {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--bmsl-bronze-dark);
+  color: var(--bmsl-bronze-text);
 }
 
 .news-title,
@@ -2182,7 +2162,7 @@ a.link-cta:hover {
   height: 3rem;
   border-radius: 8px;
   background: var(--bmsl-pale);
-  color: var(--bmsl-bronze-dark);
+  color: var(--bmsl-bronze-text);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -2212,10 +2192,6 @@ a.link-cta:hover {
   .cta-band {
     padding: 6rem 0;
   }
-}
-
-.cta-band .overline {
-  color: var(--bmsl-bronze);
 }
 
 .cta-band h2 {
