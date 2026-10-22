@@ -58,6 +58,7 @@
   --bmsl-cream: #f4f8fd;
   --bmsl-bronze: #c8a24e;
   --bmsl-bronze-dark: #8f6f25;
+  --bmsl-bronze-text: #765a16; /* >= 4.5:1 on cream/white at 12px (axe color-contrast) */
   --bmsl-text: #1d2b45;
   --bmsl-muted: #5e6e87;
   --bmsl-white: #ffffff;
@@ -714,7 +715,7 @@ main:focus {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bmsl-bronze-dark);
+  color: var(--bmsl-bronze-text);
   line-height: 1.4;
 }
 
@@ -1290,7 +1291,7 @@ h3 {
   line-height: 1.35;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bmsl-bronze-dark);
+  color: var(--bmsl-bronze-text);
 }
 
 .overline-gold {
@@ -1334,7 +1335,7 @@ h3 {
   padding: 0.5rem 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--bmsl-bronze-dark);
+  color: var(--bmsl-bronze-text);
   text-decoration: none;
 }
 
