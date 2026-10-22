@@ -78,8 +78,8 @@ describe('shared header and footer use the logo', () => {
       '/lien-he',
     ]);
     expect(SURVEY_CTA.href).toBe('/lien-he?requestType=khao-sat');
-    expect(shell).toContain('<Nav label="Điều hướng chính" />');
-    expect(shell).toContain('<Nav label="Điều hướng chân trang" />');
+    expect(shell).toContain('<NavLinks label="Điều hướng chính" />');
+    expect(shell).toContain('aria-label="Điều hướng chân trang"');
     expect(shell).toContain('className="skip-link"');
   });
 });

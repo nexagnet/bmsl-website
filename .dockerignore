@@ -39,3 +39,6 @@ bunfig.toml
 .gitconfig
 .gitmodules
 .ripgreprc
+
+# Internal/unapproved reference documents must never enter the build context or image.
+assets/tai-lieu

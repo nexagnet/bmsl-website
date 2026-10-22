@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ArticleCards, Crumbs, Empty, Pager, SurveyCta } from '../../../../components/blocks';
+import { Crumbs, Empty, Pager } from '../../../../components/blocks';
+import { CtaBand, NewsGrid, PageHero } from '../../../../components/content-ui';
 import { JsonLd } from '../../../../components/JsonLd';
 import { getArticles, getCategories, getCategory } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
@@ -33,29 +34,34 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           { name: category.name, path: category.href },
         ])}
       />
-      <section className="container hero">
-        <div className="hero-card">
-          <h1>{category.name}</h1>
+      <PageHero overline="TIN TỨC & KIẾN THỨC" title={category.name} />
+      <section className="pg-section">
+        <div className="container">
+          <ul className="chips">
+            <li>
+              <Link href="/kien-thuc">Tất cả</Link>
+            </li>
+            {categories.map((c) => (
+              <li key={c.id}>
+                <Link href={c.href} aria-current={c.id === category.id ? 'page' : undefined}>
+                  {c.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {result.articles.length ? (
+            <NewsGrid items={result.articles} />
+          ) : (
+            <Empty>Chưa có bài viết trong chuyên mục này.</Empty>
+          )}
+          <Pager base={category.href} page={result.page} totalPages={result.totalPages} />
         </div>
       </section>
-      <section className="container section">
-        <ul className="chips">
-          {categories.map((c) => (
-            <li key={c.id}>
-              <Link href={c.href} aria-current={c.id === category.id ? 'page' : undefined}>
-                {c.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        {result.articles.length ? (
-          <ArticleCards items={result.articles} />
-        ) : (
-          <Empty>Chưa có bài viết trong chuyên mục này.</Empty>
-        )}
-        <Pager base={category.href} page={result.page} totalPages={result.totalPages} />
-      </section>
-      <SurveyCta />
+      <CtaBand title="Cần tư vấn về vận hành, pháp lý, phí?">
+        <Link className="button gold" href="/lien-he?requestType=khac">
+          Tư vấn
+        </Link>
+      </CtaBand>
     </>
   );
 }

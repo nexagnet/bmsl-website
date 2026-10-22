@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Crumbs, Img, SurveyCta } from '../../../../../components/blocks';
+import Link from 'next/link';
+import { Crumbs, Img, Overline, SurveyCta } from '../../../../../components/blocks';
+import { NewsGrid } from '../../../../../components/content-ui';
 import { JsonLd } from '../../../../../components/JsonLd';
 import { RichText } from '../../../../../components/RichText';
-import { getArticle } from '../../../../../lib/cms';
+import { getArticle, getArticles } from '../../../../../lib/cms';
 import { buildMetadata } from '../../../../../lib/metadata';
 import { formatDate } from '../../../../../lib/public-content';
 import { getSiteUrl } from '../../../../../lib/site';
@@ -22,6 +24,10 @@ export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(category, slug);
   if (!article) notFound();
   const date = formatDate(article.publishedAt);
+  // Related reading: other published articles of the same category (none are invented when there are no siblings).
+  const related = article.category
+    ? (await getArticles({ categoryId: article.category.id, limit: 4 })).articles.filter((a) => a.id !== article.id).slice(0, 3)
+    : [];
   return (
     <>
       <Crumbs
@@ -48,30 +54,41 @@ export default async function ArticlePage({ params }: Props) {
           imageUrl: article.cover?.url,
         })}
       />
-      <article className="container hero">
-        <div className="hero-card" style={{ maxWidth: '54rem' }}>
-          <h1>{article.title}</h1>
-          {date ? (
-            <p className="muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-              <span>{date}</span>
-            </p>
-          ) : null}
-          {article.cover ? (
-            <div style={{ marginBottom: '2rem', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
-              <Img image={article.cover} />
+      <article className="pg-section" style={{ paddingTop: '3rem' }}>
+        <div className="container">
+          <div className="article-col">
+            {article.category ? <p className="news-cat">{article.category.name}</p> : null}
+            <h1>{article.title}</h1>
+            {/* No author or reading time is published, so none is invented. */}
+            {date ? <p className="news-date">{date}</p> : null}
+            {article.cover ? (
+              <div className="article-cover">
+                <Img image={article.cover} />
+              </div>
+            ) : null}
+            <div className="prose">
+              <RichText data={article.body} />
             </div>
-          ) : null}
-          <div className="prose">
-            <RichText data={article.body} />
+            <div className="inline-cta">
+              <p>Cần tư vấn thêm về nội dung này?</p>
+              <Link className="button" href="/lien-he?requestType=khac">
+                Tư vấn
+              </Link>
+            </div>
           </div>
         </div>
       </article>
+      {related.length ? (
+        <section className="pg-section white" aria-labelledby="related-title">
+          <div className="container">
+            <Overline>BÀI LIÊN QUAN</Overline>
+            <h2 className="pg-title" id="related-title">
+              Bài viết liên quan
+            </h2>
+            <NewsGrid items={related} />
+          </div>
+        </section>
+      ) : null}
       <SurveyCta />
     </>
   );

@@ -16,6 +16,13 @@ export const NAV_ITEMS = [
 
 export const SURVEY_CTA = { label: 'Đặt lịch khảo sát', href: '/lien-he?requestType=khao-sat' } as const;
 
+/** Per-page CTAs from docs/handover/contract-acceptance-matrix.md §1 (Dịch vụ, Dự án). The contact form has no separate visit type, so the visit CTA uses `khac`. */
+export const SERVICE_CTA = { label: 'Đăng ký khảo sát', href: '/lien-he?requestType=khao-sat' } as const;
+export const PROJECT_CTA = { label: 'Đăng ký tham quan', href: '/lien-he?requestType=khac' } as const;
+
+/** Contract CTA for the home page (acceptance matrix §1). No capability-profile file exists yet, so it opens the lead form. */
+export const HOME_PROFILE_CTA = { label: 'Nhận hồ sơ năng lực', href: '/lien-he?requestType=khac' } as const;
+
 /** Fixed public routes that exist regardless of CMS content. */
 export const STATIC_PUBLIC_PATHS: string[] = NAV_ITEMS.map((i) => i.href);
 

@@ -54,27 +54,36 @@ export function Crumbs({ items }: { items: { label: string; href?: string }[] })
   );
 }
 
-export const Img = ({ image, sizes }: { image: PublicImage; sizes?: string }) => (
+export const Img = ({ image, sizes, eager }: { image: PublicImage; sizes?: string; eager?: boolean }) => (
   // Plain <img>: Next's optimizer is disabled (next.config) until a rights-aware pipeline exists (W5B).
   // Dimensions are set only when both are known, so layout shift is reserved without distorting the ratio.
   <img
     src={image.url}
     alt={image.alt}
     {...(image.width && image.height ? { width: image.width, height: image.height } : {})}
-    loading="lazy"
+    loading={eager ? 'eager' : 'lazy'}
     decoding="async"
     sizes={sizes}
   />
 );
 
-export function SurveyCta() {
+export interface SurveyCtaProps {
+  overline?: string;
+  title?: string;
+  description?: string;
+  cta?: { label: string; href: string };
+}
+
+export function SurveyCta({ overline = 'Kết nối cùng BMSL', title = 'Liên hệ khảo sát', description, cta = SURVEY_CTA }: SurveyCtaProps) {
   return (
     <section className="survey-cta-section" aria-labelledby="cta-title">
       <div className="container">
         <div className="survey-cta-card">
-          <h2 id="cta-title">Liên hệ khảo sát</h2>
-          <Link className="button" href={SURVEY_CTA.href}>
-            {SURVEY_CTA.label}
+          <Overline tone="gold">{overline}</Overline>
+          <h2 id="cta-title">{title}</h2>
+          {description ? <p>{description}</p> : null}
+          <Link className="button" href={cta.href}>
+            {cta.label}
             <svg
               width="16"
               height="16"
@@ -95,6 +104,39 @@ export function SurveyCta() {
     </section>
   );
 }
+
+/** Figma "Overline row": gold rule + small caps label. */
+export const Overline = ({ children, tone = 'bronze' }: { children: ReactNode; tone?: 'bronze' | 'gold' }) => (
+  <p className={`overline overline-${tone}`}>
+    <span className="overline-rule" aria-hidden="true" />
+    <span className="overline-text">{children}</span>
+  </p>
+);
+
+/** Figma "Section heading row": overline, serif title and an optional "see all" link. */
+export const SectionHeading = ({
+  id,
+  overline,
+  title,
+  action,
+}: {
+  id: string;
+  overline: string;
+  title: string;
+  action?: { label: string; href: string };
+}) => (
+  <div className="section-heading-row">
+    <div className="section-heading">
+      <Overline>{overline}</Overline>
+      <h2 id={id}>{title}</h2>
+    </div>
+    {action ? (
+      <Link className="link-action" href={action.href}>
+        {action.label}
+      </Link>
+    ) : null}
+  </div>
+);
 
 export const ServiceCards = ({ items }: { items: ServiceView[] }) => (
   <ul className="grid">
@@ -223,14 +265,37 @@ export const JobCards = ({ items }: { items: JobView[] }) => (
 
 export function Pager({ base, page, totalPages }: { base: string; page: number; totalPages: number }) {
   if (totalPages <= 1) return null;
-  const href = (p: number) => (p <= 1 ? base : `${base}?page=${p}`);
+  const href = (p: number) => (p <= 1 ? base : `${base}${base.includes('?') ? '&' : '?'}page=${p}`);
+  // Window of page numbers around the current page, always including the first and last page.
+  const numbers = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+    (n) => n === 1 || n === totalPages || Math.abs(n - page) <= 1,
+  );
   return (
     <nav className="pager" aria-label="Phân trang">
-      {page > 1 ? <Link href={href(page - 1)}>← Trang trước</Link> : null}
-      <span>
-        Trang {page}/{totalPages}
-      </span>
-      {page < totalPages ? <Link href={href(page + 1)}>Trang sau →</Link> : null}
+      {page > 1 ? (
+        <Link href={href(page - 1)} aria-label="Trang trước">
+          ‹
+        </Link>
+      ) : null}
+      {numbers.map((n, i) => (
+        <span key={n} style={{ display: 'contents' }}>
+          {i > 0 && n - numbers[i - 1] > 1 ? <span aria-hidden="true">…</span> : null}
+          {n === page ? (
+            <span className="pager-page" aria-current="page">
+              {n}
+            </span>
+          ) : (
+            <Link href={href(n)} aria-label={`Trang ${n}`}>
+              {n}
+            </Link>
+          )}
+        </span>
+      ))}
+      {page < totalPages ? (
+        <Link href={href(page + 1)} aria-label="Trang sau">
+          ›
+        </Link>
+      ) : null}
     </nav>
   );
 }

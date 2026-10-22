@@ -1,6 +1,6 @@
 import { isApprovedMediaPath, isPrivatePath, isPublicContentPath, isPublicSlug } from './seo';
 import { paths, UNCATEGORIZED_SEGMENT } from './site';
-
+import { HOME_PROFILE_CTA } from '../lib/site';
 // Pure mappers from CMS documents to public view models. They are defensive on purpose:
 // the access layer is authoritative, these only guarantee that nothing unpublished,
 // unapproved or empty ever reaches a template.
@@ -334,8 +334,8 @@ export function toHero(v: unknown): HeroView | undefined {
   const kicker = text(v.kicker);
   const headline = text(v.headline);
   const supportingText = text(v.supportingText);
-  const primaryLabel = text(v.primaryCtaText) || 'Đặt lịch khảo sát';
-  const primaryHref = safeInternalLinkHref(v.primaryCtaLink) || '/lien-he?requestType=khao-sat';
+  const primaryLabel = text(v.primaryCtaText) || HOME_PROFILE_CTA.label;
+  const primaryHref = safeInternalLinkHref(v.primaryCtaLink) || HOME_PROFILE_CTA.href;
   const secondaryLabel = text(v.secondaryCtaText);
   const secondaryHref = safeInternalLinkHref(v.secondaryCtaLink);
   const desktopImage = toHeroImage(v.desktopImage);

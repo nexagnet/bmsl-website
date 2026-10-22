@@ -33,8 +33,8 @@ describe('HomePage Hero Mapping & Security Gate', () => {
     const hero = toHero({});
     expect(hero).toBeDefined();
     expect(hero?.enabled).toBe(true);
-    expect(hero?.primaryCta.label).toBe('Đặt lịch khảo sát');
-    expect(hero?.primaryCta.href).toBe('/lien-he?requestType=khao-sat');
+    expect(hero?.primaryCta.label).toBe('Nhận hồ sơ năng lực');
+    expect(hero?.primaryCta.href).toBe('/lien-he?requestType=khac');
     expect(hero?.secondaryCta).toBeUndefined();
     expect(hero?.desktopImage).toBeUndefined();
     expect(hero?.mobileImage).toBeUndefined();
@@ -83,7 +83,7 @@ describe('HomePage Hero Mapping & Security Gate', () => {
     });
 
     // Unsafe primary link falls back to safe default internal path
-    expect(hero?.primaryCta.href).toBe('/lien-he?requestType=khao-sat');
+    expect(hero?.primaryCta.href).toBe('/lien-he?requestType=khac');
     // Unsafe secondary link is dropped completely
     expect(hero?.secondaryCta).toBeUndefined();
 
@@ -93,7 +93,7 @@ describe('HomePage Hero Mapping & Security Gate', () => {
       secondaryCtaText: 'Trang ngoài',
       secondaryCtaLink: 'http://malicious.org/services',
     });
-    expect(heroWithExternal?.primaryCta.href).toBe('/lien-he?requestType=khao-sat');
+    expect(heroWithExternal?.primaryCta.href).toBe('/lien-he?requestType=khac');
     expect(heroWithExternal?.secondaryCta).toBeUndefined();
 
     // Valid internal paths are preserved
