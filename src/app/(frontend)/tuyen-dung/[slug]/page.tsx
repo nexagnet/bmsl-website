@@ -63,15 +63,15 @@ export default async function JobDetailPage({ params }: Props) {
           {job.salary || deadline || settings.zalo ? (
             <aside className="apply-box" aria-label="Thông tin ứng tuyển">
               {job.salary || deadline ? (
-                <dl className="meta-table">
+                <dl className="apply-meta">
                   {job.salary ? (
-                    <div className="meta-row">
+                    <div className="apply-meta-row">
                       <dt>Lương</dt>
                       <dd>{job.salary}</dd>
                     </div>
                   ) : null}
                   {deadline ? (
-                    <div className="meta-row">
+                    <div className="apply-meta-row">
                       <dt>Hạn nộp</dt>
                       <dd>{deadline}</dd>
                     </div>

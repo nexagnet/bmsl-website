@@ -54,14 +54,14 @@ export function Crumbs({ items }: { items: { label: string; href?: string }[] })
   );
 }
 
-export const Img = ({ image, sizes }: { image: PublicImage; sizes?: string }) => (
+export const Img = ({ image, sizes, eager }: { image: PublicImage; sizes?: string; eager?: boolean }) => (
   // Plain <img>: Next's optimizer is disabled (next.config) until a rights-aware pipeline exists (W5B).
   // Dimensions are set only when both are known, so layout shift is reserved without distorting the ratio.
   <img
     src={image.url}
     alt={image.alt}
     {...(image.width && image.height ? { width: image.width, height: image.height } : {})}
-    loading="lazy"
+    loading={eager ? 'eager' : 'lazy'}
     decoding="async"
     sizes={sizes}
   />
@@ -265,7 +265,7 @@ export const JobCards = ({ items }: { items: JobView[] }) => (
 
 export function Pager({ base, page, totalPages }: { base: string; page: number; totalPages: number }) {
   if (totalPages <= 1) return null;
-  const href = (p: number) => (p <= 1 ? base : `${base}?page=${p}`);
+  const href = (p: number) => (p <= 1 ? base : `${base}${base.includes('?') ? '&' : '?'}page=${p}`);
   // Window of page numbers around the current page, always including the first and last page.
   const numbers = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
     (n) => n === 1 || n === totalPages || Math.abs(n - page) <= 1,
