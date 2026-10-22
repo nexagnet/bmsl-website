@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Crumbs, SurveyCta } from '../../../../components/blocks';
+import { Crumbs, SectionHeading, SurveyCta } from '../../../../components/blocks';
+import { PageHero, RelatedServices } from '../../../../components/catalog';
 import { JsonLd } from '../../../../components/JsonLd';
 import { RichText } from '../../../../components/RichText';
-import { getService } from '../../../../lib/cms';
+import { getService, getServices } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
-import { getSiteUrl } from '../../../../lib/site';
+import { getSiteUrl, SERVICE_CTA } from '../../../../lib/site';
 import { breadcrumbLd } from '../../../../lib/structured-data';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -20,6 +21,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) notFound();
+  const related = (await getServices()).filter((s) => s.slug !== service.slug).slice(0, 3);
   return (
     <>
       <Crumbs items={[{ label: 'Dịch vụ', href: '/dich-vu' }, { label: service.name }]} />
@@ -29,16 +31,25 @@ export default async function ServiceDetailPage({ params }: Props) {
           { name: service.name, path: service.href },
         ])}
       />
-      <article className="container hero">
-        <div className="hero-card">
-          <h1>{service.name}</h1>
-          {service.summary ? <p className="lead">{service.summary}</p> : null}
-          <div className="prose">
-            <RichText data={service.body} />
+      <article>
+        <PageHero overline="Dịch vụ" title={service.name} lead={service.summary} />
+        <section className="detail-section">
+          <div className="container">
+            <div className="prose">
+              <RichText data={service.body} />
+            </div>
           </div>
-        </div>
+        </section>
       </article>
-      <SurveyCta />
+      {related.length ? (
+        <section className="detail-section tinted">
+          <div className="container">
+            <SectionHeading id="related-title" overline="Dịch vụ khác" title="Các dịch vụ liên quan" />
+            <RelatedServices items={related} />
+          </div>
+        </section>
+      ) : null}
+      <SurveyCta title="Đặt lịch khảo sát cho dịch vụ này" cta={SERVICE_CTA} />
     </>
   );
 }
