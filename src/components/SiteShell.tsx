@@ -8,11 +8,8 @@ import { NavLinks } from './NavLinks';
 
 const navHref = (href: string) => NAV_ITEMS.find((item) => item.href === href)!;
 
-/** Footer columns regroup the same 8 destinations (Figma "06 / Footer"); no destination is added or dropped. */
-const FOOTER_GROUPS = [
-  { title: 'Khám phá', items: ['/', '/gioi-thieu', '/dich-vu', '/du-an'].map(navHref) },
-  { title: 'Thông tin', items: ['/quy-trinh-minh-bach', '/kien-thuc', '/tuyen-dung'].map(navHref) },
-] as const;
+/** Footer column "Khám phá" lists the public areas (Figma "BMSL / Footer"); no destination is added or dropped. */
+const FOOTER_EXPLORE = ['/gioi-thieu', '/dich-vu', '/du-an', '/quy-trinh-minh-bach', '/kien-thuc', '/tuyen-dung'].map(navHref);
 
 /** Accessible name of the logo; the wording is the text printed in the original BMSL logo (docs/brand/logo.md). */
 const LOGO_ALT = `${SITE_NAME} — Bình Minh Sông Lô`;
@@ -84,18 +81,16 @@ export function SiteShell({ children, hotline, zalo }: Props) {
               ) : null}
             </div>
             <nav className="footer-nav" aria-label="Điều hướng chân trang">
-              {FOOTER_GROUPS.map((group) => (
-                <section key={group.title} className="footer-col">
-                  <h2>{group.title}</h2>
-                  <ul>
-                    {group.items.map((item) => (
-                      <li key={item.href}>
-                        <Link href={item.href}>{item.label}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              ))}
+              <section className="footer-col">
+                <h2>Khám phá</h2>
+                <ul>
+                  {FOOTER_EXPLORE.map((item) => (
+                    <li key={item.href}>
+                      <Link href={item.href}>{item.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
               <section className="footer-col">
                 <h2>Kết nối</h2>
                 <ul>

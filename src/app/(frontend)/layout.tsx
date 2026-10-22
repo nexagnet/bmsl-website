@@ -15,6 +15,9 @@ import '@fontsource/be-vietnam-pro/latin-ext-600.css';
 import '@fontsource/be-vietnam-pro/latin-400.css';
 import '@fontsource/be-vietnam-pro/latin-500.css';
 import '@fontsource/be-vietnam-pro/latin-600.css';
+import '@fontsource/lora/vietnamese-600.css';
+import '@fontsource/lora/latin-ext-600.css';
+import '@fontsource/lora/latin-600.css';
 import './site.css';
 
 // Content comes from PostgreSQL and is rendered per request (no database at build time).
