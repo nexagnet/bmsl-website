@@ -237,3 +237,26 @@ describe('optional service cover and project type', () => {
     expect(toProject({ ...p, projectType: 'Tự nhập', sourceStatus: 'LEGACY-SOURCE' })).toBeUndefined();
   });
 });
+
+describe('optional process steps', () => {
+  it('is empty by default and drops rows without a title', () => {
+    expect(toPage({ ...pub, title: 'T' })?.steps).toEqual([]);
+    expect(toPage({ ...pub, steps: 'x' })?.steps).toEqual([]);
+    expect(toPage({ ...pub, steps: [null, { description: 'no title' }, { title: '  ' }] })?.steps).toEqual([]);
+  });
+
+  it('keeps the entered order and optional fields only when present', () => {
+    const steps = toPage({
+      ...pub,
+      steps: [{ title: 'B1', description: 'd', duration: '5' }, { title: 'B2' }],
+    })?.steps;
+    expect(steps).toEqual([
+      { title: 'B1', description: 'd', duration: '5' },
+      { title: 'B2', description: undefined, duration: undefined },
+    ]);
+  });
+
+  it('shows nothing for an unpublished page', () => {
+    expect(toPage({ _status: 'draft', steps: [{ title: 'x' }] })).toBeNull();
+  });
+});

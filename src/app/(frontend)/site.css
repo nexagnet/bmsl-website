@@ -2261,6 +2261,32 @@ h3 {
   padding-top: 4rem;
 }
 
+.process-steps {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.process-steps li {
+  counter-increment: step;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--bmsl-line, #d9d8d2);
+  border-radius: var(--bmsl-radius);
+  background: #fff;
+}
+
+.process-steps li h3::before {
+  content: counter(step, decimal-leading-zero) ' / ';
+  color: var(--bmsl-bronze-text);
+}
+
+.process-step-duration {
+  font-weight: 600;
+}
+
 .pg-section.pale {
   background: var(--bmsl-pale);
   padding-top: 4rem;
