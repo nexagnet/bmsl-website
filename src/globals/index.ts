@@ -144,7 +144,32 @@ export const HomePage: GlobalConfig = {
   ],
 };
 export const AboutPage = page('about-page', 'Giới thiệu');
-export const ProcessPage = page('process-page', 'Quy trình và minh bạch');
+export const ProcessPage: GlobalConfig = {
+  slug: 'process-page',
+  label: 'Quy trình và minh bạch',
+  access: adminSingletonAccess,
+  versions: drafts,
+  fields: [
+    { name: 'title', type: 'text', label: 'Tiêu đề' },
+    { name: 'body', type: 'richText', label: 'Nội dung' },
+    {
+      name: 'steps',
+      type: 'array',
+      label: 'Các bước quy trình',
+      labels: { singular: 'Bước', plural: 'Các bước' },
+      admin: {
+        description:
+          'Tùy chọn. Để trống cho tới khi BMSL cung cấp và xác nhận quy trình; không điền nội dung suy đoán. Thứ tự hiển thị theo thứ tự trong danh sách.',
+      },
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Tên bước' },
+        { name: 'description', type: 'textarea', label: 'Mô tả' },
+        { name: 'duration', type: 'text', label: 'Thời hạn', admin: { description: 'Tùy chọn, nhập tự do (ví dụ theo văn bản BMSL xác nhận).' } },
+      ],
+    },
+    seoField,
+  ],
+};
 export const ContactPage = page('contact-page', 'Trang liên hệ');
 
 // Public contact details are UNCONFIRMED (CONTACT_DETAILS_REQUIRES_BMSL_CONFIRMATION):

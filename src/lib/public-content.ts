@@ -363,7 +363,17 @@ export function toHero(v: unknown): HeroView | undefined {
   };
 }
 
-export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: HeroView };
+export type ProcessStepView = { title: string; description?: string; duration?: string };
+
+/** Optional CMS process steps: rows without a title are dropped; an empty list means nothing is shown. */
+export const toSteps = (v: unknown): ProcessStepView[] =>
+  (Array.isArray(v) ? v : []).flatMap((row) => {
+    if (!isDoc(row)) return [];
+    const title = text(row.title);
+    return title ? [{ title, description: text(row.description), duration: text(row.duration) }] : [];
+  });
+
+export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: HeroView; steps: ProcessStepView[] };
 
 /** Singleton pages: null (safe empty state) unless published. */
 export function toPage(d: unknown): PageView | null {
@@ -373,6 +383,7 @@ export function toPage(d: unknown): PageView | null {
     body: d.body,
     seo: toSeo(d.seo),
     hero: toHero(d.hero),
+    steps: toSteps(d.steps),
   };
 }
 
