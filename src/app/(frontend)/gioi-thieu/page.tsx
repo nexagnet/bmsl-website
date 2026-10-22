@@ -1,3 +1,4 @@
+import { AboutSections } from '../../../components/AboutSections';
 import { SingletonPage, singletonMetadata } from '../../../components/SingletonPage';
 
 export const generateMetadata = () => singletonMetadata('about-page', '/gioi-thieu', 'Giới thiệu');
@@ -13,6 +14,8 @@ export default function AboutPage() {
         description: 'Tham khảo hồ sơ dự án được BMSL phê duyệt.',
         cta: { label: 'Xem dự án', href: '/du-an' },
       }}
-    />
+    >
+      <AboutSections />
+    </SingletonPage>
   );
 }

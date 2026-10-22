@@ -143,7 +143,80 @@ export const HomePage: GlobalConfig = {
     seoField,
   ],
 };
-export const AboutPage = page('about-page', 'Giới thiệu');
+const confirmedField = {
+  name: 'confirmed',
+  type: 'checkbox',
+  defaultValue: false,
+  label: 'Đã được BMSL xác nhận',
+  admin: { description: 'Chỉ tích khi BMSL đã xác nhận nội dung này. Mục chưa tích sẽ không hiển thị công khai.' },
+} as const;
+
+// Optional structured blocks of the About page. All empty until BMSL supplies approved content (UNCONFIRMED);
+// every item is public only when marked confirmed.
+export const AboutPage: GlobalConfig = {
+  slug: 'about-page',
+  label: 'Giới thiệu',
+  access: adminSingletonAccess,
+  versions: drafts,
+  fields: [
+    { name: 'title', type: 'text', label: 'Tiêu đề' },
+    { name: 'body', type: 'richText', label: 'Nội dung' },
+    {
+      name: 'history',
+      type: 'array',
+      label: 'Lịch sử hình thành',
+      labels: { singular: 'Mốc', plural: 'Các mốc' },
+      fields: [
+        { name: 'year', type: 'text', required: true, label: 'Năm/mốc thời gian' },
+        { name: 'title', type: 'text', required: true, label: 'Tiêu đề' },
+        { name: 'description', type: 'textarea', label: 'Mô tả' },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'team',
+      type: 'array',
+      label: 'Đội ngũ',
+      labels: { singular: 'Thành viên', plural: 'Thành viên' },
+      fields: [
+        { name: 'name', type: 'text', required: true, label: 'Họ tên' },
+        { name: 'role', type: 'text', label: 'Chức danh' },
+        {
+          name: 'photo',
+          type: 'upload',
+          relationTo: 'media-assets',
+          label: 'Ảnh',
+          admin: { description: 'Chỉ hiển thị khi tệp có rightsStatus=APPROVED.' },
+        },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'capabilities',
+      type: 'array',
+      label: 'Năng lực và giấy phép',
+      labels: { singular: 'Mục', plural: 'Các mục' },
+      fields: [
+        { name: 'name', type: 'text', required: true, label: 'Tên năng lực/giấy phép' },
+        { name: 'issuer', type: 'text', label: 'Đơn vị cấp' },
+        { name: 'validity', type: 'text', label: 'Hiệu lực', admin: { description: 'Nhập tự do theo giấy tờ BMSL cung cấp.' } },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'values',
+      type: 'array',
+      label: 'Văn hoá và giá trị',
+      labels: { singular: 'Giá trị', plural: 'Giá trị' },
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Tiêu đề' },
+        { name: 'description', type: 'textarea', label: 'Mô tả' },
+        confirmedField,
+      ],
+    },
+    seoField,
+  ],
+};
 export const ProcessPage: GlobalConfig = {
   slug: 'process-page',
   label: 'Quy trình và minh bạch',

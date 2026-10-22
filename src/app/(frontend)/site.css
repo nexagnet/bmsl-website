@@ -2287,6 +2287,40 @@ h3 {
   font-weight: 600;
 }
 
+.about-list {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  list-style: none;
+}
+
+.about-list li {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--bmsl-line, #d9d8d2);
+  border-radius: var(--bmsl-radius);
+  background: #fff;
+}
+
+.about-list img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 0.75rem;
+  border-radius: var(--bmsl-radius);
+}
+
+.about-list-key {
+  font-weight: 600;
+  color: var(--bmsl-bronze-text);
+}
+
+@media (min-width: 48rem) {
+  .about-team {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .pg-section.pale {
   background: var(--bmsl-pale);
   padding-top: 4rem;
