@@ -47,10 +47,25 @@ jobs:
           pnpm test
           pnpm build
 
-  integration:
-    name: integration
+  # The integration suite runs serially inside one process (each file resets its own database), so it is split into
+  # independent shards, each with its own PostgreSQL service. The `rest` shard excludes the three heavy files that
+  # have their own shard, so every file under tests/integration runs in exactly one shard.
+  integration-shard:
+    name: integration-shard (${{ matrix.shard }})
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: http-smoke
+            args: tests/integration/http-smoke.test.ts
+          - shard: container-image
+            args: tests/integration/container-image.test.ts
+          - shard: backup-restore
+            args: tests/integration/backup-restore.test.ts
+          - shard: rest
+            args: --exclude **/http-smoke.test.ts --exclude **/container-image.test.ts --exclude **/backup-restore.test.ts
     services:
       postgres:
         image: postgres:16-alpine
@@ -88,4 +103,19 @@ jobs:
         if: ${{ hashFiles('package.json') != '' }}
         run: |
           node -e "const p=require('./package.json'); if (!p.scripts?.['test:integration']) { console.error('Missing required script test:integration'); process.exit(2) }"
-          pnpm test:integration
+          pnpm test:integration ${{ matrix.args }}
+
+  # Stable required check name for branch protection: passes only when every shard passed.
+  integration:
+    name: integration
+    needs: integration-shard
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: All integration shards must succeed
+        env:
+          RESULT: ${{ needs.integration-shard.result }}
+        run: |
+          echo "integration-shard result: $RESULT"
+          test "$RESULT" = "success"
