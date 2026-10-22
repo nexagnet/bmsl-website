@@ -67,14 +67,23 @@ export const Img = ({ image, sizes }: { image: PublicImage; sizes?: string }) =>
   />
 );
 
-export function SurveyCta() {
+export interface SurveyCtaProps {
+  overline?: string;
+  title?: string;
+  description?: string;
+  cta?: { label: string; href: string };
+}
+
+export function SurveyCta({ overline = 'Kết nối cùng BMSL', title = 'Liên hệ khảo sát', description, cta = SURVEY_CTA }: SurveyCtaProps) {
   return (
     <section className="survey-cta-section" aria-labelledby="cta-title">
       <div className="container">
         <div className="survey-cta-card">
-          <h2 id="cta-title">Liên hệ khảo sát</h2>
-          <Link className="button" href={SURVEY_CTA.href}>
-            {SURVEY_CTA.label}
+          <Overline tone="gold">{overline}</Overline>
+          <h2 id="cta-title">{title}</h2>
+          {description ? <p>{description}</p> : null}
+          <Link className="button" href={cta.href}>
+            {cta.label}
             <svg
               width="16"
               height="16"
@@ -95,6 +104,39 @@ export function SurveyCta() {
     </section>
   );
 }
+
+/** Figma "Overline row": gold rule + small caps label. */
+export const Overline = ({ children, tone = 'bronze' }: { children: ReactNode; tone?: 'bronze' | 'gold' }) => (
+  <p className={`overline overline-${tone}`}>
+    <span className="overline-rule" aria-hidden="true" />
+    <span className="overline-text">{children}</span>
+  </p>
+);
+
+/** Figma "Section heading row": overline, serif title and an optional "see all" link. */
+export const SectionHeading = ({
+  id,
+  overline,
+  title,
+  action,
+}: {
+  id: string;
+  overline: string;
+  title: string;
+  action?: { label: string; href: string };
+}) => (
+  <div className="section-heading-row">
+    <div className="section-heading">
+      <Overline>{overline}</Overline>
+      <h2 id={id}>{title}</h2>
+    </div>
+    {action ? (
+      <Link className="link-action" href={action.href}>
+        {action.label}
+      </Link>
+    ) : null}
+  </div>
+);
 
 export const ServiceCards = ({ items }: { items: ServiceView[] }) => (
   <ul className="grid">

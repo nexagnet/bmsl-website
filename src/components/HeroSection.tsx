@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { HeroView } from '../lib/public-content';
-import { SITE_NAME, SURVEY_CTA } from '../lib/site';
+import { HOME_PROFILE_CTA, SITE_NAME } from '../lib/site';
 
 export interface HeroSectionProps {
   hero?: HeroView;
@@ -36,7 +36,7 @@ export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSection
   const kicker = hero?.kicker;
   const headline = hero?.headline || defaultTitle || SITE_NAME;
   const supportingText = hero?.supportingText || defaultBodyText;
-  const primaryCta = hero?.primaryCta || { label: SURVEY_CTA.label, href: SURVEY_CTA.href };
+  const primaryCta = hero?.primaryCta || { label: HOME_PROFILE_CTA.label, href: HOME_PROFILE_CTA.href };
   const secondaryCta = hero?.secondaryCta || { label: 'Xem dịch vụ', href: '/dich-vu' };
   const desktopImage = hero?.desktopImage;
   const mobileImage = hero?.mobileImage || desktopImage;
