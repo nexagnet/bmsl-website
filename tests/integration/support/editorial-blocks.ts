@@ -3,7 +3,7 @@ import path from 'node:path';
 import pg from 'pg';
 import { type APIRequestContext, type Browser, type BrowserType, chromium, firefox, request, webkit } from 'playwright';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { SURVEY_CTA } from '../../../src/lib/site';
+import { SERVICE_CTA, SURVEY_CTA } from '../../../src/lib/site';
 import { ENGINES, type Engine, SIZES } from './browser-policy';
 import type { BrowserUatContext } from './browser-blocks';
 import { JOBS } from './markers';
@@ -161,12 +161,12 @@ export function registerEditorialBlocks(ctx: BrowserUatContext): void {
               await context.close().catch(() => undefined);
             }
           };
-          const surveyCta = async (page: import('playwright').Page) => {
+          const surveyCta = async (page: import('playwright').Page, expected: { label: string; href: string } = SURVEY_CTA) => {
             const cta = page.locator('.survey-cta-section a.button');
             await cta.scrollIntoViewIfNeeded();
             await cta.waitFor({ state: 'visible' });
-            expect((await cta.innerText()).trim()).toBe(SURVEY_CTA.label);
-            expect(await cta.getAttribute('href')).toBe(SURVEY_CTA.href);
+            expect((await cta.innerText()).trim()).toBe(expected.label);
+            expect(await cta.getAttribute('href')).toBe(expected.href);
             const box = await cta.boundingBox();
             expect(box && box.width > 0 && box.x >= 0 && box.x + box.width <= view.width + 1, 'CTA inside viewport').toBe(true);
             await cta.click();
@@ -179,7 +179,7 @@ export function registerEditorialBlocks(ctx: BrowserUatContext): void {
             open(servicePath, async (page) => {
               expect(await page.locator('main h1').first().innerText()).toBe(SERVICE.name);
               expect(await page.locator('main').innerText()).toContain('Nội dung dịch vụ thử nghiệm');
-              await surveyCta(page);
+              await surveyCta(page, SERVICE_CTA);
             }), 180_000);
 
           it('article: published content with APPROVED cover, working survey CTA', () =>

@@ -1552,3 +1552,525 @@ h3 {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   UI-03 Dịch vụ & Dự án (Figma HiFi): page hero, service rows, tiles, filters, detail, CTA band.
+   ========================================================================== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.overline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bmsl-bronze-dark);
+}
+
+.overline::before {
+  content: "";
+  flex: none;
+  width: 2rem;
+  height: 2px;
+  background: var(--bmsl-bronze);
+}
+
+.page-hero {
+  background: var(--bmsl-cream);
+  padding: 3rem 0 2.5rem;
+}
+
+.page-hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.25;
+  color: var(--bmsl-navy);
+}
+
+.page-hero-lead {
+  margin: 1.25rem 0 0;
+  max-width: 48rem;
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: var(--bmsl-muted);
+}
+
+@media (min-width: 64rem) {
+  .page-hero {
+    padding: 4.5rem 0 3.5rem;
+  }
+}
+
+/* The cream hero must meet the breadcrumb strip without a white seam on detail pages. */
+.breadcrumb + * .page-hero,
+.breadcrumb + article .page-hero {
+  padding-top: 1.5rem;
+}
+
+.section-heading {
+  margin-bottom: 2rem;
+}
+
+.section-heading h2,
+.service-row h2,
+.cta-band h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--bmsl-navy);
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+
+.detail-section {
+  background: var(--bmsl-white);
+  padding: 3rem 0;
+}
+
+.detail-section.tinted {
+  background: var(--bmsl-pale);
+}
+
+.detail-section-flush {
+  background: var(--bmsl-cream);
+  padding-top: 0.5rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 64rem) {
+  .detail-section {
+    padding: 6rem 0;
+  }
+  .detail-section-flush {
+    padding-bottom: 6rem;
+  }
+}
+
+.detail-section .prose {
+  max-width: 50rem;
+  color: var(--bmsl-text);
+}
+
+/* Service list rows alternate white / cream, text beside a neutral numeral panel (no sample imagery). */
+.service-row {
+  background: var(--bmsl-white);
+  padding: 2.5rem 0;
+}
+
+.service-row.alt {
+  background: var(--bmsl-cream);
+}
+
+.service-row-inner {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+.service-row h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.service-row-desc {
+  margin: 1rem 0 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: var(--bmsl-muted);
+}
+
+.service-row-mark {
+  display: none;
+  min-height: 15rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--bmsl-radius);
+  background: var(--bmsl-pale);
+  font-family: var(--font-display);
+  font-size: 6rem;
+  font-weight: 600;
+  color: var(--bmsl-bronze);
+}
+
+@media (min-width: 48rem) {
+  .service-row-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  .service-row-mark {
+    display: flex;
+  }
+  .service-row.alt .service-row-text {
+    order: 2;
+  }
+}
+
+@media (min-width: 64rem) {
+  .service-row {
+    padding: 6rem 0;
+  }
+  .service-row-inner {
+    gap: 4rem;
+  }
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bmsl-bronze-dark);
+  text-decoration: none;
+}
+
+.text-link:hover {
+  color: var(--bmsl-navy);
+  text-decoration: underline;
+}
+
+/* Tiles: service + project cards (Figma "Card / Service", "Card / Project"). */
+.tile-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 48rem) {
+  .tile-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .tile-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bmsl-white);
+  border: 1px solid var(--bmsl-line);
+  border-radius: var(--bmsl-radius);
+  padding: 1.5rem;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.tile:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.tile h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--bmsl-navy);
+}
+
+.tile p {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--bmsl-muted);
+}
+
+.tile .text-link {
+  margin-top: auto;
+}
+
+.tile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  border-radius: var(--bmsl-radius-pill);
+  background: var(--bmsl-pale);
+  color: var(--bmsl-navy);
+}
+
+.project-tile {
+  padding: 0;
+}
+
+.project-tile-media {
+  aspect-ratio: 21 / 10;
+  background: var(--bmsl-pale);
+}
+
+.project-tile-media img,
+.project-tile-empty {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  color: var(--bmsl-muted);
+}
+
+.project-tile-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+.tile-tag {
+  font-size: 0.75rem !important;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bmsl-bronze-dark) !important;
+}
+
+.tile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* Filter chips (Figma "BMSL / Chip") and pager — shared with the news list. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+}
+
+.chips a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.15rem;
+  border: 1px solid var(--bmsl-line);
+  border-radius: var(--bmsl-radius-pill);
+  background: var(--bmsl-white);
+  color: var(--bmsl-text);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.chips a:hover {
+  border-color: var(--bmsl-navy);
+  background: var(--bmsl-white);
+  color: var(--bmsl-navy);
+}
+
+.chips a[aria-current='page'] {
+  background: var(--bmsl-navy);
+  border-color: var(--bmsl-navy);
+  color: var(--bmsl-white);
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.pager a {
+  border-radius: var(--bmsl-radius-pill);
+  border-color: var(--bmsl-line);
+  min-height: 2.75rem;
+  color: var(--bmsl-text);
+}
+
+.pager a:hover {
+  border-color: var(--bmsl-navy);
+  background: var(--bmsl-white);
+  color: var(--bmsl-navy);
+}
+
+/* Project detail */
+.project-cover img {
+  display: block;
+  width: 100%;
+  max-height: 30rem;
+  object-fit: cover;
+  border-radius: var(--bmsl-radius);
+  background: var(--bmsl-pale);
+}
+
+.project-detail-row {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 64rem) {
+  .project-detail-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+.meta-table {
+  margin: 0;
+  background: var(--bmsl-white);
+  border: 1px solid var(--bmsl-line);
+  border-radius: var(--bmsl-radius);
+  overflow: hidden;
+}
+
+.meta-table > div {
+  display: grid;
+  gap: 0.25rem 1.5rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--bmsl-line);
+}
+
+.meta-table > div:last-child {
+  border-bottom: 0;
+}
+
+@media (min-width: 40rem) {
+  .meta-table > div {
+    grid-template-columns: 11rem 1fr;
+  }
+}
+
+.meta-table dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bmsl-muted);
+}
+
+.meta-table dd {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--bmsl-text);
+}
+
+.subtitle {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--bmsl-navy);
+}
+
+.plain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.album-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 48rem) {
+  .album-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .album-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.album-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--bmsl-radius);
+  background: var(--bmsl-pale);
+}
+
+/* CTA band: navy with a gold button (Figma "CTA band"). Replaces the legacy survey card on UI-03 pages only. */
+.survey-cta-section.cta-band {
+  background: var(--bmsl-navy);
+  padding: 4rem 0;
+  /* main reserves 4rem below its content; the band runs flush into the footer. */
+  margin-bottom: -4rem;
+}
+
+.survey-cta-section.cta-band::before {
+  display: none;
+}
+
+.cta-band .overline {
+  color: var(--bmsl-bronze);
+}
+
+.cta-band h2 {
+  color: var(--bmsl-white);
+}
+
+.cta-band-text {
+  margin: 1rem 0 0;
+  font-size: 1.125rem;
+  color: var(--bmsl-on-dark-muted);
+}
+
+.cta-band .button {
+  margin-top: 1.5rem;
+}
+
+.button.gold,
+.survey-cta-card .button.gold,
+.cta-band .button.gold {
+  background: var(--bmsl-bronze);
+  border-color: var(--bmsl-bronze);
+  color: var(--bmsl-navy);
+  box-shadow: none;
+  padding: 0.95rem 1.65rem;
+}
+
+.cta-band .button.gold:hover {
+  background: var(--bmsl-white);
+  border-color: var(--bmsl-white);
+  color: var(--bmsl-navy);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Breadcrumb keeps the same gutter as the page container so it lines up with the hero text. */
+.container.breadcrumb {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .container.breadcrumb {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 26rem) {
+  .container.breadcrumb {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+}
