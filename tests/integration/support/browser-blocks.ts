@@ -389,6 +389,7 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
           it('contact: request type is prefilled only from a single known value', async () => {
             for (const [query, expected] of [
               ['?requestType=khac', 'khac'],
+              ['?requestType=tham-quan', 'tham-quan'],
               ['?requestType=khao-sat', 'khao-sat'],
               ['?requestType=bao-gia', 'bao-gia'],
               ['?requestType=evil', 'khao-sat'],

@@ -59,7 +59,7 @@ describe('select option machine values are unchanged', () => {
     expect(values(select(JobPostings, 'sourceStatus'))).toEqual(['LEGACY-SOURCE', 'CONFIRMED']);
     expect(values(select(MediaAssets, 'rightsStatus'))).toEqual(['UNCONFIRMED', 'APPROVED']);
     expect(values(select(ContactLeads, 'status'))).toEqual(['new', 'handled']);
-    expect(values(select(ContactLeads, 'requestType'))).toEqual(['khao-sat', 'bao-gia', 'khac']);
+    expect(values(select(ContactLeads, 'requestType'))).toEqual(['khao-sat', 'bao-gia', 'tham-quan', 'khac']);
     expect(values(select(Redirects, 'type'))).toEqual(['301']);
   });
 

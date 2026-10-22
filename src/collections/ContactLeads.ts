@@ -3,11 +3,12 @@ import { adminOnly, adminOnlyField, nobody } from '../access';
 import { resolveLeadEmailConfig } from '../lib/lead-email-config';
 import { NOTIFICATION_STATES, queueLeadNotification } from '../lib/lead-notification';
 
-export const REQUEST_TYPES = ['khao-sat', 'bao-gia', 'khac'] as const;
+export const REQUEST_TYPES = ['khao-sat', 'bao-gia', 'tham-quan', 'khac'] as const;
 
 const REQUEST_TYPE_LABELS: Record<(typeof REQUEST_TYPES)[number], string> = {
   'khao-sat': 'Khảo sát',
   'bao-gia': 'Báo giá',
+  'tham-quan': 'Tham quan',
   khac: 'Khác',
 };
 

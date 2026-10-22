@@ -109,6 +109,21 @@ export function SiteShell({ children, hotline, zalo }: Props) {
           </div>
         </div>
       </footer>
+      {/* Figma "Mobile action bar": fixed to the bottom below 768px; only the confirmed channels render. */}
+      {hotline || zalo ? (
+        <nav className="mobile-action-bar" aria-label="Liên hệ nhanh">
+          {hotline ? (
+            <a className="button" href={hotline.href} data-analytics-event="phone_click" data-link-location="mobile_bar">
+              Gọi hotline
+            </a>
+          ) : null}
+          {zalo ? (
+            <a className={hotline ? 'button secondary' : 'button'} href={zalo.href} rel="noopener" data-analytics-event="zalo_click" data-link-location="mobile_bar">
+              Zalo
+            </a>
+          ) : null}
+        </nav>
+      ) : null}
     </>
   );
 }

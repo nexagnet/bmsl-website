@@ -10,7 +10,7 @@ export const TRACK_EVENT = 'bmsl:analytics-event';
 
 // Mirrors REQUEST_TYPES (collections/ContactLeads); duplicated so this client-side module never imports the CMS
 // config. A unit test keeps the two lists identical.
-export const ANALYTICS_REQUEST_TYPES = ['khao-sat', 'bao-gia', 'khac'] as const;
+export const ANALYTICS_REQUEST_TYPES = ['khao-sat', 'bao-gia', 'tham-quan', 'khac'] as const;
 
 /** Only these parameters may leave the browser, each with a strict value shape. Never lead data or URLs. */
 const PARAM_RULES: Record<string, (v: string) => boolean> = {
