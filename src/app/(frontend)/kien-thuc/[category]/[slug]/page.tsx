@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Crumbs, Img } from '../../../../../components/blocks';
-import { CtaBand, NewsGrid, Overline } from '../../../../../components/content-ui';
+import { Crumbs, Img, SurveyCta } from '../../../../../components/blocks';
+import { NewsGrid, Overline } from '../../../../../components/content-ui';
 import { JsonLd } from '../../../../../components/JsonLd';
 import { RichText } from '../../../../../components/RichText';
 import { getArticle, getArticles } from '../../../../../lib/cms';
@@ -89,11 +89,7 @@ export default async function ArticlePage({ params }: Props) {
           </div>
         </section>
       ) : null}
-      <CtaBand title="Trao đổi với BMSL">
-        <Link className="button gold" href="/lien-he?requestType=khac">
-          Tư vấn
-        </Link>
-      </CtaBand>
+      <SurveyCta />
     </>
   );
 }

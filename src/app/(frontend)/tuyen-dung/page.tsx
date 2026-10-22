@@ -10,7 +10,7 @@ export default async function JobsPage() {
   const [jobs, settings] = await Promise.all([getJobs(), getSiteSettings()]);
   return (
     <>
-      <PageHero overline="TUYỂN DỤNG" title="Cùng làm việc với BMSL" />
+      <PageHero overline="TUYỂN DỤNG" title="Tuyển dụng" lead="Cùng làm việc với BMSL" />
       <section className="pg-section">
         <div className="container">
           {jobs.length ? <JobGrid items={jobs} /> : <Empty>Hiện chưa có vị trí tuyển dụng được công bố.</Empty>}
