@@ -260,3 +260,37 @@ describe('optional process steps', () => {
     expect(toPage({ _status: 'draft', steps: [{ title: 'x' }] })).toBeNull();
   });
 });
+
+describe('optional About blocks', () => {
+  const jpg = { ...approved, mimeType: 'image/jpeg' };
+
+  it('are empty by default', () => {
+    const page = toPage({ ...pub, title: 'T' });
+    expect([page?.history, page?.team, page?.capabilities, page?.values]).toEqual([[], [], [], []]);
+  });
+
+  it('show only items BMSL marked confirmed and that carry their required text', () => {
+    const page = toPage({
+      ...pub,
+      history: [
+        { year: '2021', title: 'Mốc A', confirmed: true },
+        { year: '2022', title: 'Mốc B' },
+        { year: '2023', title: 'Mốc C', confirmed: false },
+        { year: '', title: 'Thiếu năm', confirmed: true },
+      ],
+      team: [
+        { name: 'Người A', role: 'Chức danh', photo: jpg, confirmed: true },
+        { name: 'Người B', photo: { ...jpg, rightsStatus: 'UNCONFIRMED' }, confirmed: true },
+        { name: 'Người C' },
+      ],
+      capabilities: [{ name: 'Giấy phép A', issuer: 'Đơn vị', validity: 'Còn hiệu lực', confirmed: true }, { name: 'B' }],
+      values: [{ title: 'Giá trị A', confirmed: true }, { title: 'Giá trị B' }],
+    });
+    expect(page?.history).toEqual([{ year: '2021', title: 'Mốc A', description: undefined }]);
+    expect(page?.team.map((m) => m.name)).toEqual(['Người A', 'Người B']);
+    expect(page?.team[0]?.photo?.url).toBe(jpg.url);
+    expect(page?.team[1]?.photo).toBeUndefined();
+    expect(page?.capabilities).toEqual([{ name: 'Giấy phép A', issuer: 'Đơn vị', validity: 'Còn hiệu lực' }]);
+    expect(page?.values).toEqual([{ title: 'Giá trị A', description: undefined }]);
+  });
+});
