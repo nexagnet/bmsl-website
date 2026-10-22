@@ -1,42 +1,53 @@
 import { Empty } from '../../../components/blocks';
-import { SingletonPage, singletonMetadata } from '../../../components/SingletonPage';
-import { getDocuments } from '../../../lib/cms';
+import { CtaBand, DocumentGrid, Overline, PageHero } from '../../../components/content-ui';
+import { RichText } from '../../../components/RichText';
+import { singletonMetadata } from '../../../components/SingletonPage';
+import { getDocuments, getPage } from '../../../lib/cms';
+import { hasRichText } from '../../../lib/public-content';
 
 export const generateMetadata = () =>
   singletonMetadata('process-page', '/quy-trinh-minh-bach', 'Quy trình & Minh bạch');
 
 export default async function ProcessPage() {
-  const documents = await getDocuments();
+  const [page, documents] = await Promise.all([getPage('process-page'), getDocuments()]);
+  // The contract CTA is "Tải báo cáo mẫu": offered only for an approved document that is actually titled as a report.
+  const sampleReport = documents.find((d) => /báo cáo/i.test(d.title));
   return (
-    <SingletonPage slug="process-page" fallbackTitle="Quy trình & Minh bạch">
-      <section className="container section" aria-labelledby="docs-title">
-        <h2 id="docs-title">Tài liệu</h2>
-        {documents.length === 0 ? (
-          <Empty>Chưa có tài liệu được công bố.</Empty>
-        ) : (
-          <ul className="grid">
-            {documents.map((d) => (
-              <li key={d.id} className="card">
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem', color: 'var(--color-brand-secondary)' }} aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
-                  </svg>
-                </div>
-                <h3>
-                  {/* Hook is inert unless the opt-in analytics provider is mounted and consented; only the id is sent. */}
-                  <a href={d.url} data-analytics-event="document_download" data-link-location="documents" data-document-id={d.id} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-                    {d.title}
-                  </a>
-                </h3>
-                {d.description ? <p>{d.description}</p> : null}
-              </li>
-            ))}
-          </ul>
-        )}
+    <>
+      <PageHero overline="QUY TRÌNH & MINH BẠCH" title={page?.title ?? 'Quy trình & Minh bạch'} />
+      <section className="pg-prose">
+        <div className="container">
+          {page && hasRichText(page.body) ? (
+            <div className="prose">
+              <RichText data={page.body} />
+            </div>
+          ) : (
+            <Empty>Nội dung đang được cập nhật.</Empty>
+          )}
+        </div>
       </section>
-    </SingletonPage>
+      <section className="pg-section pale" id="tai-lieu" aria-labelledby="docs-title">
+        <div className="container">
+          <Overline>TÀI LIỆU</Overline>
+          <h2 className="pg-title" id="docs-title">
+            Tài liệu tải về
+          </h2>
+          {documents.length === 0 ? <Empty>Chưa có tài liệu được công bố.</Empty> : <DocumentGrid items={documents} />}
+        </div>
+      </section>
+      {sampleReport ? (
+        <CtaBand title="Xem báo cáo mẫu">
+          <a
+            className="button gold"
+            href={sampleReport.url}
+            data-analytics-event="document_download"
+            data-link-location="cta_band"
+            data-document-id={sampleReport.id}
+          >
+            Tải báo cáo mẫu
+          </a>
+        </CtaBand>
+      ) : null}
+    </>
   );
 }

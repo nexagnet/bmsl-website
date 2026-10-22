@@ -224,13 +224,36 @@ export const JobCards = ({ items }: { items: JobView[] }) => (
 export function Pager({ base, page, totalPages }: { base: string; page: number; totalPages: number }) {
   if (totalPages <= 1) return null;
   const href = (p: number) => (p <= 1 ? base : `${base}?page=${p}`);
+  // Window of page numbers around the current page, always including the first and last page.
+  const numbers = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+    (n) => n === 1 || n === totalPages || Math.abs(n - page) <= 1,
+  );
   return (
     <nav className="pager" aria-label="Phân trang">
-      {page > 1 ? <Link href={href(page - 1)}>← Trang trước</Link> : null}
-      <span>
-        Trang {page}/{totalPages}
-      </span>
-      {page < totalPages ? <Link href={href(page + 1)}>Trang sau →</Link> : null}
+      {page > 1 ? (
+        <Link href={href(page - 1)} aria-label="Trang trước">
+          ‹
+        </Link>
+      ) : null}
+      {numbers.map((n, i) => (
+        <span key={n} style={{ display: 'contents' }}>
+          {i > 0 && n - numbers[i - 1] > 1 ? <span aria-hidden="true">…</span> : null}
+          {n === page ? (
+            <span className="pager-page" aria-current="page">
+              {n}
+            </span>
+          ) : (
+            <Link href={href(n)} aria-label={`Trang ${n}`}>
+              {n}
+            </Link>
+          )}
+        </span>
+      ))}
+      {page < totalPages ? (
+        <Link href={href(page + 1)} aria-label="Trang sau">
+          ›
+        </Link>
+      ) : null}
     </nav>
   );
 }
