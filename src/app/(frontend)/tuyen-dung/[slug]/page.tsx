@@ -3,10 +3,10 @@ import { notFound } from 'next/navigation';
 import { Crumbs } from '../../../../components/blocks';
 import { JsonLd } from '../../../../components/JsonLd';
 import { RichText } from '../../../../components/RichText';
-import { getJob } from '../../../../lib/cms';
+import { getJob, getSiteSettings } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
 import { formatDate, hasRichText } from '../../../../lib/public-content';
-import { getSiteUrl } from '../../../../lib/site';
+import { getSiteUrl, ZALO_APPLY_LABEL } from '../../../../lib/site';
 import { breadcrumbLd, confirmedJobPostingLd } from '../../../../lib/structured-data';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function JobDetailPage({ params }: Props) {
   const { slug } = await params;
-  const job = await getJob(slug);
+  const [job, settings] = await Promise.all([getJob(slug), getSiteSettings()]);
   if (!job) notFound();
   const deadline = formatDate(job.deadline);
   return (
@@ -58,6 +58,14 @@ export default async function JobDetailPage({ params }: Props) {
                 <h2>Cách ứng tuyển</h2>
                 <p>{job.applyInstruction}</p>
               </section>
+            ) : null}
+            {/* Only a published, validated SiteSettings.zalo renders this; unconfigured means no link and no request. */}
+            {settings.zalo ? (
+              <p>
+                <a className="button" href={settings.zalo.href} rel="noopener" data-analytics-event="zalo_click" data-link-location="job_apply">
+                  {ZALO_APPLY_LABEL}
+                </a>
+              </p>
             ) : null}
           </div>
         </div>

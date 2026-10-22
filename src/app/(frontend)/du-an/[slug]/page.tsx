@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Crumbs, Img, SurveyCta } from '../../../../components/blocks';
+import { Crumbs, Img } from '../../../../components/blocks';
 import { JsonLd } from '../../../../components/JsonLd';
 import { getProject } from '../../../../lib/cms';
 import { buildMetadata } from '../../../../lib/metadata';
-import { getSiteUrl } from '../../../../lib/site';
+import { getSiteUrl, PROJECT_VISIT_LABEL, projectVisitHref } from '../../../../lib/site';
 import { breadcrumbLd } from '../../../../lib/structured-data';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -73,7 +73,16 @@ export default async function ProjectDetailPage({ params }: Props) {
           </section>
         ) : null}
       </article>
-      <SurveyCta />
+      <section className="survey-cta-section" aria-labelledby="visit-cta-title">
+        <div className="container">
+          <div className="survey-cta-card">
+            <h2 id="visit-cta-title">Tham quan dự án</h2>
+            <Link className="button" href={projectVisitHref(project.slug)}>
+              {PROJECT_VISIT_LABEL}
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
