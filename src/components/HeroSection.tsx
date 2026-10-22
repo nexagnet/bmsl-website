@@ -8,25 +8,6 @@ export interface HeroSectionProps {
   defaultBodyText?: string;
 }
 
-function Arrow() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <line x1="5" y1="12" x2="19" y2="12" />
-      <polyline points="12 5 19 12 12 19" />
-    </svg>
-  );
-}
-
 export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSectionProps) {
   // If CMS admin disabled the Hero section, preserve semantic H1 for page heading hierarchy
   if (hero && hero.enabled === false) {
@@ -48,64 +29,57 @@ export function HeroSection({ hero, defaultTitle, defaultBodyText }: HeroSection
     <section
       className={`hero-editorial ${layoutPreset === 'split' ? 'preset-split' : 'preset-editorial'} ${
         desktopImage ? 'has-media' : 'text-first'
-      }`}
+      } overlay-${overlayPreset}`}
       aria-label="Giới thiệu thương hiệu BMSL"
     >
+      {desktopImage ? (
+        <div className={`hero-media-wrapper focal-${focalPoint}`}>
+          <picture>
+            {mobileImage && mobileImage.url !== desktopImage.url ? (
+              <source media="(max-width: 48rem)" srcSet={mobileImage.url} />
+            ) : null}
+            {/* LCP candidate: eager + high priority; intrinsic size reserved to prevent CLS */}
+            <img
+              src={desktopImage.url}
+              alt={desktopImage.alt || 'Hình ảnh kiến trúc công trình'}
+              {...(desktopImage.width && desktopImage.height
+                ? { width: desktopImage.width, height: desktopImage.height }
+                : {})}
+              fetchPriority="high"
+              decoding="async"
+              className="hero-media-img"
+            />
+          </picture>
+          <div className="hero-media-overlay" aria-hidden="true" />
+        </div>
+      ) : null}
+
       <div className="container hero-editorial-inner">
         <div className="hero-editorial-content">
           {kicker ? (
-            <div className="hero-editorial-kicker">
-              <span className="kicker-line" aria-hidden="true" />
-              <span className="kicker-text">{kicker}</span>
-            </div>
+            <p className="overline hero-editorial-kicker">
+              <span className="overline-rule" aria-hidden="true" />
+              <span>{kicker}</span>
+            </p>
           ) : null}
 
           <h1 className="hero-editorial-headline">{headline}</h1>
-        </div>
 
-        <div className="hero-editorial-aside">
           {supportingText ? <p className="hero-editorial-description">{supportingText}</p> : null}
 
           <div className="hero-editorial-actions">
             <Link className="button button-primary hero-btn-primary" href={primaryCta.href}>
-              <span>{primaryCta.label}</span>
-              <Arrow />
+              {primaryCta.label}
             </Link>
 
             {secondaryCta ? (
               <Link className="button button-secondary hero-btn-secondary" href={secondaryCta.href}>
-                <span>{secondaryCta.label}</span>
-                <Arrow />
+                {secondaryCta.label}
               </Link>
             ) : null}
           </div>
         </div>
-
-        {desktopImage ? (
-          <div className="hero-editorial-media">
-            <div className={`hero-media-wrapper focal-${focalPoint} overlay-${overlayPreset}`}>
-              <picture>
-                {mobileImage && mobileImage.url !== desktopImage.url ? (
-                  <source media="(max-width: 48rem)" srcSet={mobileImage.url} />
-                ) : null}
-                {/* LCP candidate: eager + high priority; intrinsic size reserved to prevent CLS */}
-                <img
-                  src={desktopImage.url}
-                  alt={desktopImage.alt || 'Hình ảnh kiến trúc công trình'}
-                  {...(desktopImage.width && desktopImage.height
-                    ? { width: desktopImage.width, height: desktopImage.height }
-                    : {})}
-                  fetchPriority="high"
-                  decoding="async"
-                  className="hero-media-img"
-                />
-              </picture>
-              <div className="hero-media-overlay" aria-hidden="true" />
-            </div>
-          </div>
-        ) : null}
       </div>
-      <div className="hero-architectural-rule" aria-hidden="true" />
     </section>
   );
 }
