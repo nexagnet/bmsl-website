@@ -1577,7 +1577,8 @@ h3 {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bmsl-bronze-dark);
+  /* Darker than --bmsl-bronze-dark: that token is 4.45:1 on the cream hero, just under WCAG AA (4.5:1). */
+  color: #7d601c;
 }
 
 .overline::before {
@@ -1736,7 +1737,7 @@ h3 {
   min-height: 2.75rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--bmsl-bronze-dark);
+  color: #7d601c;
   text-decoration: none;
 }
 
@@ -1845,7 +1846,7 @@ h3 {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--bmsl-bronze-dark) !important;
+  color: #7d601c !important;
 }
 
 .tile-meta {
