@@ -21,7 +21,7 @@ export const job = (name: string, over: Json = {}, runId = 900, attempt = 1, sha
   conclusion: 'success',
   steps: [
     step('Set up job'),
-    step(name === 'verify' ? 'Application verify scripts' : 'Required application integration suite'),
+    step(name === 'verify' ? 'Application verify scripts' : 'All integration shards must succeed'),
     step('Complete job'),
   ],
   ...over,

@@ -23,7 +23,7 @@ async function gate(mutate: Mutate = () => undefined, extraEnv: Record<string, s
 describe('CD gate: fixed trusted identity', () => {
   it('pins the repository, branch, workflow id/path and the two required jobs/steps', () => {
     expect(GATE).toMatchObject({ repository: 'nexagnet/bmsl-website', branch: 'main', workflowId: 375023465, workflowPath: '.github/workflows/ci.yml' });
-    expect(GATE.jobs).toEqual({ verify: 'Application verify scripts', integration: 'Required application integration suite' });
+    expect(GATE.jobs).toEqual({ verify: 'Application verify scripts', integration: 'All integration shards must succeed' });
   });
 });
 
@@ -117,7 +117,7 @@ describe('CD gate: fails closed', () => {
     ]), EXIT.FAIL],
     ['integration suite step skipped inside a successful job', (w) => void (w.jobs = (id, a) => [
       job('verify', {}, id, a),
-      job('integration', { steps: [step('Required application integration suite', 'skipped')] }, id, a),
+      job('integration', { steps: [step('All integration shards must succeed', 'skipped')] }, id, a),
     ]), EXIT.FAIL],
     ['required step missing from job', (w) => void (w.jobs = (id, a) => [job('verify', { steps: [step('Set up job')] }, id, a), job('integration', {}, id, a)]), EXIT.FAIL],
     ['job for another head_sha', (w) => void (w.jobs = (id, a) => [job('verify', {}, id, a, OTHER_SHA), job('integration', {}, id, a)]), EXIT.FAIL],
@@ -458,7 +458,7 @@ globalThis.fetch = async (url) => {
     const run = scenario === 'failed' ? { ...base, conclusion: 'failure' } : pending ? { ...base, status: 'in_progress', conclusion: null } : base;
     return json({ total_count: 1, workflow_runs: [run] });
   }
-  if (p.endsWith('/jobs')) return json({ total_count: 2, jobs: [mkJob('verify', 'Application verify scripts'), mkJob('integration', 'Required application integration suite')] });
+  if (p.endsWith('/jobs')) return json({ total_count: 2, jobs: [mkJob('verify', 'Application verify scripts'), mkJob('integration', 'All integration shards must succeed')] });
   if (p.endsWith('/runs/900')) return json(base);
   return json({}, 404);
 };
