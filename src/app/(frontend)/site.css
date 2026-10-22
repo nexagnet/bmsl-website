@@ -1422,61 +1422,85 @@ h3 {
   border-color: var(--bmsl-white);
 }
 
-/* Contact Form */
+/* Contact page (Figma "HiFi / 12 Liên hệ"): form card + info column; stacks below 64rem. */
+.contact-layout {
+  display: grid;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .contact-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 4rem;
+  }
+}
+
 .contact-form-container {
-  max-width: 42rem;
-  background: #ffffff;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 2rem 1.5rem;
-  box-shadow: var(--shadow-md);
+  background: var(--bmsl-white);
+  border: 1px solid var(--bmsl-line);
+  border-radius: var(--bmsl-radius);
+  padding: 1.5rem 1.25rem;
+  box-shadow: var(--shadow-card);
 }
 
 @media (min-width: 48rem) {
   .contact-form-container {
-    padding: 2.75rem 2.5rem;
+    padding: 2.5rem;
   }
 }
 
 .contact-form {
   display: grid;
-  gap: 1.35rem;
+  gap: 1.25rem;
   position: relative;
+}
+
+.contact-form-row {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 40rem) {
+  .contact-form-row {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .contact-form label {
   display: grid;
   gap: 0.4rem;
-  font-size: 0.925rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--bmsl-navy);
 }
 
 .contact-form input:not([type='checkbox']):not([type='radio']):not([type='submit']):not([type='button']),
 .contact-form select,
 .contact-form textarea {
   width: 100%;
+  min-height: 3rem;
   padding: 0.75rem 1rem;
-  border: 1.5px solid var(--color-border-strong);
-  border-radius: var(--radius);
+  border: 1.5px solid var(--bmsl-line);
+  border-radius: 10px;
   font-size: 1rem;
   font-family: inherit;
-  color: var(--color-text);
-  background-color: #ffffff;
+  color: var(--bmsl-text);
+  background-color: var(--bmsl-white);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .contact-form input:focus,
 .contact-form select:focus,
 .contact-form textarea:focus {
-  border-color: var(--color-brand-secondary);
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+  border-color: var(--bmsl-navy);
+  box-shadow: 0 0 0 3px rgba(15, 45, 99, 0.18);
   outline: none;
 }
 
 .contact-form select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235e6e87' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
@@ -1493,47 +1517,44 @@ h3 {
   align-items: flex-start;
   gap: 0.75rem;
   font-weight: 400;
-  font-size: 0.925rem;
-  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  color: var(--bmsl-muted);
   line-height: 1.5;
   cursor: pointer;
-  margin-top: 0.25rem;
 }
 
 .contact-form label.consent input[type='checkbox'] {
   width: 1.25rem;
   height: 1.25rem;
-  margin-top: 0.15rem;
+  margin-top: 0.1rem;
   flex-shrink: 0;
   cursor: pointer;
-  accent-color: var(--color-brand-secondary);
+  accent-color: var(--bmsl-navy);
 }
 
 .contact-form button[type='submit'] {
   width: 100%;
+  min-height: 3.25rem;
   padding: 0.85rem 1.5rem;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--color-brand-secondary) 0%, var(--color-brand-accent) 100%);
-  color: #ffffff;
-  font-size: 1.05rem;
-  font-weight: 700;
-  border: none;
-  box-shadow: 0 2px 6px rgba(30, 58, 138, 0.25);
+  border-radius: var(--bmsl-radius-pill);
+  background: var(--bmsl-navy);
+  color: var(--bmsl-white);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: 1.5px solid var(--bmsl-navy);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-top: 0.5rem;
+  transition: background-color 0.2s ease;
 }
 
 .contact-form button[type='submit']:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-secondary) 100%);
-  box-shadow: 0 4px 10px rgba(30, 58, 138, 0.35);
-  transform: translateY(-1px);
+  background: var(--bmsl-navy2);
+  border-color: var(--bmsl-navy2);
 }
 
 .contact-form button[type='submit']:disabled {
   opacity: 0.65;
   cursor: not-allowed;
-  transform: none;
 }
 
 .contact-form [aria-invalid='true'] {
@@ -1541,16 +1562,119 @@ h3 {
   background-color: var(--color-error-bg);
 }
 
-.contact-form [role='status'] {
-  margin: 0.5rem 0 0;
-  font-size: 0.95rem;
-  font-weight: 500;
+.contact-alert-slot {
+  outline: none;
+}
+
+.contact-alert-slot:empty {
+  display: none;
+}
+
+.contact-alert {
+  margin: 0;
+  padding: 0.85rem 1.15rem;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 0.9375rem;
   line-height: 1.5;
 }
 
-.contact-form [role='status']:not(:empty) {
-  padding: 0.85rem 1.15rem;
-  border-radius: var(--radius);
+.contact-alert p {
+  margin: 0.15rem 0 0;
+}
+
+.contact-alert.error {
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+}
+
+.contact-alert.success {
+  color: var(--color-success);
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+}
+
+.contact-info-list {
+  margin: 0;
+  padding: 0;
+}
+
+.contact-info-row {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--bmsl-line);
+}
+
+.contact-info-row:first-child {
+  padding-top: 0;
+}
+
+.contact-info-row dt {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bmsl-bronze-text);
+}
+
+.contact-info-row dd {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 1.0625rem;
+  color: var(--bmsl-navy);
+}
+
+.contact-info-row a {
+  color: var(--bmsl-navy);
+  font-weight: 600;
+}
+
+.contact-info-row .contact-map-link {
+  font-size: 0.875rem;
+}
+
+/* The hero reserves two lines for the title and the lead on phones, so a web-font swap (different wrapping) cannot
+   move the form below it (Lighthouse CLS budget). */
+@media (max-width: 47.99rem) {
+  .contact-hero h1 {
+    min-height: 2.5em;
+  }
+
+  .contact-hero .page-hero-lead {
+    min-height: 3.3em;
+  }
+}
+
+/* Mobile action bar (Figma "BMSL / Mobile action bar"): fixed to the bottom below 48rem, hidden above. */
+.mobile-action-bar {
+  display: none;
+}
+
+@media (max-width: 47.99rem) {
+  .mobile-action-bar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 40;
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    background: var(--bmsl-white);
+    border-top: 1px solid var(--bmsl-line);
+    box-shadow: 0 -6px 20px rgba(15, 46, 99, 0.1);
+  }
+
+  .mobile-action-bar .button {
+    flex: 1 1 0;
+    min-height: 3rem;
+    font-size: 0.9375rem;
+  }
+
+  /* Keep the last footer line clear of the fixed bar. */
+  body:has(.mobile-action-bar) .site-footer {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
 }
 
 /* Footer (Figma "BMSL / Footer") */

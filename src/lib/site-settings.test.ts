@@ -44,4 +44,16 @@ describe('published SiteSettings view', () => {
     expect(toSiteSettings({ ...pub }).hotline).toBeUndefined();
     expect(toSiteSettings({ ...pub, contact: { hotline: 'javascript:alert(1)', zalo: 'https://evil.example' } })).toEqual({});
   });
+
+  it('exposes email and a map link only from valid published values', () => {
+    const s = toSiteSettings({ ...pub, contact: { email: 'lienhe@example.com', address: '1 Đường A, Quận B' } });
+    expect(s.email).toEqual({ address: 'lienhe@example.com', href: 'mailto:lienhe@example.com' });
+    expect(s.address?.text).toBe('1 Đường A, Quận B');
+    expect(s.address?.mapHref).toBe('https://www.google.com/maps/search/?api=1&query=1%20%C4%90%C6%B0%E1%BB%9Dng%20A%2C%20Qu%E1%BA%ADn%20B');
+    expect(toSiteSettings({ ...pub }).email).toBeUndefined();
+    expect(toSiteSettings({ ...pub }).address).toBeUndefined();
+    for (const bad of ['not-an-email', 'a@b.c?bcc=x@y.z', 'a b@c.d', 'javascript:alert(1)'])
+      expect(toSiteSettings({ ...pub, contact: { email: bad } }).email, bad).toBeUndefined();
+    expect(toSiteSettings({ _status: 'draft', contact: { email: 'a@b.co', address: 'x' } })).toEqual({});
+  });
 });

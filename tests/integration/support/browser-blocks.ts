@@ -822,6 +822,11 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
             const problems = lighthouseFailures(measurement);
             report.lighthouse.push({ url: run.route, formFactor: run.formFactor, measurement, failures: problems });
             failures.push(...problems.map((p) => `${run.formFactor} ${run.route}: ${p}`));
+            if (problems.some((p) => p.startsWith('CLS'))) {
+              // Name the elements behind a CLS failure so a budget miss is diagnosable from the CI log alone.
+              const items = (lhr as unknown as { audits?: Record<string, { details?: { items?: { score?: number; node?: { selector?: string } }[] } }> }).audits?.['layout-shifts']?.details?.items ?? [];
+              failures.push(`${run.formFactor} ${run.route} layout shifts: ${JSON.stringify(items.slice(0, 8).map((i) => ({ score: i.score, node: i.node?.selector })))}`);
+            }
           }
         } finally {
           await browser.close().catch(() => undefined);

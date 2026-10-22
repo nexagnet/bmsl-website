@@ -18,6 +18,8 @@ export const parseVerificationToken = (v: unknown): string | undefined => {
   return s && VERIFICATION.test(s) ? s : undefined;
 };
 
+const EMAIL = /^[^\s@?&#<>"]+@[^\s@?&#<>"]+\.[^\s@?&#<>"]+$/;
+
 const digitsOfPhone = (v: unknown): string | undefined => {
   const s = text(v);
   const digits = s?.replace(/[\s.\-()]/g, '');
@@ -29,6 +31,8 @@ export type SiteSettingsView = {
   analytics?: { measurementId: string };
   hotline?: { label: string; href: string };
   zalo?: { href: string };
+  email?: { address: string; href: string };
+  address?: { text: string; mapHref: string };
   searchConsoleVerification?: string;
 };
 
@@ -42,11 +46,18 @@ export function toSiteSettings(d: unknown): SiteSettingsView {
   const measurementId = doc.analyticsEnabled === true ? parseGa4Id(doc.ga4Id) : undefined;
   const hotlineDigits = digitsOfPhone(contact.hotline);
   const zaloDigits = digitsOfPhone(contact.zalo);
+  const emailText = text(contact.email);
+  const addressText = text(contact.address);
   const hotlineLabel = text(contact.hotline);
   return {
     ...(measurementId ? { analytics: { measurementId } } : {}),
     ...(hotlineDigits && hotlineLabel ? { hotline: { label: hotlineLabel, href: `tel:${hotlineDigits}` } } : {}),
     ...(zaloDigits ? { zalo: { href: `https://zalo.me/${zaloDigits.replace(/^\+/, '')}` } } : {}),
+    ...(emailText && EMAIL.test(emailText) ? { email: { address: emailText, href: `mailto:${emailText}` } } : {}),
+    // A plain Google Maps search link, not an embed: no third-party frame or script loads, and the map opens only on request.
+    ...(addressText
+      ? { address: { text: addressText, mapHref: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}` } }
+      : {}),
     ...(parseVerificationToken(doc.searchConsoleVerification)
       ? { searchConsoleVerification: parseVerificationToken(doc.searchConsoleVerification) }
       : {}),
