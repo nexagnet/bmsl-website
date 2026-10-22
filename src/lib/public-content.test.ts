@@ -216,3 +216,24 @@ describe('sitemap entries', () => {
     expect(urls.some((u) => /\/(admin|api)(\/|$)/.test(u))).toBe(false);
   });
 });
+
+describe('optional service cover and project type', () => {
+  const svc = { ...pub, id: 1, name: 'Bảo vệ', slug: 'bao-ve' };
+  const jpg = { ...approved, mimeType: 'image/jpeg' };
+
+  it('shows a service cover only for an APPROVED raster image', () => {
+    expect(toService(svc)?.cover).toBeUndefined();
+    expect(toService({ ...svc, cover: 7 })?.cover).toBeUndefined();
+    expect(toService({ ...svc, cover: { ...jpg, rightsStatus: 'UNCONFIRMED' } })?.cover).toBeUndefined();
+    expect(toService({ ...svc, cover: { ...jpg, mimeType: 'application/pdf' } })?.cover).toBeUndefined();
+    expect(toService({ ...svc, cover: jpg })?.cover?.url).toBe(jpg.url);
+  });
+
+  it('adds a project type fact only when entered', () => {
+    const p = { ...pub, id: 1, name: 'P', slug: 'p', sourceStatus: 'CONFIRMED' };
+    expect(toProject(p)?.facts).toEqual([]);
+    expect(toProject({ ...p, projectType: '  ' })?.facts).toEqual([]);
+    expect(toProject({ ...p, projectType: 'Tự nhập' })?.facts).toEqual([{ label: 'Loại hình', value: 'Tự nhập' }]);
+    expect(toProject({ ...p, projectType: 'Tự nhập', sourceStatus: 'LEGACY-SOURCE' })).toBeUndefined();
+  });
+});
