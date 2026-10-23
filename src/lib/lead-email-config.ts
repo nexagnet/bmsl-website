@@ -25,7 +25,47 @@ type Env = Record<string, string | undefined>;
 /** Loopback hosts (a developer's Mailpit) may speak plain SMTP; anything else must negotiate TLS before sending PII. */
 export const isLoopbackHost = (host: string): boolean => LOOPBACK.has(host.toLowerCase());
 
-export function resolveLeadEmailConfig(env: Env = process.env): LeadEmailConfig {
+/**
+ * Values an ADMIN saved in the CMS (global `lead-email-settings`). Only meaningful while `enabled` is ticked; then each
+ * non-empty value overrides the matching environment variable and an empty one falls back to it. `passwordUnreadable`
+ * means a stored password exists but could not be decrypted (e.g. the encryption key changed): the feature stays OFF.
+ */
+export type LeadEmailCmsSettings = {
+  enabled?: boolean | null;
+  from?: string | null;
+  to?: string | null;
+  smtpHost?: string | null;
+  smtpPort?: number | null;
+  smtpSecure?: boolean | null;
+  smtpUser?: string | null;
+  smtpPassword?: string | null;
+  passwordUnreadable?: boolean;
+};
+
+const text = (value: string | null | undefined) => value?.trim() || undefined;
+
+/** Overlays the CMS values onto the environment; the result is an ordinary env map for the single validation path. */
+function overlayCms(env: Env, cms: LeadEmailCmsSettings | undefined): Env {
+  if (!cms?.enabled) return env;
+  return {
+    ...env,
+    [LEAD_EMAIL_FLAG]: 'true',
+    SMTP_HOST: text(cms.smtpHost) ?? env.SMTP_HOST,
+    SMTP_PORT: cms.smtpPort ? String(cms.smtpPort) : env.SMTP_PORT,
+    SMTP_SECURE: typeof cms.smtpSecure === 'boolean' ? String(cms.smtpSecure) : env.SMTP_SECURE,
+    SMTP_USER: text(cms.smtpUser) ?? env.SMTP_USER,
+    SMTP_PASS: cms.smtpPassword || env.SMTP_PASS,
+    LEAD_EMAIL_FROM: text(cms.from) ?? env.LEAD_EMAIL_FROM,
+    LEAD_EMAIL_TO: text(cms.to) ?? env.LEAD_EMAIL_TO,
+  };
+}
+
+export function resolveLeadEmailConfig(rawEnv: Env = process.env, cms?: LeadEmailCmsSettings): LeadEmailConfig {
+  const env = overlayCms(rawEnv, cms);
+  if (cms?.enabled && cms.passwordUnreadable) {
+    const rest = resolveLeadEmailConfig(env);
+    return { enabled: false, problems: [...(rest.enabled ? [] : rest.problems.filter((p) => p !== 'SMTP_PASS' && p !== 'SMTP_USER')), 'SMTP_PASS'] };
+  }
   if (env[LEAD_EMAIL_FLAG]?.trim().toLowerCase() !== 'true') return { enabled: false, problems: [LEAD_EMAIL_FLAG] };
 
   const problems: string[] = [];

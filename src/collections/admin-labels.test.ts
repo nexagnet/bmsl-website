@@ -5,7 +5,7 @@ import { ContactLeads } from './ContactLeads';
 import { MediaAssets } from './MediaAssets';
 import { Redirects } from './Redirects';
 import { Users } from './Users';
-import { AboutPage, ContactPage, HomePage, ProcessPage, SiteSettings } from '../globals';
+import { AboutPage, ContactPage, HomePage, ProcessPage, SiteSettings, LeadEmailSettings } from '../globals';
 
 // Admin UI i18n contract: Vietnamese display labels only; slugs and stored option values must not change.
 
@@ -37,13 +37,14 @@ describe('admin collection and global labels', () => {
     }
   });
 
-  it('names the 5 globals in Vietnamese and keeps their slugs', () => {
+  it('names the globals in Vietnamese and keeps their slugs', () => {
     const expected: Array<[GlobalConfig, string, string]> = [
       [HomePage, 'home-page', 'Trang chủ'],
       [AboutPage, 'about-page', 'Giới thiệu'],
       [ProcessPage, 'process-page', 'Quy trình và minh bạch'],
       [ContactPage, 'contact-page', 'Trang liên hệ'],
       [SiteSettings, 'site-settings', 'Cài đặt website'],
+      [LeadEmailSettings, 'lead-email-settings', 'Email báo yêu cầu liên hệ'],
     ];
     for (const [config, slug, label] of expected) {
       expect(config.slug).toBe(slug);

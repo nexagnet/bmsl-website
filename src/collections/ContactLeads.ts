@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { adminOnly, adminOnlyField, nobody } from '../access';
-import { resolveLeadEmailConfig } from '../lib/lead-email-config';
+import { loadLeadEmailConfig } from '../lib/lead-email-settings';
 import { NOTIFICATION_STATES, queueLeadNotification } from '../lib/lead-notification';
 
 export const REQUEST_TYPES = ['khao-sat', 'bao-gia', 'tham-quan', 'khac'] as const;
@@ -29,9 +29,9 @@ export const ContactLeads: CollectionConfig = {
     // Outbox (Issue #82): the notification intent is part of the lead row, decided at insert time. A lead that arrives
     // while e-mail is OFF is marked not_configured and is never sent retroactively.
     beforeChange: [
-      ({ data, operation }) => {
+      async ({ data, operation, req }) => {
         if (operation !== 'create') return data;
-        const state = resolveLeadEmailConfig().enabled ? 'pending' : 'not_configured';
+        const state = (await loadLeadEmailConfig(req.payload)).enabled ? 'pending' : 'not_configured';
         return { ...data, notification: { ...(data.notification ?? {}), state } };
       },
     ],

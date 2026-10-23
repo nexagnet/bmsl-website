@@ -8,6 +8,7 @@ import * as migration_20261022_095100_service_cover_project_type from './2026102
 import * as migration_20261022_101846_process_steps from './20261022_101846_process_steps';
 import * as migration_20261022_102156_about_blocks from './20261022_102156_about_blocks';
 import * as migration_20261022_104053_home_blocks_step_confirmed from './20261022_104053_home_blocks_step_confirmed';
+import * as migration_20261023_024353_lead_email_settings from './20261023_024353_lead_email_settings';
 
 export const migrations = [
   {
@@ -59,5 +60,10 @@ export const migrations = [
     up: migration_20261022_104053_home_blocks_step_confirmed.up,
     down: migration_20261022_104053_home_blocks_step_confirmed.down,
     name: '20261022_104053_home_blocks_step_confirmed',
+  },
+  {
+    up: migration_20261023_024353_lead_email_settings.up,
+    down: migration_20261023_024353_lead_email_settings.down,
+    name: '20261023_024353_lead_email_settings',
   },
 ];
