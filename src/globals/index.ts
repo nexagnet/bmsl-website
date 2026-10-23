@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload';
 import { adminOnly, isStaff } from '../access';
 import { BACKGROUND_PRESETS } from '../lib/backgrounds';
+import { HOME_SECTIONS } from '../lib/home-sections';
 import { adminSingletonAccess, drafts, seoField } from '../collections/shared';
 import { encryptSecret } from '../lib/secret-box';
 import { secretKeyMaterial } from '../lib/lead-email-settings';
@@ -37,13 +38,19 @@ const backgroundField = (name: string, label: string, description: string): Glob
   ],
 });
 
+// Sidebar groups of the globals, ordered by what an editor wants to change: page content, shared look, then contact and system.
+const GROUP_PAGES = '1. Trang website';
+const GROUP_LOOK = '2. Giao diện chung';
+const GROUP_SYSTEM = '3. Liên hệ và hệ thống';
+
 // Singletons. Block structure follows wireframe 05 §3 in later work; W1B keeps a rich-text body + SEO.
 // Provisional fail-closed default: only ADMIN writes these (not a BMSL business decision).
-const page = (slug: string, label: string): GlobalConfig => ({
+const page = (slug: string, label: string, description: string): GlobalConfig => ({
   slug,
   label,
   access: adminSingletonAccess,
   versions: drafts,
+  admin: { group: GROUP_PAGES, description },
   fields: [
     { name: 'title', type: 'text', label: 'Tiêu đề' },
     { name: 'body', type: 'richText', label: 'Nội dung' },
@@ -56,151 +63,201 @@ export const HomePage: GlobalConfig = {
   label: 'Trang chủ',
   access: adminSingletonAccess,
   versions: drafts,
+  admin: {
+    group: GROUP_PAGES,
+    description: 'Nội dung, bố cục các khối và nền các dải xanh của Trang chủ. Mỗi tab là một nhóm cài đặt.',
+  },
+  // Tabs only group the form; field names (and so the database columns) are unchanged.
   fields: [
-    { name: 'title', type: 'text', label: 'Tiêu đề' },
-    { name: 'body', type: 'richText', label: 'Nội dung' },
     {
-      name: 'hero',
-      type: 'group',
-      label: 'Cấu hình Hero Section',
-      admin: {
-        description: 'Quản trị nội dung và hình ảnh của Hero section trên Trang chủ (chỉ ADMIN có quyền sửa).',
-      },
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'enabled',
-          type: 'checkbox',
-          defaultValue: true,
-          label: 'Bật Hero Section',
-        },
-        {
-          name: 'kicker',
-          type: 'text',
-          label: 'Dòng Kicker / Eyebrow',
-          admin: {
-            placeholder: 'VẬN HÀNH BẤT ĐỘNG SẢN CHUẨN MỰC',
-            description: 'Dòng tiêu đề phụ nhỏ phía trên tiêu đề chính.',
-          },
-        },
-        {
-          name: 'headline',
-          type: 'text',
-          label: 'Tiêu đề chính (H1)',
-          admin: {
-            placeholder: 'Quản lý vận hành bất động sản chuyên nghiệp & minh bạch',
-            description: 'Để trống sẽ tự động dùng tiêu đề Trang chủ hoặc tên website.',
-          },
-        },
-        {
-          name: 'supportingText',
-          type: 'textarea',
-          label: 'Mô tả hỗ trợ',
-          admin: {
-            placeholder: 'Đồng hành cùng Ban Quản trị và Chủ đầu tư tối ưu hóa giá trị tài sản, kiến tạo không gian sống an toàn và bền vững.',
-            description: 'Đoạn văn ngắn làm rõ giá trị dịch vụ.',
-          },
-        },
-        {
-          name: 'primaryCtaText',
-          type: 'text',
-          label: 'Nút hành động chính (Nhãn)',
-          admin: { placeholder: 'Đặt lịch khảo sát' },
-        },
-        {
-          name: 'primaryCtaLink',
-          type: 'text',
-          label: 'Nút hành động chính (Đường dẫn)',
-          admin: { placeholder: '/lien-he?requestType=khao-sat' },
-        },
-        {
-          name: 'secondaryCtaText',
-          type: 'text',
-          label: 'Nút hành động phụ (Nhãn)',
-          admin: { placeholder: 'Xem dịch vụ' },
-        },
-        {
-          name: 'secondaryCtaLink',
-          type: 'text',
-          label: 'Nút hành động phụ (Đường dẫn)',
-          admin: { placeholder: '/dich-vu' },
-        },
-        {
-          name: 'desktopImage',
-          type: 'upload',
-          relationTo: 'media-assets',
-          label: 'Ảnh kiến trúc Desktop',
-          admin: {
-            description: 'Chỉ ảnh có rightsStatus=APPROVED mới hiển thị công khai. Nếu chưa duyệt sẽ dùng fallback.',
-          },
-        },
-        {
-          name: 'mobileImage',
-          type: 'upload',
-          relationTo: 'media-assets',
-          label: 'Ảnh kiến trúc Mobile (tùy chọn)',
-          admin: {
-            description: 'Tùy chọn ảnh crop riêng cho màn hình di động. Cần rightsStatus=APPROVED.',
-          },
-        },
-        {
-          name: 'focalPoint',
-          type: 'select',
-          label: 'Điểm lấy nét ảnh (Focal Point)',
-          defaultValue: 'center',
-          options: [
-            { label: 'Căn giữa (Center)', value: 'center' },
-            { label: 'Lấy phần trên (Top)', value: 'top' },
-            { label: 'Lấy phần dưới (Bottom)', value: 'bottom' },
+          label: 'Hero',
+          fields: [
+            {
+              name: 'hero',
+              type: 'group',
+              label: 'Cấu hình Hero Section',
+              admin: {
+                description: 'Quản trị nội dung và hình ảnh của Hero section trên Trang chủ (chỉ ADMIN có quyền sửa).',
+              },
+              fields: [
+                {
+                  name: 'enabled',
+                  type: 'checkbox',
+                  defaultValue: true,
+                  label: 'Bật Hero Section',
+                },
+                {
+                  name: 'kicker',
+                  type: 'text',
+                  label: 'Dòng Kicker / Eyebrow',
+                  admin: {
+                    placeholder: 'VẬN HÀNH BẤT ĐỘNG SẢN CHUẨN MỰC',
+                    description: 'Dòng tiêu đề phụ nhỏ phía trên tiêu đề chính.',
+                  },
+                },
+                {
+                  name: 'headline',
+                  type: 'text',
+                  label: 'Tiêu đề chính (H1)',
+                  admin: {
+                    placeholder: 'Quản lý vận hành bất động sản chuyên nghiệp & minh bạch',
+                    description: 'Để trống sẽ tự động dùng tiêu đề Trang chủ hoặc tên website.',
+                  },
+                },
+                {
+                  name: 'supportingText',
+                  type: 'textarea',
+                  label: 'Mô tả hỗ trợ',
+                  admin: {
+                    placeholder: 'Đồng hành cùng Ban Quản trị và Chủ đầu tư tối ưu hóa giá trị tài sản, kiến tạo không gian sống an toàn và bền vững.',
+                    description: 'Đoạn văn ngắn làm rõ giá trị dịch vụ.',
+                  },
+                },
+                {
+                  name: 'primaryCtaText',
+                  type: 'text',
+                  label: 'Nút hành động chính (Nhãn)',
+                  admin: { placeholder: 'Đặt lịch khảo sát' },
+                },
+                {
+                  name: 'primaryCtaLink',
+                  type: 'text',
+                  label: 'Nút hành động chính (Đường dẫn)',
+                  admin: { placeholder: '/lien-he?requestType=khao-sat' },
+                },
+                {
+                  name: 'secondaryCtaText',
+                  type: 'text',
+                  label: 'Nút hành động phụ (Nhãn)',
+                  admin: { placeholder: 'Xem dịch vụ' },
+                },
+                {
+                  name: 'secondaryCtaLink',
+                  type: 'text',
+                  label: 'Nút hành động phụ (Đường dẫn)',
+                  admin: { placeholder: '/dich-vu' },
+                },
+                {
+                  name: 'desktopImage',
+                  type: 'upload',
+                  relationTo: 'media-assets',
+                  label: 'Ảnh kiến trúc Desktop',
+                  admin: {
+                    description: 'Chỉ ảnh có rightsStatus=APPROVED mới hiển thị công khai. Nếu chưa duyệt sẽ dùng fallback.',
+                  },
+                },
+                {
+                  name: 'mobileImage',
+                  type: 'upload',
+                  relationTo: 'media-assets',
+                  label: 'Ảnh kiến trúc Mobile (tùy chọn)',
+                  admin: {
+                    description: 'Tùy chọn ảnh crop riêng cho màn hình di động. Cần rightsStatus=APPROVED.',
+                  },
+                },
+                {
+                  name: 'focalPoint',
+                  type: 'select',
+                  label: 'Điểm lấy nét ảnh (Focal Point)',
+                  defaultValue: 'center',
+                  options: [
+                    { label: 'Căn giữa (Center)', value: 'center' },
+                    { label: 'Lấy phần trên (Top)', value: 'top' },
+                    { label: 'Lấy phần dưới (Bottom)', value: 'bottom' },
+                  ],
+                },
+                {
+                  name: 'overlayPreset',
+                  type: 'select',
+                  label: 'Mức độ phủ tương phản (Overlay)',
+                  defaultValue: 'soft',
+                  options: [
+                    { label: 'Phủ nhẹ (Soft)', value: 'soft' },
+                    { label: 'Phủ đậm (Strong)', value: 'strong' },
+                    { label: 'Không phủ (None)', value: 'none' },
+                  ],
+                },
+                {
+                  name: 'layoutPreset',
+                  type: 'select',
+                  label: 'Bố cục (Layout Preset)',
+                  defaultValue: 'editorial',
+                  options: [
+                    { label: 'Architectural Editorial (Mặc định)', value: 'editorial' },
+                    { label: 'Quiet Split (Cân xứng)', value: 'split' },
+                  ],
+                },
+              ],
+            },
           ],
         },
         {
-          name: 'overlayPreset',
-          type: 'select',
-          label: 'Mức độ phủ tương phản (Overlay)',
-          defaultValue: 'soft',
-          options: [
-            { label: 'Phủ nhẹ (Soft)', value: 'soft' },
-            { label: 'Phủ đậm (Strong)', value: 'strong' },
-            { label: 'Không phủ (None)', value: 'none' },
+          label: 'Nội dung trang',
+          fields: [
+            { name: 'title', type: 'text', label: 'Tiêu đề' },
+            { name: 'body', type: 'richText', label: 'Nội dung' },
+            {
+              name: 'stats',
+              type: 'array',
+              label: 'Số liệu năng lực',
+              labels: { singular: 'Số liệu', plural: 'Số liệu' },
+              admin: { description: 'Tùy chọn. Để trống cho tới khi BMSL cung cấp số liệu đã duyệt kèm nguồn; không điền số liệu suy đoán.' },
+              fields: [
+                { name: 'label', type: 'text', required: true, label: 'Nhãn' },
+                { name: 'value', type: 'text', required: true, label: 'Giá trị' },
+                { name: 'source', type: 'text', label: 'Nguồn (ghi chú nội bộ)', access: { read: ({ req }) => isStaff(req.user) } },
+                confirmedField,
+              ],
+            },
+            {
+              name: 'featuredProjects',
+              type: 'relationship',
+              relationTo: 'projects',
+              hasMany: true,
+              label: 'Dự án tiêu biểu',
+              admin: {
+                description: 'Tùy chọn, hiển thị theo thứ tự chọn. Chỉ dự án đã xuất bản và CONFIRMED mới hiện công khai; để trống sẽ dùng danh sách mặc định.',
+              },
+            },
           ],
         },
         {
-          name: 'layoutPreset',
-          type: 'select',
-          label: 'Bố cục (Layout Preset)',
-          defaultValue: 'editorial',
-          options: [
-            { label: 'Architectural Editorial (Mặc định)', value: 'editorial' },
-            { label: 'Quiet Split (Cân xứng)', value: 'split' },
+          label: 'Bố cục các khối',
+          description: 'Thứ tự, bật/tắt và số lượng các khối giữa Trang chủ (sau Hero). Để trống danh sách sẽ dùng thứ tự mặc định: Số liệu, Dịch vụ, Dự án, Quy trình & Minh bạch, Tin tức.',
+          fields: [
+            {
+              name: 'sections',
+              type: 'array',
+              label: 'Thứ tự các khối',
+              labels: { singular: 'Khối', plural: 'Khối' },
+              admin: { description: 'Kéo để đổi vị trí. Khối không có trong danh sách (khi danh sách không trống) sẽ không hiển thị. Hero luôn ở đầu, dải "Liên hệ khảo sát thực tế" luôn ở cuối.' },
+              fields: [
+                { name: 'section', type: 'select', required: true, label: 'Khối', options: HOME_SECTIONS.map((x) => ({ label: x.label, value: x.value })) },
+                { name: 'visible', type: 'checkbox', defaultValue: true, label: 'Hiển thị' },
+              ],
+            },
+            { name: 'projectsLimit', type: 'number', min: 1, max: 12, defaultValue: 6, label: 'Số dự án hiển thị', admin: { description: 'Chỉ áp dụng khi không chọn "Dự án tiêu biểu" thủ công (tab Nội dung trang).' } },
+            { name: 'articlesLimit', type: 'number', min: 1, max: 12, defaultValue: 3, label: 'Số bài viết hiển thị' },
           ],
         },
+        {
+          label: 'Nền các dải xanh',
+          description: 'Mọi dải nền navy của website cấu hình tại đây.',
+          fields: [
+            backgroundField('processBand', 'Nền khối "Quy trình & Minh bạch"', 'Dải navy "Quy trình & Minh bạch" trên Trang chủ.'),
+            backgroundField(
+              'ctaBand',
+              'Nền dải "Liên hệ khảo sát thực tế"',
+              'Dải kêu gọi hành động (CTA) ở cuối Trang chủ; cũng áp dụng cho dải CTA cùng kiểu ở các trang Dịch vụ, Dự án và Bài viết. Nền chân trang cấu hình ở mục "Chân trang".',
+            ),
+          ],
+        },
+        { label: 'SEO', fields: [seoField] },
       ],
     },
-    backgroundField('processBand', 'Nền khối "Quy trình & Minh bạch"', 'Nền của khối Quy trình & Minh bạch trên Trang chủ.'),
-    {
-      name: 'stats',
-      type: 'array',
-      label: 'Số liệu năng lực',
-      labels: { singular: 'Số liệu', plural: 'Số liệu' },
-      admin: { description: 'Tùy chọn. Để trống cho tới khi BMSL cung cấp số liệu đã duyệt kèm nguồn; không điền số liệu suy đoán.' },
-      fields: [
-        { name: 'label', type: 'text', required: true, label: 'Nhãn' },
-        { name: 'value', type: 'text', required: true, label: 'Giá trị' },
-        { name: 'source', type: 'text', label: 'Nguồn (ghi chú nội bộ)', access: { read: ({ req }) => isStaff(req.user) } },
-        confirmedField,
-      ],
-    },
-    {
-      name: 'featuredProjects',
-      type: 'relationship',
-      relationTo: 'projects',
-      hasMany: true,
-      label: 'Dự án tiêu biểu',
-      admin: {
-        description: 'Tùy chọn, hiển thị theo thứ tự chọn. Chỉ dự án đã xuất bản và CONFIRMED mới hiện công khai; để trống sẽ dùng danh sách mặc định.',
-      },
-    },
-    seoField,
   ],
 };
 // Optional structured blocks of the About page. All empty until BMSL supplies approved content (UNCONFIRMED);
@@ -210,6 +267,7 @@ export const AboutPage: GlobalConfig = {
   label: 'Giới thiệu',
   access: adminSingletonAccess,
   versions: drafts,
+  admin: { group: GROUP_PAGES, description: 'Trang Giới thiệu: nội dung chung, lịch sử, đội ngũ, năng lực và giá trị. Mục chỉ hiện công khai khi đã tích "Đã được BMSL xác nhận".' },
   fields: [
     { name: 'title', type: 'text', label: 'Tiêu đề' },
     { name: 'body', type: 'richText', label: 'Nội dung' },
@@ -275,6 +333,7 @@ export const ProcessPage: GlobalConfig = {
   label: 'Quy trình và minh bạch',
   access: adminSingletonAccess,
   versions: drafts,
+  admin: { group: GROUP_PAGES, description: 'Trang Quy trình và minh bạch: nội dung chung và các bước quy trình. Nền dải cùng tên trên Trang chủ chỉnh ở Trang chủ > Nền các dải xanh.' },
   fields: [
     { name: 'title', type: 'text', label: 'Tiêu đề' },
     { name: 'body', type: 'richText', label: 'Nội dung' },
@@ -303,8 +362,9 @@ export const SiteFooter: GlobalConfig = {
   access: adminSingletonAccess,
   versions: drafts,
   admin: {
+    group: GROUP_LOOK,
     description:
-      'Nền, giới thiệu ngắn, liên kết thêm và bản quyền của chân trang. Hotline, Zalo, email, địa chỉ lấy từ "Cài đặt website" (chỉ hiện khi đã nhập).',
+      'Toàn bộ phần chân trang: nền, giới thiệu ngắn, liên kết thêm, bản quyền. Hotline, Zalo, email, địa chỉ và mạng xã hội hiển thị ở chân trang được nhập một lần tại "Cài đặt website" (dùng chung cho trang Liên hệ), chỉ hiện khi đã nhập.',
   },
   fields: [
     backgroundField('background', 'Nền chân trang', 'Chọn mẫu nền có sẵn hoặc ảnh đã duyệt; để mặc định sẽ dùng màu navy.'),
@@ -332,7 +392,7 @@ export const SiteFooter: GlobalConfig = {
     { name: 'copyright', type: 'text', label: 'Dòng bản quyền', admin: { description: 'Để trống sẽ dùng "© BMSL".' } },
   ],
 };
-export const ContactPage = page('contact-page', 'Trang liên hệ');
+export const ContactPage = page('contact-page', 'Trang liên hệ', 'Tiêu đề và nội dung giới thiệu của trang Liên hệ. Hotline, Zalo, email, địa chỉ lấy từ "Cài đặt website"; email nhận yêu cầu cấu hình ở "Email báo yêu cầu liên hệ".');
 
 // Public contact details are UNCONFIRMED (CONTACT_DETAILS_REQUIRES_BMSL_CONFIRMATION):
 // no defaults are provided and nothing is published until BMSL confirms.
@@ -342,52 +402,68 @@ export const SiteSettings: GlobalConfig = {
   access: adminSingletonAccess,
   versions: drafts,
   admin: {
-    description: 'Thông tin liên hệ chính thức là UNCONFIRMED: để trống cho tới khi BMSL xác nhận.',
+    group: GROUP_SYSTEM,
+    description: 'Thông tin liên hệ chính thức là UNCONFIRMED: để trống cho tới khi BMSL xác nhận. Chân trang không có ô nhập riêng cho các thông tin này.',
   },
   fields: [
     {
-      name: 'contact',
-      type: 'group',
-      label: 'Thông tin liên hệ',
-      admin: { description: 'UNCONFIRMED: không điền giá trị suy đoán; chỉ nhập khi BMSL xác nhận.' },
-      fields: [
-        { name: 'address', type: 'text', label: 'Địa chỉ' },
-        { name: 'email', type: 'email', label: 'Email' },
-        { name: 'hotline', type: 'text', label: 'Hotline' },
-        { name: 'zalo', type: 'text', label: 'Zalo' },
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Liên hệ và mạng xã hội',
+          fields: [
+            {
+              name: 'contact',
+              type: 'group',
+              label: 'Thông tin liên hệ (hiện ở chân trang và trang Liên hệ)',
+              admin: { description: 'UNCONFIRMED: không điền giá trị suy đoán; chỉ nhập khi BMSL xác nhận.' },
+              fields: [
+                { name: 'address', type: 'text', label: 'Địa chỉ' },
+                { name: 'email', type: 'email', label: 'Email' },
+                { name: 'hotline', type: 'text', label: 'Hotline' },
+                { name: 'zalo', type: 'text', label: 'Zalo' },
+              ],
+            },
+            {
+              name: 'socialLinks',
+              type: 'array',
+              label: 'Liên kết mạng xã hội (hiện ở chân trang)',
+              labels: { singular: 'Liên kết', plural: 'Liên kết' },
+              fields: [
+                { name: 'label', type: 'text', required: true, label: 'Tên hiển thị' },
+                { name: 'url', type: 'text', required: true, label: 'Địa chỉ liên kết (URL)' },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Phân tích và Search Console',
+          fields: [
+            {
+              name: 'ga4Id',
+              type: 'text',
+              label: 'Mã GA4',
+              admin: { description: 'Mã GA4 dạng G-XXXXXXXXXX do BMSL cấp. Chỉ có hiệu lực khi bật "analyticsEnabled".' },
+            },
+            {
+              name: 'analyticsEnabled',
+              type: 'checkbox',
+              defaultValue: false,
+              label: 'Bật phân tích truy cập',
+              admin: {
+                description:
+                  'Mặc định tắt. Chỉ bật khi BMSL đã quyết định chính sách đồng ý cookie (OWNER-DECISION). Ngay cả khi bật, không có dữ liệu nào được gửi trước khi người dùng đồng ý.',
+              },
+            },
+            {
+              name: 'searchConsoleVerification',
+              type: 'text',
+              label: 'Mã xác minh Search Console',
+              admin: { description: 'Giá trị content của thẻ meta google-site-verification do Google Search Console cấp.' },
+            },
+          ],
+        },
       ],
-    },
-    {
-      name: 'socialLinks',
-      type: 'array',
-      label: 'Liên kết mạng xã hội',
-      labels: { singular: 'Liên kết', plural: 'Liên kết' },
-      fields: [
-        { name: 'label', type: 'text', required: true, label: 'Tên hiển thị' },
-        { name: 'url', type: 'text', required: true, label: 'Địa chỉ liên kết (URL)' },
-      ],
-    },
-    {
-      name: 'ga4Id',
-      type: 'text',
-      label: 'Mã GA4',
-      admin: { description: 'Mã GA4 dạng G-XXXXXXXXXX do BMSL cấp. Chỉ có hiệu lực khi bật "analyticsEnabled".' },
-    },
-    {
-      name: 'analyticsEnabled',
-      type: 'checkbox',
-      defaultValue: false,
-      label: 'Bật phân tích truy cập',
-      admin: {
-        description:
-          'Mặc định tắt. Chỉ bật khi BMSL đã quyết định chính sách đồng ý cookie (OWNER-DECISION). Ngay cả khi bật, không có dữ liệu nào được gửi trước khi người dùng đồng ý.',
-      },
-    },
-    {
-      name: 'searchConsoleVerification',
-      type: 'text',
-      label: 'Mã xác minh Search Console',
-      admin: { description: 'Giá trị content của thẻ meta google-site-verification do Google Search Console cấp.' },
     },
   ],
 };
@@ -400,8 +476,9 @@ export const LeadEmailSettings: GlobalConfig = {
   label: 'Email báo yêu cầu liên hệ',
   access: { read: adminOnly, update: adminOnly },
   admin: {
+    group: GROUP_SYSTEM,
     description:
-      'Cấu hình gửi email báo khi có yêu cầu liên hệ mới. Chỉ quản trị viên. Ô nào để trống sẽ dùng biến môi trường tương ứng (SMTP_HOST, SMTP_PORT, LEAD_EMAIL_FROM, LEAD_EMAIL_TO, SMTP_USER, SMTP_PASS). Chỉ lưu thông tin BMSL đã xác nhận.',
+      'Nơi nhận và cách gửi email báo khi có yêu cầu liên hệ mới. Chỉ quản trị viên. Ô nào để trống sẽ dùng biến môi trường tương ứng (SMTP_HOST, SMTP_PORT, LEAD_EMAIL_FROM, LEAD_EMAIL_TO, SMTP_USER, SMTP_PASS). Chỉ lưu thông tin BMSL đã xác nhận.',
   },
   hooks: {
     beforeChange: [
