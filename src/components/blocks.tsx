@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { ArticleView, JobView, ProjectView, PublicImage, ServiceView } from '../lib/public-content';
 import { formatDate } from '../lib/public-content';
 import { backgroundProps } from '../lib/backgrounds';
-import { getPage } from '../lib/cms';
+import { getSiteCtaBackground } from '../lib/cms';
 import { SURVEY_CTA } from '../lib/site';
 
 export const Empty = ({ children }: { children: ReactNode }) => (
@@ -76,11 +76,11 @@ export interface SurveyCtaProps {
   cta?: { label: string; href: string };
 }
 
-/** Navy CTA band; its background (preset or approved image) is set once in the CMS under Trang chủ > Nền các dải xanh. */
+/** Navy CTA band; its background (preset or approved image) is set once in the CMS under Thành phần dùng chung > Dải kêu gọi hành động. */
 export async function SurveyCta({ overline = 'Kết nối cùng BMSL', title = 'Liên hệ khảo sát', description, cta = SURVEY_CTA }: SurveyCtaProps) {
-  const home = await getPage('home-page');
+  const background = await getSiteCtaBackground();
   return (
-    <section {...backgroundProps(home?.ctaBand, 'survey-cta-section')} aria-labelledby="cta-title">
+    <section {...backgroundProps(background, 'survey-cta-section')} aria-labelledby="cta-title">
       <div className="container">
         <div className="survey-cta-card">
           <Overline tone="gold">{overline}</Overline>

@@ -18,7 +18,8 @@ import {
   toService,
   fetchAllPages,
 } from './public-content';
-import { type SiteFooterView, toSiteFooter } from './site-footer';
+import type { SectionBackground } from './backgrounds';
+import { type SiteFooterView, toSiteCtaBackground, toSiteFooter } from './site-footer';
 import { type SiteSettingsView, toSiteSettings } from './site-settings';
 
 // Public read path. Every query runs with overrideAccess:false and no user, so collection access
@@ -148,6 +149,10 @@ export const getSiteSettings = (): Promise<SiteSettingsView> =>
 /** Published SiteFooter only; anything unpublished or invalid yields the default (plain navy, no extra text). */
 export const getSiteFooter = (): Promise<SiteFooterView> =>
   safe(toSiteFooter(undefined), async () => toSiteFooter(await (await cms()).findGlobal({ slug: 'site-footer', ...PUBLIC })));
+
+/** Published SiteCta only; anything unpublished or invalid yields plain navy. */
+export const getSiteCtaBackground = (): Promise<SectionBackground> =>
+  safe(toSiteCtaBackground(undefined), async () => toSiteCtaBackground(await (await cms()).findGlobal({ slug: 'site-cta', ...PUBLIC })));
 
 export const SITEMAP_PAGE_SIZE = 200;
 

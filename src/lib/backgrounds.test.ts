@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { backgroundProps } from './backgrounds';
 import { toSectionBackground } from './public-content';
-import { toSiteFooter } from './site-footer';
+import { toSiteCtaBackground, toSiteFooter } from './site-footer';
 
 const media = (rights: string) => ({
   id: 7, alt: 'Nền', url: '/api/media-assets/file/nen.jpg', mimeType: 'image/jpeg', rightsStatus: rights,
@@ -46,5 +46,13 @@ describe('site footer view', () => {
     expect(v.intro).toBeUndefined();
     expect(v.links).toEqual([{ label: 'A', href: '/chinh-sach' }]);
     expect(v.copyright).toBe('© BMSL 2026');
+  });
+});
+
+describe('shared CTA band background', () => {
+  it('is plain navy unless a published setting says otherwise', () => {
+    expect(toSiteCtaBackground(undefined).preset).toBe('navy');
+    expect(toSiteCtaBackground({ _status: 'draft', background: { preset: 'grid' } }).preset).toBe('navy');
+    expect(toSiteCtaBackground({ _status: 'published', background: { preset: 'grid' } }).preset).toBe('grid');
   });
 });

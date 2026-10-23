@@ -447,7 +447,6 @@ export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: H
   stats: StatView[];
   featuredProjects: ProjectView[];
   processBand: SectionBackground;
-  ctaBand: SectionBackground;
   layout: HomeLayout;
 };
 
@@ -466,7 +465,6 @@ export function toPage(d: unknown): PageView | null {
     values: toValues(d.values),
     stats: toStats(d.stats),
     processBand: toSectionBackground(d.processBand),
-    ctaBand: toSectionBackground(d.ctaBand),
     layout: toHomeLayout(d),
     featuredProjects: (Array.isArray(d.featuredProjects) ? d.featuredProjects : [])
       .map(toProject)

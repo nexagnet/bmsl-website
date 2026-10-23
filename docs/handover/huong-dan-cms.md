@@ -181,8 +181,10 @@ Users không thay đổi: không có tài khoản ADMIN/EDITOR bổ sung.
 
 Bộ mẫu chỉ minh hoạ thao tác CMS trên bản chạy đã chụp lại. Nó **không** chứng minh: website công khai hiển thị nội dung thật; BMSL đã được đào tạo hoặc ký nhận; ADMIN đã được bàn giao chính thức; chuyển hướng trong bảng Redirects có hiệu lực; form liên hệ công khai hoặc thông báo email/Zalo hoạt động; chính sách lưu lead hay quyền EDITOR xem lead đã chốt. Tài liệu không kèm ảnh chụp màn hình và không có xác nhận của khách hàng.
 
-## Bố cục cài đặt, chân trang và nền các dải xanh
+## Bố cục cài đặt trong CMS
 
-- **Thanh bên** chia ba nhóm: *1. Trang website* (Trang chủ, Giới thiệu, Quy trình, Liên hệ), *2. Giao diện chung* (Chân trang), *3. Liên hệ và hệ thống* (Cài đặt website, Email báo yêu cầu liên hệ).
-- **Chân trang**: nền (5 mẫu có sẵn hoặc ảnh đã duyệt APPROVED), giới thiệu ngắn, liên kết thêm, bản quyền. Hotline, Zalo, email, địa chỉ, mạng xã hội chỉ nhập một lần ở "Cài đặt website", tab "Liên hệ và mạng xã hội" (dùng chung cho chân trang và trang Liên hệ).
-- **Trang chủ** có các tab: Hero; Nội dung trang (tiêu đề, số liệu, dự án tiêu biểu); **Bố cục các khối** (thứ tự và bật/tắt Số liệu, Dịch vụ, Dự án, Quy trình & Minh bạch, Tin tức; số dự án và số bài viết hiển thị; để trống danh sách thì giữ thứ tự mặc định); **Nền các dải xanh** (dải "Quy trình & Minh bạch" và dải "Liên hệ khảo sát thực tế", dải sau áp dụng cho mọi dải CTA cùng kiểu); SEO. Mặc định là navy phẳng.
+Mỗi cấu hình nằm đúng một chỗ, theo đối tượng của nó. Thanh bên chia ba nhóm:
+
+- **1. Trang website** (chỉ nội dung riêng của từng trang): Trang chủ (tab Hero, Các khối, SEO), Giới thiệu (Nội dung, Lịch sử và đội ngũ, Năng lực và giá trị, SEO), Quy trình và minh bạch (Nội dung, Các bước, SEO), Trang liên hệ (Nội dung, SEO). Tab "Các khối" của Trang chủ gồm thứ tự và bật/tắt khối, số liệu, dự án tiêu biểu và số dự án, nền khối "Quy trình & Minh bạch", số bài viết; để trống danh sách thứ tự thì giữ thứ tự mặc định.
+- **2. Thành phần dùng chung**: Chân trang (tab Nền, Nội dung), Dải kêu gọi hành động (CTA) "Liên hệ khảo sát thực tế" dùng cho Trang chủ, Dịch vụ, Dự án, Bài viết. Mặc định là navy phẳng; nền chọn từ 5 mẫu có sẵn hoặc ảnh đã duyệt APPROVED.
+- **3. Liên hệ và hệ thống** (ADMIN): Cài đặt website (tab Liên hệ, Mạng xã hội, Theo dõi và SEO) và Email báo yêu cầu liên hệ (tab Người nhận, Máy chủ gửi thư). Hotline, Zalo, email, địa chỉ, mạng xã hội chỉ nhập ở Cài đặt website và dùng chung cho chân trang và trang Liên hệ.

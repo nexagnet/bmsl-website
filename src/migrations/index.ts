@@ -12,6 +12,7 @@ import * as migration_20261023_030000_job_employment_fields from './20261023_030
 import * as migration_20261023_030438_lead_email_settings from './20261023_030438_lead_email_settings';
 import * as migration_20261023_031732_footer_and_section_backgrounds from './20261023_031732_footer_and_section_backgrounds';
 import * as migration_20261023_034402_home_layout_and_cta_band from './20261023_034402_home_layout_and_cta_band';
+import * as migration_20261023_041119_site_cta_global from './20261023_041119_site_cta_global';
 
 export const migrations = [
   {
@@ -83,5 +84,10 @@ export const migrations = [
     up: migration_20261023_034402_home_layout_and_cta_band.up,
     down: migration_20261023_034402_home_layout_and_cta_band.down,
     name: '20261023_034402_home_layout_and_cta_band',
+  },
+  {
+    up: migration_20261023_041119_site_cta_global.up,
+    down: migration_20261023_041119_site_cta_global.down,
+    name: '20261023_041119_site_cta_global',
   },
 ];

@@ -28,9 +28,8 @@ describe('home layout', () => {
     expect(l.articlesLimit).toBe(3);
   });
 
-  it('is exposed on the published home page together with the CTA band', () => {
-    const p = toPage({ _status: 'published', ctaBand: { preset: 'glow' }, sections: [{ section: 'process', visible: true }] });
-    expect(p?.ctaBand.preset).toBe('glow');
+  it('is exposed on the published home page', () => {
+    const p = toPage({ _status: 'published', sections: [{ section: 'process', visible: true }] });
     expect(p?.layout.order).toEqual(['process']);
   });
 });
