@@ -3058,6 +3058,25 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'draft'"
+        },
+        "employment_type": {
+          "name": "employment_type",
+          "type": "enum_job_postings_employment_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "headcount": {
+          "name": "headcount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "experience": {
+          "name": "experience",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -3328,6 +3347,25 @@
         "latest": {
           "name": "latest",
           "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_employment_type": {
+          "name": "version_employment_type",
+          "type": "enum__job_postings_v_version_employment_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_headcount": {
+          "name": "version_headcount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_experience": {
+          "name": "version_experience",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         }
@@ -8877,93 +8915,6 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
-    },
-    "public.lead_email_settings": {
-      "name": "lead_email_settings",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "enabled": {
-          "name": "enabled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "to": {
-          "name": "to",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "from": {
-          "name": "from",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "smtp_host": {
-          "name": "smtp_host",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "smtp_port": {
-          "name": "smtp_port",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "smtp_secure": {
-          "name": "smtp_secure",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "smtp_user": {
-          "name": "smtp_user",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "smtp_password_configured": {
-          "name": "smtp_password_configured",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "smtp_password_encrypted": {
-          "name": "smtp_password_encrypted",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -9303,6 +9254,26 @@
         "draft",
         "published"
       ]
+    },
+    "public.enum_job_postings_employment_type": {
+      "name": "enum_job_postings_employment_type",
+      "schema": "public",
+      "values": [
+        "FULL_TIME",
+        "PART_TIME",
+        "CONTRACTOR",
+        "INTERN"
+      ]
+    },
+    "public.enum__job_postings_v_version_employment_type": {
+      "name": "enum__job_postings_v_version_employment_type",
+      "schema": "public",
+      "values": [
+        "FULL_TIME",
+        "PART_TIME",
+        "CONTRACTOR",
+        "INTERN"
+      ]
     }
   },
   "schemas": {},
@@ -9315,6 +9286,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "696a98c2-a7a9-490c-a7c3-d7729f9fd083",
-  "prevId": "00000000-0000-0000-0000-000000000000"
+  "id": "98d613a7-6933-4f6a-a3aa-a4c9d2aae9ee",
+  "prevId": "7cf0be4b-fb51-4afd-b6d3-d47b1e1e7f97"
 }
