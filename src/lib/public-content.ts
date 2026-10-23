@@ -211,6 +211,9 @@ export type JobView = {
   requirements: unknown;
   benefits: unknown;
   salary?: string;
+  employmentType?: string;
+  headcount?: number;
+  experience?: string;
   deadline?: string;
   applyInstruction?: string;
   /** Operator-entered facts for JobPosting JSON-LD; present only when well-formed, never derived. */
@@ -259,6 +262,13 @@ export function richTextToPlain(v: unknown): string {
     .join('\n');
 }
 
+const EMPLOYMENT_TYPE_LABELS: Record<string, string> = {
+  FULL_TIME: 'Toàn thời gian',
+  PART_TIME: 'Bán thời gian',
+  CONTRACTOR: 'Hợp đồng thời vụ',
+  INTERN: 'Thực tập',
+};
+
 export function toJob(d: unknown): JobView | undefined {
   if (!isPublished(d)) return undefined;
   const title = text(d.title);
@@ -276,6 +286,9 @@ export function toJob(d: unknown): JobView | undefined {
     requirements: d.requirements,
     benefits: d.benefits,
     salary: text(d.salary),
+    employmentType: EMPLOYMENT_TYPE_LABELS[text(d.employmentType) ?? ''],
+    headcount: typeof d.headcount === 'number' && Number.isInteger(d.headcount) && d.headcount > 0 ? d.headcount : undefined,
+    experience: text(d.experience),
     deadline: text(d.deadline),
     applyInstruction: text(d.applyInstruction),
     datePosted: text(d.datePosted),

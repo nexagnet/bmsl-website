@@ -266,6 +266,31 @@ export const JobPostings: CollectionConfig = {
       label: 'Mức lương',
       admin: { description: 'UNCONFIRMED: không nhập mức lương khi chưa có xác nhận của BMSL.' },
     },
+    {
+      name: 'employmentType',
+      type: 'select',
+      label: 'Hình thức làm việc',
+      options: [
+        { label: 'Toàn thời gian', value: 'FULL_TIME' },
+        { label: 'Bán thời gian', value: 'PART_TIME' },
+        { label: 'Hợp đồng thời vụ', value: 'CONTRACTOR' },
+        { label: 'Thực tập', value: 'INTERN' },
+      ],
+      admin: { description: 'Tuỳ chọn. Chỉ chọn khi BMSL đã xác nhận; để trống nếu chưa rõ.' },
+    },
+    {
+      name: 'headcount',
+      type: 'number',
+      label: 'Số lượng cần tuyển',
+      min: 1,
+      admin: { step: 1, description: 'Tuỳ chọn. Số nguyên, để trống nếu chưa xác nhận.' },
+    },
+    {
+      name: 'experience',
+      type: 'text',
+      label: 'Kinh nghiệm yêu cầu',
+      admin: { description: 'Tuỳ chọn, ví dụ "Từ 2 năm". Để trống nếu chưa xác nhận.' },
+    },
     { name: 'deadline', type: 'date', label: 'Hạn nộp hồ sơ' },
     {
       name: 'datePosted',
