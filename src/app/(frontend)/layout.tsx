@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { AnalyticsProvider } from '../../components/AnalyticsProvider';
 import { JsonLd } from '../../components/JsonLd';
 import { SiteShell } from '../../components/SiteShell';
-import { getSiteSettings } from '../../lib/cms';
+import { getSiteFooter, getSiteSettings } from '../../lib/cms';
 import { getSiteUrl, SITE_NAME } from '../../lib/site';
 import { organizationLd } from '../../lib/structured-data';
 import '@fontsource/be-vietnam-pro/vietnamese-400.css';
@@ -37,11 +37,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FrontendLayout({ children }: { children: ReactNode }) {
-  const settings = await getSiteSettings();
+  const [settings, footer] = await Promise.all([getSiteSettings(), getSiteFooter()]);
   return (
     <html lang="vi">
       <body>
-        <SiteShell hotline={settings.hotline} zalo={settings.zalo}>
+        <SiteShell hotline={settings.hotline} zalo={settings.zalo} email={settings.email} address={settings.address} footer={footer}>
           {children}
         </SiteShell>
         <JsonLd data={organizationLd(getSiteUrl())} />

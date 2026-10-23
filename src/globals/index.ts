@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload';
 import { isStaff } from '../access';
+import { BACKGROUND_PRESETS } from '../lib/backgrounds';
 import { adminSingletonAccess, drafts, seoField } from '../collections/shared';
 
 const confirmedField = {
@@ -9,6 +10,30 @@ const confirmedField = {
   label: 'Đã được BMSL xác nhận',
   admin: { description: 'Chỉ tích khi BMSL đã xác nhận nội dung này. Mục chưa tích sẽ không hiển thị công khai.' },
 } as const;
+
+const backgroundField = (name: string, label: string, description: string): GlobalConfig['fields'][number] => ({
+  name,
+  type: 'group',
+  label,
+  admin: { description },
+  fields: [
+    {
+      name: 'preset',
+      type: 'select',
+      label: 'Mẫu nền có sẵn',
+      defaultValue: 'navy',
+      options: BACKGROUND_PRESETS.map((p) => ({ label: p.label, value: p.value })),
+      admin: { description: 'Mẫu vẽ bằng CSS theo màu navy và vàng của BMSL, không dùng ảnh bên ngoài.' },
+    },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media-assets',
+      label: 'Ảnh nền (tùy chọn)',
+      admin: { description: 'Thay cho mẫu có sẵn. Chỉ ảnh có rightsStatus=APPROVED mới hiển thị; chữ luôn nằm trên lớp phủ navy.' },
+    },
+  ],
+});
 
 // Singletons. Block structure follows wireframe 05 §3 in later work; W1B keeps a rich-text body + SEO.
 // Provisional fail-closed default: only ADMIN writes these (not a BMSL business decision).
@@ -149,6 +174,7 @@ export const HomePage: GlobalConfig = {
         },
       ],
     },
+    backgroundField('processBand', 'Nền khối "Quy trình & Minh bạch"', 'Nền của khối Quy trình & Minh bạch trên Trang chủ.'),
     {
       name: 'stats',
       type: 'array',
@@ -267,6 +293,41 @@ export const ProcessPage: GlobalConfig = {
       ],
     },
     seoField,
+  ],
+};
+export const SiteFooter: GlobalConfig = {
+  slug: 'site-footer',
+  label: 'Chân trang',
+  access: adminSingletonAccess,
+  versions: drafts,
+  admin: {
+    description:
+      'Nền, giới thiệu ngắn, liên kết thêm và bản quyền của chân trang. Hotline, Zalo, email, địa chỉ lấy từ "Cài đặt website" (chỉ hiện khi đã nhập).',
+  },
+  fields: [
+    backgroundField('background', 'Nền chân trang', 'Chọn mẫu nền có sẵn hoặc ảnh đã duyệt; để mặc định sẽ dùng màu navy.'),
+    {
+      name: 'intro',
+      type: 'group',
+      label: 'Giới thiệu ngắn',
+      fields: [
+        { name: 'text', type: 'textarea', label: 'Nội dung' },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'links',
+      type: 'array',
+      label: 'Liên kết thêm',
+      labels: { singular: 'Liên kết', plural: 'Liên kết' },
+      admin: { description: 'Hiện trong cột "Thông tin". Đường dẫn nội bộ (/...) hoặc https://, mailto:, tel:.' },
+      fields: [
+        { name: 'label', type: 'text', required: true, label: 'Tên hiển thị' },
+        { name: 'href', type: 'text', required: true, label: 'Đường dẫn' },
+        confirmedField,
+      ],
+    },
+    { name: 'copyright', type: 'text', label: 'Dòng bản quyền', admin: { description: 'Để trống sẽ dùng "© BMSL".' } },
   ],
 };
 export const ContactPage = page('contact-page', 'Trang liên hệ');

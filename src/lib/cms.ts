@@ -18,6 +18,7 @@ import {
   toService,
   fetchAllPages,
 } from './public-content';
+import { type SiteFooterView, toSiteFooter } from './site-footer';
 import { type SiteSettingsView, toSiteSettings } from './site-settings';
 
 // Public read path. Every query runs with overrideAccess:false and no user, so collection access
@@ -143,6 +144,10 @@ export const getDocuments = (): Promise<DocumentView[]> =>
 /** Published SiteSettings only (draft:false, no user). Anything unpublished or invalid yields an empty view. */
 export const getSiteSettings = (): Promise<SiteSettingsView> =>
   safe({}, async () => toSiteSettings(await (await cms()).findGlobal({ slug: 'site-settings', ...PUBLIC })));
+
+/** Published SiteFooter only; anything unpublished or invalid yields the default (plain navy, no extra text). */
+export const getSiteFooter = (): Promise<SiteFooterView> =>
+  safe(toSiteFooter(undefined), async () => toSiteFooter(await (await cms()).findGlobal({ slug: 'site-footer', ...PUBLIC })));
 
 export const SITEMAP_PAGE_SIZE = 200;
 

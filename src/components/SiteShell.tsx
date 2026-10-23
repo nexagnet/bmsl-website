@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import logo from '../assets/brand/bmsl-logo.jpg';
+import { backgroundProps } from '../lib/backgrounds';
+import type { SiteFooterView } from '../lib/site-footer';
 import { NAV_ITEMS, SITE_NAME, SURVEY_CTA } from '../lib/site';
 import { MobileMenu } from './MobileMenu';
 import { NavLinks } from './NavLinks';
@@ -24,9 +26,13 @@ type Props = {
   /** Published, validated SiteSettings values only; absent means the link is not shown (never invented). */
   hotline?: { label: string; href: string };
   zalo?: { href: string };
+  email?: { address: string; href: string };
+  address?: { text: string; mapHref: string };
+  /** Published SiteFooter view; absent means the plain navy footer with no extra text. */
+  footer?: SiteFooterView;
 };
 
-export function SiteShell({ children, hotline, zalo }: Props) {
+export function SiteShell({ children, hotline, zalo, email, address, footer }: Props) {
   return (
     <>
       <a className="skip-link" href="#main">
@@ -51,14 +57,22 @@ export function SiteShell({ children, hotline, zalo }: Props) {
       <main id="main" tabIndex={-1}>
         {children}
       </main>
-      <footer className="site-footer">
+      <footer {...backgroundProps(footer?.background, 'site-footer')}>
         <div className="container">
           <div className="footer-top">
             <div className="footer-brand">
               <div className="footer-logo">
                 <BrandLogo />
               </div>
-              {hotline || zalo ? (
+              {footer?.intro ? <p className="footer-intro">{footer.intro}</p> : null}
+              {address ? (
+                <p className="footer-address">
+                  <a href={address.mapHref} rel="noopener">
+                    {address.text}
+                  </a>
+                </p>
+              ) : null}
+              {hotline || zalo || email ? (
                 <div className="footer-contacts">
                   {/* data-analytics-* hooks are inert unless the opt-in analytics provider is mounted and consented. */}
                   {hotline ? (
@@ -77,6 +91,7 @@ export function SiteShell({ children, hotline, zalo }: Props) {
                       Zalo
                     </a>
                   ) : null}
+                  {email ? <a href={email.href}>{email.address}</a> : null}
                 </div>
               ) : null}
             </div>
@@ -102,10 +117,22 @@ export function SiteShell({ children, hotline, zalo }: Props) {
                   </li>
                 </ul>
               </section>
+              {footer?.links.length ? (
+                <section className="footer-col">
+                  <h2>Thông tin</h2>
+                  <ul>
+                    {footer.links.map((l) => (
+                      <li key={`${l.href}-${l.label}`}>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
             </nav>
           </div>
           <div className="footer-bottom">
-            <p className="muted">© {SITE_NAME}</p>
+            <p className="muted">{footer?.copyright ?? `© ${SITE_NAME}`}</p>
           </div>
         </div>
       </footer>

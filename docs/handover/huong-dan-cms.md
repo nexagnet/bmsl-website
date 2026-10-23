@@ -180,3 +180,8 @@ Users không thay đổi: không có tài khoản ADMIN/EDITOR bổ sung.
 ### 12.5 Mẫu CMS ≠ xuất bản và bàn giao thật
 
 Bộ mẫu chỉ minh hoạ thao tác CMS trên bản chạy đã chụp lại. Nó **không** chứng minh: website công khai hiển thị nội dung thật; BMSL đã được đào tạo hoặc ký nhận; ADMIN đã được bàn giao chính thức; chuyển hướng trong bảng Redirects có hiệu lực; form liên hệ công khai hoặc thông báo email/Zalo hoạt động; chính sách lưu lead hay quyền EDITOR xem lead đã chốt. Tài liệu không kèm ảnh chụp màn hình và không có xác nhận của khách hàng.
+
+## Chân trang và nền khối "Quy trình & Minh bạch"
+
+- **Chân trang** (mục "Chân trang" trong Globals): chọn nền (5 mẫu có sẵn hoặc ảnh đã duyệt APPROVED), giới thiệu ngắn, liên kết thêm, dòng bản quyền. Giới thiệu và liên kết chỉ hiện khi tích "Đã được BMSL xác nhận". Hotline, Zalo, email, địa chỉ lấy từ "Cài đặt website".
+- **Nền khối Quy trình & Minh bạch**: trong "Trang chủ", nhóm "Nền khối Quy trình & Minh bạch". Mặc định là navy phẳng.
