@@ -1,6 +1,6 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { sql, type MigrateUpArgs, type MigrateDownArgs } from '@payloadcms/db-postgres';
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_home_page_process_band_preset" AS ENUM('navy', 'gradient', 'grid', 'diagonal', 'glow');
   CREATE TYPE "public"."enum__home_page_v_version_process_band_preset" AS ENUM('navy', 'gradient', 'grid', 'diagonal', 'glow');
@@ -79,7 +79,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_home_page_v_version_process_band_version_process_band_i_idx" ON "_home_page_v" USING btree ("version_process_band_image_id");`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    ALTER TABLE "site_footer_links" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "site_footer" DISABLE ROW LEVEL SECURITY;

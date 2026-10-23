@@ -52,6 +52,8 @@ describe('home blocks migration', () => {
   });
 
   it('saves ordered stats through the CMS', async () => {
+    // The CMS reads every current column, so bring the schema fully up to date first (later additive migrations).
+    await payload.db.migrate({ migrations: migrations as never });
     await payload.updateGlobal({
       slug: 'home-page',
       data: { stats: [{ label: 'Synthetic L1', value: '1', confirmed: true }, { label: 'Synthetic L2', value: '2' }], _status: 'published' },
