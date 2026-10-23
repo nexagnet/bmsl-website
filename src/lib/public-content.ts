@@ -363,7 +363,68 @@ export function toHero(v: unknown): HeroView | undefined {
   };
 }
 
-export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: HeroView };
+/** Rows of an optional About list: only items marked confirmed by BMSL and carrying their required text. */
+const confirmedRows = (v: unknown): Doc[] =>
+  (Array.isArray(v) ? v : []).filter((row): row is Doc => isDoc(row) && row.confirmed === true);
+
+export type ProcessStepView = { title: string; description?: string; duration?: string };
+
+/** Optional CMS process steps: only rows marked confirmed with a title; an empty list means nothing is shown. */
+export const toSteps = (v: unknown): ProcessStepView[] =>
+  confirmedRows(v).flatMap((row) => {
+    const title = text(row.title);
+    return title ? [{ title, description: text(row.description), duration: text(row.duration) }] : [];
+  });
+
+export type AboutHistoryView = { year: string; title: string; description?: string };
+export type AboutTeamView = { name: string; role?: string; photo?: PublicImage };
+export type AboutCapabilityView = { name: string; issuer?: string; validity?: string };
+export type AboutValueView = { title: string; description?: string };
+
+export const toHistory = (v: unknown): AboutHistoryView[] =>
+  confirmedRows(v).flatMap((r) => {
+    const year = text(r.year);
+    const title = text(r.title);
+    return year && title ? [{ year, title, description: text(r.description) }] : [];
+  });
+
+export const toTeam = (v: unknown): AboutTeamView[] =>
+  confirmedRows(v).flatMap((r) => {
+    const name = text(r.name);
+    return name ? [{ name, role: text(r.role), photo: toHeroImage(r.photo) }] : [];
+  });
+
+export const toCapabilities = (v: unknown): AboutCapabilityView[] =>
+  confirmedRows(v).flatMap((r) => {
+    const name = text(r.name);
+    return name ? [{ name, issuer: text(r.issuer), validity: text(r.validity) }] : [];
+  });
+
+export const toValues = (v: unknown): AboutValueView[] =>
+  confirmedRows(v).flatMap((r) => {
+    const title = text(r.title);
+    return title ? [{ title, description: text(r.description) }] : [];
+  });
+
+export type StatView = { label: string; value: string };
+
+/** Optional home statistics: only items marked confirmed by BMSL. The internal source note is never mapped. */
+export const toStats = (v: unknown): StatView[] =>
+  confirmedRows(v).flatMap((r) => {
+    const label = text(r.label);
+    const value = text(r.value);
+    return label && value ? [{ label, value }] : [];
+  });
+
+export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: HeroView;
+  steps: ProcessStepView[];
+  history: AboutHistoryView[];
+  team: AboutTeamView[];
+  capabilities: AboutCapabilityView[];
+  values: AboutValueView[];
+  stats: StatView[];
+  featuredProjects: ProjectView[];
+};
 
 /** Singleton pages: null (safe empty state) unless published. */
 export function toPage(d: unknown): PageView | null {
@@ -373,6 +434,15 @@ export function toPage(d: unknown): PageView | null {
     body: d.body,
     seo: toSeo(d.seo),
     hero: toHero(d.hero),
+    steps: toSteps(d.steps),
+    history: toHistory(d.history),
+    team: toTeam(d.team),
+    capabilities: toCapabilities(d.capabilities),
+    values: toValues(d.values),
+    stats: toStats(d.stats),
+    featuredProjects: (Array.isArray(d.featuredProjects) ? d.featuredProjects : [])
+      .map(toProject)
+      .filter((p): p is ProjectView => !!p),
   };
 }
 

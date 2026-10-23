@@ -55,14 +55,26 @@ describe('HeroSection', () => {
     expect(html).toContain('href="/dich-vu"');
   });
 
-  it('uses a Vietnamese-complete serif font stack without Georgia on .hero-editorial-headline', () => {
+  it('sets the headline in the shared Figma display font (Lora) instead of a hero-only serif stack', () => {
     const css = readFileSync(resolve(import.meta.dirname, '../app/(frontend)/site.css'), 'utf8');
     const match = /\.hero-editorial-headline\s*\{([^}]+)\}/.exec(css);
     expect(match).not.toBeNull();
-    const block = match![1];
-    expect(block).toContain("'Palatino Linotype'");
-    expect(block).toContain("'Times New Roman'");
-    expect(block).not.toContain('Georgia');
+    expect(match![1]).toContain('font-family: var(--font-display)');
+    expect(match![1]).not.toContain('Noto Serif');
+    const display = /--font-display:\s*([^;]+);/.exec(css);
+    expect(display![1]).toContain("'Lora'");
+    expect(display![1]).toContain("'Noto Serif'");
+  });
+
+  it('lays the image behind the copy as a full-bleed background with the overlay', () => {
+    const hero = {
+      ...baseHero,
+      kicker: 'BÌNH MINH – SÔNG LÔ',
+      desktopImage: { url: '/media/a.jpg', alt: 'Mô tả', width: 1600, height: 900 },
+    } as unknown as HeroView;
+    const html = render({ hero });
+    expect(html.indexOf('hero-media-wrapper')).toBeLessThan(html.indexOf('hero-editorial-inner'));
+    expect(html).toContain('hero-media-overlay');
+    expect(html).toContain('overline hero-editorial-kicker');
   });
 });
-

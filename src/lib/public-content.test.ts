@@ -237,3 +237,102 @@ describe('optional service cover and project type', () => {
     expect(toProject({ ...p, projectType: 'Tự nhập', sourceStatus: 'LEGACY-SOURCE' })).toBeUndefined();
   });
 });
+
+describe('optional process steps', () => {
+  it('is empty by default and drops rows without a title', () => {
+    expect(toPage({ ...pub, title: 'T' })?.steps).toEqual([]);
+    expect(toPage({ ...pub, steps: 'x' })?.steps).toEqual([]);
+    expect(
+      toPage({ ...pub, steps: [null, { description: 'no title', confirmed: true }, { title: '  ', confirmed: true }] })?.steps,
+    ).toEqual([]);
+  });
+
+  it('keeps the entered order and optional fields only when present', () => {
+    const steps = toPage({
+      ...pub,
+      steps: [
+        { title: 'B1', description: 'd', duration: '5', confirmed: true },
+        { title: 'B2', confirmed: true },
+        { title: 'B3 chưa xác nhận' },
+        { title: 'B4', confirmed: false },
+      ],
+    })?.steps;
+    expect(steps).toEqual([
+      { title: 'B1', description: 'd', duration: '5' },
+      { title: 'B2', description: undefined, duration: undefined },
+    ]);
+  });
+
+  it('shows nothing for an unpublished page', () => {
+    expect(toPage({ _status: 'draft', steps: [{ title: 'x' }] })).toBeNull();
+  });
+});
+
+describe('optional About blocks', () => {
+  const jpg = { ...approved, mimeType: 'image/jpeg' };
+
+  it('are empty by default', () => {
+    const page = toPage({ ...pub, title: 'T' });
+    expect([page?.history, page?.team, page?.capabilities, page?.values]).toEqual([[], [], [], []]);
+  });
+
+  it('show only items BMSL marked confirmed and that carry their required text', () => {
+    const page = toPage({
+      ...pub,
+      history: [
+        { year: '2021', title: 'Mốc A', confirmed: true },
+        { year: '2022', title: 'Mốc B' },
+        { year: '2023', title: 'Mốc C', confirmed: false },
+        { year: '', title: 'Thiếu năm', confirmed: true },
+      ],
+      team: [
+        { name: 'Người A', role: 'Chức danh', photo: jpg, confirmed: true },
+        { name: 'Người B', photo: { ...jpg, rightsStatus: 'UNCONFIRMED' }, confirmed: true },
+        { name: 'Người C' },
+      ],
+      capabilities: [{ name: 'Giấy phép A', issuer: 'Đơn vị', validity: 'Còn hiệu lực', confirmed: true }, { name: 'B' }],
+      values: [{ title: 'Giá trị A', confirmed: true }, { title: 'Giá trị B' }],
+    });
+    expect(page?.history).toEqual([{ year: '2021', title: 'Mốc A', description: undefined }]);
+    expect(page?.team.map((m) => m.name)).toEqual(['Người A', 'Người B']);
+    expect(page?.team[0]?.photo?.url).toBe(jpg.url);
+    expect(page?.team[1]?.photo).toBeUndefined();
+    expect(page?.capabilities).toEqual([{ name: 'Giấy phép A', issuer: 'Đơn vị', validity: 'Còn hiệu lực' }]);
+    expect(page?.values).toEqual([{ title: 'Giá trị A', description: undefined }]);
+  });
+});
+
+describe('optional home blocks', () => {
+  it('are empty by default', () => {
+    const page = toPage({ ...pub });
+    expect([page?.stats, page?.featuredProjects]).toEqual([[], []]);
+  });
+
+  it('shows only confirmed stats and never maps the internal source note', () => {
+    const stats = toPage({
+      ...pub,
+      stats: [
+        { label: 'Năm', value: '5', source: 'nội bộ', confirmed: true },
+        { label: 'Chưa duyệt', value: '9' },
+        { label: '', value: '1', confirmed: true },
+      ],
+    })?.stats;
+    expect(stats).toEqual([{ label: 'Năm', value: '5' }]);
+    expect(JSON.stringify(stats)).not.toContain('nội bộ');
+  });
+
+  it('keeps only published CONFIRMED featured projects, in the chosen order', () => {
+    const ok = (id: number, slug: string) => ({ ...pub, id, name: slug, slug, sourceStatus: 'CONFIRMED' });
+    const featured = toPage({
+      ...pub,
+      featuredProjects: [
+        ok(2, 'b'),
+        7,
+        { ...ok(3, 'c'), sourceStatus: 'LEGACY-SOURCE' },
+        { ...ok(4, 'd'), _status: 'draft' },
+        ok(1, 'a'),
+      ],
+    })?.featuredProjects;
+    expect(featured?.map((p) => p.slug)).toEqual(['b', 'a']);
+  });
+});

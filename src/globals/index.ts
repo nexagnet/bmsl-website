@@ -1,5 +1,14 @@
 import type { GlobalConfig } from 'payload';
+import { isStaff } from '../access';
 import { adminSingletonAccess, drafts, seoField } from '../collections/shared';
+
+const confirmedField = {
+  name: 'confirmed',
+  type: 'checkbox',
+  defaultValue: false,
+  label: 'Đã được BMSL xác nhận',
+  admin: { description: 'Chỉ tích khi BMSL đã xác nhận nội dung này. Mục chưa tích sẽ không hiển thị công khai.' },
+} as const;
 
 // Singletons. Block structure follows wireframe 05 §3 in later work; W1B keeps a rich-text body + SEO.
 // Provisional fail-closed default: only ADMIN writes these (not a BMSL business decision).
@@ -140,11 +149,126 @@ export const HomePage: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'stats',
+      type: 'array',
+      label: 'Số liệu năng lực',
+      labels: { singular: 'Số liệu', plural: 'Số liệu' },
+      admin: { description: 'Tùy chọn. Để trống cho tới khi BMSL cung cấp số liệu đã duyệt kèm nguồn; không điền số liệu suy đoán.' },
+      fields: [
+        { name: 'label', type: 'text', required: true, label: 'Nhãn' },
+        { name: 'value', type: 'text', required: true, label: 'Giá trị' },
+        { name: 'source', type: 'text', label: 'Nguồn (ghi chú nội bộ)', access: { read: ({ req }) => isStaff(req.user) } },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'featuredProjects',
+      type: 'relationship',
+      relationTo: 'projects',
+      hasMany: true,
+      label: 'Dự án tiêu biểu',
+      admin: {
+        description: 'Tùy chọn, hiển thị theo thứ tự chọn. Chỉ dự án đã xuất bản và CONFIRMED mới hiện công khai; để trống sẽ dùng danh sách mặc định.',
+      },
+    },
     seoField,
   ],
 };
-export const AboutPage = page('about-page', 'Giới thiệu');
-export const ProcessPage = page('process-page', 'Quy trình và minh bạch');
+// Optional structured blocks of the About page. All empty until BMSL supplies approved content (UNCONFIRMED);
+// every item is public only when marked confirmed.
+export const AboutPage: GlobalConfig = {
+  slug: 'about-page',
+  label: 'Giới thiệu',
+  access: adminSingletonAccess,
+  versions: drafts,
+  fields: [
+    { name: 'title', type: 'text', label: 'Tiêu đề' },
+    { name: 'body', type: 'richText', label: 'Nội dung' },
+    {
+      name: 'history',
+      type: 'array',
+      label: 'Lịch sử hình thành',
+      labels: { singular: 'Mốc', plural: 'Các mốc' },
+      fields: [
+        { name: 'year', type: 'text', required: true, label: 'Năm/mốc thời gian' },
+        { name: 'title', type: 'text', required: true, label: 'Tiêu đề' },
+        { name: 'description', type: 'textarea', label: 'Mô tả' },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'team',
+      type: 'array',
+      label: 'Đội ngũ',
+      labels: { singular: 'Thành viên', plural: 'Thành viên' },
+      fields: [
+        { name: 'name', type: 'text', required: true, label: 'Họ tên' },
+        { name: 'role', type: 'text', label: 'Chức danh' },
+        {
+          name: 'photo',
+          type: 'upload',
+          relationTo: 'media-assets',
+          label: 'Ảnh',
+          admin: { description: 'Chỉ hiển thị khi tệp có rightsStatus=APPROVED.' },
+        },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'capabilities',
+      type: 'array',
+      label: 'Năng lực và giấy phép',
+      labels: { singular: 'Mục', plural: 'Các mục' },
+      fields: [
+        { name: 'name', type: 'text', required: true, label: 'Tên năng lực/giấy phép' },
+        { name: 'issuer', type: 'text', label: 'Đơn vị cấp' },
+        { name: 'validity', type: 'text', label: 'Hiệu lực', admin: { description: 'Nhập tự do theo giấy tờ BMSL cung cấp.' } },
+        confirmedField,
+      ],
+    },
+    {
+      name: 'values',
+      type: 'array',
+      label: 'Văn hoá và giá trị',
+      labels: { singular: 'Giá trị', plural: 'Giá trị' },
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Tiêu đề' },
+        { name: 'description', type: 'textarea', label: 'Mô tả' },
+        confirmedField,
+      ],
+    },
+    seoField,
+  ],
+};
+
+export const ProcessPage: GlobalConfig = {
+  slug: 'process-page',
+  label: 'Quy trình và minh bạch',
+  access: adminSingletonAccess,
+  versions: drafts,
+  fields: [
+    { name: 'title', type: 'text', label: 'Tiêu đề' },
+    { name: 'body', type: 'richText', label: 'Nội dung' },
+    {
+      name: 'steps',
+      type: 'array',
+      label: 'Các bước quy trình',
+      labels: { singular: 'Bước', plural: 'Các bước' },
+      admin: {
+        description:
+          'Tùy chọn. Để trống cho tới khi BMSL cung cấp và xác nhận quy trình; không điền nội dung suy đoán. Thứ tự hiển thị theo thứ tự trong danh sách.',
+      },
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Tên bước' },
+        { name: 'description', type: 'textarea', label: 'Mô tả' },
+        { name: 'duration', type: 'text', label: 'Thời hạn', admin: { description: 'Tùy chọn, nhập tự do (ví dụ theo văn bản BMSL xác nhận).' } },
+        confirmedField,
+      ],
+    },
+    seoField,
+  ],
+};
 export const ContactPage = page('contact-page', 'Trang liên hệ');
 
 // Public contact details are UNCONFIRMED (CONTACT_DETAILS_REQUIRES_BMSL_CONFIRMATION):

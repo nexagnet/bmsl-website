@@ -26,6 +26,25 @@ export default async function ProcessPage() {
           )}
         </div>
       </section>
+      {page?.steps.length ? (
+        <section className="pg-section white" id="quy-trinh" aria-labelledby="steps-title">
+          <div className="container">
+            <Overline>QUY TRÌNH</Overline>
+            <h2 className="pg-title" id="steps-title">
+              Các bước thực hiện
+            </h2>
+            <ol className="process-steps">
+              {page.steps.map((step, i) => (
+                <li key={`${i}-${step.title}`}>
+                  <h3>{step.title}</h3>
+                  {step.duration ? <p className="process-step-duration">{step.duration}</p> : null}
+                  {step.description ? <p>{step.description}</p> : null}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      ) : null}
       <section className="pg-section pale" id="tai-lieu" aria-labelledby="docs-title">
         <div className="container">
           <Overline>TÀI LIỆU</Overline>
