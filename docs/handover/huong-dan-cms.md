@@ -181,7 +181,8 @@ Users không thay đổi: không có tài khoản ADMIN/EDITOR bổ sung.
 
 Bộ mẫu chỉ minh hoạ thao tác CMS trên bản chạy đã chụp lại. Nó **không** chứng minh: website công khai hiển thị nội dung thật; BMSL đã được đào tạo hoặc ký nhận; ADMIN đã được bàn giao chính thức; chuyển hướng trong bảng Redirects có hiệu lực; form liên hệ công khai hoặc thông báo email/Zalo hoạt động; chính sách lưu lead hay quyền EDITOR xem lead đã chốt. Tài liệu không kèm ảnh chụp màn hình và không có xác nhận của khách hàng.
 
-## Chân trang và nền khối "Quy trình & Minh bạch"
+## Bố cục cài đặt, chân trang và nền các dải xanh
 
-- **Chân trang** (mục "Chân trang" trong Globals): chọn nền (5 mẫu có sẵn hoặc ảnh đã duyệt APPROVED), giới thiệu ngắn, liên kết thêm, dòng bản quyền. Giới thiệu và liên kết chỉ hiện khi tích "Đã được BMSL xác nhận". Hotline, Zalo, email, địa chỉ lấy từ "Cài đặt website".
-- **Nền khối Quy trình & Minh bạch**: trong "Trang chủ", nhóm "Nền khối Quy trình & Minh bạch". Mặc định là navy phẳng.
+- **Thanh bên** chia ba nhóm: *1. Trang website* (Trang chủ, Giới thiệu, Quy trình, Liên hệ), *2. Giao diện chung* (Chân trang), *3. Liên hệ và hệ thống* (Cài đặt website, Email báo yêu cầu liên hệ).
+- **Chân trang**: nền (5 mẫu có sẵn hoặc ảnh đã duyệt APPROVED), giới thiệu ngắn, liên kết thêm, bản quyền. Hotline, Zalo, email, địa chỉ, mạng xã hội chỉ nhập một lần ở "Cài đặt website", tab "Liên hệ và mạng xã hội" (dùng chung cho chân trang và trang Liên hệ).
+- **Trang chủ** có các tab: Hero; Nội dung trang (tiêu đề, số liệu, dự án tiêu biểu); **Bố cục các khối** (thứ tự và bật/tắt Số liệu, Dịch vụ, Dự án, Quy trình & Minh bạch, Tin tức; số dự án và số bài viết hiển thị; để trống danh sách thì giữ thứ tự mặc định); **Nền các dải xanh** (dải "Quy trình & Minh bạch" và dải "Liên hệ khảo sát thực tế", dải sau áp dụng cho mọi dải CTA cùng kiểu); SEO. Mặc định là navy phẳng.
