@@ -31,3 +31,9 @@ export function toSiteFooter(d: unknown): SiteFooterView {
     background: toSectionBackground(doc.background),
   };
 }
+
+/** Published SiteCta only: the shared CTA band background (plain navy unless a published setting says otherwise). */
+export function toSiteCtaBackground(d: unknown): SectionBackground {
+  const doc = asDoc(d);
+  return doc._status === 'published' ? toSectionBackground(doc.background) : toSectionBackground(undefined);
+}
