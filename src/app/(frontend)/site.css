@@ -2780,3 +2780,43 @@ main > .pg-section:last-child,
 main > .cta-band:last-child {
   margin-bottom: -4rem;
 }
+
+/* Decorative dark-section backgrounds (footer, home "Quy trình & Minh bạch"), CMS-selectable presets.
+   Navy base stays under every preset so white text keeps >= 4.5:1 (the lightest stop is #1b4286 with white text ~9:1). */
+.bg-gradient {
+  background-image: linear-gradient(135deg, var(--bmsl-navy) 0%, var(--bmsl-navy2) 100%);
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-diagonal {
+  background-image: repeating-linear-gradient(135deg, rgba(200, 162, 78, 0.12) 0 1px, transparent 1px 28px);
+}
+
+.bg-glow {
+  background-image: radial-gradient(circle at 100% 0%, rgba(200, 162, 78, 0.28) 0, transparent 55%);
+}
+
+.bg-has-image {
+  background-size: cover;
+  background-position: center;
+}
+
+.footer-intro,
+.footer-address {
+  margin: 1rem 0 0;
+  max-width: 28rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--bmsl-on-dark-muted);
+}
+
+.footer-address a {
+  color: inherit;
+  overflow-wrap: anywhere;
+}

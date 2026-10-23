@@ -1,3 +1,4 @@
+import { BACKGROUND_PRESETS, type SectionBackground } from './backgrounds';
 import { isApprovedMediaPath, isPrivatePath, isPublicContentPath, isPublicSlug } from './seo';
 import { paths, UNCATEGORIZED_SEGMENT } from './site';
 import { HOME_PROFILE_CTA } from '../lib/site';
@@ -323,6 +324,13 @@ export function safeInternalLinkHref(url: unknown): string | undefined {
   return undefined;
 }
 
+/** Decorative section background: a known CSS preset (default navy) and an optional APPROVED raster image. */
+export function toSectionBackground(v: unknown): SectionBackground {
+  const d = isDoc(v) ? v : {};
+  const preset = BACKGROUND_PRESETS.find((p) => p.value === d.preset)?.value ?? 'navy';
+  return { preset, image: toHeroImage(d.image) };
+}
+
 export type HeroView = {
   enabled: boolean;
   kicker?: string;
@@ -339,7 +347,7 @@ export type HeroView = {
 
 /** A MediaAssets upload can be an APPROVED PDF, but a Hero <img> requires an actual raster image. */
 const HERO_IMAGE_MIME_TYPES = new Set(['image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/avif']);
-const toHeroImage = (value: unknown): PublicImage | undefined =>
+export const toHeroImage = (value: unknown): PublicImage | undefined =>
   isDoc(value) && typeof value.mimeType === 'string' && HERO_IMAGE_MIME_TYPES.has(value.mimeType)
     ? toPublicImage(value)
     : undefined;
@@ -437,6 +445,7 @@ export type PageView = { title?: string; body: unknown; seo: PublicSeo; hero?: H
   values: AboutValueView[];
   stats: StatView[];
   featuredProjects: ProjectView[];
+  processBand: SectionBackground;
 };
 
 /** Singleton pages: null (safe empty state) unless published. */
@@ -453,6 +462,7 @@ export function toPage(d: unknown): PageView | null {
     capabilities: toCapabilities(d.capabilities),
     values: toValues(d.values),
     stats: toStats(d.stats),
+    processBand: toSectionBackground(d.processBand),
     featuredProjects: (Array.isArray(d.featuredProjects) ? d.featuredProjects : [])
       .map(toProject)
       .filter((p): p is ProjectView => !!p),

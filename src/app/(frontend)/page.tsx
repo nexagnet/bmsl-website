@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { ArticleCards, Empty, Overline, ProjectCards, SectionHeading, ServiceCards, SurveyCta } from '../../components/blocks';
 import { HeroSection } from '../../components/HeroSection';
 import { getArticles, getPage, getProjects, getServices } from '../../lib/cms';
+import { backgroundProps } from '../../lib/backgrounds';
 import { buildMetadata } from '../../lib/metadata';
 import { richTextToPlain } from '../../lib/public-content';
 import { HOME_PROFILE_CTA, SITE_NAME } from '../../lib/site';
@@ -64,7 +65,7 @@ export default async function HomePage() {
           </div>
         </section>
       ) : null}
-      <section className="band-navy" aria-labelledby="home-process">
+      <section {...backgroundProps(page?.processBand, 'band-navy')} data-band="process" aria-labelledby="home-process">
         <div className="container band-navy-inner">
           <Overline tone="gold">Quy trình & Minh bạch</Overline>
           <h2 id="home-process">Quy trình & Minh bạch</h2>

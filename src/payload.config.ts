@@ -17,7 +17,7 @@ import { ContactLeads } from './collections/ContactLeads';
 import { MediaAssets } from './collections/MediaAssets';
 import { Redirects } from './collections/Redirects';
 import { Users } from './collections/Users';
-import { AboutPage, ContactPage, HomePage, ProcessPage, SiteSettings, LeadEmailSettings } from './globals';
+import { AboutPage, ContactPage, HomePage, ProcessPage, SiteFooter, SiteSettings, LeadEmailSettings } from './globals';
 import { resolvePayloadEnv } from './lib/env';
 import { leadEmailAdapter } from './lib/lead-email-adapter';
 import { describeLeadEmailConfig, LEAD_EMAIL_QUEUE } from './lib/lead-email-config';
@@ -51,7 +51,7 @@ export default buildConfig({
     Redirects,
     ContactLeads,
   ],
-  globals: [HomePage, AboutPage, ProcessPage, ContactPage, SiteSettings, LeadEmailSettings],
+  globals: [HomePage, AboutPage, ProcessPage, ContactPage, SiteSettings, LeadEmailSettings, SiteFooter],
   // No GraphQL API or playground: the public site reads through the local API and there is no approved GraphQL
   // consumer, so the endpoint stays absent (no src/app/(payload)/api/graphql route) and generation is disabled.
   graphQL: { disable: true },
