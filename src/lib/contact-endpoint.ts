@@ -8,7 +8,7 @@ import {
   readBoundedBody,
 } from './request-guard';
 import { type LeadNotifier, submitContact } from './contact-submission';
-import { resolveLeadEmailConfig } from './lead-email-config';
+import { loadLeadEmailConfig } from './lead-email-settings';
 import { runLeadNotificationQueue } from './lead-notification';
 
 // HTTP layer of the write-only /lien-he/gui endpoint. Every failure answers with a fixed, PII-free JSON body, and
@@ -29,7 +29,7 @@ type Deps = {
 // The durable work (outbox row + queued job) was already committed with the lead. This only asks the queue to run it now
 // instead of waiting for the next autoRun tick; it is not awaited, never throws and does nothing while e-mail is OFF.
 const defaultNotify = (payload: Payload): LeadNotifier => async () => {
-  if (resolveLeadEmailConfig().enabled) void runLeadNotificationQueue(payload);
+  if ((await loadLeadEmailConfig(payload)).enabled) void runLeadNotificationQueue(payload);
 };
 
 let sharedLimiter: ReturnType<typeof createRateLimiter> | undefined;

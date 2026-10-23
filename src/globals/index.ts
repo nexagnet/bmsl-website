@@ -1,7 +1,9 @@
 import type { GlobalConfig } from 'payload';
-import { isStaff } from '../access';
+import { adminOnly, isStaff } from '../access';
 import { BACKGROUND_PRESETS } from '../lib/backgrounds';
 import { adminSingletonAccess, drafts, seoField } from '../collections/shared';
+import { encryptSecret } from '../lib/secret-box';
+import { secretKeyMaterial } from '../lib/lead-email-settings';
 
 const confirmedField = {
   name: 'confirmed',
@@ -387,5 +389,58 @@ export const SiteSettings: GlobalConfig = {
       label: 'Mã xác minh Search Console',
       admin: { description: 'Giá trị content của thẻ meta google-site-verification do Google Search Console cấp.' },
     },
+  ],
+};
+
+// Lead e-mail notification settings (Issue #82 follow-up). ADMIN only, no drafts. Every value here is optional: with
+// "enabled" unticked the environment variables alone decide, exactly as before. The SMTP password is write-only: it is
+// encrypted (AES-256-GCM) into a field no API or admin read returns, and the typed input is never stored.
+export const LeadEmailSettings: GlobalConfig = {
+  slug: 'lead-email-settings',
+  label: 'Email báo yêu cầu liên hệ',
+  access: { read: adminOnly, update: adminOnly },
+  admin: {
+    description:
+      'Cấu hình gửi email báo khi có yêu cầu liên hệ mới. Chỉ quản trị viên. Ô nào để trống sẽ dùng biến môi trường tương ứng (SMTP_HOST, SMTP_PORT, LEAD_EMAIL_FROM, LEAD_EMAIL_TO, SMTP_USER, SMTP_PASS). Chỉ lưu thông tin BMSL đã xác nhận.',
+  },
+  hooks: {
+    beforeChange: [
+      ({ data, originalDoc, req }) => {
+        const typed = typeof data.smtpPasswordInput === 'string' ? data.smtpPasswordInput : '';
+        let encrypted: string | null = (originalDoc as { smtpPasswordEncrypted?: string | null } | undefined)?.smtpPasswordEncrypted ?? null;
+        if (data.clearSmtpPassword === true) encrypted = null;
+        else if (typed) encrypted = encryptSecret(typed, secretKeyMaterial(req.payload));
+        return { ...data, smtpPasswordInput: undefined, clearSmtpPassword: undefined, smtpPasswordEncrypted: encrypted, smtpPasswordConfigured: Boolean(encrypted) };
+      },
+    ],
+  },
+  fields: [
+    {
+      name: 'enabled',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Dùng cấu hình trong trang này',
+      admin: { description: 'Bỏ tick: chỉ dùng biến môi trường. Tick: các ô dưới đây (nếu có giá trị) được ưu tiên hơn biến môi trường.' },
+    },
+    { name: 'to', type: 'email', label: 'Email nhận thông báo', admin: { description: 'Một hộp thư do BMSL xác nhận.' } },
+    { name: 'from', type: 'email', label: 'Email gửi đi', admin: { description: 'Địa chỉ người gửi do BMSL xác nhận (thường trùng tài khoản SMTP).' } },
+    { name: 'smtpHost', type: 'text', label: 'Máy chủ SMTP' },
+    { name: 'smtpPort', type: 'number', min: 1, max: 65535, label: 'Cổng SMTP', admin: { description: 'Ví dụ 587 (STARTTLS) hoặc 465 (TLS ngầm).' } },
+    { name: 'smtpSecure', type: 'checkbox', defaultValue: false, label: 'TLS ngầm (cổng 465)' },
+    { name: 'smtpUser', type: 'text', label: 'Tài khoản SMTP', admin: { autoComplete: 'off' } },
+    {
+      name: 'smtpPasswordInput',
+      type: 'text',
+      virtual: true,
+      label: 'Mật khẩu SMTP (nhập để đặt hoặc thay mới)',
+      admin: {
+        autoComplete: 'new-password',
+        description:
+          'Chỉ ghi, không bao giờ hiển thị lại. Được mã hoá trước khi lưu bằng khoá phía máy chủ (LEAD_SMTP_ENCRYPTION_KEY hoặc PAYLOAD_SECRET); nếu khoá đổi, cần nhập lại mật khẩu.',
+      },
+    },
+    { name: 'clearSmtpPassword', type: 'checkbox', virtual: true, label: 'Xoá mật khẩu SMTP đã lưu' },
+    { name: 'smtpPasswordConfigured', type: 'checkbox', label: 'Đã lưu mật khẩu SMTP', admin: { readOnly: true } },
+    { name: 'smtpPasswordEncrypted', type: 'text', admin: { hidden: true }, access: { read: () => false, update: () => false } },
   ],
 };

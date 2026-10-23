@@ -57,6 +57,11 @@ describe('published + approved review flow (synthetic)', () => {
     const job = { ...pub, id: 3, title: 'Vị trí thử', slug: 'vi-tri-thu' };
     expect(toJob({ ...job, sourceStatus: 'UNCONFIRMED' })).toBeUndefined();
     expect(toJob({ ...job, sourceStatus: 'CONFIRMED' })?.salary).toBeUndefined();
+    const detailed = toJob({ ...job, sourceStatus: 'CONFIRMED', employmentType: 'FULL_TIME', headcount: 2, experience: ' Từ 2 năm ' });
+    expect(detailed).toMatchObject({ employmentType: 'Toàn thời gian', headcount: 2, experience: 'Từ 2 năm' });
+    const invalid = toJob({ ...job, sourceStatus: 'CONFIRMED', employmentType: 'X', headcount: 0 });
+    expect(invalid?.employmentType).toBeUndefined();
+    expect(invalid?.headcount).toBeUndefined();
     const doc = { ...pub, id: 4, title: 'Tài liệu thử' };
     expect(toDocument({ ...doc, file: { ...approved, rightsStatus: 'UNCONFIRMED' } })).toBeUndefined();
     expect(toDocument({ ...doc, file: approved })?.url).toBe(approved.url);

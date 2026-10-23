@@ -23,6 +23,12 @@ Trạng thái `notification.state`: `not_configured` (lead đến khi tính năn
 - Job kẹt `processing` sau crash vẫn nằm lại trong `payload-jobs` (chỉ là rác, hiển thị cho ADMIN); lead được gửi qua job mới do reconcile tạo.
 - Thư gửi tới hộp thư của BMSL **có chứa họ tên, số điện thoại, nội dung** (để nhân viên gọi lại). Tiêu đề thư, job, log và `lastError` **không** chứa PII (chỉ mã lỗi như `ESOCKET`).
 
+## Cấu hình trong CMS (global `lead-email-settings`, chỉ ADMIN)
+
+Quản trị > "Email báo yêu cầu liên hệ". Tick **"Dùng cấu hình trong trang này"** thì mỗi ô có giá trị (email nhận/gửi, máy chủ, cổng, TLS ngầm, tài khoản, mật khẩu) được ưu tiên hơn biến môi trường tương ứng; ô trống dùng biến môi trường. Không tick: chỉ biến môi trường quyết định, như trước. Cấu hình được đọc lại mỗi lần cần (không cần redeploy). Tắt hoàn toàn: bỏ tick và bỏ `LEAD_EMAIL_ENABLED`.
+
+Mật khẩu SMTP là **chỉ ghi**: mã hoá AES-256-GCM trước khi lưu, khoá lấy từ `LEAD_SMTP_ENCRYPTION_KEY` (nếu đặt) hoặc `PAYLOAD_SECRET`; không API/giao diện/log nào trả lại giá trị. Đánh đổi: ai có quyền ghi DB **và** biết khoá máy chủ mới giải mã được; đổi khoá thì phải nhập lại mật khẩu (trong lúc đó tính năng TẮT, log chỉ nêu `SMTP_PASS`). Nếu không muốn lưu mật khẩu trong DB, để trống ô này và đặt `SMTP_USER`/`SMTP_PASS` bằng biến môi trường.
+
 ## Biến môi trường (chỉ phía server; KHÔNG commit giá trị)
 
 | Biến | Bắt buộc | Ý nghĩa |
@@ -33,10 +39,11 @@ Trạng thái `notification.state`: `not_configured` (lead đến khi tính năn
 | `LEAD_EMAIL_TO` | có | **một** hộp thư nhận đã được BMSL xác nhận |
 | `SMTP_SECURE` | không | `true` = TLS ngầm (cổng 465). Mặc định STARTTLS bắt buộc nếu host không phải loopback |
 | `SMTP_USER`, `SMTP_PASS` | cặp | cùng có hoặc cùng không; có một nửa = cấu hình lỗi, tính năng TẮT |
+| `LEAD_SMTP_ENCRYPTION_KEY` | không | khoá mã hoá mật khẩu SMTP lưu trong CMS (mặc định dùng `PAYLOAD_SECRET`) |
 
 Thiếu hoặc sai bất kỳ giá trị nào ⇒ **TẮT**, log một dòng khi khởi động chỉ nêu **tên** biến lỗi (không bao giờ giá trị), ví dụ:
 `lead e-mail notification: OFF (configuration required: SMTP_HOST, LEAD_EMAIL_TO)`.
-Khi TẮT: không có email adapter, không cron, không job; lead vẫn lưu với `state = not_configured`.
+Khi TẮT: adapter từ chối gửi, không job được tạo; lead vẫn lưu với `state = not_configured`.
 
 ## Triển khai (cần owner duyệt riêng — NGOÀI phạm vi task này)
 

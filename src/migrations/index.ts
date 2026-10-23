@@ -8,7 +8,9 @@ import * as migration_20261022_095100_service_cover_project_type from './2026102
 import * as migration_20261022_101846_process_steps from './20261022_101846_process_steps';
 import * as migration_20261022_102156_about_blocks from './20261022_102156_about_blocks';
 import * as migration_20261022_104053_home_blocks_step_confirmed from './20261022_104053_home_blocks_step_confirmed';
-import * as migration_20261023_025046_footer_and_section_backgrounds from './20261023_025046_footer_and_section_backgrounds';
+import * as migration_20261023_030000_job_employment_fields from './20261023_030000_job_employment_fields';
+import * as migration_20261023_030438_lead_email_settings from './20261023_030438_lead_email_settings';
+import * as migration_20261023_031732_footer_and_section_backgrounds from './20261023_031732_footer_and_section_backgrounds';
 
 export const migrations = [
   {
@@ -62,8 +64,18 @@ export const migrations = [
     name: '20261022_104053_home_blocks_step_confirmed',
   },
   {
-    up: migration_20261023_025046_footer_and_section_backgrounds.up,
-    down: migration_20261023_025046_footer_and_section_backgrounds.down,
-    name: '20261023_025046_footer_and_section_backgrounds'
+    up: migration_20261023_030000_job_employment_fields.up,
+    down: migration_20261023_030000_job_employment_fields.down,
+    name: '20261023_030000_job_employment_fields',
+  },
+  {
+    up: migration_20261023_030438_lead_email_settings.up,
+    down: migration_20261023_030438_lead_email_settings.down,
+    name: '20261023_030438_lead_email_settings',
+  },
+  {
+    up: migration_20261023_031732_footer_and_section_backgrounds.up,
+    down: migration_20261023_031732_footer_and_section_backgrounds.down,
+    name: '20261023_031732_footer_and_section_backgrounds',
   },
 ];

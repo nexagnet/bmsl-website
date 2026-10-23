@@ -3058,6 +3058,25 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'draft'"
+        },
+        "employment_type": {
+          "name": "employment_type",
+          "type": "enum_job_postings_employment_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "headcount": {
+          "name": "headcount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "experience": {
+          "name": "experience",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -3328,6 +3347,25 @@
         "latest": {
           "name": "latest",
           "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_employment_type": {
+          "name": "version_employment_type",
+          "type": "enum__job_postings_v_version_employment_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_headcount": {
+          "name": "version_headcount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_experience": {
+          "name": "version_experience",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         }
@@ -5579,20 +5617,6 @@
           "notNull": false,
           "default": "'editorial'"
         },
-        "process_band_preset": {
-          "name": "process_band_preset",
-          "type": "enum_home_page_process_band_preset",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'navy'"
-        },
-        "process_band_image_id": {
-          "name": "process_band_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "seo_title": {
           "name": "seo_title",
           "type": "varchar",
@@ -5670,21 +5694,6 @@
           "method": "btree",
           "with": {}
         },
-        "home_page_process_band_process_band_image_idx": {
-          "name": "home_page_process_band_process_band_image_idx",
-          "columns": [
-            {
-              "expression": "process_band_image_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "home_page_seo_seo_og_image_idx": {
           "name": "home_page_seo_seo_og_image_idx",
           "columns": [
@@ -5736,19 +5745,6 @@
           "tableTo": "media_assets",
           "columnsFrom": [
             "hero_mobile_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "home_page_process_band_image_id_media_assets_id_fk": {
-          "name": "home_page_process_band_image_id_media_assets_id_fk",
-          "tableFrom": "home_page",
-          "tableTo": "media_assets",
-          "columnsFrom": [
-            "process_band_image_id"
           ],
           "columnsTo": [
             "id"
@@ -6121,20 +6117,6 @@
           "notNull": false,
           "default": "'editorial'"
         },
-        "version_process_band_preset": {
-          "name": "version_process_band_preset",
-          "type": "enum__home_page_v_version_process_band_preset",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'navy'"
-        },
-        "version_process_band_image_id": {
-          "name": "version_process_band_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_seo_title": {
           "name": "version_seo_title",
           "type": "varchar",
@@ -6222,21 +6204,6 @@
           "columns": [
             {
               "expression": "version_hero_mobile_image_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_home_page_v_version_process_band_version_process_band_i_idx": {
-          "name": "_home_page_v_version_process_band_version_process_band_i_idx",
-          "columns": [
-            {
-              "expression": "version_process_band_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -6343,19 +6310,6 @@
           "tableTo": "media_assets",
           "columnsFrom": [
             "version_hero_mobile_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "_home_page_v_version_process_band_image_id_media_assets_id_fk": {
-          "name": "_home_page_v_version_process_band_image_id_media_assets_id_fk",
-          "tableFrom": "_home_page_v",
-          "tableTo": "media_assets",
-          "columnsFrom": [
-            "version_process_band_image_id"
           ],
           "columnsTo": [
             "id"
@@ -8961,501 +8915,6 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
-    },
-    "public.site_footer_links": {
-      "name": "site_footer_links",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "label": {
-          "name": "label",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "href": {
-          "name": "href",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "confirmed": {
-          "name": "confirmed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        }
-      },
-      "indexes": {
-        "site_footer_links_order_idx": {
-          "name": "site_footer_links_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "site_footer_links_parent_id_idx": {
-          "name": "site_footer_links_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "site_footer_links_parent_id_fk": {
-          "name": "site_footer_links_parent_id_fk",
-          "tableFrom": "site_footer_links",
-          "tableTo": "site_footer",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.site_footer": {
-      "name": "site_footer",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "background_preset": {
-          "name": "background_preset",
-          "type": "enum_site_footer_background_preset",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'navy'"
-        },
-        "background_image_id": {
-          "name": "background_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "intro_text": {
-          "name": "intro_text",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "intro_confirmed": {
-          "name": "intro_confirmed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "copyright": {
-          "name": "copyright",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "_status": {
-          "name": "_status",
-          "type": "enum_site_footer_status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'draft'"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "site_footer_background_background_image_idx": {
-          "name": "site_footer_background_background_image_idx",
-          "columns": [
-            {
-              "expression": "background_image_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "site_footer__status_idx": {
-          "name": "site_footer__status_idx",
-          "columns": [
-            {
-              "expression": "_status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "site_footer_background_image_id_media_assets_id_fk": {
-          "name": "site_footer_background_image_id_media_assets_id_fk",
-          "tableFrom": "site_footer",
-          "tableTo": "media_assets",
-          "columnsFrom": [
-            "background_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public._site_footer_v_version_links": {
-      "name": "_site_footer_v_version_links",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "label": {
-          "name": "label",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "href": {
-          "name": "href",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "confirmed": {
-          "name": "confirmed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "_uuid": {
-          "name": "_uuid",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "_site_footer_v_version_links_order_idx": {
-          "name": "_site_footer_v_version_links_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_site_footer_v_version_links_parent_id_idx": {
-          "name": "_site_footer_v_version_links_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "_site_footer_v_version_links_parent_id_fk": {
-          "name": "_site_footer_v_version_links_parent_id_fk",
-          "tableFrom": "_site_footer_v_version_links",
-          "tableTo": "_site_footer_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public._site_footer_v": {
-      "name": "_site_footer_v",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "version_background_preset": {
-          "name": "version_background_preset",
-          "type": "enum__site_footer_v_version_background_preset",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'navy'"
-        },
-        "version_background_image_id": {
-          "name": "version_background_image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_intro_text": {
-          "name": "version_intro_text",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_intro_confirmed": {
-          "name": "version_intro_confirmed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "version_copyright": {
-          "name": "version_copyright",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version__status": {
-          "name": "version__status",
-          "type": "enum__site_footer_v_version_status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'draft'"
-        },
-        "version_updated_at": {
-          "name": "version_updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "version_created_at": {
-          "name": "version_created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "latest": {
-          "name": "latest",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "_site_footer_v_version_background_version_background_ima_idx": {
-          "name": "_site_footer_v_version_background_version_background_ima_idx",
-          "columns": [
-            {
-              "expression": "version_background_image_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_site_footer_v_version_version__status_idx": {
-          "name": "_site_footer_v_version_version__status_idx",
-          "columns": [
-            {
-              "expression": "version__status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_site_footer_v_created_at_idx": {
-          "name": "_site_footer_v_created_at_idx",
-          "columns": [
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_site_footer_v_updated_at_idx": {
-          "name": "_site_footer_v_updated_at_idx",
-          "columns": [
-            {
-              "expression": "updated_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_site_footer_v_latest_idx": {
-          "name": "_site_footer_v_latest_idx",
-          "columns": [
-            {
-              "expression": "latest",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "_site_footer_v_version_background_image_id_media_assets_id_fk": {
-          "name": "_site_footer_v_version_background_image_id_media_assets_id_fk",
-          "tableFrom": "_site_footer_v",
-          "tableTo": "media_assets",
-          "columnsFrom": [
-            "version_background_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -9690,17 +9149,6 @@
         "split"
       ]
     },
-    "public.enum_home_page_process_band_preset": {
-      "name": "enum_home_page_process_band_preset",
-      "schema": "public",
-      "values": [
-        "navy",
-        "gradient",
-        "grid",
-        "diagonal",
-        "glow"
-      ]
-    },
     "public.enum_home_page_status": {
       "name": "enum_home_page_status",
       "schema": "public",
@@ -9733,17 +9181,6 @@
       "values": [
         "editorial",
         "split"
-      ]
-    },
-    "public.enum__home_page_v_version_process_band_preset": {
-      "name": "enum__home_page_v_version_process_band_preset",
-      "schema": "public",
-      "values": [
-        "navy",
-        "gradient",
-        "grid",
-        "diagonal",
-        "glow"
       ]
     },
     "public.enum__home_page_v_version_status": {
@@ -9818,42 +9255,24 @@
         "published"
       ]
     },
-    "public.enum_site_footer_background_preset": {
-      "name": "enum_site_footer_background_preset",
+    "public.enum_job_postings_employment_type": {
+      "name": "enum_job_postings_employment_type",
       "schema": "public",
       "values": [
-        "navy",
-        "gradient",
-        "grid",
-        "diagonal",
-        "glow"
+        "FULL_TIME",
+        "PART_TIME",
+        "CONTRACTOR",
+        "INTERN"
       ]
     },
-    "public.enum_site_footer_status": {
-      "name": "enum_site_footer_status",
+    "public.enum__job_postings_v_version_employment_type": {
+      "name": "enum__job_postings_v_version_employment_type",
       "schema": "public",
       "values": [
-        "draft",
-        "published"
-      ]
-    },
-    "public.enum__site_footer_v_version_background_preset": {
-      "name": "enum__site_footer_v_version_background_preset",
-      "schema": "public",
-      "values": [
-        "navy",
-        "gradient",
-        "grid",
-        "diagonal",
-        "glow"
-      ]
-    },
-    "public.enum__site_footer_v_version_status": {
-      "name": "enum__site_footer_v_version_status",
-      "schema": "public",
-      "values": [
-        "draft",
-        "published"
+        "FULL_TIME",
+        "PART_TIME",
+        "CONTRACTOR",
+        "INTERN"
       ]
     }
   },
@@ -9867,6 +9286,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "b3c5fccb-8e44-4519-a329-ea3b5dd26e8a",
-  "prevId": "00000000-0000-0000-0000-000000000000"
+  "id": "98d613a7-6933-4f6a-a3aa-a4c9d2aae9ee",
+  "prevId": "7cf0be4b-fb51-4afd-b6d3-d47b1e1e7f97"
 }

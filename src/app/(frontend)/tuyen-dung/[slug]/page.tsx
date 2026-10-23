@@ -22,6 +22,7 @@ export default async function JobDetailPage({ params }: Props) {
   const [job, settings] = await Promise.all([getJob(slug), getSiteSettings()]);
   if (!job) notFound();
   const deadline = formatDate(job.deadline);
+  const hasMeta = Boolean(job.salary || deadline || job.employmentType || job.headcount || job.experience);
   return (
     <>
       <Crumbs items={[{ label: 'Tuyển dụng', href: '/tuyen-dung' }, { label: job.title }]} />
@@ -60,10 +61,28 @@ export default async function JobDetailPage({ params }: Props) {
             </div>
           </div>
           {/* Salary and deadline are UNCONFIRMED optional fields: rendered only when present. The Zalo CTA needs a published Zalo. */}
-          {job.salary || deadline || settings.zalo ? (
+          {hasMeta || settings.zalo ? (
             <aside className="apply-box" aria-label="Thông tin ứng tuyển">
-              {job.salary || deadline ? (
+              {hasMeta ? (
                 <dl className="apply-meta">
+                  {job.employmentType ? (
+                    <div className="apply-meta-row">
+                      <dt>Hình thức</dt>
+                      <dd>{job.employmentType}</dd>
+                    </div>
+                  ) : null}
+                  {job.headcount ? (
+                    <div className="apply-meta-row">
+                      <dt>Số lượng</dt>
+                      <dd>{job.headcount}</dd>
+                    </div>
+                  ) : null}
+                  {job.experience ? (
+                    <div className="apply-meta-row">
+                      <dt>Kinh nghiệm</dt>
+                      <dd>{job.experience}</dd>
+                    </div>
+                  ) : null}
                   {job.salary ? (
                     <div className="apply-meta-row">
                       <dt>Lương</dt>

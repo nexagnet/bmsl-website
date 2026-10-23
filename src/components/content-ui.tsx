@@ -85,8 +85,9 @@ export function JobGrid({ items }: { items: JobView[] }) {
           <li key={j.id} className="job-card">
             <Link href={j.href}>
               <span className="job-title">{j.title}</span>
-              {j.salary || deadline ? (
+              {j.salary || deadline || j.employmentType ? (
                 <span className="pills">
+                  {j.employmentType ? <span className="pill">{j.employmentType}</span> : null}
                   {j.salary ? <span className="pill">Lương: {j.salary}</span> : null}
                   {deadline ? <span className="pill">Hạn nộp: {deadline}</span> : null}
                 </span>
