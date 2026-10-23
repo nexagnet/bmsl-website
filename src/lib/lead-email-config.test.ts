@@ -91,3 +91,31 @@ describe('buildLeadMessage', () => {
     expect(text).not.toMatch(/^Bcc:/m);
   });
 });
+
+describe('resolveLeadEmailConfig — CMS settings over the environment', () => {
+  const CMS = { enabled: true, to: 'cms-inbox@sandbox.example', from: 'cms-sender@sandbox.example', smtpHost: 'smtp.cms.example', smtpPort: 465, smtpSecure: true };
+
+  it('ignores every CMS value while "enabled" is unticked', () => {
+    expect(resolveLeadEmailConfig({}, { ...CMS, enabled: false })).toEqual({ enabled: false, problems: ['LEAD_EMAIL_ENABLED'] });
+    expect(resolveLeadEmailConfig(FULL, { ...CMS, enabled: false })).toMatchObject({ enabled: true, to: FULL.LEAD_EMAIL_TO });
+  });
+
+  it('works from the CMS alone and lets CMS values win over the environment', () => {
+    expect(resolveLeadEmailConfig({}, CMS)).toMatchObject({ enabled: true, to: CMS.to, from: CMS.from, smtp: { host: 'smtp.cms.example', port: 465, secure: true, requireTLS: false } });
+    expect(resolveLeadEmailConfig(FULL, CMS)).toMatchObject({ to: CMS.to, smtp: { host: 'smtp.cms.example' } });
+  });
+
+  it('falls back to the environment per empty field and still names missing values', () => {
+    expect(resolveLeadEmailConfig(FULL, { enabled: true, to: '', smtpHost: ' ' })).toMatchObject({ enabled: true, to: FULL.LEAD_EMAIL_TO });
+    expect(resolveLeadEmailConfig({}, { enabled: true, to: CMS.to })).toEqual({
+      enabled: false,
+      problems: ['SMTP_HOST', 'SMTP_PORT', 'LEAD_EMAIL_FROM'],
+    });
+  });
+
+  it('takes the password pair from the CMS or the environment, and is OFF when the stored password is unreadable', () => {
+    expect(resolveLeadEmailConfig({}, { ...CMS, smtpUser: 'u', smtpPassword: 'p' })).toMatchObject({ enabled: true, smtp: { auth: { user: 'u', pass: 'p' } } });
+    expect(resolveLeadEmailConfig({}, { ...CMS, smtpUser: 'u' })).toEqual({ enabled: false, problems: ['SMTP_PASS'] });
+    expect(resolveLeadEmailConfig({}, { ...CMS, smtpUser: 'u', passwordUnreadable: true })).toEqual({ enabled: false, problems: ['SMTP_PASS'] });
+  });
+});

@@ -1,5 +1,6 @@
 import type { Payload } from 'payload';
-import { LEAD_EMAIL_QUEUE, type LeadEmailConfig, resolveLeadEmailConfig } from './lead-email-config';
+import { LEAD_EMAIL_QUEUE, type LeadEmailConfig } from './lead-email-config';
+import { loadLeadEmailConfig } from './lead-email-settings';
 
 // Durable ContactLead e-mail notification (Issue #82).
 //
@@ -117,7 +118,7 @@ export async function deliverLeadNotification(
   id: number | string,
   env: Record<string, string | undefined> = process.env,
 ): Promise<DeliveryResult> {
-  const config = resolveLeadEmailConfig(env);
+  const config = await loadLeadEmailConfig(payload, env);
   if (!config.enabled) return 'skipped_disabled';
   if (!(await claimLead(payload, id))) return 'skipped_not_claimable';
 
