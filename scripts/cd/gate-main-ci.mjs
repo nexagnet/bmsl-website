@@ -27,7 +27,7 @@ export const GATE = Object.freeze({
   // Required job name -> the application step inside it that must itself have completed with success.
   jobs: Object.freeze({
     verify: 'Application verify scripts',
-    integration: 'Required application integration suite',
+    integration: 'All integration shards must succeed',
   }),
 });
 

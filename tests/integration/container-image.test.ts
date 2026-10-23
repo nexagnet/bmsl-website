@@ -361,7 +361,7 @@ globalThis.fetch = async (url) => {
   const p = new URL(String(url)).pathname;
   if (p.endsWith('/branches/main')) return ok({ commit: { sha: SHA } });
   if (p.endsWith('/runs')) return ok({ total_count: 1, workflow_runs: [${runObj}] });
-  if (p.endsWith('/jobs')) return ok({ total_count: 2, jobs: [job('verify', 'Application verify scripts'), job('integration', 'Required application integration suite')] });
+  if (p.endsWith('/jobs')) return ok({ total_count: 2, jobs: [job('verify', 'Application verify scripts'), job('integration', 'All integration shards must succeed')] });
   if (p.endsWith('/runs/900')) return ok(${runObj});
   return new Response('{}', { status: 404 });
 };
