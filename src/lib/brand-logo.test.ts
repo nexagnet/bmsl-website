@@ -83,3 +83,20 @@ describe('shared header and footer use the logo', () => {
     expect(shell).toContain('className="skip-link"');
   });
 });
+
+describe('Payload admin branding', () => {
+  const config = read('src/payload.config.ts').toString('utf8');
+
+  it('replaces the Payload logo, icon and tab icon with the BMSL assets', () => {
+    expect(config).toContain("Logo: '/src/components/admin/AdminLogo#AdminLogo'");
+    expect(config).toContain("Icon: '/src/components/admin/AdminIcon#AdminIcon'");
+    expect(config).toContain("url: '/admin-icon'");
+    expect(read('src/components/admin/AdminLogo.tsx').toString('utf8')).toContain('bmsl-logo-transparent.png');
+    expect(read('src/components/admin/AdminIcon.tsx').toString('utf8')).toContain('bmsl-icon-transparent.png');
+    expect(read('src/app/(payload)/admin/importMap.js').toString('utf8')).toContain('/src/components/admin/AdminLogo#AdminLogo');
+  });
+
+  it('serves the tab icon from the same favicon file as the public site', () => {
+    expect(read('src/app/(payload)/admin-icon/route.ts').toString('utf8')).toContain("'(frontend)', 'icon.jpg'");
+  });
+});

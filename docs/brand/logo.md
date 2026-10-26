@@ -53,7 +53,10 @@ từ file; chỉ cần cập nhật hash trong `src/lib/brand-logo.test.ts`).
 * `alt` = "BMSL — Bình Minh Sông Lô" (chữ có trong logo). Liên kết trang chủ có `aria-label` "BMSL — Bình Minh Sông Lô —
   Trang chủ". Không có wordmark chữ đặt cạnh logo (tránh lặp tên).
 * Logo là JPEG nền trắng nên ở footer tối được đặt trên một tấm nền trắng bo góc.
-* Favicon nằm trong `(frontend)`, nên chỉ áp dụng cho website công khai; trang `/admin` giữ biểu tượng của Payload.
+* Favicon nằm trong `(frontend)`, nên chỉ áp dụng cho website công khai. Trang `/admin` dùng logo BMSL riêng: `admin.components.graphics.Logo/Icon`
+  (`src/components/admin/`) và `admin.meta.icons` trỏ tới `/admin-icon` (cùng tệp `icon.jpg`). Hai bản nền trong suốt
+  `src/assets/brand/bmsl-logo-transparent.png` và `bmsl-icon-transparent.png` được tạo từ đúng hai tệp JPEG ở trên chỉ bằng
+  cách đổi điểm ảnh gần trắng thành trong suốt (không vẽ lại, không đổi thiết kế). Chủ đề tối của admin đặt logo trên nền trắng bo góc.
 * `src/types-images.d.ts` chỉ tham chiếu kiểu ảnh của Next để `pnpm typecheck` chạy được trên checkout sạch (CI chạy
   `typecheck` trước `build`, lúc `next-env.d.ts` — bị gitignore — chưa tồn tại).
 
