@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { AnalyticsProvider } from '../../components/AnalyticsProvider';
+import { CookieConsent } from '../../components/CookieConsent';
 import { JsonLd } from '../../components/JsonLd';
 import { SiteShell } from '../../components/SiteShell';
 import { getSiteFooter, getSiteSettings } from '../../lib/cms';
@@ -41,12 +42,18 @@ export default async function FrontendLayout({ children }: { children: ReactNode
   return (
     <html lang="vi">
       <body>
-        <SiteShell hotline={settings.hotline} zalo={settings.zalo} email={settings.email} address={settings.address} footer={footer}>
+        <SiteShell hotline={settings.hotline} zalo={settings.zalo} email={settings.email} address={settings.address} footer={footer} cookieSettings={Boolean(settings.analytics)}>
           {children}
         </SiteShell>
         <JsonLd data={organizationLd(getSiteUrl())} />
         {/* Not rendered at all (no script, listener or event) unless published settings enable analytics. */}
-        {settings.analytics ? <AnalyticsProvider measurementId={settings.analytics.measurementId} /> : null}
+        {settings.analytics ? (
+          <>
+            <AnalyticsProvider measurementId={settings.analytics.measurementId} />
+            {/* After the provider so its consent listener is registered first. */}
+            <CookieConsent />
+          </>
+        ) : null}
       </body>
     </html>
   );

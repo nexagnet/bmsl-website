@@ -5,7 +5,7 @@ import { type APIRequestContext, type Browser, type BrowserType, chromium, firef
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { SERVICE_CTA, SURVEY_CTA } from '../../../src/lib/site';
 import { ENGINES, type Engine, SIZES } from './browser-policy';
-import type { BrowserUatContext } from './browser-blocks';
+import { type BrowserUatContext, declineCookies } from './browser-blocks';
 import { JOBS } from './markers';
 
 // Issue #120 (successor A of #84/PR #98) editorial acceptance, executed under the existing `pnpm test:integration` step against the SAME production
@@ -143,6 +143,7 @@ export function registerEditorialBlocks(ctx: BrowserUatContext): void {
         describe(`[${engine} / ${view.name} ${view.width}x${view.height}] representative pages`, () => {
           const open = async (p: string, fn: (page: import('playwright').Page) => Promise<void>) => {
             const context = await browsers.get(engine)!.newContext({ viewport: { width: view.width, height: view.height }, locale: 'vi-VN', serviceWorkers: 'block' });
+            await context.addInitScript(declineCookies);
             try {
               const page = await context.newPage();
               const response = await page.goto(`${ctx.base}${p}`, { waitUntil: 'load', timeout: 60_000 });

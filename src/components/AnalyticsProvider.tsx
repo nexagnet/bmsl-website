@@ -9,11 +9,40 @@ import {
   createAnalytics,
   TRACK_EVENT,
 } from '../lib/analytics';
+import { gaCookieNames } from '../lib/consent';
 
 type Win = Window & { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void; bmslAnalytics?: unknown } & Record<string, unknown>;
 
-/** Real GA4 transport. Constructed only in the browser and only used after consent is granted. */
+const DENIED = {
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  analytics_storage: 'denied',
+} as const;
+
+/** Removes GA cookies on withdrawal (host and parent-domain variants); they could otherwise outlive the choice. */
+function clearGaCookies() {
+  const parts = location.hostname.split('.');
+  const domains = ['', location.hostname, ...(parts.length > 2 ? [`.${parts.slice(-2).join('.')}`] : [`.${location.hostname}`])];
+  for (const name of gaCookieNames(document.cookie)) {
+    for (const domain of domains) {
+      document.cookie = `${name}=; Max-Age=0; path=/${domain ? `; domain=${domain}` : ''}; SameSite=Lax`;
+    }
+  }
+}
+
+/**
+ * Real GA4 transport, constructed only in the browser and only used after consent is granted. Google Consent
+ * Mode v2: every storage type is declared denied before gtag.js is requested, and analytics_storage is updated to
+ * granted only on the visitor's opt-in (and back to denied on withdrawal). Ad storage/signals are never granted.
+ */
 function gtagTransport(win: Win): AnalyticsTransport {
+  let analyticsGranted = false;
+  const setAnalyticsStorage = (granted: boolean) => {
+    if (analyticsGranted === granted) return;
+    analyticsGranted = granted;
+    win.gtag?.('consent', 'update', { analytics_storage: granted ? 'granted' : 'denied' });
+  };
   return {
     load(id) {
       win.dataLayer = win.dataLayer ?? [];
@@ -22,6 +51,7 @@ function gtagTransport(win: Win): AnalyticsTransport {
         // eslint-disable-next-line prefer-rest-params
         (win.dataLayer as unknown[]).push(arguments);
       };
+      win.gtag('consent', 'default', DENIED);
       win.gtag('js', new Date());
       const script = document.createElement('script');
       script.async = true;
@@ -30,6 +60,7 @@ function gtagTransport(win: Win): AnalyticsTransport {
     },
     config(id, params) {
       win[`ga-disable-${id}`] = false;
+      setAnalyticsStorage(true);
       win.gtag?.('config', id, params);
     },
     event(name, params) {
@@ -37,6 +68,8 @@ function gtagTransport(win: Win): AnalyticsTransport {
     },
     disable(id) {
       win[`ga-disable-${id}`] = true;
+      setAnalyticsStorage(false);
+      clearGaCookies();
     },
   };
 }
@@ -44,7 +77,7 @@ function gtagTransport(win: Win): AnalyticsTransport {
 /**
  * Mounted only when published SiteSettings enable analytics with a valid GA4 id. Even then nothing loads until
  * consent is granted through window.bmslAnalytics.setConsent(true) or the `bmsl:analytics-consent` event
- * (the consent UI/policy is an OWNER-DECISION and is not implemented here). Contact-form consent is unrelated.
+ * (sent by CookieConsent). Contact-form consent is unrelated.
  */
 export function AnalyticsProvider({ measurementId }: { measurementId: string }) {
   const pathname = usePathname();

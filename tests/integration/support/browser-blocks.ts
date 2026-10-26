@@ -82,6 +82,11 @@ const recordCspViolations = () => {
   w.__csp = [];
   document.addEventListener('securitypolicyviolation', (e) => w.__csp?.push(`${e.violatedDirective} ${e.blockedURI}`));
 };
+// The cookie banner is fixed to the bottom of the viewport and would sit over footer controls. Suites that are not about
+// consent start from a stored refusal (the visitor already decided), which is also the "nothing granted" state.
+export const declineCookies = () => {
+  window.localStorage.setItem('bmsl_cookie_consent', JSON.stringify({ v: 1, analytics: false, at: Date.now() }));
+};
 // Analytics links point at tel:/zalo/pdf targets; the test only observes the analytics hook, never follows them.
 const keepOnPage = () => {
   window.addEventListener(
@@ -270,6 +275,7 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
 
           beforeAll(async () => {
             context = await browser().newContext({ viewport: { width: size.width, height: size.height }, locale: 'vi-VN', serviceWorkers: 'block' });
+            await context.addInitScript(declineCookies);
             page = await context.newPage();
             await page.addInitScript(recordCspViolations);
           }, 120_000);
@@ -512,6 +518,7 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
 
           it('analytics: consent gates everything; exact events, minimal safe parameters, no success without a stored lead', async () => {
             const actx = await browser().newContext({ viewport: { width: size.width, height: size.height }, locale: 'vi-VN', serviceWorkers: 'block' });
+            await actx.addInitScript(declineCookies);
             const googleHits: string[] = [];
             try {
               // Transport interception: the Google hosts are answered locally; nothing leaves the machine.
@@ -633,6 +640,97 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
               await actx.close().catch(() => undefined);
             }
           }, 300_000);
+
+          it('cookie banner: refused by default, GA4 only after "Đồng ý", choice stored and changeable, Consent Mode order, no overflow', async () => {
+            const cctx = await browser().newContext({ viewport: { width: size.width, height: size.height }, locale: 'vi-VN', serviceWorkers: 'block' });
+            const googleHits: string[] = [];
+            try {
+              await cctx.route(/^https:\/\/([a-z0-9-]+\.)?(googletagmanager|google-analytics)\.com\//, (route) => {
+                googleHits.push(route.request().url());
+                return route.fulfill({ status: 200, contentType: 'application/javascript', body: '/* synthetic stub: not GA4 */' });
+              });
+              const cp = await cctx.newPage();
+              await cp.addInitScript(recordCspViolations);
+              const layer = () => cp.evaluate(() => Array.from((window as unknown as W).dataLayer ?? [], (e) => Array.from(e as ArrayLike<unknown>)));
+              const banner = cp.locator('[data-cookie-banner]');
+              const stored = () => cp.evaluate(() => window.localStorage.getItem('bmsl_cookie_consent'));
+              const open = async (url: string) => {
+                await cp.goto(`${ctx.base}${url}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+                await hydrated(cp, 'footer [data-cookie-settings]');
+              };
+
+              // 1. First visit: banner visible, equal choices, inside the viewport, no horizontal scroll, nothing loaded.
+              await open('/');
+              await expect.poll(() => banner.isVisible(), { timeout: 15_000 }).toBe(true);
+              await expect.poll(() => banner.getByRole('button', { name: 'Từ chối' }).isVisible(), { timeout: 15_000 }).toBe(true);
+              await expect.poll(() => banner.getByRole('button', { name: 'Đồng ý' }).isVisible(), { timeout: 15_000 }).toBe(true);
+              expect(await banner.getByRole('link', { name: 'Xem Chính sách cookie' }).getAttribute('href')).toBe('/chinh-sach-cookie');
+              const box = await banner.boundingBox();
+              expect(box && box.x >= 0 && box.x + box.width <= size.width + 0.5 && box.y >= 0 && box.y + box.height <= size.height + 0.5).toBe(true);
+              expect(await cp.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+              expect(await layer()).toEqual([]);
+              expect(googleHits).toEqual([]);
+              expect(await stored()).toBeNull();
+              const axe = await new AxeBuilder({ page: cp }).withTags([...AXE_TAGS]).analyze();
+              expect(summarizeAxe(axe.violations).blocking).toEqual([]);
+
+              // 2. Refuse: stored, banner gone, still nothing loaded, and it stays gone after navigation and reload.
+              await banner.getByRole('button', { name: 'Từ chối' }).click();
+              await expect.poll(() => banner.count(), { timeout: 15_000 }).toBe(0);
+              expect(JSON.parse((await stored()) ?? 'null')).toMatchObject({ v: 1, analytics: false });
+              await cp.reload({ waitUntil: 'domcontentloaded' });
+              await hydrated(cp, 'footer [data-cookie-settings]');
+              await expect.poll(() => banner.count(), { timeout: 15_000 }).toBe(0);
+              expect(await layer()).toEqual([]);
+              expect(googleHits).toEqual([]);
+
+              // 3. Footer "Cài đặt cookie" reopens it with focus inside; accepting loads the library once, with
+              // Consent Mode declared denied BEFORE it is granted and a safe page_view queued.
+              await cp.locator('footer [data-cookie-settings]').click();
+              await expect.poll(() => banner.isVisible(), { timeout: 15_000 }).toBe(true);
+              await expect.poll(() => cp.evaluate(() => document.activeElement?.hasAttribute('data-cookie-banner') ?? false), { timeout: 5_000 }).toBe(true);
+              await banner.getByRole('button', { name: 'Đồng ý' }).click();
+              await expect.poll(() => banner.count(), { timeout: 15_000 }).toBe(0);
+              expect(JSON.parse((await stored()) ?? 'null')).toMatchObject({ v: 1, analytics: true });
+              await expect.poll(() => googleHits.length, { timeout: 15_000 }).toBe(1);
+              const afterGrant = await layer();
+              const consentCalls = afterGrant.filter((e) => e[0] === 'consent');
+              expect(consentCalls[0]).toEqual(['consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' }]);
+              expect(consentCalls[1]).toEqual(['consent', 'update', { analytics_storage: 'granted' }]);
+              expect(afterGrant.findIndex((e) => e[0] === 'consent')).toBeLessThan(afterGrant.findIndex((e) => e[0] === 'js'));
+              expect(eventsFromDataLayer(afterGrant).map((e) => e.name)).toEqual(['page_view']);
+
+              // 4. A returning visitor who accepted is not asked again and analytics resumes by itself.
+              await cp.goto(`${ctx.base}/gioi-thieu`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+              await hydrated(cp, 'footer [data-cookie-settings]');
+              await expect.poll(() => banner.count(), { timeout: 15_000 }).toBe(0);
+              await expect.poll(async () => eventsFromDataLayer(await layer()).map((e) => e.name), { timeout: 15_000 }).toContain('page_view');
+
+              // 5. Withdraw through the footer: consent denied again, GA cookies removed, nothing more is queued.
+              await cp.evaluate(() => {
+                document.cookie = '_ga=GA1.1.1.1; path=/';
+                document.cookie = '_ga_ABC123DEF4=GS1.1.1; path=/';
+              });
+              await cp.locator('footer [data-cookie-settings]').click();
+              await banner.getByRole('button', { name: 'Từ chối' }).click();
+              await expect.poll(async () => (await layer()).some((e) => e[0] === 'consent' && e[1] === 'update' && (e[2] as { analytics_storage?: string }).analytics_storage === 'denied'), { timeout: 15_000 }).toBe(true);
+              expect(await cp.evaluate(() => document.cookie.split(';').some((c) => c.trim().startsWith('_ga')))).toBe(false);
+              const atWithdrawal = (await layer()).length;
+              await cp.evaluate(() => window.dispatchEvent(new CustomEvent('bmsl:analytics-event', { detail: { name: 'phone_click', params: { link_location: 'footer' } } })));
+              expect((await layer()).length).toBe(atWithdrawal);
+              expect(JSON.parse((await stored()) ?? 'null')).toMatchObject({ analytics: false });
+              expect(googleHits.every((u) => u.includes('/gtag/js'))).toBe(true);
+              expect(await cspViolations(cp)).toEqual([]);
+
+              // 6. The draft policy page exists, is noindex and is reachable from the footer.
+              await cp.locator('footer').getByRole('link', { name: 'Chính sách cookie' }).click();
+              await cp.waitForURL(/\/chinh-sach-cookie$/);
+              expect((await cp.locator('h1').textContent())?.trim()).toBe('Chính sách cookie');
+              expect(await cp.locator('meta[name="robots"]').getAttribute('content')).toMatch(/noindex/);
+            } finally {
+              await cctx.close().catch(() => undefined);
+            }
+          }, 300_000);
         });
       }
     }
@@ -642,6 +740,7 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
         it('an APPROVED image loads, then disappears from the page and from its URL once approval is revoked', async () => {
           const media = within('uat media', uatMedia.get(engine));
           const context = await within('browser', browsers.get(engine)).newContext({ viewport: { width: 1366, height: 900 }, serviceWorkers: 'block' });
+          await context.addInitScript(declineCookies);
           try {
             const page = await context.newPage();
             const image = page.locator(`main img[src*="${media.slug}"]`);
@@ -681,6 +780,7 @@ export function registerBrowserBlocks(ctx: BrowserUatContext): void {
           const email = role === 'ADMIN' ? await soleAdminEmail() : ctx.editorEmail;
           const password = role === 'ADMIN' ? ctx.adminPassword : ctx.editorPassword;
           const context = await within('browser', browsers.get(engine)).newContext({ viewport: { width: 1366, height: 900 }, locale: 'en-US', serviceWorkers: 'block' });
+          await context.addInitScript(declineCookies);
           const pageErrors: string[] = [];
           const consoleProblems: string[] = [];
           const requestedUrls: string[] = [];
