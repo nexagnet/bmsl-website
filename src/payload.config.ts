@@ -36,7 +36,16 @@ const RECONCILE_EVERY_MS = 5 * 60_000;
 export default buildConfig({
   // `avatar: 'default'` is Payload's local icon: the admin never looks up a hashed e-mail address at Gravatar, so the
   // narrow CSP needs no external img-src and no staff address leaves the deployment.
-  admin: { user: Users.slug, avatar: 'default' },
+  admin: {
+    user: Users.slug,
+    avatar: 'default',
+    // BMSL branding instead of Payload's defaults (same logo/favicon as the public site, docs/brand/logo.md).
+    components: { graphics: { Logo: '/src/components/admin/AdminLogo#AdminLogo', Icon: '/src/components/admin/AdminIcon#AdminIcon' } },
+    meta: {
+      titleSuffix: '— BMSL CMS',
+      icons: [{ rel: 'icon', type: 'image/jpeg', url: '/admin-icon' }],
+    },
+  },
   // Admin UI language only (not data localization): Vietnamese for every account, whatever the browser prefers.
   i18n: { supportedLanguages: { vi }, fallbackLanguage: 'vi' },
   collections: [
