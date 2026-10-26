@@ -5,6 +5,8 @@ import logo from '../assets/brand/bmsl-logo.jpg';
 import { backgroundProps } from '../lib/backgrounds';
 import type { SiteFooterView } from '../lib/site-footer';
 import { NAV_ITEMS, SITE_NAME, SURVEY_CTA } from '../lib/site';
+import { COOKIE_POLICY_PATH } from '../lib/consent';
+import { CookieSettingsButton } from './CookieConsent';
 import { MobileMenu } from './MobileMenu';
 import { NavLinks } from './NavLinks';
 
@@ -30,9 +32,11 @@ type Props = {
   address?: { text: string; mapHref: string };
   /** Published SiteFooter view; absent means the plain navy footer with no extra text. */
   footer?: SiteFooterView;
+  /** True when analytics is configured: shows the "Cài đặt cookie" control that reopens the consent banner. */
+  cookieSettings?: boolean;
 };
 
-export function SiteShell({ children, hotline, zalo, email, address, footer }: Props) {
+export function SiteShell({ children, hotline, zalo, email, address, footer, cookieSettings }: Props) {
   return (
     <>
       <a className="skip-link" href="#main">
@@ -133,6 +137,16 @@ export function SiteShell({ children, hotline, zalo, email, address, footer }: P
           </div>
           <div className="footer-bottom">
             <p className="muted">{footer?.copyright ?? `© ${SITE_NAME}`}</p>
+            <ul className="footer-legal" aria-label="Quyền riêng tư">
+              <li>
+                <Link href={COOKIE_POLICY_PATH}>Chính sách cookie</Link>
+              </li>
+              {cookieSettings ? (
+                <li>
+                  <CookieSettingsButton />
+                </li>
+              ) : null}
+            </ul>
           </div>
         </div>
       </footer>

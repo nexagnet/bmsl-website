@@ -1716,6 +1716,131 @@ h3 {
   color: var(--bmsl-on-dark-muted);
 }
 
+/* Footer legal links + cookie settings control */
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-legal a,
+.footer-link-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--bmsl-white);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--bmsl-bronze);
+  text-underline-offset: 0.35em;
+}
+
+/* Cookie consent banner (navy / bronze, Lora heading) */
+.cookie-banner {
+  position: fixed;
+  inset: auto 1rem 1rem 1rem;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  background: var(--bmsl-white);
+  color: var(--bmsl-text);
+  border: 1px solid var(--bmsl-line);
+  border-top: 4px solid var(--bmsl-bronze);
+  border-radius: var(--bmsl-radius);
+  box-shadow: var(--shadow-card);
+}
+
+.cookie-banner:focus {
+  outline: none;
+}
+
+.cookie-banner:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.cookie-banner-body {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+.cookie-banner h2 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: var(--bmsl-navy);
+}
+
+.cookie-banner p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.cookie-banner a {
+  color: var(--bmsl-navy);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.cookie-banner .cookie-banner-state {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--bmsl-muted);
+}
+
+.cookie-banner-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.75rem;
+}
+
+.cookie-banner-actions .button {
+  min-height: 2.75rem;
+}
+
+@media (max-width: 47.99rem) {
+  /* Sit above the fixed mobile action bar (about 4.5rem tall) and keep both choices equally reachable. */
+  body:has(.mobile-action-bar) .cookie-banner {
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+
+  .cookie-banner {
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .cookie-banner-actions {
+    flex: 1 1 100%;
+  }
+
+  .cookie-banner-actions .button {
+    flex: 1 1 0;
+  }
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
