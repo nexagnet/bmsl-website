@@ -1,5 +1,7 @@
 # Gói bàn giao kỹ thuật W5C (Issue #24)
 
+> **Mới vào dự án? Đọc [`00-tong-quan-du-an.md`](00-tong-quan-du-an.md) trước, rồi [`01-trang-thai-va-ton-dong.md`](01-trang-thai-va-ton-dong.md)** (tổng quan, quyết định đã chốt, trạng thái G0–G5, domain, SEO, GA4, việc chờ BMSL, rủi ro).
+
 Gói này là **vật liệu đã chuẩn bị để xem xét**. Nó không phải bằng chứng rằng BMSL đã nghiệm thu, đã nhận đào tạo, đã nhận sao lưu hay website đã chạy production.
 
 | Tài liệu | Nội dung |
